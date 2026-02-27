@@ -7,7 +7,8 @@
   <style>
     :root{
       --bg:#0b0d12; --panel:#121625; --panel2:#0f1320; --border:#2a3350;
-      --text:#e9ecff; --muted:#aab0d6; --accent:#00e5ff; --good:#47ff87; --bad:#ff4d4d;
+      --text:#e9ecff; --muted:#aab0d6; --accent:#00e5ff; --accent2:#ff2bd6;
+      --good:#47ff87; --bad:#ff4d4d;
       --r:18px; --shadow:0 16px 40px rgba(0,0,0,.38);
     }
     *{box-sizing:border-box}
@@ -24,8 +25,10 @@
     .cardBody{padding:14px;display:flex;flex-direction:column;gap:12px}
     button{appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:1000;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28)}
     button:hover{border-color:color-mix(in srgb,var(--accent) 60%, var(--border))}
+    button:disabled{opacity:.55;cursor:not-allowed}
     .btnPrimary{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));box-shadow:0 14px 34px rgba(0,229,255,.12)}
     .btnDanger{border-color:color-mix(in srgb,var(--bad) 65%, var(--border))}
+    .btnGhost{background:rgba(255,255,255,.03)}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 
     .stickyArea{
@@ -146,6 +149,85 @@
       50%{transform:translateX(120%)}
       100%{transform:translateX(-40%)}
     }
+
+    /* ===== Modals (tutorial + step3 gate) ===== */
+    .overlay{
+      position:fixed; inset:0; z-index:95;
+      background:rgba(0,0,0,.62);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:16px;
+    }
+    .modal{
+      width:min(720px, 100%);
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .modalHead h3{
+      margin:0;
+      font-size:14px;
+      font-weight:1000;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+    }
+    .modalBody{padding:14px; display:flex; flex-direction:column; gap:10px}
+    .modalFoot{
+      padding:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .kicker{color:var(--muted); font-weight:800; font-size:12px; line-height:1.35}
+    .steps{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      color:var(--muted); font-weight:900; font-size:12px;
+    }
+    .pill{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      padding:4px 8px;
+      border-radius:999px;
+    }
+    .pill.active{
+      border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.12));
+      box-shadow:0 12px 28px rgba(0,229,255,.10);
+      color:var(--text);
+    }
+    .list{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+      line-height:1.55;
+    }
+    .callout{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,229,255,.06);
+      border-radius:16px;
+      padding:10px 12px;
+      color:var(--text);
+      font-weight:900;
+      font-size:12px;
+      line-height:1.45;
+    }
+    .field{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:900;
+      outline:none;
+      min-width:240px;
+    }
   </style>
 </head>
 <body>
@@ -159,6 +241,7 @@
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
+        <button id="btnTutorial" class="btnGhost">Tutorial</button>
         <button id="btnBack">← Step 1</button>
         <button id="btnNext" class="btnPrimary">Next → Step 3</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
@@ -190,6 +273,56 @@
     </div>
   </div>
 
+  <!-- Tutorial Modal -->
+  <div class="overlay" id="tutOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="tutTitle">Step 2 Tutorial</h3>
+          <div class="kicker">How to use stickies (and why we do it this way).</div>
+        </div>
+        <button id="btnCloseTut" class="btnGhost" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="steps" id="tutSteps"></div>
+        <div id="tutContent"></div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">You can reopen this anytime via “Tutorial”.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnPrev" class="btnGhost">← Back</button>
+          <button id="btnNextStep" class="btnPrimary">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 Gate Modal -->
+  <div class="overlay" id="gateOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="gateTitle">Passcode required</h3>
+          <div class="kicker">Enter the Step 3 passcode to proceed.</div>
+        </div>
+        <button id="btnCloseGate" class="btnGhost" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="row">
+          <input id="gateInput" class="field" type="password" placeholder="Step 3 passcode" autocomplete="one-time-code"/>
+          <button id="btnGateGo" class="btnPrimary">Proceed</button>
+        </div>
+        <div class="callout">
+          This gate helps keep the workshop in sync (so people don’t jump ahead).
+        </div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">If you don’t have it, ask the facilitator.</div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   (() => {
@@ -197,7 +330,6 @@
     const ERROR_BOX = document.createElement("div");
     ERROR_BOX.style.cssText = "position:fixed;inset:0;padding:16px;background:#0b0d12;color:#e9ecff;font-family:ui-monospace,Menlo,Consolas,monospace;z-index:99999;display:none;overflow:auto";
     document.body.appendChild(ERROR_BOX);
-
     function showFatal(title, err){
       ERROR_BOX.style.display = "block";
       ERROR_BOX.innerHTML = `<h2 style="margin:0 0 10px;font-family:system-ui">${title}</h2>
@@ -212,7 +344,10 @@
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const BASE_PATH = "/stage1";
-    const CHIBI3_SRC = "/pic/chibi3.png"; // <- change if needed
+    const CHIBI3_SRC = "/assets/chibi3.png"; // <- change if needed
+
+    // ✅ Step 3 gate passcode (client-side)
+    const STEP3_PASSCODE = "duck456";
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
@@ -227,6 +362,9 @@
       location.href = `${BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`;
       return;
     }
+
+    // Remember Step3 unlock per room (optional)
+    const STEP3_KEY = `stage1_step3_authed_${room}`;
 
     const $ = (q, el=document) => el.querySelector(q);
     const roomOut = $("#roomOut"), meOut = $("#meOut");
@@ -261,6 +399,31 @@
       loading.setAttribute("aria-hidden","true");
       document.body.style.overflow = "";
     }
+
+    // ===== overlay helpers =====
+    function openOverlay(el){
+      el.style.display = "flex";
+      el.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+    function closeOverlay(el){
+      el.style.display = "none";
+      el.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+    const tutOverlay = $("#tutOverlay");
+    const gateOverlay = $("#gateOverlay");
+
+    // click outside closes
+    [tutOverlay, gateOverlay].forEach(ov => {
+      ov.addEventListener("mousedown",(e)=>{ if(e.target===ov) closeOverlay(ov); });
+    });
+    // esc closes modal (not loading)
+    window.addEventListener("keydown",(e)=>{
+      if(e.key!=="Escape") return;
+      if(tutOverlay.style.display==="flex") closeOverlay(tutOverlay);
+      if(gateOverlay.style.display==="flex") closeOverlay(gateOverlay);
+    });
 
     function clamp(v,min,max){ return Math.min(max, Math.max(min,v)); }
 
@@ -387,7 +550,7 @@
 
         const delBtn = el.querySelector(".tinyBtn");
 
-        // ✅ FIXED: stop pointerdown so drag never captures this interaction
+        // stop pointerdown so drag never captures this interaction
         delBtn.addEventListener("pointerdown", (e)=>{
           e.stopPropagation();
           e.preventDefault();
@@ -403,7 +566,7 @@
           saving.delete(id);
           render();
 
-          // DB delete + log (keeps debugging easy)
+          // DB delete
           const { data, error } = await supabase
             .from("workshop_stickies")
             .delete()
@@ -482,9 +645,7 @@
     function getDeletedId(payload){
       if (!payload) return null;
       if (payload.old && payload.old.id) return payload.old.id;
-      if (payload.old && payload.old.ID) return payload.old.ID;
       if (payload.old && payload.old.sticky_id) return payload.old.sticky_id;
-      if (payload.old && payload.old.stickyId) return payload.old.stickyId;
       return null;
     }
 
@@ -518,8 +679,7 @@
                 saving.delete(did);
                 render();
               } else {
-                // fallback: reload
-                loadInitial();
+                loadInitial(); // fallback
               }
             }
           }
@@ -572,18 +732,176 @@
       }
     });
 
+    // ===== Tutorial =====
+    const TUT_KEY = `stage1_step2_tut_seen_${room}`;
+    const tutorialSlides = [
+      {
+        title: "What to do here",
+        html: `
+          <div class="callout">
+            Add your goals as stickies. One sticky = one goal. Keep it short.
+          </div>
+          <ul class="list">
+            <li>Click <span class="mono">＋ Add sticky</span> to create one.</li>
+            <li>Type inside the sticky to edit.</li>
+            <li>Drag the sticky to organize.</li>
+            <li>Delete with <span class="mono">X</span> if needed.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Why sticky notes",
+        html: `
+          <div class="callout">
+            Stickies make goals visible and negotiable — everyone can quickly see the shared direction.
+          </div>
+          <ul class="list">
+            <li>It reduces “hidden assumptions” in group work.</li>
+            <li>It’s faster than a form, but still structured.</li>
+            <li>It helps the facilitator spot clusters and conflicts.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Realtime + saving behaviour",
+        html: `
+          <div class="callout">
+            You’ll see updates from others automatically (realtime).
+          </div>
+          <ul class="list">
+            <li><span class="mono">saving</span> shows while changes sync.</li>
+            <li>Text saves after you pause typing (to reduce spam).</li>
+            <li>Drag updates are throttled for smoothness.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Before going to Step 3",
+        html: `
+          <div class="callout">
+            Make sure your main goals are on the board.
+          </div>
+          <ul class="list">
+            <li>If you’re done, click <span class="mono">Next → Step 3</span>.</li>
+            <li>You’ll be asked for a Step 3 passcode.</li>
+          </ul>
+        `
+      }
+    ];
+    let tutIndex = 0;
+
+    const tutSteps = $("#tutSteps");
+    const tutContent = $("#tutContent");
+    const btnPrev = $("#btnPrev");
+    const btnNextStep = $("#btnNextStep");
+
+    function renderTutorial(){
+      tutSteps.innerHTML = tutorialSlides.map((_, i) => {
+        const cls = "pill" + (i === tutIndex ? " active" : "");
+        return `<span class="${cls}">${i+1}</span>`;
+      }).join("");
+
+      const slide = tutorialSlides[tutIndex];
+      tutContent.innerHTML = `
+        <div class="row" style="justify-content:space-between; align-items:flex-end">
+          <div>
+            <div class="mono">Step ${tutIndex+1} / ${tutorialSlides.length}</div>
+            <div style="margin-top:6px;font-weight:1000;font-size:16px;letter-spacing:.2px">${escapeHtml(slide.title)}</div>
+          </div>
+        </div>
+        <div style="height:6px"></div>
+        ${slide.html}
+      `;
+
+      btnPrev.disabled = (tutIndex === 0);
+      btnNextStep.textContent = (tutIndex === tutorialSlides.length - 1) ? "Done" : "Next";
+    }
+
+    function openTutorial(startAt=0){
+      tutIndex = Math.max(0, Math.min(startAt, tutorialSlides.length - 1));
+      renderTutorial();
+      openOverlay(tutOverlay);
+    }
+
+    $("#btnTutorial").addEventListener("click", ()=> openTutorial(0));
+    $("#btnCloseTut").addEventListener("click", ()=> closeOverlay(tutOverlay));
+    btnPrev.addEventListener("click", ()=>{ tutIndex = Math.max(0, tutIndex - 1); renderTutorial(); });
+    btnNextStep.addEventListener("click", ()=>{
+      if (tutIndex === tutorialSlides.length - 1){
+        closeOverlay(tutOverlay);
+        return;
+      }
+      tutIndex = Math.min(tutorialSlides.length - 1, tutIndex + 1);
+      renderTutorial();
+    });
+
+    // auto-show tutorial once (per room)
+    function maybeShowTutorialOnce(){
+      if (!localStorage.getItem(TUT_KEY)){
+        localStorage.setItem(TUT_KEY, "1");
+        openTutorial(0);
+      }
+    }
+
+    // ===== Step 3 passcode gate =====
+    const gateInput = $("#gateInput");
+    const btnGateGo = $("#btnGateGo");
+
+    function openGate(){
+      gateInput.value = "";
+      openOverlay(gateOverlay);
+      setTimeout(()=>gateInput.focus(), 0);
+    }
+
+    function proceedToStep3(){
+      location.href = `${BASE_PATH}/step3.html?room=${encodeURIComponent(room)}`;
+    }
+
+    $("#btnCloseGate").addEventListener("click", ()=> closeOverlay(gateOverlay));
+
+    gateInput.addEventListener("keydown",(e)=>{
+      if(e.key === "Enter") btnGateGo.click();
+    });
+
+    btnGateGo.addEventListener("click", ()=>{
+      const pw = (gateInput.value || "").trim();
+      if (pw !== STEP3_PASSCODE){
+        showToast("Wrong Step 3 passcode");
+        gateInput.focus();
+        gateInput.select?.();
+        return;
+      }
+      localStorage.setItem(STEP3_KEY, "1");
+      closeOverlay(gateOverlay);
+      proceedToStep3();
+    });
+
     $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`);
-    $("#btnNext").addEventListener("click", ()=> location.href = `${BASE_PATH}/step3.html?room=${encodeURIComponent(room)}`);
+
+    // Next button requires Step 3 passcode
+    $("#btnNext").addEventListener("click", ()=>{
+      if (localStorage.getItem(STEP3_KEY) === "1"){
+        proceedToStep3();
+        return;
+      }
+      openGate();
+    });
 
     $("#btnReset").addEventListener("click", ()=>{
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;
       localStorage.removeItem(PID_KEY);
-      localStorage.removeItem(`stage1_authed_${room}`);
+      localStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(STEP3_KEY);
+      localStorage.removeItem(TUT_KEY);
       location.reload();
     });
 
-    loadInitial().then(subscribeRealtime);
+    // ===== Boot =====
+    loadInitial().then(()=>{
+      subscribeRealtime();
+      maybeShowTutorialOnce();
+    });
   })();
   </script>
 </body>
