@@ -13,9 +13,14 @@
 :root{
   --bg:#07070b;
   --text:#f6f6ff;
-  --muted:rgba(246,246,255,.65);
+  --muted:rgba(246,246,255,.66);
+
   --accent:#7c5cff;
   --accent2:#ff2bd6;
+
+  --card:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.14);
+  --shadow:rgba(0,0,0,.55);
 }
 
 *{box-sizing:border-box}
@@ -23,7 +28,7 @@ html,body{height:100%}
 
 body{
   margin:0;
-  font-family:"Space Grotesk", sans-serif;
+  font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   background:var(--bg);
   color:var(--text);
   display:flex;
@@ -33,92 +38,111 @@ body{
   overflow-x:hidden;
 }
 
-/* Soft glow */
+/* soft glow, keeps vibe */
 body::before{
   content:"";
   position:fixed;
   inset:-20%;
   background:
-    radial-gradient(700px 500px at 20% 10%, rgba(255,43,214,.15), transparent 60%),
-    radial-gradient(800px 600px at 80% 20%, rgba(124,92,255,.15), transparent 60%);
+    radial-gradient(700px 500px at 18% 10%, rgba(255,43,214,.14), transparent 60%),
+    radial-gradient(820px 620px at 84% 20%, rgba(124,92,255,.14), transparent 62%);
   z-index:-1;
 }
 
-.container{
-  max-width:900px;
-  width:100%;
-}
+.container{max-width:980px; width:100%}
 
-/* Layout */
 .hero{
   display:flex;
   align-items:center;
-  gap:48px;
+  gap:44px;
 }
 
-@media (max-width:768px){
+@media (max-width:780px){
   .hero{
     flex-direction:column;
     align-items:flex-start;
-    gap:32px;
+    gap:24px;
   }
 }
 
-/* Chibi */
+/* ROUND CHIBI */
 .chibi{
-  width:clamp(160px, 28vw, 260px);
+  width:clamp(160px, 28vw, 240px);
   aspect-ratio:1/1;
+  border-radius:999px;
+  overflow:hidden;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.45),
+    0 0 0 6px rgba(124,92,255,.08);
+  position:relative;
   flex-shrink:0;
+}
+
+/* subtle cute highlight ring */
+.chibi::after{
+  content:"";
+  position:absolute;
+  inset:10px;
+  border-radius:999px;
+  border:1px dashed rgba(255,255,255,.16);
+  pointer-events:none;
+  opacity:.55;
 }
 
 .chibi img{
   width:100%;
   height:100%;
-  object-fit:contain;
+  object-fit:cover; /* crops nicely */
+  object-position:center;
   display:block;
+  transform: scale(1.02); /* tiny zoom so edges fill round */
 }
 
 /* Typography */
 h1{
-  font-size:clamp(48px, 8vw, 90px);
+  font-size:clamp(52px, 8vw, 92px);
   margin:0;
-  line-height:.9;
-  letter-spacing:-.03em;
+  line-height:.92;
+  letter-spacing:-.04em;
 }
 
 .highlight{
   position:relative;
   display:inline-block;
+  padding:0 4px;
 }
 
 .highlight::after{
   content:"";
   position:absolute;
-  left:0;
-  right:0;
-  bottom:8px;
+  left:0; right:0;
+  bottom:10px;
   height:10px;
-  background:rgba(124,92,255,.25);
+  background:rgba(124,92,255,.22);
   z-index:-1;
+  transform:skewX(-10deg);
 }
 
-p{
-  margin:24px 0 0;
+.lead{
+  margin:18px 0 0;
   font-size:18px;
-  line-height:1.7;
+  line-height:1.75;
   color:var(--muted);
-  max-width:520px;
+  max-width:56ch;
 }
 
-/* Links */
+.lead b{color:var(--text)}
+
 .links{
-  margin-top:40px;
+  margin-top:28px;
   display:flex;
-  gap:28px;
+  gap:22px;
   flex-wrap:wrap;
 }
 
-a{
+a.link{
   text-decoration:none;
   font-size:16px;
   font-weight:600;
@@ -127,7 +151,7 @@ a{
   transition:.2s ease;
 }
 
-a::after{
+a.link::after{
   content:"";
   position:absolute;
   left:0;
@@ -140,55 +164,225 @@ a::after{
   transition:.25s ease;
 }
 
-a:hover::after{
-  transform:scaleX(1);
+a.link:hover::after{transform:scaleX(1)}
+
+/* Workshop button */
+.actions{
+  margin-top:26px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
+button{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);
+  color:var(--text);
+  padding:12px 14px;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .08s ease, background .12s ease, border-color .12s ease;
+}
+button:active{transform:translateY(1px)}
+button.primary{
+  border-color: rgba(255,43,214,.26);
+  background: rgba(255,43,214,.10);
+}
+button.primary:hover{background: rgba(255,43,214,.14)}
+button.ghost{
+  border-style:dashed;
+  background:rgba(255,255,255,.05);
+  color:rgba(246,246,255,.78);
+}
+
+/* Modal */
+.overlay{
+  position:fixed; inset:0;
+  background:rgba(10,10,18,.55);
+  backdrop-filter: blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:50;
+}
+.overlay.open{display:flex}
+
+.modal{
+  width:min(520px, 100%);
+  border-radius:18px;
+  background:rgba(16,16,26,.92);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 26px 80px rgba(0,0,0,.6);
+  padding:16px;
+}
+
+.modalTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.modal h2{
+  margin:0;
+  font-size:16px;
+  letter-spacing:.02em;
+}
+.modal p{
+  margin:10px 0 0;
+  color:rgba(246,246,255,.70);
+  line-height:1.6;
+  font-size:14px;
+}
+.modal .choices{
+  margin-top:14px;
+  display:grid;
+  gap:10px;
+}
+.choice{
+  width:100%;
+  text-align:left;
+  padding:14px 14px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  font-weight:800;
+}
+.choice:hover{background:rgba(255,255,255,.09)}
+.closeBtn{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.06);
+  padding:10px 12px;
+  border-radius:12px;
+  font-weight:800;
+}
+.smallNote{
+  margin-top:10px;
+  font-size:12px;
+  color:rgba(246,246,255,.55);
+}
+
+/* Footer */
 small{
   display:block;
-  margin-top:60px;
-  font-size:14px;
-  color:rgba(246,246,255,.4);
+  margin-top:46px;
+  font-size:13px;
+  color:rgba(246,246,255,.42);
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
-
   <div class="hero">
     <div class="chibi">
-      <img src="/pic/chibi1.png" alt="Jackie Chibi">
+      <!-- change extension if needed: .png / .jpg / .webp -->
+      <img src="/pic/chibi1.png" alt="Jackie chibi">
     </div>
 
     <div>
-      <h1>
-        <span class="highlight">Jackie Foo</span>
-      </h1>
+      <h1><span class="highlight">Jackie Foo</span></h1>
 
-      <p>
-        Soft launch. This site is still developing.
-        I’m building it in public and refining it as I go.
+      <p class="lead">
+        <b>Soft launch.</b> I’m Jackie. This is my tiny corner of the internet.
+        More is coming. Stay tuned.
       </p>
 
-      <div class="links">
-        <a href="#" target="_blank">LinkedIn</a>
-        <a href="#" target="_blank">GitHub</a>
-        <a href="mailto:you@email.com">Email</a>
-        <a href="#" target="_blank">Resume</a>
+      <div class="actions">
+        <button class="primary" id="workshopBtn" type="button">Here for Workshop 1</button>
+        <button class="ghost" id="closeHint" type="button" title="Just vibes">Just browsing</button>
       </div>
+
+      <div class="links" aria-label="links">
+        <!-- Replace # + email -->
+        <a class="link" href="#" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="link" href="#" target="_blank" rel="noopener">GitHub</a>
+        <a class="link" href="mailto:you@email.com">Email</a>
+        <a class="link" href="#" target="_blank" rel="noopener">Resume</a>
+      </div>
+
+      <small>© <span id="year"></span></small>
     </div>
   </div>
+</div>
 
-  <small>
-    © <span id="year"></span>
-  </small>
+<!-- Modal -->
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modalTop">
+      <div>
+        <h2 id="modalTitle">Workshop 1</h2>
+        <p>Which university are you from?</p>
+      </div>
+      <button class="closeBtn" id="closeModal" type="button" aria-label="Close">Close</button>
+    </div>
 
+    <div class="choices">
+      <button class="choice" type="button" data-uni="Monash">Monash University</button>
+      <button class="choice" type="button" data-uni="UPNG">UPNG</button>
+    </div>
+
+    <div class="smallNote" id="routeNote">
+      Not routing yet. For now, you’ll stay on this page (jackiefoo.me).
+    </div>
+  </div>
 </div>
 
 <script>
-document.getElementById("year").textContent = new Date().getFullYear();
+  // Year
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Modal controls
+  const overlay = document.getElementById("overlay");
+  const workshopBtn = document.getElementById("workshopBtn");
+  const closeModal = document.getElementById("closeModal");
+  const routeNote = document.getElementById("routeNote");
+  const justBrowsing = document.getElementById("closeHint");
+
+  function openModal(){
+    overlay.classList.add("open");
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+  function closeModalFn(){
+    overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  workshopBtn.addEventListener("click", openModal);
+  closeModal.addEventListener("click", closeModalFn);
+  overlay.addEventListener("click", (e) => {
+    if(e.target === overlay) closeModalFn();
+  });
+  window.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && overlay.classList.contains("open")) closeModalFn();
+  });
+
+  justBrowsing.addEventListener("click", () => {
+    // a tiny dramatic wink without being cringe
+    routeNote.textContent = "Okay. Lurking accepted. Stay tuned.";
+    // brief flash
+    overlay.classList.add("open");
+    setTimeout(() => closeModalFn(), 900);
+  });
+
+  // Uni selection (for now: stay on same page, but we store choice)
+  document.querySelectorAll("[data-uni]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const uni = btn.getAttribute("data-uni");
+      localStorage.setItem("workshop1_uni", uni);
+
+      // Placeholder routing behavior (keeps you on jackiefoo.me)
+      routeNote.textContent = `Selected: ${uni}. Routing is coming soon. For now, you stay here.`;
+
+      // If later you want routing, uncomment one of these:
+      // if(uni === "Monash") window.location.href = "/workshop1/monash";
+      // if(uni === "UPNG") window.location.href = "/workshop1/upng";
+    });
+  });
 </script>
 
 </body>
