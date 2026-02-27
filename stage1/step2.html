@@ -51,8 +51,21 @@
       display:flex;
       flex-direction:column;
       gap:8px;
+      opacity:0;
+      transform: translateY(6px) scale(.99);
+      animation: popIn .18s ease-out forwards;
+      transition: left .08s linear, top .08s linear, transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+      will-change: left, top;
     }
-    .sticky:active{ cursor:grabbing; }
+    @keyframes popIn{
+      to { opacity:1; transform: translateY(0) scale(1); }
+    }
+    .sticky.dragging{
+      cursor:grabbing;
+      transform: scale(1.01);
+      box-shadow: 0 22px 50px rgba(0,0,0,.42);
+      transition: transform .05s linear, box-shadow .05s linear;
+    }
     .sticky textarea{
       width:100%;
       background: transparent;
@@ -72,8 +85,69 @@
       font-weight: 1000;border-radius: 10px;padding: 6px 8px;cursor:pointer;
       box-shadow:none;
     }
+    .statusPill{
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:10px;
+      font-weight:1000;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+      background: rgba(0,0,0,.18);
+      color: rgba(0,0,0,.82);
+      border: 1px solid rgba(0,0,0,.12);
+    }
+    .statusPill.saving{
+      background: rgba(255,255,255,.22);
+      border-color: rgba(255,255,255,.18);
+      color: rgba(0,0,0,.82);
+    }
+
     .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
       border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);max-width:360px;color:var(--text);font-weight:900;font-size:12px;display:none}
+
+    /* ===== Loading Screen ===== */
+    .loading{
+      position:fixed; inset:0; z-index:120;
+      display:none; align-items:center; justify-content:center;
+      background:radial-gradient(1200px 600px at 30% 20%, rgba(0,229,255,.10), transparent 55%),
+                 radial-gradient(900px 500px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
+                 rgba(0,0,0,.72);
+      backdrop-filter: blur(6px);
+      padding:16px;
+    }
+    .loadingCard{
+      width:min(520px, 100%);
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      text-align:center;
+      padding:18px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+    }
+    .chibi{
+      width:140px; height:140px;
+      object-fit:contain;
+      filter: drop-shadow(0 16px 22px rgba(0,0,0,.45));
+      border-radius:18px;
+    }
+    .loadingTitle{font-weight:1000;letter-spacing:.2px;font-size:16px;margin:0}
+    .loadingSub{margin:0;color:var(--muted);font-weight:800;font-size:12px;line-height:1.45}
+    .bar{width:100%;height:10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);overflow:hidden}
+    .bar > div{
+      height:100%;width:40%;border-radius:999px;
+      background:linear-gradient(90deg, rgba(0,229,255,.85), rgba(255,43,214,.85));
+      animation: glide 1.2s ease-in-out infinite;
+    }
+    @keyframes glide{
+      0%{transform:translateX(-40%)}
+      50%{transform:translateX(120%)}
+      100%{transform:translateX(-40%)}
+    }
   </style>
 </head>
 <body>
@@ -107,26 +181,41 @@
 
   <div class="toast" id="toast"></div>
 
+  <!-- Loading -->
+  <div class="loading" id="loading" aria-hidden="true">
+    <div class="loadingCard">
+      <img id="chibiImg" class="chibi" alt="Loading chibi"/>
+      <p class="loadingTitle" id="loadingTitle">Loading stickies…</p>
+      <p class="loadingSub" id="loadingSub">Syncing your room + fetching the board.</p>
+      <div class="bar" aria-hidden="true"><div></div></div>
+      <div class="subtitle" style="margin:0;max-width:420px">If this takes long, your network might be slow — don’t panic.</div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   (() => {
-              const ERROR_BOX = document.createElement("div");
-          ERROR_BOX.style.cssText = "position:fixed;inset:0;padding:16px;background:#0b0d12;color:#e9ecff;font-family:ui-monospace,Menlo,Consolas,monospace;z-index:99999;display:none;overflow:auto";
-          document.body.appendChild(ERROR_BOX);
+    // ===== crash overlay (kept from yours) =====
+    const ERROR_BOX = document.createElement("div");
+    ERROR_BOX.style.cssText = "position:fixed;inset:0;padding:16px;background:#0b0d12;color:#e9ecff;font-family:ui-monospace,Menlo,Consolas,monospace;z-index:99999;display:none;overflow:auto";
+    document.body.appendChild(ERROR_BOX);
 
-          function showFatal(title, err){
-            ERROR_BOX.style.display = "block";
-            ERROR_BOX.innerHTML = `<h2 style="margin:0 0 10px;font-family:system-ui">${title}</h2>
-            <pre style="white-space:pre-wrap">${(err && (err.stack || err.message)) ? (err.stack || err.message) : String(err)}</pre>`;
-          }
+    function showFatal(title, err){
+      ERROR_BOX.style.display = "block";
+      ERROR_BOX.innerHTML = `<h2 style="margin:0 0 10px;font-family:system-ui">${title}</h2>
+      <pre style="white-space:pre-wrap">${(err && (err.stack || err.message)) ? (err.stack || err.message) : String(err)}</pre>`;
+    }
+    window.addEventListener("error", (e)=>showFatal("Step2 crashed", e.error || e.message));
+    window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise rejected", e.reason));
 
-window.addEventListener("error", (e)=>showFatal("Step2 crashed", e.error || e.message));
-window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise rejected", e.reason));
+    // ===== config =====
     const SUPABASE_URL = "https://djqwztoavtkqspxpvluc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcXd6dG9hdnRrcXNweHB2bHVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMDU3MDEsImV4cCI6MjA4Nzc4MTcwMX0.ZVcMU8DeHxHMw3WWegz88BmCei9z4UX3tZR7n1XFRj0";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const BASE_PATH = "/stage1";
+    const CHIBI3_SRC = "/assets/chibi3.png"; // <- change if needed
+
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
     if (!room) { location.href = `${BASE_PATH}/step1.html?room=demo`; return; }
@@ -144,6 +233,14 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
     const $ = (q, el=document) => el.querySelector(q);
     const roomOut = $("#roomOut"), meOut = $("#meOut");
     const stickyArea = $("#stickyArea"), toast = $("#toast");
+
+    const loading = $("#loading");
+    const chibiImg = $("#chibiImg");
+    const loadingTitle = $("#loadingTitle");
+    const loadingSub = $("#loadingSub");
+
+    chibiImg.src = CHIBI3_SRC;
+
     roomOut.textContent = room;
     meOut.textContent = participantId.slice(0,8);
 
@@ -152,6 +249,19 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
       toast.style.display = "block";
       clearTimeout(showToast._t);
       showToast._t = setTimeout(() => toast.style.display = "none", 2200);
+    }
+
+    function showLoading(title="Loading stickies…", sub="Syncing your room + fetching the board."){
+      loadingTitle.textContent = title;
+      loadingSub.textContent = sub;
+      loading.style.display = "flex";
+      loading.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+    function hideLoading(){
+      loading.style.display = "none";
+      loading.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
     }
 
     function clamp(v,min,max){ return Math.min(max, Math.max(min,v)); }
@@ -165,11 +275,35 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
       };
     }
 
+    function debounce(fn, ms=350){
+      let timer=null;
+      return (...args)=>{
+        clearTimeout(timer);
+        timer=setTimeout(()=>fn(...args), ms);
+      };
+    }
+
     const state = { stickies: [] };
 
+    // Local map of pending save states (id -> boolean)
+    const saving = new Map();
+
+    function setSaving(id, isSaving){
+      saving.set(id, !!isSaving);
+      // update pill if exists
+      const el = stickyArea.querySelector(`[data-id="${CSS.escape(String(id))}"]`);
+      if(!el) return;
+      const pill = el.querySelector("[data-pill]");
+      if(!pill) return;
+      pill.classList.toggle("saving", !!isSaving);
+      pill.textContent = isSaving ? "saving" : "saved";
+    }
+
     async function ensureSessionAndParticipant(){
-      await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict: "id" });
-      await supabase.from("workshop_participants").upsert({ id: participantId, session_id: room }, { onConflict: "id" });
+      const a = await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict: "id" });
+      if (a.error) throw a.error;
+      const b = await supabase.from("workshop_participants").upsert({ id: participantId, session_id: room }, { onConflict: "id" });
+      if (b.error) throw b.error;
     }
 
     function escapeHtml(str){
@@ -186,12 +320,13 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
       return options[Math.floor(Math.random()*options.length)];
     }
 
-    function makePointerDraggable(el, {onMove}){
+    function makePointerDraggable(el, {onStart, onMove, onEnd}){
       let last=null;
       el.addEventListener("pointerdown",(e)=>{
         if(e.target && e.target.tagName==="TEXTAREA") return;
         el.setPointerCapture(e.pointerId);
         last={x:e.clientX,y:e.clientY};
+        onStart?.();
       });
       el.addEventListener("pointermove",(e)=>{
         if(!last) return;
@@ -199,45 +334,87 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
         last={x:e.clientX,y:e.clientY};
         onMove(dx,dy);
       });
-      el.addEventListener("pointerup",()=>{last=null;});
-      el.addEventListener("pointercancel",()=>{last=null;});
+      el.addEventListener("pointerup",()=>{
+        if(!last) return;
+        last=null;
+        onEnd?.();
+      });
+      el.addEventListener("pointercancel",()=>{
+        if(!last) return;
+        last=null;
+        onEnd?.();
+      });
     }
 
+    // ===== DB update helpers =====
     const pushStickyUpdate = throttle(async (id, patch) => {
+      setSaving(id, true);
       const { error } = await supabase.from("workshop_stickies").update(patch).eq("id", id);
       if (error) console.error("sticky update error", error);
-    }, 200);
+      setSaving(id, false);
+    }, 180);
+
+    const pushStickyTextUpdate = debounce(async (id, text) => {
+      setSaving(id, true);
+      const { error } = await supabase.from("workshop_stickies").update({ text }).eq("id", id);
+      if (error) console.error("text update error", error);
+      setSaving(id, false);
+    }, 420);
 
     function render(){
       stickyArea.innerHTML = "";
       state.stickies.forEach(s=>{
         const el = document.createElement("div");
         el.className = "sticky";
+        el.dataset.id = s.id;
         el.style.left = s.x + "px";
         el.style.top  = s.y + "px";
         el.style.background = s.color;
 
+        const isSaving = saving.get(s.id) === true;
+
         el.innerHTML = `
           <div class="mini">
             <span style="font-weight:1000;color:rgba(0,0,0,.82);font-size:11px;letter-spacing:.2px;text-transform:uppercase">Goal</span>
-            <button class="tinyBtn" title="Delete">X</button>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span class="statusPill ${isSaving ? "saving" : ""}" data-pill>${isSaving ? "saving" : "saved"}</span>
+              <button class="tinyBtn" title="Delete" aria-label="Delete">X</button>
+            </div>
           </div>
           <textarea placeholder="Write your goal...">${escapeHtml(s.text)}</textarea>
         `;
 
+        // Delete: optimistic remove first, then DB delete
         el.querySelector(".tinyBtn").addEventListener("click", async (e)=>{
           e.stopPropagation();
-          await supabase.from("workshop_stickies").delete().eq("id", s.id);
+
+          // optimistic UI remove
+          const id = s.id;
+          state.stickies = state.stickies.filter(x => x.id !== id);
+          render();
+
+          // actual delete
+          const { error } = await supabase.from("workshop_stickies").delete().eq("id", id);
+          if (error){
+            console.error(error);
+            showToast("Delete failed (see console)");
+            // rollback: re-add locally if delete failed
+            state.stickies.push(s);
+            render();
+          }
         });
 
         const ta = el.querySelector("textarea");
         ta.addEventListener("input", ()=>{
           const item = state.stickies.find(x=>x.id===s.id);
           if(item) item.text = ta.value;
-          pushStickyUpdate(s.id, { text: ta.value });
+          setSaving(s.id, true);
+          pushStickyTextUpdate(s.id, ta.value);
         });
 
         makePointerDraggable(el, {
+          onStart: ()=> el.classList.add("dragging"),
+          onEnd:   ()=> el.classList.remove("dragging"),
           onMove:(dx,dy)=>{
             const item = state.stickies.find(x=>x.id===s.id);
             if(!item) return;
@@ -248,7 +425,6 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
             item.x = clamp(item.x + dx, 6, Math.max(6, maxX-6));
             item.y = clamp(item.y + dy, 6, Math.max(6, maxY-6));
 
-            // IMPORTANT: ints only
             item.x = Math.round(item.x);
             item.y = Math.round(item.y);
 
@@ -264,14 +440,39 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
     }
 
     async function loadInitial(){
-      await ensureSessionAndParticipant();
-      const { data, error } = await supabase
-        .from("workshop_stickies")
-        .select("*")
-        .eq("session_id", room);
-      if (error) console.error(error);
-      state.stickies = (data || []).map(s => ({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text, participant_id:s.participant_id }));
-      render();
+      showLoading("Loading stickies…", "Syncing your room + fetching the board.");
+      try{
+        await ensureSessionAndParticipant();
+
+        const { data, error } = await supabase
+          .from("workshop_stickies")
+          .select("*")
+          .eq("session_id", room);
+
+        if (error) throw error;
+
+        state.stickies = (data || []).map(s => ({
+          id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "",
+          participant_id:s.participant_id
+        }));
+
+        render();
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // Helper to safely extract id from DELETE payload
+    function getDeletedId(payload){
+      // With REPLICA IDENTITY FULL, payload.old includes full row.
+      // Without it, payload.old might only contain the primary key columns.
+      if (!payload) return null;
+      if (payload.old && payload.old.id) return payload.old.id;
+      if (payload.old && payload.old.ID) return payload.old.ID;
+      if (payload.old && payload.old.sticky_id) return payload.old.sticky_id;
+      if (payload.old && payload.old.stickyId) return payload.old.stickyId;
+      // Sometimes supabase gives old as just an object with the PK but naming mismatch
+      return null;
     }
 
     function subscribeRealtime(){
@@ -283,20 +484,32 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
             if(payload.eventType==="INSERT"){
               const s = payload.new;
               if(!state.stickies.some(x=>x.id===s.id)){
-                state.stickies.push({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text, participant_id:s.participant_id });
+                state.stickies.push({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id });
                 render();
               }
             } else if(payload.eventType==="UPDATE"){
               const s = payload.new;
               const idx = state.stickies.findIndex(x=>x.id===s.id);
               if(idx>=0){
-                state.stickies[idx] = { id:s.id, x:s.x, y:s.y, color:s.color, text:s.text, participant_id:s.participant_id };
+                // keep local saving state, but update fields
+                state.stickies[idx] = { id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id };
+                render();
+              } else {
+                // if it didn't exist locally, add it
+                state.stickies.push({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id });
                 render();
               }
+              setSaving(s.id, false);
             } else if(payload.eventType==="DELETE"){
-              const old = payload.old;
-              state.stickies = state.stickies.filter(x=>x.id!==old.id);
-              render();
+              const did = getDeletedId(payload);
+              if(did){
+                state.stickies = state.stickies.filter(x=>x.id!==did);
+                saving.delete(did);
+                render();
+              } else {
+                // If delete payload has no id, fallback: reload (rare, but fixes “won’t remove”)
+                loadInitial();
+              }
             }
           }
         )
@@ -308,18 +521,32 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
       const x = Math.round(Math.max(10, Math.min(rect.width - 190, 12 + Math.random()*40)));
       const y = Math.round(Math.max(10, Math.min(rect.height - 120, 12 + Math.random()*40)));
 
-      const payload = {
+      // optimistic placeholder ID (temp)
+      const tempId = "temp_" + crypto.randomUUID();
+      const optimistic = {
+        id: tempId,
         session_id: room,
         x, y,
         color: randomStickyColor(),
-        text: ""
+        text: "",
+        participant_id: participantId
       };
 
-      // try include participant_id (if your column exists)
-      payload.participant_id = participantId;
+      state.stickies.push({ id:optimistic.id, x:optimistic.x, y:optimistic.y, color:optimistic.color, text:"", participant_id:participantId });
+      setSaving(tempId, true);
+      render();
 
-      // Optimistic insert: request row back
+      // actual insert
+      const payload = {
+        session_id: room,
+        x, y,
+        color: optimistic.color,
+        text: "",
+        participant_id: participantId
+      };
+
       let res = await supabase.from("workshop_stickies").insert(payload).select().single();
+
       if (res.error) {
         // fallback if participant_id column doesn't exist
         if (String(res.error.message || "").toLowerCase().includes("participant_id")) {
@@ -327,16 +554,31 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
           res = await supabase.from("workshop_stickies").insert(payload).select().single();
         }
       }
+
       if (res.error) {
         console.error(res.error);
         showToast("Insert failed: " + (res.error.message || "unknown"));
+        // remove optimistic
+        state.stickies = state.stickies.filter(s => s.id !== tempId);
+        saving.delete(tempId);
+        render();
         return;
       }
 
-      // Update UI instantly
+      // replace temp with real row
       const row = res.data;
-      state.stickies.push({ id:row.id, x:row.x, y:row.y, color:row.color, text:row.text, participant_id:row.participant_id });
-      render();
+      const idx = state.stickies.findIndex(s => s.id === tempId);
+      if (idx >= 0){
+        state.stickies[idx] = { id:row.id, x:row.x, y:row.y, color:row.color, text:row.text || "", participant_id:row.participant_id };
+        saving.delete(tempId);
+        setSaving(row.id, false);
+        render();
+      } else {
+        // temp disappeared (rare), just add
+        state.stickies.push({ id:row.id, x:row.x, y:row.y, color:row.color, text:row.text || "", participant_id:row.participant_id });
+        setSaving(row.id, false);
+        render();
+      }
     });
 
     $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`);
@@ -350,6 +592,7 @@ window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise reje
       location.reload();
     });
 
+    // Boot
     loadInitial().then(subscribeRealtime);
   })();
   </script>
