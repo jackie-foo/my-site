@@ -51,6 +51,48 @@
     .type-wish{background:var(--wish)}
     .type-neutral{background:var(--neutral)}
 
+    /* Notes panel */
+    .notesGrid{
+      display:grid;
+      grid-template-columns: 1.3fr .9fr;
+      gap:12px;
+      align-items:stretch;
+    }
+    @media (max-width:980px){
+      .notesGrid{grid-template-columns:1fr}
+    }
+    .panel{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:220px;
+    }
+    .panel h3{
+      margin:0;
+      font-size:12px;
+      font-weight:1000;
+      letter-spacing:.3px;
+      text-transform:uppercase;
+    }
+    .notesBox{
+      flex:1;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:900;
+      outline:none;
+      resize:vertical;
+      min-height:160px;
+      line-height:1.45;
+    }
+    .hintTiny{color:var(--muted);font-weight:800;font-size:12px;line-height:1.35}
+
     .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
       border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);max-width:360px;color:var(--text);font-weight:900;font-size:12px;display:none}
 
@@ -87,13 +129,11 @@
     .list{margin:0; padding-left:18px; color:var(--muted); font-weight:800; font-size:13px; line-height:1.55;}
     .callout{border:1px solid rgba(255,255,255,.10); background:rgba(0,229,255,.06); border-radius:16px; padding:10px 12px; color:var(--text); font-weight:900; font-size:12px; line-height:1.45;}
 
-    /* Add modal fields */
     .field{width:100%; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.04); color:var(--text);
       border-radius:14px; padding:10px 12px; font-weight:900; outline:none;}
     .seg{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
     .seg button{box-shadow:none; padding:8px 10px; border-radius:999px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);}
     .seg button.active{border-color:color-mix(in srgb,var(--accent2) 55%, rgba(255,255,255,.10)); background:rgba(255,43,214,.08);}
-    .hintTiny{color:var(--muted);font-weight:800;font-size:12px;line-height:1.35}
   </style>
 </head>
 <body>
@@ -124,6 +164,43 @@
         </section>
         <div class="subtitle" style="margin:0">
           Tip: Long-press a week on phone to add. Drag cards to move weeks.
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW: Notes / Parking lot -->
+    <section class="card">
+      <div class="cardHead">
+        <h2>Parking Lot Notes</h2>
+        <span class="mono" id="notesScopePill">Notes: Shared</span>
+      </div>
+      <div class="cardBody">
+        <div class="notesGrid">
+          <div class="panel">
+            <h3>Things I didn’t get time to say</h3>
+            <textarea id="notesBox" class="notesBox" placeholder="Write anything you want to elaborate later…"></textarea>
+            <div class="row" style="justify-content:space-between">
+              <span class="mono" id="notesStatus">Saved</span>
+              <button id="btnClearNotes" class="btnGhost" type="button">Clear</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Quick prompts</h3>
+            <div class="hintTiny">
+              Use these to expand your cards (especially constraints/support):
+            </div>
+            <ul class="list">
+              <li>What happened?</li>
+              <li>Why was it a constraint / support?</li>
+              <li>What did you do next (or wish you could do)?</li>
+              <li>What would have made it easier?</li>
+              <li>Any example of “good feedback” vs “bad feedback”?</li>
+            </ul>
+            <div class="callout">
+              This note space helps us capture details even if the workshop is rushed.
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -185,12 +262,10 @@
           <div style="flex:1;min-width:260px">
             <div class="kicker">Preset</div>
             <select class="field" id="tmplSelect"></select>
-            <div class="hintTiny" style="margin-top:6px">Choose a preset to guide you.</div>
           </div>
           <div style="flex:1;min-width:260px">
             <div class="kicker">Your wording</div>
             <input class="field" id="cardText" placeholder="What happened / what you think matters"/>
-            <div class="hintTiny" style="margin-top:6px">Leave blank to use preset text.</div>
           </div>
         </div>
 
@@ -221,7 +296,12 @@
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const BASE_PATH = "/stage1";
-    const CHIBI3_SRC = "/pic/chibi3.png"; // ✅ your folder is pic
+    const CHIBI3_SRC = "/pic/chibi3.png";
+
+    // ===== NOTES MODE =====
+    // true  = everyone in same room shares ONE note
+    // false = each participant has their own private note (still stored in Supabase)
+    const NOTES_SHARED = true;
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
@@ -248,6 +328,13 @@
     const loadingSub = $("#loadingSub");
     chibiImg.src = CHIBI3_SRC;
 
+    // notes ui
+    const notesScopePill = $("#notesScopePill");
+    const notesBox = $("#notesBox");
+    const notesStatus = $("#notesStatus");
+    const btnClearNotes = $("#btnClearNotes");
+    notesScopePill.textContent = NOTES_SHARED ? "Notes: Shared" : "Notes: Private";
+
     roomOut.textContent = room;
     meOut.textContent = participantId.slice(0,8);
 
@@ -271,26 +358,18 @@
       document.body.style.overflow = "";
     }
 
-    function openOverlay(el){
-      el.style.display="flex";
-      el.setAttribute("aria-hidden","false");
-      document.body.style.overflow="hidden";
-    }
-    function closeOverlay(el){
-      el.style.display="none";
-      el.setAttribute("aria-hidden","true");
-      document.body.style.overflow="";
-    }
+    function openOverlay(el){ el.style.display="flex"; el.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden"; }
+    function closeOverlay(el){ el.style.display="none"; el.setAttribute("aria-hidden","true"); document.body.style.overflow=""; }
 
     const baseEvents = [
-      { id:"evt-brief",    name:"Assessment brief / rubric arrives", hint:"W1–W2" },
-      { id:"evt-work",     name:"Working on assignment",             hint:"Any week" },
-      { id:"evt-submit",   name:"Submit assignment",                 hint:"Due week" },
-      { id:"evt-feedback", name:"Feedback released",                 hint:"Key moment" },
-      { id:"evt-reflect",  name:"Reflect & decide next action",      hint:"After feedback" },
-      { id:"evt-ask",      name:"Ask for clarification",             hint:"Support moment" },
-      { id:"evt-peer",     name:"Talk to peers",                     hint:"Support moment" },
-      { id:"evt-revise",   name:"Revise approach for next task",     hint:"Iteration" }
+      { id:"evt-brief",    name:"Assessment brief / rubric arrives" },
+      { id:"evt-work",     name:"Working on assignment" },
+      { id:"evt-submit",   name:"Submit assignment" },
+      { id:"evt-feedback", name:"Feedback released" },
+      { id:"evt-reflect",  name:"Reflect & decide next action" },
+      { id:"evt-ask",      name:"Ask for clarification" },
+      { id:"evt-peer",     name:"Talk to peers" },
+      { id:"evt-revise",   name:"Revise approach for next task" }
     ];
 
     const state = { placed: [] };
@@ -342,13 +421,11 @@
           if(obj.kind==="placedEvent") await movePlaced(obj.id, w);
         });
 
-        // desktop: right click
         weekEl.addEventListener("contextmenu",(e)=>{
           e.preventDefault();
           openAddModal(w);
         });
 
-        // mobile: long press
         let pressTimer=null;
         weekEl.addEventListener("pointerdown",(e)=>{
           if(e.pointerType!=="touch") return;
@@ -422,7 +499,6 @@
         el.addEventListener("dragstart",(e)=>{
           e.dataTransfer.setData("text/plain", JSON.stringify({kind:"placedEvent", id:pe.id}));
         });
-
         enableMobileDragPlaced(el, pe.id);
 
         const tagBtn = el.querySelector(".tagBtn");
@@ -480,6 +556,101 @@
       if(error) console.error(error);
     }
 
+    // ===== Notes persistence =====
+    let notesRowId = null;
+    let notesSuppress = false;
+
+    function throttle(fn, ms=400){
+      let t=0, timer=null, lastArgs=null;
+      return (...args)=>{
+        const now=Date.now(); lastArgs=args;
+        if(now - t >= ms){ t=now; fn(...args); }
+        else { clearTimeout(timer); timer=setTimeout(()=>{ t=Date.now(); fn(...lastArgs); }, ms - (now - t)); }
+      };
+    }
+
+    async function loadOrCreateNotesRow(){
+      // shared => one row per session (participant_id null)
+      // private => one row per participant per session
+      let q = supabase.from("workshop_journey_notes").select("*").eq("session_id", room);
+      if (NOTES_SHARED) q = q.is("participant_id", null);
+      else q = q.eq("participant_id", participantId);
+
+      const { data, error } = await q.maybeSingle();
+      if(error) throw error;
+
+      if(data){
+        notesRowId = data.id;
+        notesSuppress = true;
+        notesBox.value = data.body || "";
+        notesSuppress = false;
+        notesStatus.textContent = "Saved";
+        return;
+      }
+
+      // create
+      const payload = { session_id: room, body: "" };
+      payload.participant_id = NOTES_SHARED ? null : participantId;
+
+      const ins = await supabase.from("workshop_journey_notes").insert(payload).select().single();
+      if(ins.error) throw ins.error;
+      notesRowId = ins.data.id;
+      notesStatus.textContent = "Saved";
+    }
+
+    const saveNotesThrottled = throttle(async ()=>{
+      if(!notesRowId) return;
+      notesStatus.textContent = "Saving…";
+      const body = notesBox.value || "";
+      const { error } = await supabase
+        .from("workshop_journey_notes")
+        .update({ body })
+        .eq("id", notesRowId);
+      if(error){
+        console.error(error);
+        notesStatus.textContent = "Save failed";
+        return;
+      }
+      notesStatus.textContent = "Saved";
+    }, 500);
+
+    notesBox.addEventListener("input", ()=>{
+      if(notesSuppress) return;
+      saveNotesThrottled();
+    });
+
+    btnClearNotes.addEventListener("click", async ()=>{
+      const ok = confirm("Clear your notes?");
+      if(!ok) return;
+      notesBox.value = "";
+      await saveNotesThrottled();
+    });
+
+    function subscribeNotesRealtime(){
+      // filter should match the row(s) we care about
+      const filter = NOTES_SHARED
+        ? `session_id=eq.${room}`
+        : `session_id=eq.${room},participant_id=eq.${participantId}`;
+
+      supabase
+        .channel("step3notes:" + room + ":" + (NOTES_SHARED ? "shared" : participantId))
+        .on("postgres_changes",
+          { event:"UPDATE", schema:"public", table:"workshop_journey_notes", filter },
+          (payload)=>{
+            // shared notes: accept updates from others too
+            const row = payload.new;
+            if(!row || !row.id) return;
+            if(notesRowId && row.id !== notesRowId) return;
+            if(document.activeElement === notesBox) return; // don't fight while typing
+            notesSuppress = true;
+            notesBox.value = row.body || "";
+            notesSuppress = false;
+            notesStatus.textContent = "Saved";
+          }
+        )
+        .subscribe();
+    }
+
     // ===== Add modal =====
     const addOverlay = $("#addOverlay");
     const addWeekPill = $("#addWeekPill");
@@ -521,11 +692,7 @@
       const preset = baseEvents.find(x=>x.id===presetId);
       const typed = (cardText.value || "").trim();
       const label = typed || (preset ? preset.name : "");
-
-      if(!label){
-        showToast("Pick a preset or type your wording");
-        return;
-      }
+      if(!label){ showToast("Pick a preset or type your wording"); return; }
 
       const tempId = "temp_" + crypto.randomUUID();
       state.placed.push({ id: tempId, week: addWeek, label, type: addType, participant_id: participantId });
@@ -566,8 +733,8 @@
           </div>
           <ul class="list">
             <li>Choose a preset (dropdown).</li>
-            <li>Type your wording if you want (or leave blank to use the preset text).</li>
-            <li>Pick a starting tag: Neutral / Constraint / Support / Wish.</li>
+            <li>Type your wording (or leave blank to use preset text).</li>
+            <li>Pick a starting tag.</li>
           </ul>
         `
       },
@@ -584,13 +751,13 @@
         `
       },
       {
-        title:"Edit + revise",
+        title:"Parking lot notes",
         html: `
-          <div class="callout">You can change your mind while discussing.</div>
+          <div class="callout">If time is short, write details below so we can analyse later.</div>
           <ul class="list">
-            <li>Drag cards to move between weeks.</li>
-            <li>Tap the tag to cycle types.</li>
-            <li>Remove deletes the card for everyone (realtime).</li>
+            <li>Examples you didn’t get to explain</li>
+            <li>Why something felt unfair / unclear</li>
+            <li>What you wish the tutor feedback included</li>
           </ul>
         `
       }
@@ -649,15 +816,19 @@
       showLoading("Loading journey…", "Syncing your room + fetching items.");
       try{
         await ensureSessionAndParticipant();
+
         const { data, error } = await supabase
           .from("workshop_journey_items")
           .select("*")
           .eq("session_id", room);
         if(error) throw error;
+
         state.placed = (data || []).map(it => ({
           id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id
         }));
         renderPlaced();
+
+        await loadOrCreateNotesRow();
       } finally {
         hideLoading();
       }
@@ -687,8 +858,6 @@
               if(did){
                 state.placed = state.placed.filter(x=>x.id!==did);
                 renderPlaced();
-              } else {
-                loadInitial();
               }
             }
           }
@@ -712,6 +881,7 @@
     initTemplateSelect();
     loadInitial().then(()=>{
       subscribeRealtime();
+      subscribeNotesRealtime();
       maybeShowTutorialOnce();
     });
   })();
