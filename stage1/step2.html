@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Stage 1 • Step 2</title>
+  <style>
+    :root{
+      --bg:#0b0d12; --panel:#121625; --panel2:#0f1320; --border:#2a3350;
+      --text:#e9ecff; --muted:#aab0d6; --accent:#00e5ff; --good:#47ff87; --bad:#ff4d4d;
+      --r:18px; --shadow:0 16px 40px rgba(0,0,0,.38);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1120px;margin:0 auto;padding:16px 14px 88px}
+    header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .badge{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:var(--panel);box-shadow:0 10px 30px rgba(0,0,0,.28);font-weight:1000;font-size:12px}
+    .dot{width:10px;height:10px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 3px rgba(0,229,255,.14)}
+    .subtitle{color:var(--muted);font-weight:800;font-size:13px;line-height:1.35;margin-top:8px}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:900;font-size:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);padding:3px 8px;border-radius:999px}
+    .card{border:1px solid var(--border);background:linear-gradient(0deg,var(--panel2),var(--panel));border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-top:14px}
+    .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .cardHead h2{margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase}
+    .cardBody{padding:14px;display:flex;flex-direction:column;gap:12px}
+    button{appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:1000;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28)}
+    button:hover{border-color:color-mix(in srgb,var(--accent) 60%, var(--border))}
+    .btnPrimary{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));box-shadow:0 14px 34px rgba(0,229,255,.12)}
+    .btnDanger{border-color:color-mix(in srgb,var(--bad) 65%, var(--border))}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+
+    .stickyArea{
+      border: 1px dashed color-mix(in srgb, var(--border) 85%, transparent);
+      background: rgba(255,255,255,.02);
+      border-radius: 16px;
+      padding: 12px;
+      min-height: 320px;
+      position:relative;
+      overflow:hidden;
+    }
+    .sticky{
+      position:absolute;
+      width: 170px;
+      min-height: 90px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 16px 40px rgba(0,0,0,.34);
+      padding: 10px 10px 12px;
+      cursor: grab;
+      touch-action: none;
+      user-select:none;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .sticky:active{ cursor:grabbing; }
+    .sticky textarea{
+      width:100%;
+      background: transparent;
+      color: #0b0d12;
+      border: none;
+      outline:none;
+      resize:none;
+      font-weight: 1000;
+      line-height: 1.2;
+      font-size: 13px;
+      min-height: 56px;
+    }
+    .mini{display:flex;gap:8px;align-items:center;justify-content:space-between}
+    .tinyBtn{
+      border:none;background: rgba(0,0,0,.18);
+      color: rgba(0,0,0,.8);
+      font-weight: 1000;border-radius: 10px;padding: 6px 8px;cursor:pointer;
+      box-shadow:none;
+    }
+    .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);max-width:360px;color:var(--text);font-weight:900;font-size:12px;display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="badge"><span class="dot"></span> Stage 1 • Step 2</div>
+        <div class="subtitle">
+          Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
+          Add sticky goals. It should appear instantly, and sync to others via realtime.
+        </div>
+      </div>
+      <div class="row" style="justify-content:flex-end">
+        <button id="btnBack">← Step 1</button>
+        <button id="btnNext" class="btnPrimary">Next → Step 3</button>
+        <button id="btnReset" class="btnDanger">Reset Local</button>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="cardHead">
+        <h2>Goals as Sticky Notes</h2>
+        <button id="btnAdd" class="btnPrimary">＋ Add sticky</button>
+      </div>
+      <div class="cardBody">
+        <div class="stickyArea" id="stickyArea"></div>
+        <div class="subtitle">Tip: One sticky = one goal. Keep it short.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (() => {
+              const ERROR_BOX = document.createElement("div");
+          ERROR_BOX.style.cssText = "position:fixed;inset:0;padding:16px;background:#0b0d12;color:#e9ecff;font-family:ui-monospace,Menlo,Consolas,monospace;z-index:99999;display:none;overflow:auto";
+          document.body.appendChild(ERROR_BOX);
+
+          function showFatal(title, err){
+            ERROR_BOX.style.display = "block";
+            ERROR_BOX.innerHTML = `<h2 style="margin:0 0 10px;font-family:system-ui">${title}</h2>
+            <pre style="white-space:pre-wrap">${(err && (err.stack || err.message)) ? (err.stack || err.message) : String(err)}</pre>`;
+          }
+
+window.addEventListener("error", (e)=>showFatal("Step2 crashed", e.error || e.message));
+window.addEventListener("unhandledrejection", (e)=>showFatal("Step2 promise rejected", e.reason));
+    const SUPABASE_URL = "https://djqwztoavtkqspxpvluc.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcXd6dG9hdnRrcXNweHB2bHVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMDU3MDEsImV4cCI6MjA4Nzc4MTcwMX0.ZVcMU8DeHxHMw3WWegz88BmCei9z4UX3tZR7n1XFRj0";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const BASE_PATH = "/stage1";
+    const params = new URLSearchParams(location.search);
+    const room = (params.get("room") || "").trim();
+    if (!room) { location.href = `${BASE_PATH}/step1.html?room=demo`; return; }
+
+    const PID_KEY = "stage1_participant_id";
+    let participantId = localStorage.getItem(PID_KEY);
+    if (!participantId) { participantId = crypto.randomUUID(); localStorage.setItem(PID_KEY, participantId); }
+
+    const AUTH_KEY = `stage1_authed_${room}`;
+    if (localStorage.getItem(AUTH_KEY) !== "1") {
+      location.href = `${BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`;
+      return;
+    }
+
+    const $ = (q, el=document) => el.querySelector(q);
+    const roomOut = $("#roomOut"), meOut = $("#meOut");
+    const stickyArea = $("#stickyArea"), toast = $("#toast");
+    roomOut.textContent = room;
+    meOut.textContent = participantId.slice(0,8);
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.style.display = "block";
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.style.display = "none", 2200);
+    }
+
+    function clamp(v,min,max){ return Math.min(max, Math.max(min,v)); }
+
+    function throttle(fn, ms=200){
+      let t=0, timer=null, lastArgs=null;
+      return (...args)=>{
+        const now=Date.now(); lastArgs=args;
+        if(now - t >= ms){ t=now; fn(...args); }
+        else { clearTimeout(timer); timer=setTimeout(()=>{ t=Date.now(); fn(...lastArgs); }, ms - (now - t)); }
+      };
+    }
+
+    const state = { stickies: [] };
+
+    async function ensureSessionAndParticipant(){
+      await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict: "id" });
+      await supabase.from("workshop_participants").upsert({ id: participantId, session_id: room }, { onConflict: "id" });
+    }
+
+    function escapeHtml(str){
+      return (str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function randomStickyColor(){
+      const options = ["#47ff87","#00e5ff","#ffe44d","#ff2bd6","#ff884d"];
+      return options[Math.floor(Math.random()*options.length)];
+    }
+
+    function makePointerDraggable(el, {onMove}){
+      let last=null;
+      el.addEventListener("pointerdown",(e)=>{
+        if(e.target && e.target.tagName==="TEXTAREA") return;
+        el.setPointerCapture(e.pointerId);
+        last={x:e.clientX,y:e.clientY};
+      });
+      el.addEventListener("pointermove",(e)=>{
+        if(!last) return;
+        const dx=e.clientX-last.x, dy=e.clientY-last.y;
+        last={x:e.clientX,y:e.clientY};
+        onMove(dx,dy);
+      });
+      el.addEventListener("pointerup",()=>{last=null;});
+      el.addEventListener("pointercancel",()=>{last=null;});
+    }
+
+    const pushStickyUpdate = throttle(async (id, patch) => {
+      const { error } = await supabase.from("workshop_stickies").update(patch).eq("id", id);
+      if (error) console.error("sticky update error", error);
+    }, 200);
+
+    function render(){
+      stickyArea.innerHTML = "";
+      state.stickies.forEach(s=>{
+        const el = document.createElement("div");
+        el.className = "sticky";
+        el.style.left = s.x + "px";
+        el.style.top  = s.y + "px";
+        el.style.background = s.color;
+
+        el.innerHTML = `
+          <div class="mini">
+            <span style="font-weight:1000;color:rgba(0,0,0,.82);font-size:11px;letter-spacing:.2px;text-transform:uppercase">Goal</span>
+            <button class="tinyBtn" title="Delete">X</button>
+          </div>
+          <textarea placeholder="Write your goal...">${escapeHtml(s.text)}</textarea>
+        `;
+
+        el.querySelector(".tinyBtn").addEventListener("click", async (e)=>{
+          e.stopPropagation();
+          await supabase.from("workshop_stickies").delete().eq("id", s.id);
+        });
+
+        const ta = el.querySelector("textarea");
+        ta.addEventListener("input", ()=>{
+          const item = state.stickies.find(x=>x.id===s.id);
+          if(item) item.text = ta.value;
+          pushStickyUpdate(s.id, { text: ta.value });
+        });
+
+        makePointerDraggable(el, {
+          onMove:(dx,dy)=>{
+            const item = state.stickies.find(x=>x.id===s.id);
+            if(!item) return;
+
+            const maxX = stickyArea.clientWidth - el.offsetWidth;
+            const maxY = stickyArea.clientHeight - el.offsetHeight;
+
+            item.x = clamp(item.x + dx, 6, Math.max(6, maxX-6));
+            item.y = clamp(item.y + dy, 6, Math.max(6, maxY-6));
+
+            // IMPORTANT: ints only
+            item.x = Math.round(item.x);
+            item.y = Math.round(item.y);
+
+            el.style.left = item.x + "px";
+            el.style.top  = item.y + "px";
+
+            pushStickyUpdate(s.id, { x: item.x, y: item.y });
+          }
+        });
+
+        stickyArea.appendChild(el);
+      });
+    }
+
+    async function loadInitial(){
+      await ensureSessionAndParticipant();
+      const { data, error } = await supabase
+        .from("workshop_stickies")
+        .select("*")
+        .eq("session_id", room);
+      if (error) console.error(error);
+      state.stickies = (data || []).map(s => ({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text, participant_id:s.participant_id }));
+      render();
+    }
+
+    function subscribeRealtime(){
+      supabase
+        .channel("step2:" + room)
+        .on("postgres_changes",
+          { event:"*", schema:"public", table:"workshop_stickies", filter:`session_id=eq.${room}` },
+          (payload)=>{
+            if(payload.eventType==="INSERT"){
+              const s = payload.new;
+              if(!state.stickies.some(x=>x.id===s.id)){
+                state.stickies.push({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text, participant_id:s.participant_id });
+                render();
+              }
+            } else if(payload.eventType==="UPDATE"){
+              const s = payload.new;
+              const idx = state.stickies.findIndex(x=>x.id===s.id);
+              if(idx>=0){
+                state.stickies[idx] = { id:s.id, x:s.x, y:s.y, color:s.color, text:s.text, participant_id:s.participant_id };
+                render();
+              }
+            } else if(payload.eventType==="DELETE"){
+              const old = payload.old;
+              state.stickies = state.stickies.filter(x=>x.id!==old.id);
+              render();
+            }
+          }
+        )
+        .subscribe();
+    }
+
+    $("#btnAdd").addEventListener("click", async ()=>{
+      const rect = stickyArea.getBoundingClientRect();
+      const x = Math.round(Math.max(10, Math.min(rect.width - 190, 12 + Math.random()*40)));
+      const y = Math.round(Math.max(10, Math.min(rect.height - 120, 12 + Math.random()*40)));
+
+      const payload = {
+        session_id: room,
+        x, y,
+        color: randomStickyColor(),
+        text: ""
+      };
+
+      // try include participant_id (if your column exists)
+      payload.participant_id = participantId;
+
+      // Optimistic insert: request row back
+      let res = await supabase.from("workshop_stickies").insert(payload).select().single();
+      if (res.error) {
+        // fallback if participant_id column doesn't exist
+        if (String(res.error.message || "").toLowerCase().includes("participant_id")) {
+          delete payload.participant_id;
+          res = await supabase.from("workshop_stickies").insert(payload).select().single();
+        }
+      }
+      if (res.error) {
+        console.error(res.error);
+        showToast("Insert failed: " + (res.error.message || "unknown"));
+        return;
+      }
+
+      // Update UI instantly
+      const row = res.data;
+      state.stickies.push({ id:row.id, x:row.x, y:row.y, color:row.color, text:row.text, participant_id:row.participant_id });
+      render();
+    });
+
+    $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`);
+    $("#btnNext").addEventListener("click", ()=> location.href = `${BASE_PATH}/step3.html?room=${encodeURIComponent(room)}`);
+
+    $("#btnReset").addEventListener("click", ()=>{
+      const ok = confirm("Clear local workshop storage and reload?");
+      if(!ok) return;
+      localStorage.removeItem(PID_KEY);
+      localStorage.removeItem(AUTH_KEY);
+      location.reload();
+    });
+
+    loadInitial().then(subscribeRealtime);
+  })();
+  </script>
+</body>
+</html>
