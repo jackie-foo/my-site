@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Stage 1 Workshop • Card → Goals → Journey</title>
+  <title>Stage 1 Workshop • Shared Room</title>
   <style>
     :root{
       --bg:#0b0d12;
@@ -13,11 +13,11 @@
       --text:#e9ecff;
       --muted:#aab0d6;
 
-      --accent:#00e5ff;    /* bright cyan */
-      --accent2:#ff2bd6;   /* magenta */
-      --good:#47ff87;      /* neon green */
-      --warn:#ffe44d;      /* yellow */
-      --bad:#ff4d4d;       /* red */
+      --accent:#00e5ff;
+      --accent2:#ff2bd6;
+      --good:#47ff87;
+      --warn:#ffe44d;
+      --bad:#ff4d4d;
       --ink:#0b0d12;
 
       --constraint:#ff4d4d;
@@ -46,7 +46,7 @@
     .wrap{
       max-width: 1120px;
       margin: 0 auto;
-      padding: 16px 14px 80px;
+      padding: 16px 14px 88px;
     }
 
     header{
@@ -63,64 +63,45 @@
       border-bottom: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
     }
 
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      min-width: 0;
-    }
+    .brand{ display:flex; flex-direction:column; gap:4px; min-width:0; }
     .title{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: .2px;
-      text-transform: uppercase;
+      display:flex; align-items:center; gap:10px;
+      font-size: 16px; font-weight: 900;
+      letter-spacing: .2px; text-transform: uppercase;
     }
     .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 6px 10px;
-      border-radius: 999px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 6px 10px; border-radius: 999px;
       background: var(--panel);
       border: 1px solid var(--border);
       box-shadow: 0 10px 30px rgba(0,0,0,.28);
-      font-weight: 700;
-      font-size: 12px;
-      white-space: nowrap;
+      font-weight: 900; font-size: 12px; white-space: nowrap;
     }
     .dot{
-      width:10px; height:10px;
-      border-radius: 3px;
+      width:10px; height:10px; border-radius:3px;
       background: var(--accent);
       box-shadow: 0 0 0 3px rgba(0,229,255,.14);
     }
-
     .subtitle{
       font-size: 13px;
       color: var(--muted);
       line-height: 1.35;
-      max-width: 60ch;
+      max-width: 70ch;
     }
 
     .topActions{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+      display:flex; gap:8px; align-items:center;
+      flex-wrap:wrap; justify-content:flex-end;
     }
 
-    button, .btn{
+    button{
       appearance:none;
       border: 1px solid var(--border);
       background: var(--panel);
       color: var(--text);
       padding: 10px 12px;
       border-radius: 14px;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: .2px;
       cursor:pointer;
       box-shadow: 0 10px 26px rgba(0,0,0,.28);
@@ -153,7 +134,7 @@
 
     .card{
       border: 1px solid var(--border);
-      background: linear-gradient(0deg, var(--panel2), var(--panel)); /* subtle, not gradient-y; still flat-ish */
+      background: linear-gradient(0deg, var(--panel2), var(--panel));
       border-radius: var(--r);
       box-shadow: var(--shadow);
       overflow:hidden;
@@ -170,14 +151,14 @@
     .cardHead h2{
       margin:0;
       font-size: 14px;
-      font-weight: 900;
+      font-weight: 1000;
       letter-spacing: .35px;
       text-transform: uppercase;
     }
     .stepHint{
       color: var(--muted);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       display:flex;
       align-items:center;
       gap:8px;
@@ -206,19 +187,13 @@
       border-radius: 999px;
       padding: 7px 10px;
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
       color: var(--muted);
       background: rgba(255,255,255,.03);
     }
     .pill strong{ color: var(--text); }
 
-    .grid3{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 10px;
-    }
     @media (max-width: 860px){
-      .grid3{ grid-template-columns: 1fr; }
       header{ position: static; backdrop-filter:none; }
       .subtitle{ max-width: unset; }
     }
@@ -242,12 +217,7 @@
       gap:10px;
       min-width: 160px;
     }
-    .stepLeft{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      min-width: 0;
-    }
+    .stepLeft{ display:flex; gap:10px; align-items:center; min-width:0; }
     .num{
       width: 30px; height: 30px;
       border-radius: 10px;
@@ -259,7 +229,7 @@
       flex:0 0 auto;
     }
     .stepName{
-      font-weight: 900;
+      font-weight: 1000;
       font-size: 12px;
       letter-spacing: .3px;
       text-transform: uppercase;
@@ -270,7 +240,7 @@
     }
     .stepState{
       font-size: 12px;
-      font-weight: 900;
+      font-weight: 1000;
       color: var(--muted);
       white-space: nowrap;
     }
@@ -283,7 +253,7 @@
       border-color: color-mix(in srgb, var(--good) 55%, var(--border));
     }
 
-    /* Personality cards */
+    /* Persona + role */
     .personaGrid{
       display:grid;
       grid-template-columns: repeat(4, minmax(0,1fr));
@@ -308,7 +278,6 @@
     }
     .persona:hover{ border-color: color-mix(in srgb, var(--accent2) 55%, var(--border)); }
     .persona:active{ transform: translateY(1px); }
-
     .personaTitle{
       font-weight: 1000;
       letter-spacing: .2px;
@@ -318,7 +287,7 @@
     }
     .personaText{
       color: var(--muted);
-      font-weight: 650;
+      font-weight: 700;
       font-size: 12px;
       line-height: 1.35;
       margin:0;
@@ -329,7 +298,7 @@
       gap:8px;
       margin-top:auto;
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 1000;
       color: var(--text);
       opacity: .9;
     }
@@ -356,6 +325,24 @@
       border-radius: 999px;
       color: var(--ink);
       background: var(--accent2);
+    }
+
+    .roleRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .select{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 900;
+      outline:none;
+      min-width: 220px;
     }
 
     /* Sticky notes */
@@ -391,7 +378,7 @@
       border: none;
       outline:none;
       resize:none;
-      font-weight: 900;
+      font-weight: 1000;
       line-height: 1.2;
       font-size: 13px;
       min-height: 56px;
@@ -445,14 +432,10 @@
       color: var(--muted);
       font-size: 12px;
       line-height: 1.35;
-      font-weight: 650;
+      font-weight: 700;
     }
 
-    .eventList{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+    .eventList{ display:flex; flex-direction:column; gap:10px; }
 
     .event{
       border-radius: 14px;
@@ -468,12 +451,7 @@
       box-shadow: 0 14px 30px rgba(0,0,0,.26);
     }
     .event:active{ cursor:grabbing; }
-    .eventTop{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-    }
+    .eventTop{ display:flex; justify-content:space-between; gap:10px; align-items:center; }
     .eventName{
       margin:0;
       font-size: 12px;
@@ -484,23 +462,8 @@
     .eventHint{
       font-size: 11px;
       color: var(--muted);
-      font-weight: 800;
+      font-weight: 900;
       white-space: nowrap;
-    }
-    .typePills{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .typePill{
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
-      padding: 6px 9px;
-      font-size: 11px;
-      font-weight: 1000;
-      letter-spacing: .2px;
-      cursor:pointer;
-      background: rgba(255,255,255,.06);
     }
 
     .legend{
@@ -577,12 +540,7 @@
       font-weight: 900;
       white-space: nowrap;
     }
-    .dropZone{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      padding-top: 2px;
-    }
+    .dropZone{ display:flex; flex-direction:column; gap:8px; padding-top:2px; }
 
     .placed{
       border-radius: 14px;
@@ -595,14 +553,7 @@
       touch-action:none;
     }
     .placed:active{ cursor:grabbing; }
-
-    .placedTop{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      margin-bottom: 6px;
-    }
+    .placedTop{ display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom: 6px; }
     .placedTitle{
       font-weight: 1000;
       font-size: 12px;
@@ -642,7 +593,6 @@
       font-weight: 1000;
       cursor:pointer;
     }
-
     .type-constraint{ background: var(--constraint); }
     .type-support{ background: var(--support); }
     .type-wish{ background: var(--wish); }
@@ -653,14 +603,10 @@
     .note{
       color: var(--muted);
       font-size: 12px;
-      font-weight: 650;
+      font-weight: 700;
       line-height: 1.35;
     }
-    .divider{
-      height:1px;
-      background: rgba(255,255,255,.08);
-      margin: 4px 0;
-    }
+    .divider{ height:1px; background: rgba(255,255,255,.08); margin: 4px 0; }
 
     .footerBar{
       position: fixed;
@@ -685,8 +631,9 @@
       gap:10px;
       align-items:center;
       color: var(--muted);
-      font-weight: 800;
+      font-weight: 900;
       font-size: 12px;
+      flex-wrap:wrap;
     }
     .status strong{ color: var(--text); }
     .toast{
@@ -701,9 +648,19 @@
       box-shadow: var(--shadow);
       max-width: 360px;
       color: var(--text);
-      font-weight: 850;
+      font-weight: 900;
       font-size: 12px;
       display:none;
+    }
+    .tinyCode{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--text);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 3px 8px;
+      border-radius: 999px;
     }
   </style>
 </head>
@@ -713,24 +670,17 @@
     <div class="brand">
       <div class="title">
         <span class="badge"><span class="dot"></span> Stage 1 Workshop</span>
-        <span style="color:var(--muted); font-weight:900; font-size:12px; letter-spacing:.2px;">Card → Goals → Journey</span>
+        <span style="color:var(--muted); font-weight:1000; font-size:12px; letter-spacing:.2px;">Shared room • realtime</span>
       </div>
-      <div class="subtitle">
-        Pick a personality card, drop your goals as sticky notes, then drag events onto Week 1–13 and tag them as Constraint, Support, or Wish.
-        Everything saves automatically on this device.
+      <div class="subtitle" id="subtitle">
+        Loading room…
       </div>
     </div>
 
     <div class="topActions">
-      <button class="btnGhost" id="btnBack" title="Go back">
-        ← Back
-      </button>
-      <button id="btnExport" class="btnPrimary" title="Export your work as a JSON file">
-        ⤓ Export
-      </button>
-      <button id="btnReset" class="btnDanger" title="Clear everything on this page">
-        ⟲ Reset
-      </button>
+      <button class="btnGhost" id="btnBack" title="Go back">← Back</button>
+      <button id="btnExport" class="btnPrimary" title="Export your work as JSON">⤓ Export</button>
+      <button id="btnReset" class="btnDanger" title="Clear your local participant id (does not delete DB rows)">⟲ Reset Local</button>
     </div>
   </header>
 
@@ -739,7 +689,7 @@
       <div class="step active" data-step="1">
         <div class="stepLeft">
           <div class="num">1</div>
-          <p class="stepName">Pick a card</p>
+          <p class="stepName">Role + Card</p>
         </div>
         <div class="stepState" id="state1">In progress</div>
       </div>
@@ -763,20 +713,34 @@
       <!-- STEP 1 -->
       <section class="card" id="step1">
         <div class="cardHead">
-          <h2>Stage 1 • Personality Card</h2>
-          <div class="stepHint">Tap one card to continue →</div>
+          <h2>Stage 1 • Role + Personality Card</h2>
+          <div class="stepHint">Choose role + pick one card →</div>
         </div>
         <div class="cardBody">
-          <div class="note">
-            Choose the card that feels closest to your vibe when receiving and using feedback.
-            This is a placeholder set, you can rename later.
+          <div class="roleRow">
+            <div class="note">
+              Room: <span class="tinyCode" id="roomCode"></span>
+              • You: <span class="tinyCode" id="meCode"></span>
+              <br/>Pick your role first, then choose the personality card that matches your feedback vibe.
+            </div>
+
+            <div class="row" style="margin-left:auto;">
+              <select id="roleSelect" class="select" aria-label="Role">
+                <option value="student">Student</option>
+                <option value="tutor">Tutor</option>
+                <option value="observer">Observer</option>
+              </select>
+              <button id="btnToStep2" class="btnPrimary" disabled>Next: Goals →</button>
+            </div>
           </div>
+
+          <div class="divider"></div>
 
           <div class="personaGrid" id="personaGrid"></div>
 
           <div class="row">
             <span class="pill">Selected: <strong id="selectedPersona">None yet</strong></span>
-            <button id="btnToStep2" class="btnPrimary" disabled>Next: Goals →</button>
+            <span class="pill">Role: <strong id="selectedRole">student</strong></span>
           </div>
         </div>
       </section>
@@ -790,8 +754,7 @@
         <div class="cardBody">
           <div class="row" style="justify-content:space-between;">
             <div class="note">
-              Write your goals for this unit / assignment. One sticky note = one goal.
-              Drag notes around. Tap “X” to delete.
+              Write your goals. One sticky = one goal. Drag around. Changes sync to everyone in this room.
             </div>
             <div class="row" style="margin-left:auto;">
               <button id="btnAddSticky" class="btnPrimary">＋ Add sticky</button>
@@ -802,7 +765,7 @@
           <div class="stickyArea" id="stickyArea" aria-label="Sticky notes canvas"></div>
 
           <div class="note">
-            Tip: Keep them short. Example: “Understand why I lost marks” or “Know exactly what to change next time”.
+            Tip: Keep them short. Example: “Understand why I lost marks” or “Know what to change next time”.
           </div>
         </div>
       </section>
@@ -811,15 +774,15 @@
       <section class="card hidden" id="step3">
         <div class="cardHead">
           <h2>Stage 3 • Feedback Journey Map (Week 1 → Week 13)</h2>
-          <div class="stepHint">Drag boxes into weeks • tap tag to change colour</div>
+          <div class="stepHint">Drag templates into weeks • add custom cards</div>
         </div>
 
         <div class="cardBody">
           <div class="journeyLayout">
             <aside class="palette">
-              <h3>Event boxes (drag into weeks)</h3>
+              <h3>Template cards (drag into weeks)</h3>
               <p>
-                Drag an event into a week. Then tag it as <b>Constraint</b>, <b>Support</b>, or <b>Wish</b> to show what happened and what you needed.
+                Drag a card into a week. Tap its tag to cycle colour: Constraint → Support → Wish → Neutral.
               </p>
 
               <div class="legend">
@@ -831,12 +794,16 @@
 
               <div class="divider"></div>
 
+              <div class="row" style="justify-content:space-between;">
+                <button id="btnAddCustom" class="btnPrimary">＋ Add custom card</button>
+              </div>
+
               <div class="eventList" id="eventList"></div>
 
               <div class="divider"></div>
 
               <div class="note">
-                You can also drag placed boxes between weeks. Tap “Remove” to send it back to the list.
+                You can drag placed cards between weeks. “Remove” deletes it.
               </div>
             </aside>
 
@@ -852,9 +819,10 @@
   <div class="footerBar">
     <div class="footerInner">
       <div class="status">
-        <span>Progress:</span>
-        <strong id="progressText">Stage 1</strong>
-        <span id="autosaveText">• Autosaved</span>
+        <span>Status:</span>
+        <strong id="progressText">Connecting…</strong>
+        <span id="netText">•</span>
+        <span id="onlineText"></span>
       </div>
       <div class="row" style="justify-content:flex-end; margin:0;">
         <button id="btnJump1" class="btnGhost">1</button>
@@ -866,21 +834,61 @@
 
   <div class="toast" id="toast"></div>
 
-<script>
-(function(){
-  const STORAGE_KEY = "stage1_workshop_v1";
+  <!-- Supabase client (browser) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+(() => {
+  // ============================
+  // 0) CONFIG (YOU MUST EDIT)
+  // ============================
+  const SUPABASE_URL = "https://djqwztoavtkqspxpvluc.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcXd6dG9hdnRrcXNweHB2bHVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMDU3MDEsImV4cCI6MjA4Nzc4MTcwMX0.ZVcMU8DeHxHMw3WWegz88BmCei9z4UX3tZR7n1XFRj0";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ============================
+  // 1) ROOM + PARTICIPANT ID
+  // ============================
+  const params = new URLSearchParams(location.search);
+  const room = (params.get("room") || "").trim();
+
+  if (!room) {
+    document.body.innerHTML =
+      "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>" +
+      "Missing room. Use <b>?room=demo</b>" +
+      "</div>";
+    throw new Error("Missing room");
+  }
+
+  // stable participant id per browser
+  const PID_KEY = "stage1_participant_id";
+  let participantId = localStorage.getItem(PID_KEY);
+  if (!participantId) {
+    participantId = crypto.randomUUID();
+    localStorage.setItem(PID_KEY, participantId);
+  }
+
+  // optional: show a friendly hint
+  document.getElementById("subtitle").innerHTML =
+    `Room <span class="tinyCode">${escapeHtml(room)}</span> is shared. Anyone with this link can edit.`;
+  document.getElementById("roomCode").textContent = room;
+  document.getElementById("meCode").textContent = participantId.slice(0, 8);
+
+  // ============================
+  // 2) UI DATA (in-memory)
+  // ============================
   const personaCards = [
-    { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want specific examples.", tag:"Needs clarity fast" },
-    { id:"optimizer", title:"Optimizer", text:"I want actionable steps and I iterate. I care about efficiency.", tag:"Likes concrete next steps" },
-    { id:"validator", title:"Validator", text:"I look for fairness and alignment with rubric. I compare vs criteria.", tag:"Wants rubric alignment" },
-    { id:"overwhelmed", title:"Overwhelmed", text:"I shut down when feedback is too vague or too much at once.", tag:"Needs gentle structure" },
-    { id:"independent", title:"Independent", text:"I’ll figure it out myself but I need a direction to start.", tag:"Wants a starting point" },
-    { id:"storybuilder", title:"Story Builder", text:"I want the ‘why’ behind comments to connect the whole picture.", tag:"Needs meaning & context" },
-    { id:"perfectionist", title:"Perfectionist", text:"I fix everything, but I need to know what matters most.", tag:"Needs prioritisation" },
-    { id:"strategist", title:"Strategist", text:"I plan ahead. I want timeline + checkpoints for improvement.", tag:"Likes planning + milestones" }
+    { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want examples.", tag:"Needs clarity fast" },
+    { id:"optimizer", title:"Optimizer", text:"Give me actions. I iterate. I care about efficiency.", tag:"Likes next steps" },
+    { id:"validator", title:"Validator", text:"I check fairness and rubric alignment.", tag:"Wants criteria match" },
+    { id:"overwhelmed", title:"Overwhelmed", text:"Too vague or too much makes me shut down.", tag:"Needs structure" },
+    { id:"independent", title:"Independent", text:"I’ll figure it out, but I need a direction.", tag:"Needs a starting point" },
+    { id:"storybuilder", title:"Story Builder", text:"I want the ‘why’ to connect the picture.", tag:"Needs context" },
+    { id:"perfectionist", title:"Perfectionist", text:"I fix everything. Tell me what matters most.", tag:"Needs prioritisation" },
+    { id:"strategist", title:"Strategist", text:"I plan ahead with checkpoints and timelines.", tag:"Likes milestones" }
   ];
 
+  // pre-existing journey templates
   const baseEvents = [
     { id:"evt-brief", name:"Assessment brief / rubric arrives", hint:"W1–W2" },
     { id:"evt-work", name:"Working on assignment", hint:"Any week" },
@@ -889,21 +897,36 @@
     { id:"evt-reflect", name:"Reflect & decide next action", hint:"After feedback" },
     { id:"evt-ask", name:"Ask for clarification", hint:"Support moment" },
     { id:"evt-peer", name:"Talk to peers", hint:"Support moment" },
-    { id:"evt-revise", name:"Revise approach for next task", hint:"Iteration" },
-    { id:"evt-wish", name:"I wish… (custom)", hint:"Add your wish" }
+    { id:"evt-revise", name:"Revise approach for next task", hint:"Iteration" }
   ];
 
+  const data = {
+    role: "student",
+    personaId: null,
+    personaTitle: null,
+    stickies: [],        // {id,x,y,color,text, participant_id?}
+    placedEvents: []     // {id,label,week,type, participant_id?}
+  };
+
+  // ============================
+  // 3) DOM
+  // ============================
   const $ = (q, el=document) => el.querySelector(q);
   const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
 
   const personaGrid = $("#personaGrid");
   const selectedPersonaText = $("#selectedPersona");
+  const selectedRoleText = $("#selectedRole");
+  const roleSelect = $("#roleSelect");
+
   const btnToStep2 = $("#btnToStep2");
   const btnToStep3 = $("#btnToStep3");
   const btnAddSticky = $("#btnAddSticky");
   const stickyArea = $("#stickyArea");
+
   const eventList = $("#eventList");
   const weeksWrap = $("#weeks");
+  const btnAddCustom = $("#btnAddCustom");
 
   const step1 = $("#step1");
   const step2 = $("#step2");
@@ -912,18 +935,14 @@
   const state1 = $("#state1");
   const state2 = $("#state2");
   const state3 = $("#state3");
-
   const progressText = $("#progressText");
+  const netText = $("#netText");
+
   const toast = $("#toast");
 
-  let data = {
-    personaId: null,
-    personaTitle: null,
-    stickies: [],
-    placedEvents: [] // {instanceId, baseId, name, week, type}
-  };
-
-  // ---------- Toast ----------
+  // ============================
+  // 4) Toast
+  // ============================
   let toastTimer = null;
   function showToast(msg){
     toast.textContent = msg;
@@ -932,44 +951,10 @@
     toastTimer = setTimeout(()=> toast.style.display="none", 2200);
   }
 
-  // ---------- Storage ----------
-  function save(){
-    try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      $("#autosaveText").textContent = "• Autosaved";
-    }catch(e){
-      $("#autosaveText").textContent = "• Save failed";
-    }
-  }
-
-  function load(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return;
-      const parsed = JSON.parse(raw);
-      if(parsed && typeof parsed === "object"){
-        data = Object.assign(data, parsed);
-      }
-    }catch(e){}
-  }
-
-  function resetAll(){
-    localStorage.removeItem(STORAGE_KEY);
-    data = { personaId:null, personaTitle:null, stickies:[], placedEvents:[] };
-    renderAll();
-    goToStage(1);
-    showToast("Reset done");
-  }
-
-  // ---------- Stepper ----------
+  // ============================
+  // 5) Stepper / navigation
+  // ============================
   function setStepper(active){
-    const steps = $$(".step", $("#stepper"));
-    steps.forEach(s=>{
-      const n = Number(s.dataset.step);
-      s.classList.toggle("active", n === active);
-    });
-
-    // done/locked states
     const hasPersona = !!data.personaId;
     const hasSticky = data.stickies.length > 0;
 
@@ -977,18 +962,14 @@
     state2.textContent = hasPersona ? (hasSticky ? "Done" : (active===2 ? "In progress" : "Ready")) : "Locked";
     state3.textContent = (hasPersona && hasSticky) ? (active===3 ? "In progress" : "Ready") : "Locked";
 
-    // classes
     const s1 = $('.step[data-step="1"]');
     const s2 = $('.step[data-step="2"]');
     const s3 = $('.step[data-step="3"]');
-
+    $$(".step", $("#stepper")).forEach(s=>{
+      s.classList.toggle("active", Number(s.dataset.step)===active);
+    });
     s1.classList.toggle("done", hasPersona);
     s2.classList.toggle("done", hasPersona && hasSticky);
-    s2.classList.toggle("active", active===2);
-    s3.classList.toggle("active", active===3);
-
-    s2.classList.toggle("disabled", !hasPersona);
-    s3.classList.toggle("disabled", !(hasPersona && hasSticky));
 
     progressText.textContent = active===1 ? "Stage 1" : active===2 ? "Stage 2" : "Stage 3";
   }
@@ -998,12 +979,72 @@
     step2.classList.toggle("hidden", n!==2);
     step3.classList.toggle("hidden", n!==3);
     setStepper(n);
-
-    // scroll top-ish
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // ---------- Render Persona ----------
+  $("#btnToStep2").addEventListener("click", ()=>{
+    if(!data.personaId) return;
+    goToStage(2);
+  });
+
+  $("#btnToStep3").addEventListener("click", ()=>{
+    if(!data.personaId) return;
+    if(data.stickies.length === 0){
+      showToast("Add at least 1 sticky goal first");
+      return;
+    }
+    goToStage(3);
+  });
+
+  $("#btnJump1").addEventListener("click", ()=> goToStage(1));
+  $("#btnJump2").addEventListener("click", ()=>{
+    if(!data.personaId){ showToast("Pick a card first"); return; }
+    goToStage(2);
+  });
+  $("#btnJump3").addEventListener("click", ()=>{
+    if(!(data.personaId && data.stickies.length>0)){ showToast("Finish Stage 2 first"); return; }
+    goToStage(3);
+  });
+
+  $("#btnBack").addEventListener("click", ()=>{
+    const visible = !step1.classList.contains("hidden") ? 1 : !step2.classList.contains("hidden") ? 2 : 3;
+    if(visible===3) goToStage(2);
+    else if(visible===2) goToStage(1);
+    else window.location.href = "index.html";
+  });
+
+  $("#btnReset").addEventListener("click", ()=>{
+    const ok = confirm("Reset local participant id (creates a new identity). This will NOT delete DB rows.");
+    if(!ok) return;
+    localStorage.removeItem(PID_KEY);
+    showToast("Local reset done. Reloading…");
+    setTimeout(()=> location.reload(), 700);
+  });
+
+  $("#btnExport").addEventListener("click", async ()=>{
+    // export the CURRENT in-memory state
+    const blob = new Blob([JSON.stringify({
+      exportedAt: new Date().toISOString(),
+      room,
+      participantId,
+      role: data.role,
+      persona: { id: data.personaId, title: data.personaTitle },
+      stickies: data.stickies,
+      journey: data.placedEvents
+    }, null, 2)], {type:"application/json"});
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `stage1-${room}-export.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast("Exported JSON");
+  });
+
+  // ============================
+  // 6) Render role + personas
+  // ============================
   function renderPersonas(){
     personaGrid.innerHTML = "";
     personaCards.forEach(c=>{
@@ -1011,22 +1052,21 @@
       el.className = "persona" + (data.personaId === c.id ? " selected":"");
       el.dataset.id = c.id;
       el.innerHTML = `
-        <p class="personaTitle">${c.title}</p>
-        <p class="personaText">${c.text}</p>
-        <div class="personaTag"><span class="chip"></span> ${c.tag}</div>
+        <p class="personaTitle">${escapeHtml(c.title)}</p>
+        <p class="personaText">${escapeHtml(c.text)}</p>
+        <div class="personaTag"><span class="chip"></span> ${escapeHtml(c.tag)}</div>
       `;
-      el.addEventListener("click", ()=>{
+      el.addEventListener("click", async ()=>{
         data.personaId = c.id;
         data.personaTitle = c.title;
         selectedPersonaText.textContent = c.title;
         btnToStep2.disabled = false;
 
-        // update selection UI
         $$(".persona", personaGrid).forEach(p=>p.classList.remove("selected"));
         el.classList.add("selected");
 
-        save();
-        showToast("Personality selected");
+        await updateParticipant({ persona_id: data.personaId });
+        showToast("Card saved");
         setStepper(1);
       });
       personaGrid.appendChild(el);
@@ -1036,42 +1076,19 @@
     btnToStep2.disabled = !data.personaId;
   }
 
-  // ---------- Sticky Notes ----------
+  roleSelect.addEventListener("change", async ()=>{
+    data.role = roleSelect.value;
+    selectedRoleText.textContent = data.role;
+    await updateParticipant({ role: data.role });
+    showToast("Role saved");
+  });
+
+  // ============================
+  // 7) Stickies: render + drag + DB write
+  // ============================
   function randomStickyColor(){
-    // loud, flat, high-contrast
-    const options = [
-      "#47ff87", // neon green
-      "#00e5ff", // cyan
-      "#ffe44d", // yellow
-      "#ff2bd6", // magenta
-      "#ff884d"  // orange
-    ];
+    const options = ["#47ff87","#00e5ff","#ffe44d","#ff2bd6","#ff884d"];
     return options[Math.floor(Math.random()*options.length)];
-  }
-
-  function addSticky(initialText=""){
-    const id = "st-" + Math.random().toString(16).slice(2);
-    const rect = stickyArea.getBoundingClientRect();
-
-    const x = Math.max(10, Math.min(rect.width - 190, 12 + Math.random()*40));
-    const y = Math.max(10, Math.min(rect.height - 120, 12 + Math.random()*40));
-
-    data.stickies.push({
-      id,
-      x, y,
-      color: randomStickyColor(),
-      text: initialText || ""
-    });
-    save();
-    renderStickies();
-    setStepper(2);
-  }
-
-  function removeSticky(id){
-    data.stickies = data.stickies.filter(s=>s.id!==id);
-    save();
-    renderStickies();
-    setStepper(2);
   }
 
   function renderStickies(){
@@ -1093,20 +1110,21 @@
       `;
 
       // delete
-      el.querySelector(".tinyBtn").addEventListener("click", (e)=>{
+      el.querySelector(".tinyBtn").addEventListener("click", async (e)=>{
         e.stopPropagation();
-        removeSticky(s.id);
-        showToast("Sticky deleted");
+        await supabase.from("workshop_stickies").delete().eq("id", s.id);
+        // realtime will remove for everyone
       });
 
-      // edit
+      // edit text (throttled)
       const ta = el.querySelector("textarea");
       ta.addEventListener("input", ()=>{
         const item = data.stickies.find(x=>x.id===s.id);
-        if(item){ item.text = ta.value; save(); }
+        if(item){ item.text = ta.value; }
+        pushStickyUpdate(s.id, { text: ta.value });
       });
 
-      // drag (pointer)
+      // drag
       makePointerDraggable(el, {
         onMove:(dx,dy)=>{
           const item = data.stickies.find(x=>x.id===s.id);
@@ -1120,15 +1138,71 @@
 
           el.style.left = item.x + "px";
           el.style.top  = item.y + "px";
-        },
-        onEnd: ()=> save()
+
+          pushStickyUpdate(s.id, { x: item.x, y: item.y });
+        }
       });
 
       stickyArea.appendChild(el);
     });
+
+    setStepper(!step1.classList.contains("hidden") ? 1 : !step2.classList.contains("hidden") ? 2 : 3);
   }
 
-  // ---------- Journey Timeline ----------
+  btnAddSticky.addEventListener("click", async ()=>{
+    const rect = stickyArea.getBoundingClientRect();
+    const x = Math.max(10, Math.min(rect.width - 190, 12 + Math.random()*40));
+    const y = Math.max(10, Math.min(rect.height - 120, 12 + Math.random()*40));
+
+    const payload = {
+      session_id: room,
+      x, y,
+      color: randomStickyColor(),
+      text: ""
+    };
+
+    // Try to include participant_id if your column exists
+    payload.participant_id = participantId;
+
+    // Insert
+    const { error } = await supabase.from("workshop_stickies").insert(payload);
+    if (error) {
+      // If you didn't add participant_id column, retry without it
+      const msg = String(error.message || "");
+      if (msg.toLowerCase().includes("participant_id")) {
+        delete payload.participant_id;
+        await supabase.from("workshop_stickies").insert(payload);
+      } else {
+        console.error(error);
+        showToast("Sticky insert failed (see console)");
+      }
+    }
+  });
+
+  // throttle updates so drag doesn’t spam DB
+  function throttle(fn, ms=200){
+    let t = 0, timer = null, lastArgs=null;
+    return (...args)=>{
+      const now = Date.now();
+      lastArgs = args;
+      if (now - t >= ms){
+        t = now;
+        fn(...args);
+      } else {
+        clearTimeout(timer);
+        timer = setTimeout(()=>{ t = Date.now(); fn(...lastArgs); }, ms - (now - t));
+      }
+    };
+  }
+
+  const pushStickyUpdate = throttle(async (id, patch) => {
+    const { error } = await supabase.from("workshop_stickies").update(patch).eq("id", id);
+    if (error) console.error("sticky update error", error);
+  }, 200);
+
+  // ============================
+  // 8) Journey: render + drag + DB write
+  // ============================
   function renderWeeks(){
     weeksWrap.innerHTML = "";
     for(let w=1; w<=13; w++){
@@ -1143,9 +1217,8 @@
         <div class="dropZone" data-week="${w}"></div>
       `;
 
-      // allow drop
       weekEl.addEventListener("dragover", (e)=> e.preventDefault());
-      weekEl.addEventListener("drop", (e)=> {
+      weekEl.addEventListener("drop", async (e)=> {
         e.preventDefault();
         const payload = e.dataTransfer.getData("text/plain");
         if(!payload) return;
@@ -1154,9 +1227,9 @@
         if(!obj) return;
 
         if(obj.kind === "baseEvent"){
-          placeBaseEvent(obj.baseId, w);
+          await placeBaseEvent(obj.baseId, w);
         }else if(obj.kind === "placedEvent"){
-          movePlacedEvent(obj.instanceId, w);
+          await supabase.from("workshop_journey_items").update({ week: w }).eq("id", obj.id);
         }
       });
 
@@ -1174,8 +1247,8 @@
 
       el.innerHTML = `
         <div class="eventTop">
-          <p class="eventName">${evt.name}</p>
-          <span class="eventHint">${evt.hint}</span>
+          <p class="eventName">${escapeHtml(evt.name)}</p>
+          <span class="eventHint">${escapeHtml(evt.hint)}</span>
         </div>
         <div class="note">Drag into a week.</div>
       `;
@@ -1187,59 +1260,66 @@
         }));
       });
 
-      // mobile: pointer drag (ghost)
-      enableMobileDrag(el, {
-        kind:"baseEvent",
-        baseId: evt.id
-      });
-
+      enableMobileDrag(el, { kind:"baseEvent", baseId: evt.id });
       eventList.appendChild(el);
     });
   }
 
-  function placeBaseEvent(baseId, week){
+  async function placeBaseEvent(baseId, week){
     const base = baseEvents.find(x=>x.id===baseId);
     if(!base) return;
 
-    let name = base.name;
-    if(baseId === "evt-wish"){
-      name = prompt("Write your wish (short)") || "I wish… (custom)";
-      name = name.trim() || "I wish… (custom)";
-    }
-
-    const instanceId = "pe-" + Math.random().toString(16).slice(2);
-    data.placedEvents.push({
-      instanceId,
-      baseId,
-      name,
+    const label = base.name;
+    const payload = {
+      session_id: room,
       week,
+      label,
       type: "neutral"
-    });
-    save();
-    renderPlacedEvents();
-    showToast("Placed on Week " + week);
+    };
+    payload.participant_id = participantId;
+
+    const { error } = await supabase.from("workshop_journey_items").insert(payload);
+    if (error) {
+      const msg = String(error.message || "");
+      if (msg.toLowerCase().includes("participant_id")) {
+        delete payload.participant_id;
+        await supabase.from("workshop_journey_items").insert(payload);
+      } else {
+        console.error(error);
+        showToast("Place failed (see console)");
+      }
+    }
   }
 
-  function movePlacedEvent(instanceId, week){
-    const item = data.placedEvents.find(x=>x.instanceId===instanceId);
-    if(!item) return;
-    item.week = week;
-    save();
-    renderPlacedEvents();
-  }
+  btnAddCustom.addEventListener("click", async ()=>{
+    const txt = prompt("Custom card text (short)");
+    if (!txt) return;
 
-  function removePlacedEvent(instanceId){
-    data.placedEvents = data.placedEvents.filter(x=>x.instanceId!==instanceId);
-    save();
-    renderPlacedEvents();
-  }
+    const payload = {
+      session_id: room,
+      week: 1,
+      label: txt.trim(),
+      type: "wish"
+    };
+    payload.participant_id = participantId;
+
+    const { error } = await supabase.from("workshop_journey_items").insert(payload);
+    if (error) {
+      const msg = String(error.message || "");
+      if (msg.toLowerCase().includes("participant_id")) {
+        delete payload.participant_id;
+        await supabase.from("workshop_journey_items").insert(payload);
+      } else {
+        console.error(error);
+      }
+    }
+  });
 
   function cycleType(curr){
     const order = ["neutral","constraint","support","wish"];
     const idx = order.indexOf(curr);
     return order[(idx+1) % order.length];
   }
-
   function typeLabel(t){
     if(t==="constraint") return "Constraint";
     if(t==="support") return "Support";
@@ -1248,7 +1328,6 @@
   }
 
   function renderPlacedEvents(){
-    // clear zones
     $$(".dropZone", weeksWrap).forEach(z => z.innerHTML = "");
 
     data.placedEvents.forEach(pe=>{
@@ -1258,65 +1337,51 @@
       const el = document.createElement("div");
       el.className = "placed";
       el.draggable = true;
-      el.dataset.instanceId = pe.instanceId;
+      el.dataset.id = pe.id;
 
       el.innerHTML = `
         <div class="placedTop">
-          <p class="placedTitle">${escapeHtml(pe.name)}</p>
+          <p class="placedTitle">${escapeHtml(pe.label)}</p>
           <span class="placedMeta">${typeLabel(pe.type)}</span>
         </div>
         <div class="placedTags">
-          <button class="tagBtn type-${pe.type}" title="Tap to change type (colour)">${typeLabel(pe.type)} (tap)</button>
+          <button class="tagBtn type-${pe.type}" title="Tap to change type">${typeLabel(pe.type)} (tap)</button>
           <button class="miniX" title="Remove">Remove</button>
         </div>
       `;
 
-      // drag start (desktop)
       el.addEventListener("dragstart", (e)=>{
         e.dataTransfer.setData("text/plain", JSON.stringify({
           kind:"placedEvent",
-          instanceId: pe.instanceId
+          id: pe.id
         }));
       });
 
-      // mobile drag
-      enableMobileDrag(el, {
-        kind:"placedEvent",
-        instanceId: pe.instanceId
+      enableMobileDrag(el, { kind:"placedEvent", id: pe.id });
+
+      el.querySelector(".tagBtn").addEventListener("click", async ()=>{
+        const next = cycleType(pe.type);
+        await supabase.from("workshop_journey_items").update({ type: next }).eq("id", pe.id);
       });
 
-      // change type
-      el.querySelector(".tagBtn").addEventListener("click", ()=>{
-        const item = data.placedEvents.find(x=>x.instanceId===pe.instanceId);
-        if(!item) return;
-        item.type = cycleType(item.type);
-        save();
-        renderPlacedEvents();
-      });
-
-      // remove
-      el.querySelector(".miniX").addEventListener("click", ()=>{
-        removePlacedEvent(pe.instanceId);
-        showToast("Removed");
+      el.querySelector(".miniX").addEventListener("click", async ()=>{
+        await supabase.from("workshop_journey_items").delete().eq("id", pe.id);
       });
 
       zone.appendChild(el);
     });
   }
 
-  // ---------- Mobile Drag (Pointer) ----------
-  // For touch devices, emulate drag-drop:
-  // - On pointerdown, create a ghost clone that follows finger
-  // - On pointerup, detect target week column and trigger place/move
+  // ============================
+  // 9) Mobile drag helper
+  // ============================
   function enableMobileDrag(el, payload){
     let ghost = null;
-    let start = null;
 
     el.addEventListener("pointerdown", (e)=>{
       if(e.pointerType !== "touch") return;
       e.preventDefault();
 
-      start = { x:e.clientX, y:e.clientY };
       ghost = el.cloneNode(true);
       ghost.style.position = "fixed";
       ghost.style.left = (e.clientX - 80) + "px";
@@ -1336,12 +1401,11 @@
       ghost.style.top  = (e.clientY - 20) + "px";
     });
 
-    el.addEventListener("pointerup", (e)=>{
+    el.addEventListener("pointerup", async (e)=>{
       if(!ghost) return;
       ghost.remove();
       ghost = null;
 
-      // find week under finger
       const under = document.elementFromPoint(e.clientX, e.clientY);
       const weekEl = under ? under.closest(".week") : null;
       if(!weekEl){
@@ -1351,18 +1415,19 @@
       const week = Number(weekEl.dataset.week);
 
       if(payload.kind === "baseEvent"){
-        placeBaseEvent(payload.baseId, week);
+        await placeBaseEvent(payload.baseId, week);
       }else if(payload.kind === "placedEvent"){
-        movePlacedEvent(payload.instanceId, week);
+        await supabase.from("workshop_journey_items").update({ week }).eq("id", payload.id);
       }
     });
   }
 
-  // ---------- Generic Pointer Drag for Stickies ----------
-  function makePointerDraggable(el, {onMove, onEnd}){
+  // ============================
+  // 10) Pointer drag for stickies
+  // ============================
+  function makePointerDraggable(el, {onMove}){
     let last = null;
     el.addEventListener("pointerdown", (e)=>{
-      // ignore when editing textarea
       if(e.target && e.target.tagName === "TEXTAREA") return;
       el.setPointerCapture(e.pointerId);
       last = { x:e.clientX, y:e.clientY };
@@ -1374,19 +1439,162 @@
       last = { x:e.clientX, y:e.clientY };
       onMove(dx,dy);
     });
-    el.addEventListener("pointerup", ()=>{
-      if(!last) return;
-      last = null;
-      onEnd && onEnd();
-    });
-    el.addEventListener("pointercancel", ()=>{
-      if(!last) return;
-      last = null;
-      onEnd && onEnd();
-    });
+    el.addEventListener("pointerup", ()=>{ last = null; });
+    el.addEventListener("pointercancel", ()=>{ last = null; });
   }
 
-  // ---------- Helpers ----------
+  // ============================
+  // 11) Supabase: ensure rows + load + subscribe
+  // ============================
+  async function ensureSession(roomId){
+    const { error } = await supabase.from("workshop_sessions").upsert({ id: roomId }, { onConflict: "id" });
+    if (error) console.error("ensureSession", error);
+  }
+
+  async function ensureParticipant(){
+    // Upsert with our local uuid as primary key
+    const payload = {
+      id: participantId,
+      session_id: room,
+      role: data.role,
+      persona_id: data.personaId
+    };
+    const { error } = await supabase.from("workshop_participants").upsert(payload, { onConflict: "id" });
+    if (error) console.error("ensureParticipant", error);
+  }
+
+  async function updateParticipant(patch){
+    const { error } = await supabase.from("workshop_participants").update(patch).eq("id", participantId);
+    if (error) console.error("updateParticipant", error);
+  }
+
+  async function loadInitial(){
+    netText.textContent = "• loading";
+    await ensureSession(room);
+    await ensureParticipant();
+
+    // read participant row (in case role/persona existed)
+    const { data: me } = await supabase
+      .from("workshop_participants")
+      .select("*")
+      .eq("id", participantId)
+      .maybeSingle();
+
+    if (me){
+      data.role = me.role || data.role;
+      data.personaId = me.persona_id || null;
+      data.personaTitle = data.personaId ? (personaCards.find(p=>p.id===data.personaId)?.title || null) : null;
+    }
+
+    roleSelect.value = data.role;
+    selectedRoleText.textContent = data.role;
+
+    // load stickies + journey
+    const { data: stickies, error: se } = await supabase
+      .from("workshop_stickies")
+      .select("*")
+      .eq("session_id", room);
+
+    if (se) console.error(se);
+
+    const { data: items, error: ie } = await supabase
+      .from("workshop_journey_items")
+      .select("*")
+      .eq("session_id", room);
+
+    if (ie) console.error(ie);
+
+    data.stickies = (stickies || []).map(s => ({
+      id: s.id, x: s.x, y: s.y, color: s.color, text: s.text, participant_id: s.participant_id
+    }));
+
+    data.placedEvents = (items || []).map(it => ({
+      id: it.id, week: it.week, label: it.label, type: it.type, participant_id: it.participant_id
+    }));
+
+    // UI init
+    renderPersonas();
+    renderWeeks();
+    renderEventPalette();
+    renderStickies();
+    renderPlacedEvents();
+
+    selectedPersonaText.textContent = data.personaTitle || "None yet";
+    btnToStep2.disabled = !data.personaId;
+
+    netText.textContent = "• connected";
+    showToast("Room loaded");
+    // Decide stage view
+    if(!data.personaId) goToStage(1);
+    else if(data.stickies.length === 0) goToStage(2);
+    else goToStage(3);
+  }
+
+  function subscribeRealtime(){
+    netText.textContent = "• realtime on";
+
+    supabase
+      .channel("stage1:" + room)
+
+      // Stickies changes
+      .on("postgres_changes",
+        { event:"*", schema:"public", table:"workshop_stickies", filter:`session_id=eq.${room}` },
+        (payload) => {
+          if (payload.eventType === "INSERT"){
+            const s = payload.new;
+            if (!data.stickies.some(x=>x.id===s.id)){
+              data.stickies.push({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text, participant_id:s.participant_id });
+              renderStickies();
+            }
+          } else if (payload.eventType === "UPDATE"){
+            const s = payload.new;
+            const idx = data.stickies.findIndex(x=>x.id===s.id);
+            if (idx >= 0){
+              data.stickies[idx] = { id:s.id, x:s.x, y:s.y, color:s.color, text:s.text, participant_id:s.participant_id };
+              renderStickies();
+            }
+          } else if (payload.eventType === "DELETE"){
+            const old = payload.old;
+            data.stickies = data.stickies.filter(x => x.id !== old.id);
+            renderStickies();
+          }
+        }
+      )
+
+      // Journey changes
+      .on("postgres_changes",
+        { event:"*", schema:"public", table:"workshop_journey_items", filter:`session_id=eq.${room}` },
+        (payload) => {
+          if (payload.eventType === "INSERT"){
+            const it = payload.new;
+            if (!data.placedEvents.some(x=>x.id===it.id)){
+              data.placedEvents.push({ id:it.id, week:it.week, label:it.label, type:it.type, participant_id: it.participant_id });
+              renderPlacedEvents();
+            }
+          } else if (payload.eventType === "UPDATE"){
+            const it = payload.new;
+            const idx = data.placedEvents.findIndex(x=>x.id===it.id);
+            if (idx >= 0){
+              data.placedEvents[idx] = { id:it.id, week:it.week, label:it.label, type:it.type, participant_id: it.participant_id };
+              renderPlacedEvents();
+            }
+          } else if (payload.eventType === "DELETE"){
+            const old = payload.old;
+            data.placedEvents = data.placedEvents.filter(x => x.id !== old.id);
+            renderPlacedEvents();
+          }
+        }
+      )
+
+      .subscribe((status) => {
+        // status: SUBSCRIBED, TIMED_OUT, CLOSED, CHANNEL_ERROR
+        netText.textContent = "• " + String(status).toLowerCase();
+      });
+  }
+
+  // ============================
+  // 12) Helpers
+  // ============================
   function clamp(v,min,max){ return Math.min(max, Math.max(min, v)); }
   function safeJson(s){ try{ return JSON.parse(s); }catch(e){ return null; } }
   function escapeHtml(str){
@@ -1398,91 +1606,7 @@
       .replaceAll("'","&#039;");
   }
 
-  // ---------- Navigation buttons ----------
-  $("#btnToStep2").addEventListener("click", ()=>{
-    if(!data.personaId) return;
-    goToStage(2);
-    setStepper(2);
-  });
-
-  $("#btnToStep3").addEventListener("click", ()=>{
-    if(!data.personaId) return;
-    if(data.stickies.length === 0){
-      showToast("Add at least 1 sticky goal first");
-      return;
-    }
-    goToStage(3);
-    setStepper(3);
-  });
-
-  $("#btnAddSticky").addEventListener("click", ()=> addSticky(""));
-
-  $("#btnBack").addEventListener("click", ()=>{
-    // simple back: from 3 -> 2 -> 1
-    const visible = !step1.classList.contains("hidden") ? 1 : !step2.classList.contains("hidden") ? 2 : 3;
-    if(visible===3) goToStage(2);
-    else if(visible===2) goToStage(1);
-    else window.location.href = "index.html";
-  });
-
-  $("#btnJump1").addEventListener("click", ()=> goToStage(1));
-  $("#btnJump2").addEventListener("click", ()=>{
-    if(!data.personaId){ showToast("Pick a card first"); return; }
-    goToStage(2);
-  });
-  $("#btnJump3").addEventListener("click", ()=>{
-    if(!(data.personaId && data.stickies.length>0)){ showToast("Finish Stage 2 first"); return; }
-    goToStage(3);
-  });
-
-  $("#btnReset").addEventListener("click", ()=>{
-    const ok = confirm("Reset everything on this page?");
-    if(ok) resetAll();
-  });
-
-  $("#btnExport").addEventListener("click", ()=>{
-    const blob = new Blob([JSON.stringify({
-      exportedAt: new Date().toISOString(),
-      persona: { id: data.personaId, title: data.personaTitle },
-      stickies: data.stickies,
-      placedEvents: data.placedEvents
-    }, null, 2)], {type:"application/json"});
-
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "stage1-workshop-export.json";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    showToast("Exported JSON");
-  });
-
-  // ---------- Render all ----------
-  function renderAll(){
-    renderPersonas();
-    renderStickies();
-    renderEventPalette();
-    renderWeeks();
-    renderPlacedEvents();
-
-    // determine stage to show
-    if(!data.personaId){
-      goToStage(1);
-      setStepper(1);
-    }else if(data.stickies.length === 0){
-      goToStage(2);
-      setStepper(2);
-    }else{
-      goToStage(3);
-      setStepper(3);
-    }
-  }
-
-  // ---------- Init ----------
-  load();
-  renderAll();
-
-  // ensure sticky area has height on small screens
+  // Make sticky area nice on mobile
   function ensureStickyHeight(){
     const min = 260;
     const h = Math.max(min, Math.round(window.innerHeight * 0.34));
@@ -1491,10 +1615,14 @@
   ensureStickyHeight();
   window.addEventListener("resize", ensureStickyHeight);
 
-  // small “autosave pulse”
-  setInterval(()=> {
-    $("#autosaveText").textContent = "• Autosaved";
-  }, 5000);
+  // ============================
+  // 13) Boot
+  // ============================
+  loadInitial().then(subscribeRealtime).catch((e)=>{
+    console.error(e);
+    netText.textContent = "• error";
+    showToast("Connect failed (see console)");
+  });
 
 })();
 </script>
