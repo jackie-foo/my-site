@@ -6,234 +6,211 @@
   <title>Jackie Foo</title>
   <style>
     :root{
-      /* Pastel but high-contrast */
-      --bg: #FFF6FB;
-      --panel: #FFFFFF;
-      --ink: #111827;
-      --muted: #374151;
-      --soft: #6B7280;
+      --bg: #FFF7FB;
+      --ink: #0B1220;
+      --muted: #2B3445;
+      --soft: #5B6475;
 
-      --a: #BDE0FE;     /* pastel blue */
-      --b: #C7F9CC;     /* pastel green */
-      --c: #FFD6A5;     /* pastel peach */
-      --d: #FFADAD;     /* pastel pink */
-      --e: #E9D5FF;     /* pastel lavender */
-      --f: #FFF1A8;     /* pastel yellow */
+      --p1:#BDE0FE; /* pastel blue */
+      --p2:#C7F9CC; /* pastel green */
+      --p3:#FFD6A5; /* pastel peach */
+      --p4:#FFADAD; /* pastel pink */
+      --p5:#E9D5FF; /* pastel lavender */
+      --p6:#FFF1A8; /* pastel yellow */
 
-      --shadow: 0 18px 50px rgba(17,24,39,0.10);
-      --shadow2: 0 10px 25px rgba(17,24,39,0.10);
-      --radius: 22px;
-      --radius2: 16px;
-      --ring: 0 0 0 4px rgba(17,24,39,0.12);
+      --panel: rgba(255,255,255,0.82);
+      --border: rgba(11,18,32,0.12);
+      --shadow: 0 18px 60px rgba(11,18,32,0.12);
+      --shadow2: 0 10px 26px rgba(11,18,32,0.12);
+
+      --r1: 26px;
+      --r2: 18px;
+      --ring: 0 0 0 4px rgba(11,18,32,0.14);
     }
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(1200px 600px at 15% 10%, rgba(189,224,254,0.65), transparent 60%),
-        radial-gradient(900px 500px at 85% 15%, rgba(255,173,173,0.55), transparent 60%),
-        radial-gradient(900px 600px at 70% 95%, rgba(199,249,204,0.55), transparent 60%),
-        radial-gradient(900px 600px at 20% 90%, rgba(233,213,255,0.55), transparent 60%),
-        var(--bg);
       color: var(--ink);
+      background:
+        radial-gradient(1000px 600px at 10% 10%, rgba(189,224,254,0.70), transparent 60%),
+        radial-gradient(1000px 600px at 90% 15%, rgba(255,173,173,0.55), transparent 60%),
+        radial-gradient(900px 600px at 75% 95%, rgba(199,249,204,0.60), transparent 60%),
+        radial-gradient(900px 600px at 20% 90%, rgba(233,213,255,0.60), transparent 60%),
+        var(--bg);
+      overflow-x: hidden;
     }
 
-    a { color: inherit; text-decoration: none; }
-    a:focus-visible, button:focus-visible { outline: none; box-shadow: var(--ring); border-radius: 12px; }
+    a{ color: inherit; text-decoration: none; }
+    button:focus-visible, .flipBtn:focus-visible{ outline:none; box-shadow: var(--ring); border-radius: 14px; }
 
     .wrap{
       min-height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 22px 14px 42px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding: 22px 14px 46px;
     }
 
     .shell{
-      width: min(980px, 100%);
-      display: grid;
+      width: min(1040px, 100%);
+      display:grid;
       grid-template-columns: 1.05fr 0.95fr;
       gap: 18px;
       align-items: stretch;
     }
-
-    @media (max-width: 900px){
+    @media (max-width: 920px){
       .shell{ grid-template-columns: 1fr; }
     }
 
     .card{
-      background: rgba(255,255,255,0.78);
+      background: var(--panel);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(17,24,39,0.10);
-      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      border-radius: var(--r1);
       box-shadow: var(--shadow);
-      overflow: hidden;
+      overflow:hidden;
     }
-
     .pad{ padding: 22px; }
-    @media (max-width: 480px){
-      .pad{ padding: 18px; }
-    }
+    @media (max-width: 480px){ .pad{ padding: 18px; } }
 
-    /* ---------- Header / Intro ---------- */
-    .introTop{
+    /* Intro */
+    .top{
       display:flex;
-      align-items:center;
       justify-content:space-between;
+      align-items:flex-start;
       gap: 14px;
     }
-
-    .titleBlock h1{
-      font-size: clamp(30px, 4.2vw, 44px);
-      line-height: 1.05;
-      margin: 0 0 10px;
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(30px, 4.6vw, 46px);
       letter-spacing: -0.02em;
+      line-height: 1.05;
     }
-    .titleBlock p{
-      margin: 0;
+    .desc{
+      margin:0;
       color: var(--muted);
       font-size: 15.5px;
-      line-height: 1.6;
+      line-height: 1.7;
+      max-width: 52ch;
     }
-    .pillRow{
+    .subrow{
       margin-top: 14px;
-      display: flex;
+      display:flex;
       flex-wrap: wrap;
       gap: 10px;
     }
     .pill{
-      border: 1px solid rgba(17,24,39,0.12);
-      background: rgba(255,255,255,0.75);
-      border-radius: 999px;
+      user-select:none;
+      border: 1px solid rgba(11,18,32,0.12);
+      background: rgba(255,255,255,0.78);
       padding: 8px 12px;
+      border-radius: 999px;
       font-size: 13px;
       color: var(--muted);
-      box-shadow: 0 8px 18px rgba(17,24,39,0.06);
-      user-select: none;
+      box-shadow: 0 10px 18px rgba(11,18,32,0.06);
+      font-weight: 650;
     }
 
-    /* ---------- Cute CSS Duck ---------- */
+    /* Duck badge */
     .duck{
-      width: 92px;
-      height: 92px;
-      border-radius: 26px;
+      width: 94px;
+      height: 94px;
+      border-radius: 28px;
       position: relative;
-      background: linear-gradient(135deg, var(--f), #FFE47A);
-      border: 1px solid rgba(17,24,39,0.12);
+      border: 1px solid rgba(11,18,32,0.12);
       box-shadow: var(--shadow2);
+      background: linear-gradient(135deg, var(--p6), #FFE47A);
       flex: 0 0 auto;
+      overflow:hidden;
     }
     .duck:before{
       content:"";
       position:absolute;
       inset: 16px 18px 22px 18px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.68);
+      transform: rotate(-6deg);
     }
-    .duck .eye{
+    .eye{
       position:absolute;
-      top: 34px;
+      top: 35px;
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: #111827;
+      background: #0B1220;
     }
-    .duck .eye.left{ left: 32px; }
-    .duck .eye.right{ right: 32px; }
-    .duck .beak{
+    .eye.l{ left: 32px; }
+    .eye.r{ right: 32px; }
+    .beak{
       position:absolute;
       left: 50%;
-      top: 52px;
+      top: 53px;
       transform: translateX(-50%);
-      width: 34px;
+      width: 36px;
       height: 18px;
       border-radius: 999px;
       background: linear-gradient(180deg, #FFB703, #FFA000);
-      border: 1px solid rgba(17,24,39,0.12);
+      border: 1px solid rgba(11,18,32,0.12);
     }
-    .duck .spark{
+    .shine{
       position:absolute;
       right: 10px;
       top: 10px;
-      width: 10px;
-      height: 10px;
-      border-radius: 3px;
-      background: rgba(255,255,255,0.9);
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.92);
       transform: rotate(15deg);
     }
 
-    /* ---------- Mini game panel ---------- */
+    .footer{
+      margin-top: 16px;
+      display:flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--soft);
+      font-size: 13px;
+    }
+
+    /* Game */
     .gameHead{
       display:flex;
-      align-items:flex-end;
       justify-content: space-between;
+      align-items:flex-end;
       gap: 12px;
       margin-bottom: 14px;
     }
     .gameHead h2{
-      margin: 0;
+      margin:0;
       font-size: 18px;
       letter-spacing: -0.01em;
     }
     .gameHead .sub{
-      margin: 6px 0 0;
+      margin-top: 6px;
       color: var(--soft);
       font-size: 13.5px;
       line-height: 1.5;
     }
-    .btnRow{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
+
+    .btnRow{ display:flex; gap: 10px; flex-wrap:wrap; justify-content:flex-end; }
     button{
-      border: 1px solid rgba(17,24,39,0.14);
-      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(11,18,32,0.14);
+      background: rgba(255,255,255,0.88);
       color: var(--ink);
-      font-weight: 600;
+      font-weight: 750;
       border-radius: 14px;
       padding: 10px 12px;
-      cursor: pointer;
-      box-shadow: 0 10px 18px rgba(17,24,39,0.06);
+      cursor:pointer;
+      box-shadow: 0 10px 18px rgba(11,18,32,0.06);
       transition: transform 120ms ease, box-shadow 120ms ease;
     }
-    button:hover{ transform: translateY(-1px); box-shadow: 0 14px 22px rgba(17,24,39,0.10); }
-    button:active{ transform: translateY(0px); box-shadow: 0 10px 18px rgba(17,24,39,0.06); }
+    button:hover{ transform: translateY(-1px); box-shadow: 0 14px 22px rgba(11,18,32,0.10); }
+    button:active{ transform: translateY(0px); box-shadow: 0 10px 18px rgba(11,18,32,0.06); }
 
-    .progressWrap{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .bar{
-      height: 10px;
-      flex: 1;
-      background: rgba(17,24,39,0.08);
-      border-radius: 999px;
-      overflow: hidden;
-      border: 1px solid rgba(17,24,39,0.08);
-    }
-    .bar > div{
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--a), var(--e), var(--d));
-      border-radius: 999px;
-      transition: width 280ms ease;
-    }
-    .counter{
-      font-size: 13px;
-      color: var(--muted);
-      min-width: 88px;
-      text-align: right;
-      font-weight: 600;
-    }
-
-    /* ---------- Flip cards ---------- */
     .grid{
       display:grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -244,378 +221,551 @@
       .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
-    .flip{
-      perspective: 1000px;
-      height: 120px;
-    }
+    .flip{ perspective: 1000px; height: 126px; }
     .flipBtn{
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: transparent;
-      padding: 0;
-      cursor: pointer;
-      border-radius: var(--radius2);
+      width:100%; height:100%;
+      border:none; background: transparent; padding:0;
+      cursor:pointer;
+      border-radius: var(--r2);
     }
-    .flipInner{
-      width: 100%;
-      height: 100%;
-      position: relative;
+    .inner{
+      width:100%; height:100%;
+      position:relative;
       transform-style: preserve-3d;
       transition: transform 520ms cubic-bezier(.2,.8,.2,1);
-      border-radius: var(--radius2);
-      box-shadow: 0 12px 22px rgba(17,24,39,0.08);
+      border-radius: var(--r2);
+      box-shadow: 0 12px 22px rgba(11,18,32,0.08);
     }
-    .flip[data-flipped="true"] .flipInner{ transform: rotateY(180deg); }
+    .flip[data-flipped="true"] .inner{ transform: rotateY(180deg); }
 
     .face{
-      position:absolute;
-      inset:0;
-      backface-visibility: hidden;
-      border-radius: var(--radius2);
-      border: 1px solid rgba(17,24,39,0.12);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      position:absolute; inset:0;
+      backface-visibility:hidden;
+      border-radius: var(--r2);
+      border: 1px solid rgba(11,18,32,0.14);
+      display:flex; align-items:center; justify-content:center;
       padding: 12px;
       text-align:center;
     }
     .front{
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.94);
     }
-    .front .label{
-      display:flex;
-      flex-direction: column;
-      gap: 8px;
-      align-items: center;
-      justify-content: center;
-    }
-    .front .emoji{
-      font-size: 28px;
-      line-height: 1;
-    }
+    .front .emoji{ font-size: 28px; }
     .front .hint{
+      margin-top: 8px;
       font-size: 13px;
+      font-weight: 850;
       color: var(--muted);
-      font-weight: 700;
     }
     .front .tiny{
+      margin-top: 6px;
       font-size: 12px;
       color: var(--soft);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .back{
       transform: rotateY(180deg);
-      color: #0F172A;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-    }
-    .back p{
-      margin: 0;
-      font-size: 12.8px;
-      line-height: 1.35;
-      font-weight: 700;
-      color: rgba(15,23,42,0.88);
-    }
-    .back .tag2{
-      margin-top: 10px;
-      display:inline-flex;
-      gap: 6px;
+      font-weight: 900;
+      color: rgba(11,18,32,0.92);
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      justify-content:center;
       align-items:center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(17,24,39,0.12);
-      background: rgba(255,255,255,0.70);
-      font-size: 12px;
-      font-weight: 800;
-      color: rgba(15,23,42,0.92);
+      padding: 12px 10px;
     }
+    .back .title{
+      font-size: 13.2px;
+      line-height: 1.25;
+      max-width: 18ch;
+      font-weight: 900;
+    }
+    .chip{
+      font-size: 12px;
+      font-weight: 900;
+      border-radius: 999px;
+      padding: 6px 10px;
+      border: 1px solid rgba(11,18,32,0.14);
+      background: rgba(255,255,255,0.72);
+    }
+    .c1 .back{ background: linear-gradient(135deg, var(--p1), #fff); }
+    .c2 .back{ background: linear-gradient(135deg, var(--p2), #fff); }
+    .c3 .back{ background: linear-gradient(135deg, var(--p3), #fff); }
+    .c4 .back{ background: linear-gradient(135deg, var(--p4), #fff); }
+    .c5 .back{ background: linear-gradient(135deg, var(--p5), #fff); }
+    .c6 .back{ background: linear-gradient(135deg, var(--p6), #fff); }
 
-    /* Pastel backgrounds per card */
-    .c1 .back{ background: linear-gradient(135deg, var(--a), #FFFFFF); }
-    .c2 .back{ background: linear-gradient(135deg, var(--b), #FFFFFF); }
-    .c3 .back{ background: linear-gradient(135deg, var(--c), #FFFFFF); }
-    .c4 .back{ background: linear-gradient(135deg, var(--d), #FFFFFF); }
-    .c5 .back{ background: linear-gradient(135deg, var(--e), #FFFFFF); }
-    .c6 .back{ background: linear-gradient(135deg, var(--f), #FFFFFF); }
-
-    /* ---------- Modal ---------- */
-    .modalOverlay{
+    /* Surprise modal */
+    .overlay{
       position: fixed;
       inset: 0;
-      background: rgba(17,24,39,0.55);
+      background: rgba(11,18,32,0.58);
       display:none;
       align-items:center;
       justify-content:center;
       padding: 18px;
       z-index: 999;
     }
-    .modalOverlay[data-open="true"]{ display:flex; }
+    .overlay[data-open="true"]{ display:flex; }
 
     .modal{
       width: min(640px, 100%);
+      border-radius: 24px;
+      border: 1px solid rgba(11,18,32,0.18);
       background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(17,24,39,0.14);
-      border-radius: 22px;
-      box-shadow: 0 30px 90px rgba(17,24,39,0.25);
-      overflow: hidden;
+      box-shadow: 0 30px 90px rgba(11,18,32,0.30);
+      overflow:hidden;
+      position: relative;
     }
     .modalTop{
-      padding: 18px 18px 12px;
+      padding: 16px 16px 10px;
       display:flex;
-      align-items:flex-start;
       justify-content: space-between;
-      gap: 12px;
+      align-items:flex-start;
+      gap: 10px;
     }
     .modalTop h3{
-      margin: 0;
+      margin:0;
       font-size: 18px;
       letter-spacing: -0.01em;
     }
     .modalBody{
-      padding: 0 18px 18px;
+      padding: 0 16px 16px;
       color: var(--muted);
+      font-size: 14.8px;
       line-height: 1.65;
-      font-size: 14.5px;
     }
-    .modalBody .bubble{
+    .big{
+      margin: 10px 0 8px;
+      font-size: clamp(30px, 7vw, 48px);
+      line-height: 1;
+    }
+    .bubble{
       margin-top: 12px;
       border-radius: 16px;
-      border: 1px solid rgba(17,24,39,0.12);
-      background: rgba(255,255,255,0.80);
-      padding: 12px 12px;
+      border: 1px solid rgba(11,18,32,0.12);
+      background: rgba(255,255,255,0.82);
+      padding: 12px;
     }
     .modalFoot{
-      padding: 14px 18px 18px;
+      border-top: 1px solid rgba(11,18,32,0.10);
+      background: rgba(255,255,255,0.72);
+      padding: 12px 16px 16px;
       display:flex;
+      justify-content: space-between;
       align-items:center;
-      justify-content: space-between;
       gap: 12px;
-      border-top: 1px solid rgba(17,24,39,0.08);
-      background: rgba(255,255,255,0.70);
-    }
-    .miniNote{
-      color: var(--soft);
-      font-size: 12.5px;
-      line-height: 1.5;
-    }
-
-    /* small footer */
-    .footer{
-      margin-top: 18px;
-      color: var(--soft);
-      font-size: 13px;
-      line-height: 1.6;
-      display:flex;
-      justify-content: space-between;
-      gap: 10px;
       flex-wrap: wrap;
     }
-    .footer .dot{
-      display:inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(17,24,39,0.24);
-      margin: 0 8px 2px 0;
+    .mini{
+      color: var(--soft);
+      font-size: 12.8px;
+      line-height: 1.5;
+      max-width: 44ch;
+    }
+
+    /* Confetti canvas */
+    canvas#confetti{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    /* Surprise: page shake */
+    .shake{
+      animation: shake 420ms ease-in-out;
+    }
+    @keyframes shake{
+      0%{ transform: translateX(0); }
+      20%{ transform: translateX(-8px); }
+      40%{ transform: translateX(8px); }
+      60%{ transform: translateX(-6px); }
+      80%{ transform: translateX(6px); }
+      100%{ transform: translateX(0); }
+    }
+
+    /* Little sticker that floats up */
+    .sticker{
+      position: fixed;
+      left: 50%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      z-index: 997;
+      font-size: 44px;
+      filter: drop-shadow(0 18px 20px rgba(11,18,32,0.20));
+      animation: floatUp 900ms cubic-bezier(.2,.8,.2,1) forwards;
+      pointer-events: none;
+    }
+    @keyframes floatUp{
+      0%{ opacity: 0; transform: translate(-50%,-30%) scale(0.92); }
+      20%{ opacity: 1; transform: translate(-50%,-50%) scale(1.02); }
+      100%{ opacity: 0; transform: translate(-50%,-92%) scale(1.06); }
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
+  <canvas id="confetti"></canvas>
+
+  <div class="wrap" id="page">
     <main class="shell">
-      <!-- Left: Intro -->
+      <!-- Intro -->
       <section class="card">
         <div class="pad">
-          <div class="introTop">
-            <div class="titleBlock">
+          <div class="top">
+            <div>
               <h1>Jackie Foo</h1>
-              <p>
-                I design and test small systems that help people learn and communicate better.
+              <p class="desc">
+                I build small experiments and playful systems with a calm and curious vibe.
                 Developing this site still.
               </p>
 
-              <div class="pillRow" aria-label="Quick tags">
-                <div class="pill">Co design and workshops</div>
-                <div class="pill">Feedback systems</div>
-                <div class="pill">Data experiments</div>
-                <div class="pill">Calm and curious</div>
+              <div class="subrow">
+                <div class="pill">Pastel and high contrast</div>
+                <div class="pill">Tiny games</div>
+                <div class="pill">Duck energy</div>
+                <div class="pill">Clean and minimal</div>
               </div>
             </div>
 
             <div class="duck" aria-hidden="true">
-              <div class="spark"></div>
-              <div class="eye left"></div>
-              <div class="eye right"></div>
+              <div class="shine"></div>
+              <div class="eye l"></div>
+              <div class="eye r"></div>
               <div class="beak"></div>
             </div>
           </div>
 
           <div class="footer">
-            <div><span class="dot"></span>Tip: tap a card and flip it</div>
-            <div>Works on mobile and desktop</div>
+            <div>Tap a card for a surprise popup</div>
+            <div>Mobile friendly</div>
           </div>
         </div>
       </section>
 
-      <!-- Right: Mini game -->
+      <!-- Game -->
       <section class="card">
         <div class="pad">
           <div class="gameHead">
             <div>
-              <h2>Duck Lab Mini Game</h2>
-              <div class="sub">Flip a card to reveal a co design decision prompt.</div>
+              <h2>Flip Card Surprise</h2>
+              <div class="sub">Flip any card and see what the duck drops.</div>
             </div>
             <div class="btnRow">
-              <button id="resetBtn" type="button" aria-label="Reset cards">Reset</button>
-              <button id="shuffleBtn" type="button" aria-label="Shuffle prompts">Shuffle</button>
+              <button id="resetBtn" type="button">Reset</button>
+              <button id="shuffleBtn" type="button">Shuffle</button>
+              <button id="soundBtn" type="button" aria-pressed="true">Sound on</button>
             </div>
           </div>
 
-          <div class="progressWrap" aria-label="Progress">
-            <div class="bar" aria-hidden="true"><div id="barFill"></div></div>
-            <div class="counter" id="counter">0 of 6</div>
-          </div>
-
-          <div class="grid" id="grid" aria-label="Flip card grid">
-            <!-- Cards injected by JS -->
+          <div class="grid" id="grid" aria-label="Flip cards">
+            <!-- injected -->
           </div>
         </div>
       </section>
     </main>
   </div>
 
-  <!-- Modal -->
-  <div class="modalOverlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-open="false">
+  <!-- Surprise popup -->
+  <div class="overlay" id="overlay" data-open="false" role="dialog" aria-modal="true" aria-labelledby="title">
     <div class="modal">
       <div class="modalTop">
-        <div>
-          <h3 id="modalTitle">Decision prompt</h3>
-        </div>
-        <button id="closeModalBtn" type="button" aria-label="Close">Close</button>
+        <h3 id="title">Surprise</h3>
+        <button id="closeBtn" type="button" aria-label="Close">Close</button>
       </div>
-      <div class="modalBody" id="modalBody">
-        <!-- Filled by JS -->
-      </div>
+      <div class="modalBody" id="body"></div>
       <div class="modalFoot">
-        <div class="miniNote" id="miniNote">
-          Tiny co design moment. Pick what you would do, then reset.
-        </div>
-        <button id="nextBtn" type="button" aria-label="Flip another card">Flip another</button>
+        <div class="mini" id="mini"></div>
+        <button id="againBtn" type="button">Flip another</button>
       </div>
     </div>
   </div>
 
   <script>
-    const prompts = [
+    // --------- Cards ---------
+    const cardFront = [
+      { emoji:"🦆", hint:"Flip me", tiny:"Duck drop 1" },
+      { emoji:"🎁", hint:"Flip me", tiny:"Duck drop 2" },
+      { emoji:"✨", hint:"Flip me", tiny:"Duck drop 3" },
+      { emoji:"🎲", hint:"Flip me", tiny:"Duck drop 4" },
+      { emoji:"🍬", hint:"Flip me", tiny:"Duck drop 5" },
+      { emoji:"🌈", hint:"Flip me", tiny:"Duck drop 6" }
+    ];
+
+    const backTitles = [
+      "Duck Approved",
+      "Secret Found",
+      "Lucky Sparkle",
+      "Chaos Mode",
+      "Sweet Surprise",
+      "Pastel Power"
+    ];
+
+    const palette = ["c1","c2","c3","c4","c5","c6"];
+
+    // --------- Surprise content ---------
+    const surprises = [
       {
-        emoji: "🦆",
-        title: "Who should decide this?",
-        text: "A feature looks useful, but different people want different things. Who gets the final say for this version?",
-        choices: ["Students", "Tutors", "Both together", "Test first, then decide"],
-        tag: "Governance"
+        title: "Duck says hi",
+        big: "🦆",
+        text: "You unlocked the official duck greeting.",
+        mini: "Tip: try shuffling and collect different surprises.",
+        sticker: "🦆",
+        effect: ["confetti"]
       },
       {
-        emoji: "🧩",
-        title: "What is the smallest experiment?",
-        text: "You only have one week. What is the smallest test that still teaches you something real?",
-        choices: ["One class", "One tutor", "One workflow step", "One feedback prompt"],
-        tag: "MVP"
+        title: "Confetti rain",
+        big: "✨",
+        text: "Pastel confetti for your soft launch.",
+        mini: "This site is still cooking, but the duck is already celebrating.",
+        sticker: "✨",
+        effect: ["confetti","shake"]
       },
       {
-        emoji: "🔍",
-        title: "What should be visible?",
-        text: "Transparency can help trust, but it can also add pressure. What should be visible in the interface?",
-        choices: ["Only outcomes", "Process steps", "Nothing extra", "Let users choose visibility"],
-        tag: "Transparency"
+        title: "Secret message",
+        big: "🔒",
+        text: "You found a hidden note: Keep building in tiny steps.",
+        mini: "Small progress looks cute on a website.",
+        sticker: "🔒",
+        effect: ["sticker"]
       },
       {
-        emoji: "🎛️",
-        title: "Reduce friction or add control?",
-        text: "You can make it one click, or add options for power users. Which do you choose for first release?",
-        choices: ["One click flow", "Simple options", "Advanced options", "Adaptive based on user"],
-        tag: "Usability"
+        title: "Duck drops a badge",
+        big: "🏷️",
+        text: "Badge unlocked: Calm and curious.",
+        mini: "You can change these badges later as your site grows.",
+        sticker: "🏷️",
+        effect: ["confetti","sticker"]
       },
       {
-        emoji: "🧠",
-        title: "How do we support reflection?",
-        text: "People rush when they see feedback. What nudge helps them pause and reflect without being annoying?",
-        choices: ["One question prompt", "Highlight key sentence", "Mini checklist", "Save for later reminder"],
-        tag: "Engagement"
+        title: "Mini fortune",
+        big: "🥠",
+        text: "Fortune: Your next iteration will be cleaner than you expect.",
+        mini: "Flip another card for a different fortune.",
+        sticker: "🥠",
+        effect: ["sticker"]
       },
       {
-        emoji: "🗺️",
-        title: "Handle edge cases now or later?",
-        text: "A few users have unusual workflows. Do you design for them now, or learn first?",
-        choices: ["Design now", "Learn first", "Provide a workaround", "Add an escape hatch"],
-        tag: "Implementation"
+        title: "Chaos sparkle",
+        big: "🎲",
+        text: "A little chaos makes things memorable.",
+        mini: "Still minimal, just a tiny surprise.",
+        sticker: "🎲",
+        effect: ["shake","confetti"]
       }
     ];
 
-    const paletteClass = ["c1","c2","c3","c4","c5","c6"];
-
+    // --------- DOM ---------
     const grid = document.getElementById("grid");
-    const barFill = document.getElementById("barFill");
-    const counter = document.getElementById("counter");
-
-    const modalOverlay = document.getElementById("modalOverlay");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalBody = document.getElementById("modalBody");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const nextBtn = document.getElementById("nextBtn");
-
+    const overlay = document.getElementById("overlay");
+    const closeBtn = document.getElementById("closeBtn");
+    const againBtn = document.getElementById("againBtn");
     const resetBtn = document.getElementById("resetBtn");
     const shuffleBtn = document.getElementById("shuffleBtn");
+    const soundBtn = document.getElementById("soundBtn");
 
-    let state = [];
-    let opened = 0;
-    let lastFocusedEl = null;
+    const titleEl = document.getElementById("title");
+    const bodyEl = document.getElementById("body");
+    const miniEl = document.getElementById("mini");
+    const page = document.getElementById("page");
 
-    function shuffleArray(arr){
+    // --------- Sound (no external files) ---------
+    let soundOn = true;
+    let audioCtx = null;
+
+    function beep(type="quack"){
+      if(!soundOn) return;
+      try{
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+
+        // A cute quack-like blip
+        const now = audioCtx.currentTime;
+        o.type = "square";
+        o.frequency.setValueAtTime(type==="quack" ? 520 : 660, now);
+        o.frequency.exponentialRampToValueAtTime(type==="quack" ? 220 : 440, now + 0.09);
+
+        g.gain.setValueAtTime(0.0001, now);
+        g.gain.exponentialRampToValueAtTime(0.15, now + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.start(now);
+        o.stop(now + 0.13);
+      }catch(e){
+        // ignore if audio blocked
+      }
+    }
+
+    soundBtn.addEventListener("click", () => {
+      soundOn = !soundOn;
+      soundBtn.textContent = soundOn ? "Sound on" : "Sound off";
+      soundBtn.setAttribute("aria-pressed", String(soundOn));
+      beep("pop");
+    });
+
+    // --------- Helpers ---------
+    function shuffle(arr){
       const a = [...arr];
-      for(let i = a.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+      for(let i=a.length-1; i>0; i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
       }
       return a;
     }
 
-    function render(cards){
-      grid.innerHTML = "";
-      state = cards.map((c, idx) => ({...c, flipped:false, idx}));
+    function showSticker(emoji){
+      const s = document.createElement("div");
+      s.className = "sticker";
+      s.textContent = emoji;
+      document.body.appendChild(s);
+      setTimeout(()=> s.remove(), 920);
+    }
 
-      state.forEach((c, i) => {
+    function shakePage(){
+      page.classList.remove("shake");
+      // force reflow
+      void page.offsetWidth;
+      page.classList.add("shake");
+      setTimeout(()=> page.classList.remove("shake"), 460);
+    }
+
+    // --------- Confetti ---------
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let confettiPieces = [];
+    let confettiTimer = null;
+
+    function resize(){
+      canvas.width = window.innerWidth * devicePixelRatio;
+      canvas.height = window.innerHeight * devicePixelRatio;
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function popConfetti(){
+      const colors = ["#BDE0FE","#C7F9CC","#FFD6A5","#FFADAD","#E9D5FF","#FFF1A8"];
+      const count = 120;
+      confettiPieces = [];
+      for(let i=0;i<count;i++){
+        confettiPieces.push({
+          x: Math.random()*window.innerWidth,
+          y: -20 - Math.random()*window.innerHeight*0.2,
+          r: 3 + Math.random()*4,
+          vy: 2 + Math.random()*5,
+          vx: -1.5 + Math.random()*3,
+          rot: Math.random()*Math.PI,
+          vr: -0.12 + Math.random()*0.24,
+          c: colors[Math.floor(Math.random()*colors.length)],
+          life: 120 + Math.floor(Math.random()*80)
+        });
+      }
+
+      if(confettiTimer) cancelAnimationFrame(confettiTimer);
+      animateConfetti();
+      setTimeout(()=> { confettiPieces = []; }, 1200);
+    }
+
+    function animateConfetti(){
+      ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      confettiPieces.forEach(p=>{
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        p.life -= 1;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.c;
+        ctx.fillRect(-p.r, -p.r, p.r*2.2, p.r*1.4);
+        ctx.restore();
+      });
+
+      confettiPieces = confettiPieces.filter(p=> p.y < window.innerHeight + 40 && p.life > 0);
+      if(confettiPieces.length){
+        confettiTimer = requestAnimationFrame(animateConfetti);
+      }else{
+        ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      }
+    }
+
+    // --------- Modal ---------
+    function openModal(s){
+      titleEl.textContent = s.title;
+      bodyEl.innerHTML = `
+        <div class="big">${s.big}</div>
+        <div class="bubble"><strong>${escapeHtml(s.text)}</strong></div>
+      `;
+      miniEl.textContent = s.mini;
+
+      overlay.setAttribute("data-open","true");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+
+      // effects
+      beep("quack");
+      if(s.effect.includes("confetti")) popConfetti();
+      if(s.effect.includes("shake")) shakePage();
+      if(s.effect.includes("sticker")) showSticker(s.sticker);
+    }
+
+    function closeModal(){
+      overlay.setAttribute("data-open","false");
+      document.body.style.overflow = "";
+    }
+
+    closeBtn.addEventListener("click", closeModal);
+    againBtn.addEventListener("click", closeModal);
+    overlay.addEventListener("click", (e)=> { if(e.target === overlay) closeModal(); });
+    document.addEventListener("keydown", (e)=> {
+      if(overlay.getAttribute("data-open")==="true" && e.key==="Escape") closeModal();
+    });
+
+    function escapeHtml(str){
+      return str.replace(/[&<>"']/g, s => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+      }[s]));
+    }
+
+    // --------- Render cards ---------
+    let order = [...Array(6)].map((_,i)=>i);
+
+    function render(){
+      grid.innerHTML = "";
+      order.forEach((idx, i) => {
         const wrap = document.createElement("div");
-        wrap.className = "flip " + paletteClass[i % paletteClass.length];
-        wrap.setAttribute("data-flipped", "false");
+        wrap.className = "flip " + palette[i % palette.length];
+        wrap.setAttribute("data-flipped","false");
 
         const btn = document.createElement("button");
         btn.className = "flipBtn";
         btn.type = "button";
-        btn.setAttribute("aria-label", "Flip card " + (i+1));
+        btn.setAttribute("aria-label","Flip card " + (i+1));
 
         const inner = document.createElement("div");
-        inner.className = "flipInner";
+        inner.className = "inner";
 
         const front = document.createElement("div");
         front.className = "face front";
         front.innerHTML = `
-          <div class="label">
-            <div class="emoji">${c.emoji}</div>
-            <div class="hint">Flip me</div>
-            <div class="tiny">Decision ${i+1}</div>
+          <div>
+            <div class="emoji">${cardFront[i].emoji}</div>
+            <div class="hint">${cardFront[i].hint}</div>
+            <div class="tiny">${cardFront[i].tiny}</div>
           </div>
         `;
 
         const back = document.createElement("div");
         back.className = "face back";
         back.innerHTML = `
-          <div>
-            <p>${c.title}</p>
-            <div class="tag2">🦆 ${c.tag}</div>
-          </div>
+          <div class="title">${backTitles[i]}</div>
+          <div class="chip">Tap for surprise</div>
         `;
 
         inner.appendChild(front);
@@ -624,90 +774,40 @@
         wrap.appendChild(btn);
         grid.appendChild(wrap);
 
-        btn.addEventListener("click", () => handleFlip(i, wrap, btn));
+        btn.addEventListener("click", () => flip(i, wrap));
         btn.addEventListener("keydown", (e) => {
           if(e.key === "Enter" || e.key === " "){
             e.preventDefault();
-            handleFlip(i, wrap, btn);
+            flip(i, wrap);
           }
         });
       });
-
-      opened = 0;
-      updateProgress();
     }
 
-    function handleFlip(i, wrap, btn){
-      if(state[i].flipped) return;
+    function flip(i, wrap){
+      if(wrap.getAttribute("data-flipped")==="true") return;
+      wrap.setAttribute("data-flipped","true");
 
-      state[i].flipped = true;
-      wrap.setAttribute("data-flipped", "true");
-      opened += 1;
-      updateProgress();
-
-      openModal(state[i], btn);
+      // pick a surprise, slightly randomized
+      const s = surprises[Math.floor(Math.random()*surprises.length)];
+      // delay popup slightly so flip feels real
+      setTimeout(()=> openModal(s), 240);
     }
-
-    function updateProgress(){
-      const pct = Math.round((opened / 6) * 100);
-      barFill.style.width = pct + "%";
-      counter.textContent = `${opened} of 6`;
-    }
-
-    function openModal(card, focusEl){
-      lastFocusedEl = focusEl;
-
-      modalTitle.textContent = card.title;
-      const choices = card.choices.map((c) => `<li>${c}</li>`).join("");
-
-      modalBody.innerHTML = `
-        <div>
-          <p>${card.text}</p>
-          <div class="bubble">
-            <strong>Pick one option:</strong>
-            <ul>${choices}</ul>
-          </div>
-          <div class="bubble">
-            <strong>My note:</strong>
-            This is a tiny co design prompt. I like seeing how different people make trade offs.
-          </div>
-        </div>
-      `;
-
-      modalOverlay.setAttribute("data-open", "true");
-      closeModalBtn.focus();
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeModal(){
-      modalOverlay.setAttribute("data-open", "false");
-      document.body.style.overflow = "";
-
-      if(lastFocusedEl) lastFocusedEl.focus();
-    }
-
-    closeModalBtn.addEventListener("click", closeModal);
-    modalOverlay.addEventListener("click", (e) => {
-      if(e.target === modalOverlay) closeModal();
-    });
-    document.addEventListener("keydown", (e) => {
-      if(modalOverlay.getAttribute("data-open") === "true" && e.key === "Escape"){
-        closeModal();
-      }
-    });
-
-    nextBtn.addEventListener("click", () => closeModal());
 
     resetBtn.addEventListener("click", () => {
-      render([...prompts]);
+      document.querySelectorAll(".flip").forEach(el => el.setAttribute("data-flipped","false"));
+      beep("pop");
     });
 
     shuffleBtn.addEventListener("click", () => {
-      render(shuffleArray(prompts));
+      order = shuffle(order);
+      render();
+      beep("pop");
+      showSticker("🦆");
     });
 
-    // initial
-    render([...prompts]);
+    // Init
+    render();
   </script>
 </body>
 </html>
