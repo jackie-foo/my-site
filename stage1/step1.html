@@ -24,8 +24,10 @@
     .cardBody{padding:14px;display:flex;flex-direction:column;gap:12px}
     button{appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:1000;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28)}
     button:hover{border-color:color-mix(in srgb,var(--accent) 60%, var(--border))}
+    button:disabled{opacity:.55;cursor:not-allowed}
     .btnPrimary{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));box-shadow:0 14px 34px rgba(0,229,255,.12)}
     .btnDanger{border-color:color-mix(in srgb,var(--bad) 65%, var(--border))}
+    .btnGhost{background:rgba(255,255,255,.03)}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
     .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:900;font-size:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);padding:3px 8px;border-radius:999px}
     .select,input{
@@ -48,6 +50,75 @@
     .pText{margin:0;color:var(--muted);font-weight:700;font-size:12px;line-height:1.35}
     .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
       border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);max-width:360px;color:var(--text);font-weight:900;font-size:12px;display:none}
+
+    /* ===== Modal ===== */
+    .overlay{
+      position:fixed; inset:0; z-index:90;
+      background:rgba(0,0,0,.62);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:16px;
+    }
+    .modal{
+      width:min(720px, 100%);
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .modalHead h3{
+      margin:0;
+      font-size:14px;
+      font-weight:1000;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+    }
+    .modalBody{padding:14px; display:flex; flex-direction:column; gap:10px}
+    .modalFoot{
+      padding:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .kicker{color:var(--muted); font-weight:800; font-size:12px; line-height:1.35}
+    .steps{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      color:var(--muted); font-weight:900; font-size:12px;
+    }
+    .pill{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      padding:4px 8px;
+      border-radius:999px;
+    }
+    .pill.active{
+      border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.12));
+      box-shadow:0 12px 28px rgba(0,229,255,.10);
+      color:var(--text);
+    }
+    .list{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+      line-height:1.55;
+    }
+    .callout{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,229,255,.06);
+      border-radius:16px;
+      padding:10px 12px;
+      color:var(--text);
+      font-weight:900;
+      font-size:12px;
+      line-height:1.45;
+    }
   </style>
 </head>
 <body>
@@ -61,11 +132,13 @@
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
+        <button id="btnTutorial" class="btnGhost">Tutorial</button>
         <button id="btnExit">← Back</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
       </div>
     </header>
 
+    <!-- Gate card now just shows status (password is modal) -->
     <section class="card" id="gateCard">
       <div class="cardHead">
         <h2>Passcode</h2>
@@ -73,10 +146,12 @@
       </div>
       <div class="cardBody">
         <div class="row">
-          <input id="pwInput" type="password" placeholder="Enter passcode"/>
-          <button id="btnUnlock" class="btnPrimary">Unlock</button>
+          <div class="subtitle" style="margin:0">
+            This step is locked. Click <span class="mono">Unlock</span> to enter the passcode.
+          </div>
+          <button id="btnOpenPw" class="btnPrimary">Unlock</button>
         </div>
-        <div class="subtitle">This is a simple client gate. Later we can enforce it properly with RLS / session secret.</div>
+        <div class="subtitle">Client-side gate for now. Later we can enforce properly with RLS / session secret.</div>
       </div>
     </section>
 
@@ -107,6 +182,60 @@
 
   <div class="toast" id="toast"></div>
 
+  <!-- ===== Password Modal ===== -->
+  <div class="overlay" id="pwOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="pwTitle">Enter Passcode</h3>
+          <div class="kicker">This room is gated so participants don’t accidentally enter the wrong session.</div>
+        </div>
+        <button id="btnClosePw" class="btnGhost">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="row">
+          <input id="pwInput" type="password" placeholder="Passcode" autocomplete="one-time-code"/>
+          <button id="btnUnlock" class="btnPrimary">Unlock</button>
+        </div>
+        <div class="callout">
+          Tip: you can share a single link like <span class="mono">.../step1.html?room=demo</span>, then give the passcode separately.
+        </div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">After unlock, you’ll see a quick tutorial.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnPwHelp" class="btnGhost">Why gate this?</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Tutorial Modal ===== -->
+  <div class="overlay" id="tutOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="tutTitle">Quick Tutorial</h3>
+          <div class="kicker" id="tutSub">How to do Step 1, and why we’re doing it.</div>
+        </div>
+        <button id="btnCloseTut" class="btnGhost">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="steps" id="tutSteps"></div>
+        <div id="tutContent"></div>
+      </div>
+
+      <div class="modalFoot">
+        <div class="kicker" id="tutHint">You can reopen this anytime via the “Tutorial” button.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnPrev" class="btnGhost">← Back</button>
+          <button id="btnNextStep" class="btnPrimary">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   (() => {
@@ -118,7 +247,7 @@
     // If your files are in /stage1/, keep this. If in root, set "".
     const BASE_PATH = "/stage1";
 
-    // Set your passcode here:
+    // Passcode (client-side gate)
     const REQUIRED_PASSCODE = "duck123";
 
     const params = new URLSearchParams(location.search);
@@ -143,11 +272,28 @@
     const $ = (q, el=document) => el.querySelector(q);
     const roomOut = $("#roomOut"), meOut = $("#meOut");
     const gateCard = $("#gateCard"), mainCard = $("#mainCard");
-    const pwInput = $("#pwInput"), btnUnlock = $("#btnUnlock"), gateStatus = $("#gateStatus");
+    const gateStatus = $("#gateStatus");
     const roleSelect = $("#roleSelect"), personaGrid = $("#personaGrid");
     const selPersona = $("#selPersona"), selRole = $("#selRole");
     const btnNext = $("#btnNext");
     const toast = $("#toast");
+
+    // Password modal refs
+    const pwOverlay = $("#pwOverlay");
+    const btnOpenPw = $("#btnOpenPw");
+    const btnClosePw = $("#btnClosePw");
+    const pwInput = $("#pwInput");
+    const btnUnlock = $("#btnUnlock");
+    const btnPwHelp = $("#btnPwHelp");
+
+    // Tutorial modal refs
+    const tutOverlay = $("#tutOverlay");
+    const btnTutorial = $("#btnTutorial");
+    const btnCloseTut = $("#btnCloseTut");
+    const tutSteps = $("#tutSteps");
+    const tutContent = $("#tutContent");
+    const btnPrev = $("#btnPrev");
+    const btnNextStep = $("#btnNextStep");
 
     roomOut.textContent = room;
     meOut.textContent = participantId.slice(0, 8);
@@ -158,6 +304,30 @@
       clearTimeout(showToast._t);
       showToast._t = setTimeout(() => toast.style.display = "none", 2200);
     }
+
+    function openOverlay(el){
+      el.style.display = "flex";
+      el.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+    function closeOverlay(el){
+      el.style.display = "none";
+      el.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    // Close on overlay click (outside modal)
+    [pwOverlay, tutOverlay].forEach(ov => {
+      ov.addEventListener("mousedown", (e) => {
+        if (e.target === ov) closeOverlay(ov);
+      });
+    });
+    // Esc key closes whichever is open
+    window.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      if (tutOverlay.style.display === "flex") closeOverlay(tutOverlay);
+      if (pwOverlay.style.display === "flex") closeOverlay(pwOverlay);
+    });
 
     const personaCards = [
       { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want examples." },
@@ -257,24 +427,161 @@
       mainCard.style.display = "block";
     }
 
+    // ===== Tutorial content =====
+    const tutorialSlides = [
+      {
+        title: "What you do in Step 1",
+        html: `
+          <div class="callout">
+            Step 1 is quick: choose your <span class="mono">role</span> and pick a <span class="mono">personality card</span>.
+            Your choices save automatically.
+          </div>
+          <ul class="list">
+            <li>Select your role (Student / Tutor / Observer).</li>
+            <li>Click one personality card that best matches how you prefer feedback to be given.</li>
+            <li>When you’re done, hit <span class="mono">Next → Step 2</span>.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Why we ask for role",
+        html: `
+          <div class="callout">
+            Different roles see “good feedback” differently.
+          </div>
+          <ul class="list">
+            <li><b>Students</b> focus on clarity, actionability, and confidence.</li>
+            <li><b>Tutors</b> focus on feasibility, rubric alignment, and time.</li>
+            <li><b>Observers</b> help spot mismatch and bias across both perspectives.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Why the personality cards exist",
+        html: `
+          <div class="callout">
+            The cards help us label feedback needs quickly (without long surveys).
+          </div>
+          <ul class="list">
+            <li>They create a shared language (e.g., “Clarifier” vs “Optimizer”).</li>
+            <li>They reduce vague requests like “make it better” into specific needs.</li>
+            <li>They let us compare patterns across participants in the same room.</li>
+          </ul>
+        `
+      },
+      {
+        title: "What happens after you pick",
+        html: `
+          <div class="callout">
+            Your selection is saved to the room (session) and will be used in Step 2 / Step 3 activities.
+          </div>
+          <ul class="list">
+            <li>You’ll see tasks that build on your chosen “mode” of feedback.</li>
+            <li>We use the card to tailor prompts and to interpret your comments.</li>
+            <li>You can change role or card later if you misclicked.</li>
+          </ul>
+        `
+      }
+    ];
+
+    let tutIndex = 0;
+
+    function renderTutorial(){
+      tutSteps.innerHTML = tutorialSlides.map((_, i) => {
+        const cls = "pill" + (i === tutIndex ? " active" : "");
+        return `<span class="${cls}">${i+1}</span>`;
+      }).join("");
+
+      const slide = tutorialSlides[tutIndex];
+      tutContent.innerHTML = `
+        <div class="row" style="justify-content:space-between; align-items:flex-end">
+          <div>
+            <div class="mono">Step ${tutIndex+1} / ${tutorialSlides.length}</div>
+            <div style="margin-top:6px;font-weight:1000;font-size:16px;letter-spacing:.2px">${escapeHtml(slide.title)}</div>
+          </div>
+        </div>
+        <div style="height:6px"></div>
+        ${slide.html}
+      `;
+
+      btnPrev.disabled = (tutIndex === 0);
+      btnNextStep.textContent = (tutIndex === tutorialSlides.length - 1) ? "Done" : "Next";
+    }
+
+    function openTutorial(startAt = 0){
+      tutIndex = Math.max(0, Math.min(startAt, tutorialSlides.length - 1));
+      renderTutorial();
+      openOverlay(tutOverlay);
+    }
+
+    btnPrev.addEventListener("click", () => {
+      tutIndex = Math.max(0, tutIndex - 1);
+      renderTutorial();
+    });
+
+    btnNextStep.addEventListener("click", () => {
+      if (tutIndex === tutorialSlides.length - 1){
+        closeOverlay(tutOverlay);
+        return;
+      }
+      tutIndex = Math.min(tutorialSlides.length - 1, tutIndex + 1);
+      renderTutorial();
+    });
+
+    btnTutorial.addEventListener("click", () => openTutorial(0));
+    btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
+
+    // ===== Password modal behaviour =====
+    btnOpenPw.addEventListener("click", () => {
+      openOverlay(pwOverlay);
+      setTimeout(() => pwInput?.focus(), 0);
+    });
+    btnClosePw.addEventListener("click", () => closeOverlay(pwOverlay));
+
+    btnPwHelp.addEventListener("click", () => {
+      // jump tutorial to “Why role/persona exists”
+      closeOverlay(pwOverlay);
+      openTutorial(1);
+    });
+
+    pwInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") btnUnlock.click();
+    });
+
     btnUnlock.addEventListener("click", async () => {
       const pw = (pwInput.value || "").trim();
       if (pw !== REQUIRED_PASSCODE){
         showToast("Wrong passcode");
+        pwInput.focus();
+        pwInput.select?.();
         return;
       }
       localStorage.setItem(AUTH_KEY, "1");
+      closeOverlay(pwOverlay);
+
       unlockUI();
       await ensureSession();
       await ensureParticipant();
       await loadParticipant();
+
       showToast("Unlocked");
+      openTutorial(0); // show tutorial right after password
     });
 
     // already authed?
     if (localStorage.getItem(AUTH_KEY) === "1"){
       unlockUI();
       ensureSession().then(ensureParticipant).then(loadParticipant);
+      // Optional: show tutorial once per browser per room
+      const TUT_KEY = `stage1_tut_seen_${room}`;
+      if (!localStorage.getItem(TUT_KEY)){
+        localStorage.setItem(TUT_KEY, "1");
+        openTutorial(0);
+      }
+    } else {
+      // If not authed, open password modal immediately
+      openOverlay(pwOverlay);
+      setTimeout(() => pwInput?.focus(), 0);
     }
 
     btnNext.addEventListener("click", () => {
@@ -289,6 +596,7 @@
       if(!ok) return;
       localStorage.removeItem(PID_KEY);
       localStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(`stage1_tut_seen_${room}`);
       location.reload();
     });
   })();
