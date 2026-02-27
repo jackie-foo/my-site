@@ -5,48 +5,45 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Jackie Foo — Soft Launch</title>
 
-  <!-- Pixel-ish font (optional). If blocked, falls back to monospace. -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
   <style>
     :root{
-      --bg:#0a0a0f;
-      --panel:#121222;
-      --ink:#f2f2ff;
-      --muted:#b9b9d6;
-      --accent:#00ff6a;      /* neon green */
-      --accent2:#ff2bd6;     /* neon magenta */
-      --warning:#ffd400;     /* neon yellow */
-      --danger:#ff3b3b;      /* neon red */
+      --bg:#07070b;
+      --panel:#0e0f16;
+      --panel2:#0b0c12;
+      --ink:#f2f3ff;
+      --muted:#b9bdd6;
+      --border:rgba(242,243,255,.14);
       --shadow:rgba(0,0,0,.55);
-      --border:rgba(242,242,255,.18);
-      --border2:rgba(0,255,106,.35);
+
+      --accent:#00ff6a;   /* neon green */
+      --accent2:#ff2bd6;  /* neon magenta */
+      --warn:#ffd400;     /* neon yellow */
+      --danger:#ff3b3b;   /* neon red */
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
+      background: radial-gradient(1100px 700px at 10% 5%, rgba(255,43,214,.12), transparent 60%),
+                  radial-gradient(900px 650px at 90% 10%, rgba(0,255,106,.10), transparent 55%),
+                  radial-gradient(1200px 900px at 50% 120%, rgba(255,212,0,.07), transparent 60%),
+                  var(--bg);
       color:var(--ink);
-      background:var(--bg);
-      font-family:"Press Start 2P", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      letter-spacing:.3px;
-      -webkit-font-smoothing:none;
-      -moz-osx-font-smoothing:grayscale;
-      image-rendering: pixelated;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      letter-spacing:.2px;
     }
 
-    /* Pixel grid overlay */
+    /* subtle grid, not pixel */
     body::before{
       content:"";
       position:fixed; inset:0;
       pointer-events:none;
       background:
-        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px) 0 0/14px 14px,
-        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px) 0 0/14px 14px;
-      opacity:.18;
-      mix-blend-mode:screen;
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px) 0 0/26px 26px,
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px) 0 0/26px 26px;
+      opacity:.12;
+      mask: radial-gradient(ellipse at 50% 20%, rgba(0,0,0,1), rgba(0,0,0,.25) 55%, transparent 75%);
     }
 
     .wrap{
@@ -54,361 +51,388 @@
       display:flex;
       justify-content:center;
       padding:16px;
-      padding-bottom:24px;
-    }
-    .card{
-      width:min(920px,100%);
-      background:var(--panel);
-      border:2px solid var(--border);
-      box-shadow:0 14px 0 0 rgba(0,0,0,.25), 0 22px 55px var(--shadow);
-      padding:14px;
-      position:relative;
-    }
-    .card::after{
-      content:"";
-      position:absolute; inset:-2px;
-      border:2px dashed rgba(255,43,214,.35);
-      pointer-events:none;
-      mix-blend-mode:screen;
+      padding-bottom:28px;
     }
 
-    header{
+    .shell{
+      width:min(980px,100%);
+      display:grid;
+      gap:14px;
+      align-content:start;
+    }
+
+    .topbar{
       display:flex;
-      gap:12px;
+      gap:10px;
       flex-wrap:wrap;
-      align-items:flex-start;
       justify-content:space-between;
-      margin-bottom:12px;
-    }
-    .title{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    h1{
-      margin:0;
-      font-size:14px;
-      line-height:1.35;
-      text-transform:uppercase;
-    }
-    .sub{
-      margin:0;
-      font-size:10px;
-      line-height:1.6;
-      color:var(--muted);
-      max-width:52ch;
+      align-items:flex-start;
+      padding:14px;
+      background:rgba(14,15,22,.7);
+      border:1px solid var(--border);
+      box-shadow:0 18px 55px var(--shadow);
+      backdrop-filter: blur(10px);
+      border-radius:16px;
     }
 
-    .pillRow{
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      line-height:1.25;
+      letter-spacing:.4px;
+    }
+    .brand p{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+      max-width:60ch;
+    }
+
+    .badges{
       display:flex;
       gap:8px;
       flex-wrap:wrap;
-      align-items:center;
       justify-content:flex-end;
     }
-    .pill{
-      font-size:10px;
+    .badge{
+      font-size:12px;
       padding:8px 10px;
-      border:2px solid var(--border);
-      background:#0f0f1a;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:rgba(11,12,18,.6);
       white-space:nowrap;
-      box-shadow:0 6px 0 rgba(0,0,0,.25);
     }
-    .pill b{color:var(--accent)}
-    .pill .dot{
+    .badge b{color:var(--accent)}
+    .dot{
       display:inline-block;
-      width:8px; height:8px;
-      background:var(--accent2);
+      width:10px;height:10px;
+      border-radius:999px;
       margin-right:8px;
+      background:var(--accent2);
+      box-shadow:0 0 18px rgba(255,43,214,.35);
       vertical-align:middle;
-      box-shadow:0 0 0 2px rgba(0,0,0,.35);
     }
 
     .grid{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:12px;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
     }
-    @media (max-width:820px){
+    @media (max-width:900px){
       .grid{grid-template-columns:1fr}
     }
 
-    .panel{
-      background:#0f0f1a;
-      border:2px solid var(--border);
-      padding:12px;
-      box-shadow:0 10px 0 rgba(0,0,0,.25);
+    .card{
+      background:rgba(14,15,22,.7);
+      border:1px solid var(--border);
+      box-shadow:0 18px 55px var(--shadow);
+      backdrop-filter: blur(10px);
+      border-radius:16px;
+      padding:14px;
     }
-    .panel h2{
+
+    .card h2{
       margin:0 0 10px 0;
-      font-size:11px;
-      line-height:1.5;
+      font-size:13px;
+      letter-spacing:.4px;
       text-transform:uppercase;
-      color:var(--warning);
+      color:var(--warn);
     }
     .mini{
-      font-size:10px;
-      line-height:1.7;
+      margin:0 0 12px 0;
       color:var(--muted);
-      margin:0 0 10px 0;
+      font-size:13px;
+      line-height:1.65;
     }
 
-    .tasks{
+    /* intro "cool but brief" */
+    .intro{
       display:grid;
-      grid-template-columns:1fr;
-      gap:8px;
-      margin-top:8px;
+      gap:10px;
+      padding:12px;
+      background:rgba(11,12,18,.7);
+      border:1px solid var(--border);
+      border-radius:14px;
     }
-    .task{
+    .intro strong{color:var(--accent)}
+    .intro ul{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+    }
+
+    /* nav buttons */
+    .navRow{
       display:flex;
       gap:10px;
-      align-items:flex-start;
-      padding:10px;
-      border:2px solid var(--border);
-      background:#0b0b14;
-    }
-    .task input{
-      margin-top:2px;
-      width:18px; height:18px;
-      accent-color: var(--accent);
-    }
-    .task label{
-      font-size:10px;
-      line-height:1.65;
-      cursor:pointer;
-    }
-    .task small{
-      display:block;
-      color:var(--muted);
-      margin-top:4px;
-      font-size:9px;
-      line-height:1.6;
-    }
-    .task .tag{
-      display:inline-block;
-      margin-left:6px;
-      padding:2px 6px;
-      border:2px solid var(--border2);
-      color:var(--accent);
-      font-size:9px;
-      line-height:1.5;
-      background:rgba(0,255,106,.06);
-      vertical-align:middle;
-    }
-
-    .controls{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
+      flex-wrap:wrap;
       margin-top:10px;
     }
-    @media (max-width:520px){
-      .controls{grid-template-columns:1fr}
-    }
-    .field{
-      border:2px solid var(--border);
-      background:#0b0b14;
-      padding:10px;
-    }
-    .field label{
-      display:block;
-      font-size:9px;
-      color:var(--muted);
-      margin-bottom:8px;
-    }
-    .row{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    select, input[type="number"]{
-      width:100%;
-      border:2px solid var(--border);
-      background:#07070d;
-      color:var(--ink);
-      padding:10px;
-      font-size:10px;
-      outline:none;
-      font-family:inherit;
-    }
-    select:focus, input[type="number"]:focus{
-      border-color: var(--accent);
-      box-shadow:0 0 0 2px rgba(0,255,106,.18);
-    }
-
-    .timer{
-      display:grid;
-      gap:10px;
-      text-align:center;
-    }
-    .timeBox{
-      padding:14px 10px;
-      border:2px solid var(--border2);
-      background:#06060b;
-      box-shadow:0 10px 0 rgba(0,0,0,.35);
-    }
-    .time{
-      font-size:18px;
-      line-height:1.3;
-      color:var(--accent);
-      text-shadow:0 2px 0 rgba(0,0,0,.5);
-    }
-    .status{
-      font-size:9px;
-      color:var(--muted);
-      line-height:1.7;
-      margin-top:8px;
-    }
-    .btnRow{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:8px;
-    }
-    @media (max-width:520px){
-      .btnRow{grid-template-columns:1fr}
-    }
     button{
-      border:2px solid var(--border);
-      background:#0b0b14;
+      border:1px solid var(--border);
+      background:rgba(11,12,18,.6);
       color:var(--ink);
-      padding:12px 10px;
-      font-size:10px;
-      font-family:inherit;
+      padding:11px 12px;
+      font-size:13px;
+      border-radius:12px;
       cursor:pointer;
-      box-shadow:0 10px 0 rgba(0,0,0,.25);
       touch-action:manipulation;
+      transition: transform .08s ease, box-shadow .08s ease, border-color .08s ease;
+      box-shadow:0 12px 28px rgba(0,0,0,.25);
     }
-    button:active{transform:translateY(2px); box-shadow:0 8px 0 rgba(0,0,0,.25)}
+    button:active{transform:translateY(1px)}
     .primary{
-      border-color: var(--border2);
-      background: rgba(0,255,106,.08);
-      color: var(--accent);
+      border-color: rgba(0,255,106,.35);
+      box-shadow:0 0 0 2px rgba(0,255,106,.08), 0 12px 28px rgba(0,0,0,.25);
     }
-    .danger{
-      border-color: rgba(255,59,59,.55);
-      background: rgba(255,59,59,.08);
-      color: #ffd1d1;
-    }
+    .primary span{color:var(--accent)}
     .ghost{
       border-style:dashed;
       color:var(--muted);
     }
 
-    .footer{
+    /* timer section toggle */
+    .hidden{display:none !important;}
+
+    /* tasks */
+    .tasks{display:grid; gap:10px;}
+    .task{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(11,12,18,.65);
+    }
+    .task input{
+      margin-top:3px;
+      width:18px;height:18px;
+      accent-color: var(--accent);
+    }
+    .task label{cursor:pointer; font-size:13px; line-height:1.55;}
+    .task small{display:block; color:var(--muted); margin-top:6px; line-height:1.55;}
+    .tag{
+      display:inline-block;
+      margin-left:8px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid rgba(0,255,106,.35);
+      color:var(--accent);
+      background:rgba(0,255,106,.06);
+      font-size:12px;
+      vertical-align:middle;
+    }
+
+    /* controls */
+    .controls{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
       margin-top:12px;
-      font-size:9px;
-      line-height:1.7;
+    }
+    @media (max-width:560px){
+      .controls{grid-template-columns:1fr}
+    }
+    .field{
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(11,12,18,.65);
+      padding:12px;
+    }
+    .field label{
+      display:block;
+      font-size:12px;
       color:var(--muted);
+      margin-bottom:8px;
+    }
+    select, input[type="number"]{
+      width:100%;
+      border:1px solid var(--border);
+      background:rgba(7,7,11,.85);
+      color:var(--ink);
+      padding:11px 10px;
+      border-radius:12px;
+      outline:none;
+      font-size:13px;
+    }
+    select:focus, input[type="number"]:focus{
+      border-color: rgba(0,255,106,.6);
+      box-shadow:0 0 0 2px rgba(0,255,106,.12);
+    }
+
+    /* timer */
+    .timeBox{
+      border:1px solid rgba(0,255,106,.35);
+      background:rgba(7,7,11,.72);
+      border-radius:16px;
+      padding:14px;
+      text-align:center;
+      box-shadow:0 0 0 2px rgba(0,255,106,.08), 0 18px 55px rgba(0,0,0,.35);
+    }
+    .time{
+      font-variant-numeric: tabular-nums;
+      font-size:34px;
+      letter-spacing:.6px;
+      color:var(--accent);
+      line-height:1.2;
+    }
+    .status{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+    .btnRow{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+    @media (max-width:560px){
+      .btnRow{grid-template-columns:1fr}
+    }
+    .danger{
+      border-color: rgba(255,59,59,.55);
+      background: rgba(255,59,59,.10);
+    }
+
+    .footer{
+      margin-top:10px;
       display:flex;
       justify-content:space-between;
-      gap:10px;
+      gap:12px;
       flex-wrap:wrap;
+      color:var(--muted);
+      font-size:12px;
     }
     a{color:var(--accent2); text-decoration:none}
-    a:focus,a:hover{text-decoration:underline}
+    a:hover{text-decoration:underline}
     .kbd{
       display:inline-block;
-      padding:2px 6px;
-      border:2px solid var(--border);
-      background:#07070d;
+      padding:2px 8px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:rgba(7,7,11,.75);
       color:var(--ink);
-      font-size:9px;
-      vertical-align:middle;
+      font-size:12px;
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <main class="card" role="main">
-      <header>
-        <div class="title">
-          <h1>Jackie Foo — Soft Launch</h1>
-          <p class="sub">Site is still in development. While you’re here, pick a mission and start a focused timer.</p>
+    <main class="shell" role="main">
+
+      <header class="topbar">
+        <div class="brand">
+          <h1>Jackie Foo</h1>
+          <p><strong style="color:var(--accent)">Soft launch</strong>. This site is still developing. I’m shipping the basics first, then polishing as I go.</p>
         </div>
-        <div class="pillRow" aria-label="status badges">
-          <div class="pill"><span class="dot"></span>Build: <b>WIP</b></div>
-          <div class="pill">Mode: <b>PIXEL</b></div>
+        <div class="badges" aria-label="status badges">
+          <div class="badge"><span class="dot"></span>Build: <b>WIP</b></div>
+          <div class="badge">Style: <b>High contrast</b></div>
         </div>
       </header>
 
-      <section class="grid" aria-label="content">
-        <!-- LEFT: Tasks -->
-        <section class="panel" aria-label="tasks">
-          <h2>Pick your missions</h2>
-          <p class="mini">Select what you want to complete in one session. Keep it small. Keep it doable.</p>
+      <section class="grid">
+        <!-- LEFT: Intro -->
+        <section class="card" aria-label="intro">
+          <h2>Quick intro</h2>
+          <div class="intro">
+            <p class="mini" style="margin:0;">
+              Hi, I’m <strong>Jackie</strong>. I’m building this as my personal corner for projects, notes, and experiments.
+            </p>
+            <ul>
+              <li>Data + design energy, with a practical vibe</li>
+              <li>Interested in human-centred tools and feedback systems</li>
+              <li>Currently: iterating and deploying in public</li>
+            </ul>
 
-          <div class="tasks" id="tasks">
-            <div class="task">
-              <input id="t1" type="checkbox" />
-              <label for="t1">Read notes + highlight key points <span class="tag">10–25m</span>
-                <small>Goal: understand, not memorise.</small>
-              </label>
-            </div>
-            <div class="task">
-              <input id="t2" type="checkbox" />
-              <label for="t2">Do 10 practice questions <span class="tag">15–30m</span>
-                <small>Goal: build pattern recognition.</small>
-              </label>
-            </div>
-            <div class="task">
-              <input id="t3" type="checkbox" />
-              <label for="t3">Summarise 1 topic in 5 bullets <span class="tag">10–20m</span>
-                <small>Goal: compress and rephrase.</small>
-              </label>
-            </div>
-            <div class="task">
-              <input id="t4" type="checkbox" />
-              <label for="t4">Fix 1 “stuck” problem from last time <span class="tag">15–40m</span>
-                <small>Goal: unblock yourself fast.</small>
-              </label>
+            <div class="navRow">
+              <button class="primary" id="goTimer" type="button">Go to <span>Study Timer</span></button>
+              <button class="ghost" id="stayHere" type="button" title="You are already here">Stay on intro</button>
             </div>
           </div>
 
-          <div class="controls" aria-label="timer setup">
-            <div class="field">
-              <label for="mode">Timer mode</label>
-              <select id="mode">
-                <option value="focus" selected>Focus (single session)</option>
-                <option value="pomodoro">Pomodoro (focus + break)</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="minutes">Focus minutes</label>
-              <input id="minutes" type="number" min="1" max="180" value="25" inputmode="numeric" />
-            </div>
-
-            <div class="field" id="breakWrap" style="display:none;">
-              <label for="breakMinutes">Break minutes</label>
-              <input id="breakMinutes" type="number" min="1" max="60" value="5" inputmode="numeric" />
-            </div>
-
-            <div class="field">
-              <label>Quick set</label>
-              <div class="row">
-                <button class="ghost" type="button" data-set="10">10m</button>
-                <button class="ghost" type="button" data-set="25">25m</button>
-                <button class="ghost" type="button" data-set="45">45m</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="footer">
-            <div>Tip: press <span class="kbd">S</span> to Start/Pause, <span class="kbd">R</span> to Reset.</div>
-            <div><a href="#" id="clear">Clear saved tasks</a></div>
-          </div>
+          <p class="mini" style="margin-top:12px;">
+            If you found this page randomly, welcome. If you’re here to get stuff done, the timer is below.
+          </p>
         </section>
 
-        <!-- RIGHT: Timer -->
-        <section class="panel" aria-label="timer">
-          <h2>Study timer</h2>
+        <!-- RIGHT: Timer panel (collapsible) -->
+        <section class="card" aria-label="timer">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+            <h2 style="margin:0;">Study Timer</h2>
+            <button class="ghost" id="toggleTimer" type="button">Open / Close</button>
+          </div>
 
-          <div class="timer">
-            <div class="timeBox" role="status" aria-live="polite">
+          <div id="timerSection" class="hidden" style="margin-top:12px;">
+            <p class="mini">Pick missions, set time, press start. Simple and calm.</p>
+
+            <div class="tasks" id="tasks">
+              <div class="task">
+                <input id="t1" type="checkbox" />
+                <label for="t1">Read notes + highlight key points <span class="tag">10–25m</span>
+                  <small>Understand first, then speed up.</small>
+                </label>
+              </div>
+              <div class="task">
+                <input id="t2" type="checkbox" />
+                <label for="t2">Do 10 practice questions <span class="tag">15–30m</span>
+                  <small>One set, no multitasking.</small>
+                </label>
+              </div>
+              <div class="task">
+                <input id="t3" type="checkbox" />
+                <label for="t3">Summarise 1 topic in 5 bullets <span class="tag">10–20m</span>
+                  <small>Make your own version.</small>
+                </label>
+              </div>
+              <div class="task">
+                <input id="t4" type="checkbox" />
+                <label for="t4">Fix 1 stuck problem from last time <span class="tag">15–40m</span>
+                  <small>Close loops.</small>
+                </label>
+              </div>
+            </div>
+
+            <div class="controls" aria-label="timer setup">
+              <div class="field">
+                <label for="mode">Timer mode</label>
+                <select id="mode">
+                  <option value="focus" selected>Focus (single session)</option>
+                  <option value="pomodoro">Pomodoro (focus + break)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="minutes">Focus minutes</label>
+                <input id="minutes" type="number" min="1" max="180" value="25" inputmode="numeric" />
+              </div>
+
+              <div class="field" id="breakWrap" style="display:none;">
+                <label for="breakMinutes">Break minutes</label>
+                <input id="breakMinutes" type="number" min="1" max="60" value="5" inputmode="numeric" />
+              </div>
+
+              <div class="field">
+                <label>Quick set</label>
+                <div class="navRow" style="margin:0;">
+                  <button class="ghost" type="button" data-set="10">10m</button>
+                  <button class="ghost" type="button" data-set="25">25m</button>
+                  <button class="ghost" type="button" data-set="45">45m</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeBox" role="status" aria-live="polite" style="margin-top:12px;">
               <div class="time" id="time">25:00</div>
-              <div class="status" id="status">READY · pick missions · press START</div>
+              <div class="status" id="status">Ready. Pick missions. Press START.</div>
+              <div class="status" style="margin-top:8px;">Selected: <span id="picked">none yet</span></div>
             </div>
 
             <div class="btnRow">
@@ -417,9 +441,10 @@
               <button class="danger" id="reset" type="button">RESET</button>
             </div>
 
-            <p class="mini" id="sessionNote" style="margin:0;">
-              Selected: <span id="picked">none yet</span>
-            </p>
+            <div class="footer">
+              <div>Shortcuts: <span class="kbd">S</span> start/pause, <span class="kbd">R</span> reset</div>
+              <div><a href="#" id="clear">Clear saved tasks</a></div>
+            </div>
           </div>
         </section>
       </section>
@@ -427,50 +452,65 @@
   </div>
 
   <script>
-    // ====== Small pixel timer + task picker (mobile-friendly) ======
+    // ====== Intro -> Timer button + collapsible timer ======
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => Array.from(document.querySelectorAll(s));
 
     const els = {
+      goTimer: $("#goTimer"),
+      toggleTimer: $("#toggleTimer"),
+      timerSection: $("#timerSection"),
+
       mode: $("#mode"),
       minutes: $("#minutes"),
       breakWrap: $("#breakWrap"),
       breakMinutes: $("#breakMinutes"),
+
       time: $("#time"),
       status: $("#status"),
       start: $("#start"),
       pause: $("#pause"),
       reset: $("#reset"),
+
       picked: $("#picked"),
       clear: $("#clear"),
       taskInputs: $$("#tasks input[type=checkbox]"),
       quickBtns: $$("button[data-set]")
     };
 
-    // Persist tasks
-    const KEY_TASKS = "jf_softlaunch_tasks_v1";
-    const KEY_TIMER = "jf_softlaunch_timer_v1";
+    const KEY_TASKS = "jf_softlaunch_tasks_v2";
+    const KEY_TIMER = "jf_softlaunch_timer_v2";
 
+    function openTimer(){
+      els.timerSection.classList.remove("hidden");
+      // smooth scroll on mobile
+      els.timerSection.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+    function toggleTimer(){
+      els.timerSection.classList.toggle("hidden");
+      if(!els.timerSection.classList.contains("hidden")) openTimer();
+    }
+
+    // Tasks persistence
     function loadTasks(){
       try{
         const raw = localStorage.getItem(KEY_TASKS);
         if(!raw) return;
         const state = JSON.parse(raw);
-        els.taskInputs.forEach((inp) => inp.checked = !!state[inp.id]);
+        els.taskInputs.forEach(inp => inp.checked = !!state[inp.id]);
       }catch(e){}
     }
     function saveTasks(){
       const state = {};
-      els.taskInputs.forEach((inp) => state[inp.id] = inp.checked);
+      els.taskInputs.forEach(inp => state[inp.id] = inp.checked);
       localStorage.setItem(KEY_TASKS, JSON.stringify(state));
       renderPicked();
     }
     function clearTasks(){
       localStorage.removeItem(KEY_TASKS);
-      els.taskInputs.forEach((inp) => inp.checked = false);
+      els.taskInputs.forEach(inp => inp.checked = false);
       renderPicked();
     }
-
     function renderPicked(){
       const picked = els.taskInputs
         .filter(i => i.checked)
@@ -479,11 +519,11 @@
       els.picked.textContent = picked.length ? picked.join(" + ") : "none yet";
     }
 
-    // Timer state
+    // Timer
     let timer = null;
-    let phase = "focus";         // "focus" | "break"
+    let phase = "focus";     // "focus" | "break"
     let running = false;
-    let remainingSec = 25*60;
+    let remainingSec = 25 * 60;
 
     function fmt(sec){
       sec = Math.max(0, Math.floor(sec));
@@ -491,44 +531,40 @@
       const s = String(sec%60).padStart(2,"0");
       return `${m}:${s}`;
     }
-
+    function isPomodoro(){ return els.mode.value === "pomodoro"; }
     function getFocusSec(){ return Math.max(1, Number(els.minutes.value||25)) * 60; }
     function getBreakSec(){ return Math.max(1, Number(els.breakMinutes.value||5)) * 60; }
-    function isPomodoro(){ return els.mode.value === "pomodoro"; }
+
+    function setStatus(t){ els.status.textContent = t; }
 
     function applyModeUI(){
       els.breakWrap.style.display = isPomodoro() ? "" : "none";
-      // If switching mode, reset to keep it clean.
-      hardReset(false);
+      hardReset(true);
     }
-
-    function setStatus(text){ els.status.textContent = text; }
 
     function tick(){
       remainingSec -= 1;
       els.time.textContent = fmt(remainingSec);
-
       persistTimer();
 
       if(remainingSec <= 0){
         beep();
-
         if(isPomodoro()){
           if(phase === "focus"){
             phase = "break";
             remainingSec = getBreakSec();
             els.time.textContent = fmt(remainingSec);
-            setStatus("BREAK · breathe · no guilt");
+            setStatus("Break. Breathe. No guilt.");
           }else{
             phase = "focus";
             remainingSec = getFocusSec();
             els.time.textContent = fmt(remainingSec);
-            setStatus("FOCUS · round two");
+            setStatus("Focus round. Let’s go.");
           }
           persistTimer();
         }else{
           stopTimer();
-          setStatus("DONE · GG · mark one thing as complete");
+          setStatus("Done. Mark one mission as complete.");
           localStorage.removeItem(KEY_TIMER);
         }
       }
@@ -538,11 +574,10 @@
       if(running) return;
       running = true;
       timer = setInterval(tick, 1000);
-      setStatus((phase === "focus" ? "FOCUS" : "BREAK") + " · timer running");
+      setStatus((phase === "focus" ? "Focus" : "Break") + " running.");
       els.start.textContent = "RUNNING";
       els.start.disabled = true;
     }
-
     function stopTimer(){
       running = false;
       if(timer) clearInterval(timer);
@@ -550,30 +585,23 @@
       els.start.textContent = "START";
       els.start.disabled = false;
     }
-
     function togglePause(){
-      if(!running){
-        startTimer();
-      }else{
-        stopTimer();
-        setStatus("PAUSED · press START");
-        persistTimer();
-      }
+      if(!running) startTimer();
+      else { stopTimer(); setStatus("Paused. Press START."); persistTimer(); }
     }
 
-    function hardReset(keepTasks=true){
+    function hardReset(keepStored=false){
       stopTimer();
       phase = "focus";
       remainingSec = getFocusSec();
       els.time.textContent = fmt(remainingSec);
-      setStatus("READY · pick missions · press START");
-      localStorage.removeItem(KEY_TIMER);
-      if(!keepTasks) renderPicked();
+      setStatus("Ready. Pick missions. Press START.");
+      if(!keepStored) localStorage.removeItem(KEY_TIMER);
     }
 
     function persistTimer(){
       const data = {
-        phase, running, remainingSec,
+        phase, remainingSec,
         mode: els.mode.value,
         focusMin: Number(els.minutes.value||25),
         breakMin: Number(els.breakMinutes.value||5),
@@ -588,31 +616,26 @@
         if(!raw) return;
         const data = JSON.parse(raw);
 
-        // restore inputs
         if(data.mode) els.mode.value = data.mode;
-        applyModeUI(); // resets, then we override
         if(Number.isFinite(data.focusMin)) els.minutes.value = data.focusMin;
         if(Number.isFinite(data.breakMin)) els.breakMinutes.value = data.breakMin;
 
         phase = data.phase || "focus";
         remainingSec = Number.isFinite(data.remainingSec) ? data.remainingSec : getFocusSec();
-
         els.time.textContent = fmt(remainingSec);
 
-        // Do not auto-run on load (feels nicer). Keep paused.
-        running = false;
+        // Keep it paused on load
         stopTimer();
-        setStatus("RESTORED · press START");
+        setStatus("Restored. Press START.");
       }catch(e){}
     }
 
-    // Small beep (no external files)
     function beep(){
       try{
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const o = ctx.createOscillator();
         const g = ctx.createGain();
-        o.type = "square";
+        o.type = "sine";
         o.frequency.value = 880;
         g.gain.value = 0.03;
         o.connect(g); g.connect(ctx.destination);
@@ -621,26 +644,29 @@
       }catch(e){}
     }
 
-    // Events
+    // Wire up
+    els.goTimer.addEventListener("click", openTimer);
+    els.toggleTimer.addEventListener("click", toggleTimer);
+
     els.mode.addEventListener("change", applyModeUI);
-    els.minutes.addEventListener("change", () => hardReset());
-    els.breakMinutes.addEventListener("change", () => hardReset());
+    els.minutes.addEventListener("change", () => hardReset(false));
+    els.breakMinutes.addEventListener("change", () => hardReset(false));
+
     els.taskInputs.forEach(i => i.addEventListener("change", saveTasks));
     els.clear.addEventListener("click", (e) => { e.preventDefault(); clearTasks(); });
 
     els.start.addEventListener("click", startTimer);
     els.pause.addEventListener("click", togglePause);
-    els.reset.addEventListener("click", () => hardReset());
+    els.reset.addEventListener("click", () => hardReset(false));
 
     els.quickBtns.forEach(b => b.addEventListener("click", () => {
       els.minutes.value = b.dataset.set;
-      hardReset();
+      hardReset(false);
     }));
 
-    // Keyboard shortcuts
     window.addEventListener("keydown", (e) => {
       if(e.key.toLowerCase() === "s"){ e.preventDefault(); togglePause(); }
-      if(e.key.toLowerCase() === "r"){ e.preventDefault(); hardReset(); }
+      if(e.key.toLowerCase() === "r"){ e.preventDefault(); hardReset(false); }
     });
 
     // Init
