@@ -4,25 +4,30 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Jackie Foo — Soft Launch</title>
-  <meta name="description" content="Jackie Foo — soft-launching a portfolio site. Still building. Play a tiny game while you're here." />
+  <meta name="description" content="Jackie Foo — soft launching. Still building. Play a tiny layout shuffle game." />
 
   <style>
     :root{
-      --bg:#06070A;
-      --panel:#0E1220;
-      --text:#F4F6FF;
-      --muted:#A9B0D0;
+      /* NO GRADIENTS. Only solid colors. */
+      --bg:#050608;
+      --panel:#0B0D12;
+      --panel2:#0F121A;
+      --text:#F7F8FF;
+      --muted:#B8BED9;
 
-      /* sharp/static (not pastel) */
-      --accent:#00E5FF;
-      --accent2:#FF2BD6;
-      --good:#2BFF88;
-      --warn:#FFB020;
-      --danger:#FF365B;
+      /* sharp/static accents */
+      --cyan:#00E5FF;
+      --mag:#FF2BD6;
+      --lime:#2BFF88;
+      --amber:#FFB020;
+      --red:#FF365B;
 
-      --ring: 0 0 0 3px rgba(0,229,255,.28), 0 0 0 1px rgba(244,246,255,.10) inset;
-      --shadow: 0 12px 40px rgba(0,0,0,.55);
+      --border: rgba(247,248,255,.12);
+      --border2: rgba(247,248,255,.18);
+      --shadow: 0 18px 46px rgba(0,0,0,.55);
       --radius: 18px;
+
+      --ring: 0 0 0 3px rgba(0,229,255,.24), 0 0 0 1px rgba(247,248,255,.10) inset;
     }
 
     *{box-sizing:border-box}
@@ -31,113 +36,109 @@
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color:var(--text);
-      background:
-        radial-gradient(1100px 700px at 15% 10%, rgba(255,43,214,.18), transparent 50%),
-        radial-gradient(1000px 700px at 85% 20%, rgba(0,229,255,.18), transparent 55%),
-        radial-gradient(900px 650px at 50% 100%, rgba(43,255,136,.10), transparent 55%),
-        var(--bg);
+      background: var(--bg);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
     a{color:inherit; text-decoration:none}
+    button{font:inherit}
     .wrap{
       min-height:100%;
       display:flex;
-      align-items:center;
       justify-content:center;
-      padding: 20px;
+      align-items:center;
+      padding: 18px;
     }
 
-    .grid{
-      width:min(1040px, 100%);
+    .frame{
+      width: min(1080px, 100%);
       display:grid;
-      gap:16px;
       grid-template-columns: 1fr;
+      gap: 14px;
     }
 
     @media (min-width: 860px){
-      .grid{grid-template-columns: 1.05fr .95fr}
+      .frame{grid-template-columns: 1.1fr .9fr}
     }
 
     .card{
-      background: linear-gradient(180deg, rgba(14,18,32,.82), rgba(14,18,32,.62));
-      border: 1px solid rgba(244,246,255,.10);
-      box-shadow: var(--shadow);
+      background: var(--panel);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
+      box-shadow: var(--shadow);
       overflow:hidden;
     }
+    .inner{padding:18px}
+    @media (min-width: 520px){ .inner{padding:22px} }
 
-    .card-inner{padding:18px}
-    @media (min-width: 520px){ .card-inner{padding:22px} }
-
-    .topline{
+    .bar{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
       margin-bottom:14px;
+      flex-wrap:wrap;
     }
 
-    .badge{
+    .pill{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      font-weight:700;
-      letter-spacing:.2px;
       padding:10px 12px;
       border-radius:999px;
-      background: rgba(0,229,255,.10);
-      border: 1px solid rgba(0,229,255,.22);
-      box-shadow: 0 0 0 1px rgba(0,229,255,.06) inset;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      font-weight:800;
+      letter-spacing:.2px;
       user-select:none;
       white-space:nowrap;
     }
 
     .dot{
       width:10px;height:10px;border-radius:50%;
-      background: var(--warn);
+      background: var(--amber);
       box-shadow: 0 0 0 3px rgba(255,176,32,.18);
-      flex: 0 0 auto;
+      flex:0 0 auto;
     }
 
     h1{
-      margin:0 0 10px;
+      margin: 0 0 10px;
       font-size: clamp(28px, 4.2vw, 44px);
-      line-height: 1.06;
-      letter-spacing: -0.7px;
+      line-height: 1.05;
+      letter-spacing: -0.8px;
     }
 
-    .accent{
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color: transparent;
+    .name{
+      color: var(--cyan);
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 6px;
     }
 
     .lede{
       margin:0 0 14px;
       color: var(--muted);
       font-size: 15px;
-      line-height:1.55;
+      line-height: 1.55;
     }
 
     .chips{
       display:flex;
       flex-wrap:wrap;
       gap:10px;
-      margin: 14px 0 6px;
+      margin: 14px 0 10px;
     }
 
     .chip{
       padding:10px 12px;
       border-radius:999px;
-      border: 1px solid rgba(244,246,255,.12);
-      background: rgba(244,246,255,.06);
-      color: var(--text);
+      border: 1px solid var(--border);
+      background: var(--panel2);
       font-size: 13px;
-      font-weight: 650;
+      font-weight: 750;
+      color: var(--text);
       user-select:none;
     }
 
@@ -145,7 +146,7 @@
       display:flex;
       flex-wrap:wrap;
       gap:10px;
-      margin-top:16px;
+      margin-top: 14px;
     }
 
     .btn{
@@ -155,56 +156,47 @@
       gap:10px;
       padding: 12px 14px;
       border-radius: 14px;
-      border: 1px solid rgba(244,246,255,.14);
-      background: rgba(244,246,255,.06);
+      border: 1px solid var(--border2);
+      background: var(--panel2);
       color: var(--text);
-      font-weight: 750;
+      font-weight: 850;
       letter-spacing:.2px;
       width: 100%;
       touch-action: manipulation;
-      transition: transform .08s ease, border-color .12s ease, background .12s ease;
+      transition: transform .08s ease, border-color .12s ease;
     }
-
-    @media (min-width: 520px){
-      .btn{width:auto}
-    }
-
     .btn:active{transform: translateY(1px) scale(.99)}
     .btn:focus{outline:none; box-shadow: var(--ring)}
-    .btn.primary{
-      background: linear-gradient(90deg, rgba(0,229,255,.18), rgba(255,43,214,.16));
-      border-color: rgba(0,229,255,.28);
-    }
-    .btn.primary .icon{filter: drop-shadow(0 6px 16px rgba(0,229,255,.22))}
-    .btn.good{border-color: rgba(43,255,136,.35); background: rgba(43,255,136,.10)}
-    .btn.warn{border-color: rgba(255,176,32,.35); background: rgba(255,176,32,.10)}
+    @media (min-width: 520px){ .btn{width:auto} }
 
-    .icon{
-      width:18px;height:18px; flex:0 0 auto;
-      display:inline-block;
-    }
+    .btn.cyan{border-color: rgba(0,229,255,.42)}
+    .btn.mag{border-color: rgba(255,43,214,.42)}
+    .btn.lime{border-color: rgba(43,255,136,.42)}
+    .btn.warn{border-color: rgba(255,176,32,.42)}
 
-    /* Right: game */
-    .game-head{
+    .toast{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.4;
+    }
+    .toast b{color: var(--text)}
+
+    /* ===== Layout Shuffle Game ===== */
+    .gameHead{
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
       gap:12px;
-      margin-bottom:10px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
     }
-
-    .game-title{
-      margin:0;
-      font-size: 18px;
-      letter-spacing: -0.2px;
-    }
-
-    .game-sub{
-      margin:6px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.45;
-    }
+    .gameTitle{margin:0; font-size:18px; font-weight:900; letter-spacing:-.2px}
+    .gameSub{margin:6px 0 0; color:var(--muted); font-size:14px; line-height:1.45}
 
     .stats{
       display:grid;
@@ -212,76 +204,119 @@
       gap:10px;
       margin: 14px 0 12px;
     }
-
     .stat{
       padding:12px;
       border-radius: 14px;
-      border: 1px solid rgba(244,246,255,.10);
-      background: rgba(244,246,255,.05);
+      border: 1px solid var(--border);
+      background: var(--panel2);
     }
     .stat .label{color: var(--muted); font-size: 12px; margin:0 0 4px}
-    .stat .val{margin:0; font-size: 18px; font-weight: 850; letter-spacing: -0.2px}
+    .stat .val{margin:0; font-size: 18px; font-weight: 950; letter-spacing: -0.2px}
 
-    .arena{
-      margin-top:10px;
+    .board{
+      margin-top: 10px;
       border-radius: 16px;
-      border: 1px dashed rgba(244,246,255,.16);
-      background:
-        radial-gradient(600px 220px at 50% 0%, rgba(0,229,255,.10), transparent 55%),
-        radial-gradient(520px 200px at 30% 100%, rgba(255,43,214,.09), transparent 55%),
-        rgba(244,246,255,.03);
-      height: 320px;
-      position: relative;
-      overflow:hidden;
-      touch-action: manipulation;
-    }
-    @media (max-width: 420px){
-      .arena{height: 280px}
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      padding: 12px;
     }
 
-    .orb{
-      position:absolute;
-      width: 64px;
-      height: 64px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(244,246,255,.95), rgba(244,246,255,.15) 28%, transparent 40%),
-        radial-gradient(circle at 60% 70%, rgba(255,43,214,.85), rgba(0,229,255,.85));
-      box-shadow:
-        0 18px 40px rgba(0,0,0,.38),
-        0 0 0 2px rgba(244,246,255,.14) inset,
-        0 0 24px rgba(0,229,255,.18);
-      border: 1px solid rgba(244,246,255,.12);
-      transform: translate(-50%, -50%);
-      display:none;
-      cursor:pointer;
-    }
-    .orb:active{transform: translate(-50%, -50%) scale(.98)}
-    .orb:focus{outline:none; box-shadow: var(--ring), 0 18px 40px rgba(0,0,0,.38)}
-    .hint{
-      position:absolute;
-      inset:0;
+    .target{
       display:flex;
-      flex-direction:column;
+      flex-wrap:wrap;
+      gap:10px;
       align-items:center;
-      justify-content:center;
-      padding:18px;
-      text-align:center;
-      gap:10px;
-      color: var(--muted);
+      justify-content:space-between;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(247,248,255,.10);
+      background: var(--panel);
+      margin-bottom: 12px;
     }
-    .hint strong{color: var(--text)}
-    .tiny{
+    .targetLeft{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .tag{
       font-size:12px;
-      opacity:.9;
-      line-height:1.4;
+      font-weight:900;
+      letter-spacing:.25px;
+      padding:8px 10px;
+      border-radius:999px;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--muted);
+      user-select:none;
+    }
+    .tag.cyan{color: var(--cyan); border-color: rgba(0,229,255,.30)}
+    .tag.mag{color: var(--mag); border-color: rgba(255,43,214,.30)}
+    .tag.lime{color: var(--lime); border-color: rgba(43,255,136,.30)}
+    .tag.amb{color: var(--amber); border-color: rgba(255,176,32,.30)}
+
+    .rule{
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
     }
 
-    .footer{
-      margin-top: 12px;
+    .tiles{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .tile{
+      border-radius: 16px;
+      border: 1px solid rgba(247,248,255,.16);
+      background: var(--panel);
+      padding: 14px;
+      min-height: 66px;
       display:flex;
-      flex-direction:column;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      cursor:pointer;
+      touch-action: manipulation;
+      user-select:none;
+      transition: transform .08s ease, border-color .12s ease;
+    }
+    .tile:active{transform: translateY(1px) scale(.99)}
+    .tile:focus{outline:none; box-shadow: var(--ring)}
+    .tile.selected{
+      border-color: rgba(0,229,255,.55);
+      box-shadow: 0 0 0 1px rgba(0,229,255,.10) inset;
+    }
+
+    .tileTitle{
+      display:flex;
+      align-items:center;
       gap:10px;
+      font-weight:950;
+      letter-spacing:.1px;
+    }
+    .swatch{
+      width:12px;height:12px;border-radius:4px;
+      background: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0,229,255,.16);
+      flex:0 0 auto;
+    }
+    .swatch.mag{background:var(--mag); box-shadow:0 0 0 3px rgba(255,43,214,.16)}
+    .swatch.lime{background:var(--lime); box-shadow:0 0 0 3px rgba(43,255,136,.16)}
+    .swatch.amb{background:var(--amber); box-shadow:0 0 0 3px rgba(255,176,32,.16)}
+
+    .tileHint{
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+      text-align:right;
+      max-width: 52%;
+    }
+
+    .success{
+      border-color: rgba(43,255,136,.60) !important;
+      box-shadow: 0 0 0 1px rgba(43,255,136,.10) inset !important;
     }
 
     .kbd{
@@ -290,56 +325,36 @@
       gap:8px;
       padding:8px 10px;
       border-radius: 12px;
-      border: 1px solid rgba(244,246,255,.10);
-      background: rgba(244,246,255,.05);
+      border: 1px solid rgba(247,248,255,.10);
+      background: var(--panel2);
       color: var(--muted);
       font-size: 12px;
-      width: fit-content;
       user-select:none;
+      width: fit-content;
     }
-
-    .toast{
-      margin-top: 10px;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(244,246,255,.12);
-      background: rgba(6,7,10,.55);
-      color: var(--muted);
-      font-size: 13px;
-      line-height:1.4;
-    }
-    .toast b{color: var(--text)}
   </style>
 </head>
 
 <body>
   <main class="wrap">
-    <section class="grid" aria-label="Soft launch intro + mini game">
+    <section class="frame" aria-label="Soft launch intro + layout shuffle game">
+
       <!-- LEFT: Intro -->
       <article class="card">
-        <div class="card-inner">
-          <div class="topline">
-            <div class="badge" aria-label="Soft launch status">
-              <span class="dot" aria-hidden="true"></span>
-              Soft launch • still building
-            </div>
-            <div class="badge" style="background:rgba(255,43,214,.10);border-color:rgba(255,43,214,.22)">
-              <span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);box-shadow:0 0 0 3px rgba(255,43,214,.16)" aria-hidden="true"></span>
-              v0.1
-            </div>
+        <div class="inner">
+          <div class="bar">
+            <div class="pill"><span class="dot" aria-hidden="true"></span>Soft launch • still building</div>
+            <div class="pill" style="border-color: rgba(255,43,214,.32); color: var(--mag)">v0.1</div>
           </div>
 
-          <h1>
-            Hi, I’m <span class="accent">Jackie Foo</span>.
-          </h1>
+          <h1>Hi, I’m <span class="name">Jackie Foo</span>.</h1>
 
           <p class="lede">
-            I’m soft-launching my portfolio right now. This site is still in development, so some pages may be empty,
-            links may move, and I’m actively refining the design as I go.
+            This is my portfolio soft launch. I’m still developing the site, so some pages may be empty,
+            the layout may change, and I’m iterating fast.
           </p>
 
           <div class="chips" aria-label="Quick identity chips">
-            <!-- swap these to match you -->
             <span class="chip">Master’s in Data Science</span>
             <span class="chip">HCI + interaction design</span>
             <span class="chip">Accessibility-minded</span>
@@ -347,288 +362,245 @@
           </div>
 
           <div class="row" role="group" aria-label="Actions">
-            <button class="btn primary" id="btnProgress">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              What’s coming
-            </button>
-
-            <a class="btn" href="#" id="btnEmail" aria-label="Email Jackie">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 6h16v12H4z" stroke="currentColor" stroke-width="2" />
-                <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Say hi
-            </a>
-
-            <a class="btn" href="#" id="btnLinkedin" aria-label="LinkedIn">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M6.5 9.5V18M6.5 6.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M10 18v-5.2c0-1.8 1.2-3.3 3-3.3s3 1.5 3 3.3V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M10 12.8V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              LinkedIn
-            </a>
+            <button class="btn cyan" id="btnComing">What’s coming</button>
+            <a class="btn mag" id="btnLinkedin" href="#" rel="noreferrer">LinkedIn</a>
+            <a class="btn" id="btnEmail" href="#">Say hi</a>
           </div>
 
           <div class="toast" id="toast">
-            <b>Heads up:</b> you’re seeing a “soft launch” version. I’m iterating fast, so expect polish updates.
+            <b>Status:</b> soft launch. I’m still building the real case studies and polishing the navigation.
           </div>
         </div>
       </article>
 
-      <!-- RIGHT: Mini game -->
+      <!-- RIGHT: Game -->
       <article class="card">
-        <div class="card-inner">
-          <div class="game-head">
+        <div class="inner">
+          <div class="gameHead">
             <div>
-              <p class="game-title">Tiny game: Tap The Orb</p>
-              <p class="game-sub">
-                Purely for fun. Start, then tap the glowing orb whenever it appears.
-                Your reaction time gets measured.
+              <p class="gameTitle">Mini game: Layout Shuffle</p>
+              <p class="gameSub">
+                You’re “designing the homepage”. Tap two tiles to swap them until the order matches the target layout.
               </p>
             </div>
-            <div class="badge" style="background:rgba(43,255,136,.10);border-color:rgba(43,255,136,.22)">
-              <span style="width:10px;height:10px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px rgba(43,255,136,.16)" aria-hidden="true"></span>
-              mobile-friendly
-            </div>
+            <div class="pill" style="border-color: rgba(0,229,255,.30); color: var(--cyan)">bold mode</div>
           </div>
 
           <div class="stats" aria-label="Game stats">
             <div class="stat">
-              <p class="label">Score</p>
-              <p class="val" id="score">0</p>
+              <p class="label">Swaps</p>
+              <p class="val" id="swaps">0</p>
             </div>
             <div class="stat">
-              <p class="label">Best reaction</p>
-              <p class="val" id="best">—</p>
+              <p class="label">Status</p>
+              <p class="val" id="status">—</p>
             </div>
           </div>
 
           <div class="row" role="group" aria-label="Game controls">
-            <button class="btn good" id="btnStart">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 5v14l12-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-              </svg>
-              Start
-            </button>
-            <button class="btn warn" id="btnReset">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M20 12a8 8 0 1 1-2.3-5.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M20 4v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Reset
-            </button>
+            <button class="btn lime" id="btnNew">New shuffle</button>
+            <button class="btn warn" id="btnHint">Show hint</button>
           </div>
 
-          <div class="arena" id="arena" aria-label="Game arena">
-            <button class="orb" id="orb" aria-label="Tap the orb"></button>
-            <div class="hint" id="hint">
-              <div><strong>Goal:</strong> tap the orb as fast as you can.</div>
-              <div class="tiny">Tip: You can play with one thumb. Works great on mobile.</div>
-              <div class="kbd">Round lasts 20 seconds</div>
+          <div class="board">
+            <div class="target" aria-label="Target order">
+              <div class="targetLeft">
+                <span class="tag">Target order</span>
+                <span class="tag cyan">Intro</span>
+                <span class="tag mag">Projects</span>
+                <span class="tag lime">About</span>
+                <span class="tag amb">Contact</span>
+              </div>
+              <div class="rule">
+                Tap 2 tiles to swap. Goal: match the exact order.
+              </div>
             </div>
-          </div>
 
-          <div class="footer">
+            <div class="tiles" id="tiles" aria-label="Tiles you can reorder"></div>
             <div class="toast" id="gameToast">
-              <b>How it works:</b> after you press Start, the orb appears at random spots.
-              Each tap = +1. Faster reaction = better best score.
+              <b>Tip:</b> This is basically a tiny UI puzzle. Totally playable one-handed on mobile.
             </div>
           </div>
 
+          <div style="margin-top:12px">
+            <span class="kbd">No gradients • high contrast • mobile first</span>
+          </div>
         </div>
       </article>
+
     </section>
   </main>
 
   <script>
-    // ====== QUICK PERSONAL LINKS (EDIT THESE) ======
+    // ====== EDIT THESE ======
     const PROFILE = {
       name: "Jackie Foo",
-      email: "your.email@example.com",      // <-- replace
-      linkedin: "https://www.linkedin.com/in/your-handle/" // <-- replace
+      email: "your.email@example.com", // replace
+      linkedin: "https://www.linkedin.com/in/your-handle/" // replace
     };
 
     // Wire links
-    const btnEmail = document.getElementById("btnEmail");
-    const btnLinkedin = document.getElementById("btnLinkedin");
-    btnEmail.href = `mailto:${PROFILE.email}?subject=Hello%20from%20your%20site&body=Hi%20Jackie%2C%0A%0A`;
-    btnLinkedin.href = PROFILE.linkedin;
+    document.getElementById("btnEmail").href =
+      `mailto:${PROFILE.email}?subject=Hello%20from%20your%20site&body=Hi%20Jackie%2C%0A%0A`;
+    document.getElementById("btnLinkedin").href = PROFILE.linkedin;
 
-    // "What's coming" toast toggle
-    const btnProgress = document.getElementById("btnProgress");
+    // Coming soon message toggle
     const toast = document.getElementById("toast");
-    let showingProgress = false;
-
-    btnProgress.addEventListener("click", () => {
-      showingProgress = !showingProgress;
-      toast.innerHTML = showingProgress
-        ? `<b>Coming soon:</b> projects, research notes, and a cleaner case-study flow. Also fixing links and polishing mobile layouts.`
-        : `<b>Heads up:</b> you’re seeing a “soft launch” version. I’m iterating fast, so expect polish updates.`;
+    let comingToggle = false;
+    document.getElementById("btnComing").addEventListener("click", () => {
+      comingToggle = !comingToggle;
+      toast.innerHTML = comingToggle
+        ? "<b>Coming soon:</b> cleaner case studies, project write-ups, and a smoother nav. Also tuning typography and performance."
+        : "<b>Status:</b> soft launch. I’m still building the real case studies and polishing the navigation.";
     });
 
-    // ====== MINI GAME: TAP THE ORB ======
-    const arena = document.getElementById("arena");
-    const orb = document.getElementById("orb");
-    const hint = document.getElementById("hint");
-    const scoreEl = document.getElementById("score");
-    const bestEl = document.getElementById("best");
-    const btnStart = document.getElementById("btnStart");
-    const btnReset = document.getElementById("btnReset");
+    // ====== GAME: Layout Shuffle ======
+    const tilesWrap = document.getElementById("tiles");
+    const swapsEl = document.getElementById("swaps");
+    const statusEl = document.getElementById("status");
     const gameToast = document.getElementById("gameToast");
+    const btnNew = document.getElementById("btnNew");
+    const btnHint = document.getElementById("btnHint");
 
-    let running = false;
-    let score = 0;
-    let best = null; // ms
-    let orbShownAt = 0;
-    let roundTimer = null;
-    let spawnTimer = null;
-    const ROUND_MS = 20000;
+    const TARGET = ["Intro", "Projects", "About", "Contact"];
 
-    // Keep best across refresh (optional)
-    const savedBest = localStorage.getItem("jackie_best_reaction_ms");
-    if (savedBest) {
-      best = Number(savedBest);
-      bestEl.textContent = `${best}ms`;
+    const TILE_META = {
+      Intro:   { swatch: "cyan", hint: "Big headline + soft-launch message" },
+      Projects:{ swatch: "mag",  hint: "Case studies and prototypes" },
+      About:   { swatch: "lime", hint: "Who I am and what I care about" },
+      Contact: { swatch: "amb",  hint: "Email + socials + quick links" }
+    };
+
+    let order = [];
+    let selectedIndex = null;
+    let swaps = 0;
+    let hintOn = false;
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
     }
 
-    function rand(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+    function isSolved() {
+      return order.every((v, i) => v === TARGET[i]);
     }
 
-    function placeOrb() {
-      const rect = arena.getBoundingClientRect();
-      const size = 64; // orb size in css
-      const padding = 16;
-
-      // safe placement boundaries
-      const minX = padding + size / 2;
-      const maxX = rect.width - padding - size / 2;
-      const minY = padding + size / 2;
-      const maxY = rect.height - padding - size / 2;
-
-      const x = rand(minX, maxX);
-      const y = rand(minY, maxY);
-
-      orb.style.left = `${x}px`;
-      orb.style.top = `${y}px`;
-      orb.style.display = "block";
-      orbShownAt = performance.now();
-      orb.focus({ preventScroll: true });
+    function setStatus() {
+      if (isSolved()) {
+        statusEl.textContent = "Done";
+        statusEl.style.color = "var(--lime)";
+        gameToast.innerHTML = "<b>Nice.</b> You just fixed the homepage layout. Soft launch energy.";
+      } else {
+        statusEl.textContent = "Editing";
+        statusEl.style.color = "var(--amber)";
+      }
     }
 
-    function hideOrb() {
-      orb.style.display = "none";
+    function render() {
+      tilesWrap.innerHTML = "";
+      order.forEach((name, idx) => {
+        const meta = TILE_META[name];
+        const btn = document.createElement("button");
+        btn.className = "tile";
+        btn.type = "button";
+        btn.setAttribute("aria-label", `Tile ${idx + 1}: ${name}`);
+        btn.dataset.index = String(idx);
+
+        const left = document.createElement("div");
+        left.className = "tileTitle";
+
+        const sw = document.createElement("span");
+        sw.className = "swatch " + (meta.swatch === "mag" ? "mag" : meta.swatch === "lime" ? "lime" : meta.swatch === "amb" ? "amb" : "");
+        left.appendChild(sw);
+
+        const title = document.createElement("span");
+        title.textContent = name;
+        left.appendChild(title);
+
+        const right = document.createElement("div");
+        right.className = "tileHint";
+        right.textContent = hintOn ? meta.hint : "Tap to select";
+
+        btn.appendChild(left);
+        btn.appendChild(right);
+
+        if (selectedIndex === idx) btn.classList.add("selected");
+        if (isSolved()) btn.classList.add("success");
+
+        btn.addEventListener("click", () => onTileTap(idx));
+        tilesWrap.appendChild(btn);
+      });
+
+      swapsEl.textContent = String(swaps);
+      setStatus();
     }
 
-    function scheduleNextSpawn() {
-      // random delay (fast + fun)
-      const delay = rand(350, 1100);
-      spawnTimer = setTimeout(() => {
-        if (!running) return;
-        placeOrb();
-      }, delay);
-    }
+    function onTileTap(idx) {
+      if (isSolved()) return;
 
-    function startRound() {
-      if (running) return;
-      running = true;
-      score = 0;
-      scoreEl.textContent = score;
-      hint.style.display = "none";
-
-      gameToast.innerHTML = `<b>Go!</b> Tap the orb as soon as it appears.`;
-      btnStart.disabled = true;
-      btnStart.style.opacity = ".6";
-
-      // start round timer
-      const endsAt = Date.now() + ROUND_MS;
-      roundTimer = setInterval(() => {
-        const left = Math.max(0, endsAt - Date.now());
-        const secs = Math.ceil(left / 1000);
-
-        if (left <= 0) {
-          endRound();
-          return;
-        }
-        // light status in toast (no flashing)
-        gameToast.innerHTML = `<b>Time left:</b> ${secs}s • <b>Score:</b> ${score}`;
-      }, 220);
-
-      scheduleNextSpawn();
-    }
-
-    function endRound() {
-      running = false;
-      hideOrb();
-      clearInterval(roundTimer);
-      clearTimeout(spawnTimer);
-      roundTimer = null;
-      spawnTimer = null;
-
-      btnStart.disabled = false;
-      btnStart.style.opacity = "1";
-
-      hint.style.display = "flex";
-      gameToast.innerHTML = `<b>Round over.</b> Final score: ${score}. Tap Start to play again.`;
-    }
-
-    function resetGame() {
-      running = false;
-      hideOrb();
-      clearInterval(roundTimer);
-      clearTimeout(spawnTimer);
-      roundTimer = null;
-      spawnTimer = null;
-
-      score = 0;
-      scoreEl.textContent = score;
-      best = null;
-      bestEl.textContent = "—";
-      localStorage.removeItem("jackie_best_reaction_ms");
-
-      btnStart.disabled = false;
-      btnStart.style.opacity = "1";
-      hint.style.display = "flex";
-      gameToast.innerHTML = `<b>Reset.</b> Press Start when you’re ready.`;
-    }
-
-    orb.addEventListener("click", () => {
-      if (!running) return;
-
-      const reaction = Math.max(0, Math.round(performance.now() - orbShownAt));
-      score += 1;
-      scoreEl.textContent = score;
-
-      if (best === null || reaction < best) {
-        best = reaction;
-        bestEl.textContent = `${best}ms`;
-        localStorage.setItem("jackie_best_reaction_ms", String(best));
+      // first pick
+      if (selectedIndex === null) {
+        selectedIndex = idx;
+        gameToast.innerHTML = "<b>Selected.</b> Tap another tile to swap.";
+        render();
+        return;
       }
 
-      // feedback text (brief)
-      gameToast.innerHTML = `<b>Nice.</b> ${reaction}ms • <b>Score:</b> ${score}`;
-      hideOrb();
-      scheduleNextSpawn();
-    });
-
-    // keyboard accessibility (space/enter)
-    orb.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        orb.click();
+      // same tile = deselect
+      if (selectedIndex === idx) {
+        selectedIndex = null;
+        gameToast.innerHTML = "<b>Cancelled.</b> Pick two tiles to swap.";
+        render();
+        return;
       }
+
+      // swap
+      const a = selectedIndex;
+      const b = idx;
+      [order[a], order[b]] = [order[b], order[a]];
+      swaps += 1;
+      selectedIndex = null;
+
+      if (isSolved()) {
+        gameToast.innerHTML = `<b>Solved in ${swaps} swaps.</b> You can hit “New shuffle” for another round.`;
+      } else {
+        gameToast.innerHTML = "<b>Swapped.</b> Keep going.";
+      }
+
+      render();
+    }
+
+    function newGame() {
+      // Ensure it's actually shuffled (not already solved)
+      let next = shuffle(TARGET);
+      while (next.join("|") === TARGET.join("|")) next = shuffle(TARGET);
+
+      order = next;
+      selectedIndex = null;
+      swaps = 0;
+      hintOn = false;
+      btnHint.textContent = "Show hint";
+      gameToast.innerHTML = "<b>New layout.</b> Fix the order to match the target.";
+      render();
+    }
+
+    btnNew.addEventListener("click", newGame);
+
+    btnHint.addEventListener("click", () => {
+      hintOn = !hintOn;
+      btnHint.textContent = hintOn ? "Hide hint" : "Show hint";
+      gameToast.innerHTML = hintOn
+        ? "<b>Hints on.</b> Each tile now tells you what it represents."
+        : "<b>Hints off.</b> Back to pure vibes.";
+      render();
     });
 
-    btnStart.addEventListener("click", startRound);
-    btnReset.addEventListener("click", resetGame);
-
-    // Prevent double-tap zoom on iOS for controls (keeps it snappy)
-    document.querySelectorAll("button, a").forEach(el => {
-      el.addEventListener("touchend", () => {}, {passive:true});
-    });
+    // init
+    newGame();
   </script>
 </body>
 </html>
