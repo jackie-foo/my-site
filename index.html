@@ -1,649 +1,713 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jackie Foo</title>
-    <style>
-      :root{
-        --bg1:#FFE8F1; /* pastel pink */
-        --bg2:#E7F3FF; /* pastel blue */
-        --bg3:#E9FFE8; /* pastel green */
-        --ink:#141417; /* high contrast */
-        --ink2:#3a3a44;
-        --card:#ffffffcc;
-        --border:#14141722;
-        --shadow: 0 16px 40px rgba(0,0,0,.12);
-        --radius: 22px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jackie Foo</title>
+  <style>
+    :root{
+      /* Pastel but high-contrast */
+      --bg: #FFF6FB;
+      --panel: #FFFFFF;
+      --ink: #111827;
+      --muted: #374151;
+      --soft: #6B7280;
 
-      *{ box-sizing:border-box; }
-      html,body{ height:100%; }
-      body{
-        margin:0;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        color:var(--ink);
-        background:
-          radial-gradient(900px 500px at 15% 10%, var(--bg1), transparent 60%),
-          radial-gradient(800px 520px at 85% 20%, var(--bg2), transparent 62%),
-          radial-gradient(900px 520px at 55% 95%, var(--bg3), transparent 62%),
-          #fff;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        padding:18px;
-      }
+      --a: #BDE0FE;     /* pastel blue */
+      --b: #C7F9CC;     /* pastel green */
+      --c: #FFD6A5;     /* pastel peach */
+      --d: #FFADAD;     /* pastel pink */
+      --e: #E9D5FF;     /* pastel lavender */
+      --f: #FFF1A8;     /* pastel yellow */
 
-      .wrap{
-        width:min(980px, 100%);
-        display:grid;
-        grid-template-columns: 1.1fr .9fr;
-        gap:18px;
-        align-items:stretch;
-      }
+      --shadow: 0 18px 50px rgba(17,24,39,0.10);
+      --shadow2: 0 10px 25px rgba(17,24,39,0.10);
+      --radius: 22px;
+      --radius2: 16px;
+      --ring: 0 0 0 4px rgba(17,24,39,0.12);
+    }
 
-      @media (max-width: 860px){
-        .wrap{ grid-template-columns: 1fr; }
-      }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(189,224,254,0.65), transparent 60%),
+        radial-gradient(900px 500px at 85% 15%, rgba(255,173,173,0.55), transparent 60%),
+        radial-gradient(900px 600px at 70% 95%, rgba(199,249,204,0.55), transparent 60%),
+        radial-gradient(900px 600px at 20% 90%, rgba(233,213,255,0.55), transparent 60%),
+        var(--bg);
+      color: var(--ink);
+    }
 
-      .card{
-        background:var(--card);
-        border:1px solid var(--border);
-        border-radius:var(--radius);
-        box-shadow:var(--shadow);
-        backdrop-filter: blur(10px);
-        padding:22px;
-      }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible, button:focus-visible { outline: none; box-shadow: var(--ring); border-radius: 12px; }
 
-      .title{
-        display:flex;
-        align-items:flex-start;
-        justify-content:space-between;
-        gap:12px;
-      }
+    .wrap{
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px 14px 42px;
+    }
 
-      h1{
-        font-size: clamp(34px, 5vw, 54px);
-        line-height:1.05;
-        margin:0 0 8px 0;
-        letter-spacing:-0.02em;
-      }
+    .shell{
+      width: min(980px, 100%);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      align-items: stretch;
+    }
 
-      .sub{
-        margin:0;
-        font-size: 16px;
-        color:var(--ink2);
-        line-height:1.55;
-        max-width: 52ch;
-      }
+    @media (max-width: 900px){
+      .shell{ grid-template-columns: 1fr; }
+    }
 
-      .pillrow{
-        display:flex;
-        flex-wrap:wrap;
-        gap:10px;
-        margin-top:14px;
-      }
+    .card{
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(17,24,39,0.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
 
-      .pill{
-        border:1px solid var(--border);
-        background:#fff;
-        border-radius:999px;
-        padding:8px 12px;
-        font-size:13px;
-        color:#222;
-        user-select:none;
-      }
+    .pad{ padding: 22px; }
+    @media (max-width: 480px){
+      .pad{ padding: 18px; }
+    }
 
-      .btnrow{
-        display:flex;
-        flex-wrap:wrap;
-        gap:10px;
-        margin-top:16px;
-      }
+    /* ---------- Header / Intro ---------- */
+    .introTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+    }
 
-      button{
-        border:1px solid var(--border);
-        background: var(--ink);
-        color:#fff;
-        border-radius: 14px;
-        padding:10px 14px;
-        font-size:14px;
-        cursor:pointer;
-      }
-      button.secondary{
-        background:#fff;
-        color:var(--ink);
-      }
-      button:active{ transform: translateY(1px); }
+    .titleBlock h1{
+      font-size: clamp(30px, 4.2vw, 44px);
+      line-height: 1.05;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+    }
+    .titleBlock p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.6;
+    }
+    .pillRow{
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pill{
+      border: 1px solid rgba(17,24,39,0.12);
+      background: rgba(255,255,255,0.75);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      box-shadow: 0 8px 18px rgba(17,24,39,0.06);
+      user-select: none;
+    }
 
-      .small{
-        margin-top:14px;
-        font-size:13px;
-        color:#555;
-      }
+    /* ---------- Cute CSS Duck ---------- */
+    .duck{
+      width: 92px;
+      height: 92px;
+      border-radius: 26px;
+      position: relative;
+      background: linear-gradient(135deg, var(--f), #FFE47A);
+      border: 1px solid rgba(17,24,39,0.12);
+      box-shadow: var(--shadow2);
+      flex: 0 0 auto;
+    }
+    .duck:before{
+      content:"";
+      position:absolute;
+      inset: 16px 18px 22px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.65);
+    }
+    .duck .eye{
+      position:absolute;
+      top: 34px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #111827;
+    }
+    .duck .eye.left{ left: 32px; }
+    .duck .eye.right{ right: 32px; }
+    .duck .beak{
+      position:absolute;
+      left: 50%;
+      top: 52px;
+      transform: translateX(-50%);
+      width: 34px;
+      height: 18px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #FFB703, #FFA000);
+      border: 1px solid rgba(17,24,39,0.12);
+    }
+    .duck .spark{
+      position:absolute;
+      right: 10px;
+      top: 10px;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.9);
+      transform: rotate(15deg);
+    }
 
-      .gamehead{
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:10px;
-        margin-bottom:10px;
-      }
+    /* ---------- Mini game panel ---------- */
+    .gameHead{
+      display:flex;
+      align-items:flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .gameHead h2{
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+    .gameHead .sub{
+      margin: 6px 0 0;
+      color: var(--soft);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .btnRow{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    button{
+      border: 1px solid rgba(17,24,39,0.14);
+      background: rgba(255,255,255,0.85);
+      color: var(--ink);
+      font-weight: 600;
+      border-radius: 14px;
+      padding: 10px 12px;
+      cursor: pointer;
+      box-shadow: 0 10px 18px rgba(17,24,39,0.06);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+    button:hover{ transform: translateY(-1px); box-shadow: 0 14px 22px rgba(17,24,39,0.10); }
+    button:active{ transform: translateY(0px); box-shadow: 0 10px 18px rgba(17,24,39,0.06); }
 
-      .score{
-        font-size:13px;
-        color:#333;
-        background:#fff;
-        border:1px solid var(--border);
-        border-radius:999px;
-        padding:7px 10px;
-        min-width: 152px;
-        text-align:center;
-      }
+    .progressWrap{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .bar{
+      height: 10px;
+      flex: 1;
+      background: rgba(17,24,39,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(17,24,39,0.08);
+    }
+    .bar > div{
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--a), var(--e), var(--d));
+      border-radius: 999px;
+      transition: width 280ms ease;
+    }
+    .counter{
+      font-size: 13px;
+      color: var(--muted);
+      min-width: 88px;
+      text-align: right;
+      font-weight: 600;
+    }
 
-      canvas{
-        width:100%;
-        height:auto;
-        border-radius: 18px;
-        border:1px solid var(--border);
-        background: linear-gradient(180deg, #ffffff, #ffffffcc);
-        touch-action: none; /* allows drag on mobile */
-      }
+    /* ---------- Flip cards ---------- */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    @media (max-width: 520px){
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
 
-      .hint{
-        margin-top:10px;
-        font-size:13px;
-        color:#444;
-        line-height:1.5;
-      }
+    .flip{
+      perspective: 1000px;
+      height: 120px;
+    }
+    .flipBtn{
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      border-radius: var(--radius2);
+    }
+    .flipInner{
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 520ms cubic-bezier(.2,.8,.2,1);
+      border-radius: var(--radius2);
+      box-shadow: 0 12px 22px rgba(17,24,39,0.08);
+    }
+    .flip[data-flipped="true"] .flipInner{ transform: rotateY(180deg); }
 
-      .kbd{
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        padding:2px 6px;
-        border:1px solid var(--border);
-        border-radius:8px;
-        background:#fff;
-        font-size:12px;
-      }
+    .face{
+      position:absolute;
+      inset:0;
+      backface-visibility: hidden;
+      border-radius: var(--radius2);
+      border: 1px solid rgba(17,24,39,0.12);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 12px;
+      text-align:center;
+    }
+    .front{
+      background: rgba(255,255,255,0.92);
+    }
+    .front .label{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+    .front .emoji{
+      font-size: 28px;
+      line-height: 1;
+    }
+    .front .hint{
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .front .tiny{
+      font-size: 12px;
+      color: var(--soft);
+      font-weight: 600;
+    }
 
-      .duckbadge{
-        border:1px solid var(--border);
-        background:#fff;
-        border-radius:999px;
-        padding:8px 10px;
-        font-size:13px;
-        display:flex;
-        align-items:center;
-        gap:8px;
-        user-select:none;
-      }
-      .dot{
-        width:10px;height:10px;border-radius:50%;
-        background: #FFD54A;
-        box-shadow: 0 0 0 3px rgba(255,213,74,.35);
-      }
+    .back{
+      transform: rotateY(180deg);
+      color: #0F172A;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .back p{
+      margin: 0;
+      font-size: 12.8px;
+      line-height: 1.35;
+      font-weight: 700;
+      color: rgba(15,23,42,0.88);
+    }
+    .back .tag2{
+      margin-top: 10px;
+      display:inline-flex;
+      gap: 6px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(17,24,39,0.12);
+      background: rgba(255,255,255,0.70);
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(15,23,42,0.92);
+    }
 
-      .toast{
-        margin-top:10px;
-        font-size:13px;
-        color:#1b1b22;
-        display:none;
-        background:#fff;
-        border:1px solid var(--border);
-        border-radius:14px;
-        padding:10px 12px;
-      }
+    /* Pastel backgrounds per card */
+    .c1 .back{ background: linear-gradient(135deg, var(--a), #FFFFFF); }
+    .c2 .back{ background: linear-gradient(135deg, var(--b), #FFFFFF); }
+    .c3 .back{ background: linear-gradient(135deg, var(--c), #FFFFFF); }
+    .c4 .back{ background: linear-gradient(135deg, var(--d), #FFFFFF); }
+    .c5 .back{ background: linear-gradient(135deg, var(--e), #FFFFFF); }
+    .c6 .back{ background: linear-gradient(135deg, var(--f), #FFFFFF); }
 
-      .toast.show{ display:block; }
-    </style>
-  </head>
+    /* ---------- Modal ---------- */
+    .modalOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(17,24,39,0.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 999;
+    }
+    .modalOverlay[data-open="true"]{ display:flex; }
 
-  <body>
-    <main class="wrap">
-      <!-- Intro -->
+    .modal{
+      width: min(640px, 100%);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(17,24,39,0.14);
+      border-radius: 22px;
+      box-shadow: 0 30px 90px rgba(17,24,39,0.25);
+      overflow: hidden;
+    }
+    .modalTop{
+      padding: 18px 18px 12px;
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .modalTop h3{
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+    .modalBody{
+      padding: 0 18px 18px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14.5px;
+    }
+    .modalBody .bubble{
+      margin-top: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(17,24,39,0.12);
+      background: rgba(255,255,255,0.80);
+      padding: 12px 12px;
+    }
+    .modalFoot{
+      padding: 14px 18px 18px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.70);
+    }
+    .miniNote{
+      color: var(--soft);
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+
+    /* small footer */
+    .footer{
+      margin-top: 18px;
+      color: var(--soft);
+      font-size: 13px;
+      line-height: 1.6;
+      display:flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .footer .dot{
+      display:inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(17,24,39,0.24);
+      margin: 0 8px 2px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <main class="shell">
+      <!-- Left: Intro -->
       <section class="card">
-        <div class="title">
-          <div>
-            <h1>Jackie Foo</h1>
-            <p class="sub">
-              I build thoughtful systems across data science and human centered design.
-              This site is still developing.
-            </p>
+        <div class="pad">
+          <div class="introTop">
+            <div class="titleBlock">
+              <h1>Jackie Foo</h1>
+              <p>
+                I design and test small systems that help people learn and communicate better.
+                Developing this site still.
+              </p>
+
+              <div class="pillRow" aria-label="Quick tags">
+                <div class="pill">Co design and workshops</div>
+                <div class="pill">Feedback systems</div>
+                <div class="pill">Data experiments</div>
+                <div class="pill">Calm and curious</div>
+              </div>
+            </div>
+
+            <div class="duck" aria-hidden="true">
+              <div class="spark"></div>
+              <div class="eye left"></div>
+              <div class="eye right"></div>
+              <div class="beak"></div>
+            </div>
           </div>
 
-          <div class="duckbadge" title="Duck mode enabled">
-            <span class="dot"></span>
-            duck mode
+          <div class="footer">
+            <div><span class="dot"></span>Tip: tap a card and flip it</div>
+            <div>Works on mobile and desktop</div>
           </div>
         </div>
-
-        <div class="pillrow" aria-label="tags">
-          <div class="pill">feedback systems</div>
-          <div class="pill">workshops</div>
-          <div class="pill">data experiments</div>
-          <div class="pill">calm chaos energy</div>
-        </div>
-
-        <div class="btnrow">
-          <button id="togglePalette" class="secondary">Change pastel sky</button>
-          <button id="duckSpeak">Duck says hi</button>
-          <button id="resetGame" class="secondary">Reset game</button>
-        </div>
-
-        <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-        <p class="small">
-          Mini game: guide the duck to collect stars. It works on mobile.
-        </p>
       </section>
 
-      <!-- Game -->
+      <!-- Right: Mini game -->
       <section class="card">
-        <div class="gamehead">
-          <strong>Duck Dash</strong>
-          <div class="score" id="scoreBox">Score 0 · Best 0</div>
-        </div>
+        <div class="pad">
+          <div class="gameHead">
+            <div>
+              <h2>Duck Lab Mini Game</h2>
+              <div class="sub">Flip a card to reveal a co design decision prompt.</div>
+            </div>
+            <div class="btnRow">
+              <button id="resetBtn" type="button" aria-label="Reset cards">Reset</button>
+              <button id="shuffleBtn" type="button" aria-label="Shuffle prompts">Shuffle</button>
+            </div>
+          </div>
 
-        <canvas id="game" width="820" height="520" aria-label="Duck game canvas"></canvas>
+          <div class="progressWrap" aria-label="Progress">
+            <div class="bar" aria-hidden="true"><div id="barFill"></div></div>
+            <div class="counter" id="counter">0 of 6</div>
+          </div>
 
-        <div class="hint">
-          Desktop: move with <span class="kbd">WASD</span> or <span class="kbd">arrow keys</span>.
-          Mobile: drag anywhere to steer the duck.
-          Collect stars. Avoid the purple bubbles.
+          <div class="grid" id="grid" aria-label="Flip card grid">
+            <!-- Cards injected by JS -->
+          </div>
         </div>
       </section>
     </main>
+  </div>
 
-    <script>
-      // ---------- Small “toast” helper ----------
-      const toast = document.getElementById("toast");
-      function say(msg){
-        toast.textContent = msg;
-        toast.classList.add("show");
-        clearTimeout(say._t);
-        say._t = setTimeout(() => toast.classList.remove("show"), 2200);
+  <!-- Modal -->
+  <div class="modalOverlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-open="false">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h3 id="modalTitle">Decision prompt</h3>
+        </div>
+        <button id="closeModalBtn" type="button" aria-label="Close">Close</button>
+      </div>
+      <div class="modalBody" id="modalBody">
+        <!-- Filled by JS -->
+      </div>
+      <div class="modalFoot">
+        <div class="miniNote" id="miniNote">
+          Tiny co design moment. Pick what you would do, then reset.
+        </div>
+        <button id="nextBtn" type="button" aria-label="Flip another card">Flip another</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const prompts = [
+      {
+        emoji: "🦆",
+        title: "Who should decide this?",
+        text: "A feature looks useful, but different people want different things. Who gets the final say for this version?",
+        choices: ["Students", "Tutors", "Both together", "Test first, then decide"],
+        tag: "Governance"
+      },
+      {
+        emoji: "🧩",
+        title: "What is the smallest experiment?",
+        text: "You only have one week. What is the smallest test that still teaches you something real?",
+        choices: ["One class", "One tutor", "One workflow step", "One feedback prompt"],
+        tag: "MVP"
+      },
+      {
+        emoji: "🔍",
+        title: "What should be visible?",
+        text: "Transparency can help trust, but it can also add pressure. What should be visible in the interface?",
+        choices: ["Only outcomes", "Process steps", "Nothing extra", "Let users choose visibility"],
+        tag: "Transparency"
+      },
+      {
+        emoji: "🎛️",
+        title: "Reduce friction or add control?",
+        text: "You can make it one click, or add options for power users. Which do you choose for first release?",
+        choices: ["One click flow", "Simple options", "Advanced options", "Adaptive based on user"],
+        tag: "Usability"
+      },
+      {
+        emoji: "🧠",
+        title: "How do we support reflection?",
+        text: "People rush when they see feedback. What nudge helps them pause and reflect without being annoying?",
+        choices: ["One question prompt", "Highlight key sentence", "Mini checklist", "Save for later reminder"],
+        tag: "Engagement"
+      },
+      {
+        emoji: "🗺️",
+        title: "Handle edge cases now or later?",
+        text: "A few users have unusual workflows. Do you design for them now, or learn first?",
+        choices: ["Design now", "Learn first", "Provide a workaround", "Add an escape hatch"],
+        tag: "Implementation"
       }
+    ];
 
-      // ---------- Pastel palette switch ----------
-      const palettes = [
-        { bg1:"#FFE8F1", bg2:"#E7F3FF", bg3:"#E9FFE8" },
-        { bg1:"#FFF2D9", bg2:"#E7E9FF", bg3:"#E2FFF2" },
-        { bg1:"#EAF0FF", bg2:"#FFE7F4", bg3:"#EFFFF1" },
-        { bg1:"#F4E9FF", bg2:"#E6FFFA", bg3:"#FFF0E6" }
-      ];
-      let pIndex = 0;
-      document.getElementById("togglePalette").onclick = () => {
-        pIndex = (pIndex + 1) % palettes.length;
-        const p = palettes[pIndex];
-        document.documentElement.style.setProperty("--bg1", p.bg1);
-        document.documentElement.style.setProperty("--bg2", p.bg2);
-        document.documentElement.style.setProperty("--bg3", p.bg3);
-        say("Pastel sky changed");
-      };
+    const paletteClass = ["c1","c2","c3","c4","c5","c6"];
 
-      document.getElementById("duckSpeak").onclick = () => {
-        const lines = [
-          "Quack. Welcome to my tiny internet pond.",
-          "Quack. Jackie is building this site right now.",
-          "Quack. Come back soon for more projects.",
-          "Quack. You are now legally obliged to collect stars."
-        ];
-        say(lines[Math.floor(Math.random() * lines.length)]);
-      };
+    const grid = document.getElementById("grid");
+    const barFill = document.getElementById("barFill");
+    const counter = document.getElementById("counter");
 
-      // ---------- Game ----------
-      const canvas = document.getElementById("game");
-      const ctx = canvas.getContext("2d");
+    const modalOverlay = document.getElementById("modalOverlay");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-      // scale for crispness on high DPI
-      function fitCanvas(){
-        const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-        const rect = canvas.getBoundingClientRect();
-        const cssW = rect.width;
-        const cssH = rect.width * (520/820);
-        canvas.style.height = cssH + "px";
-        canvas.width = Math.floor(cssW * dpr);
-        canvas.height = Math.floor(cssH * dpr);
-        ctx.setTransform(dpr,0,0,dpr,0,0);
-        // game uses CSS pixels for logic
-        gameW = cssW;
-        gameH = cssH;
+    const resetBtn = document.getElementById("resetBtn");
+    const shuffleBtn = document.getElementById("shuffleBtn");
+
+    let state = [];
+    let opened = 0;
+    let lastFocusedEl = null;
+
+    function shuffleArray(arr){
+      const a = [...arr];
+      for(let i = a.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
       }
+      return a;
+    }
 
-      let gameW = 820, gameH = 520;
-      window.addEventListener("resize", fitCanvas);
+    function render(cards){
+      grid.innerHTML = "";
+      state = cards.map((c, idx) => ({...c, flipped:false, idx}));
 
-      const scoreBox = document.getElementById("scoreBox");
-      const LS_BEST = "jackie_duck_best_v1";
+      state.forEach((c, i) => {
+        const wrap = document.createElement("div");
+        wrap.className = "flip " + paletteClass[i % paletteClass.length];
+        wrap.setAttribute("data-flipped", "false");
 
-      const state = {
-        score: 0,
-        best: Number(localStorage.getItem(LS_BEST) || 0),
-        running: true,
-      };
+        const btn = document.createElement("button");
+        btn.className = "flipBtn";
+        btn.type = "button";
+        btn.setAttribute("aria-label", "Flip card " + (i+1));
 
-      const duck = {
-        x: 200,
-        y: 260,
-        r: 22,
-        vx: 0,
-        vy: 0,
-        speed: 420,
-      };
+        const inner = document.createElement("div");
+        inner.className = "flipInner";
 
-      const input = {
-        up:false, down:false, left:false, right:false,
-        dragging:false, tx:0, ty:0
-      };
+        const front = document.createElement("div");
+        front.className = "face front";
+        front.innerHTML = `
+          <div class="label">
+            <div class="emoji">${c.emoji}</div>
+            <div class="hint">Flip me</div>
+            <div class="tiny">Decision ${i+1}</div>
+          </div>
+        `;
 
-      function reset(){
-        state.score = 0;
-        duck.x = 180;
-        duck.y = gameH * 0.55;
-        duck.vx = 0;
-        duck.vy = 0;
-        stars = spawnMany(7, makeStar);
-        bubbles = spawnMany(5, makeBubble);
-        say("Game reset. Quack and go.");
-        updateScore();
-      }
+        const back = document.createElement("div");
+        back.className = "face back";
+        back.innerHTML = `
+          <div>
+            <p>${c.title}</p>
+            <div class="tag2">🦆 ${c.tag}</div>
+          </div>
+        `;
 
-      function updateScore(){
-        scoreBox.textContent = `Score ${state.score} · Best ${state.best}`;
-      }
+        inner.appendChild(front);
+        inner.appendChild(back);
+        btn.appendChild(inner);
+        wrap.appendChild(btn);
+        grid.appendChild(wrap);
 
-      // Entities
-      function rand(min,max){ return Math.random()*(max-min)+min; }
-
-      function makeStar(){
-        return {
-          x: rand(60, gameW-60),
-          y: rand(60, gameH-60),
-          r: 10,
-          t: rand(0, Math.PI*2)
-        };
-      }
-
-      function makeBubble(){
-        return {
-          x: rand(60, gameW-60),
-          y: rand(60, gameH-60),
-          r: rand(14, 22),
-          vx: rand(-90, 90),
-          vy: rand(-90, 90),
-        };
-      }
-
-      function spawnMany(n, maker){
-        const arr = [];
-        for(let i=0;i<n;i++) arr.push(maker());
-        return arr;
-      }
-
-      let stars = spawnMany(7, makeStar);
-      let bubbles = spawnMany(5, makeBubble);
-
-      // Controls
-      window.addEventListener("keydown", (e)=>{
-        const k = e.key.toLowerCase();
-        if(["arrowup","w"].includes(k)) input.up = true;
-        if(["arrowdown","s"].includes(k)) input.down = true;
-        if(["arrowleft","a"].includes(k)) input.left = true;
-        if(["arrowright","d"].includes(k)) input.right = true;
-      });
-      window.addEventListener("keyup", (e)=>{
-        const k = e.key.toLowerCase();
-        if(["arrowup","w"].includes(k)) input.up = false;
-        if(["arrowdown","s"].includes(k)) input.down = false;
-        if(["arrowleft","a"].includes(k)) input.left = false;
-        if(["arrowright","d"].includes(k)) input.right = false;
-      });
-
-      // Mobile drag steering
-      function pointerPos(ev){
-        const rect = canvas.getBoundingClientRect();
-        const x = (ev.clientX - rect.left);
-        const y = (ev.clientY - rect.top);
-        return {x,y};
-      }
-
-      canvas.addEventListener("pointerdown", (ev)=>{
-        canvas.setPointerCapture(ev.pointerId);
-        input.dragging = true;
-        const p = pointerPos(ev);
-        input.tx = p.x; input.ty = p.y;
-      });
-      canvas.addEventListener("pointermove", (ev)=>{
-        if(!input.dragging) return;
-        const p = pointerPos(ev);
-        input.tx = p.x; input.ty = p.y;
-      });
-      canvas.addEventListener("pointerup", ()=>{
-        input.dragging = false;
-      });
-      canvas.addEventListener("pointercancel", ()=>{
-        input.dragging = false;
-      });
-
-      document.getElementById("resetGame").onclick = reset;
-
-      // Drawing helpers
-      function drawBackground(){
-        // subtle confetti dots
-        for(let i=0;i<24;i++){
-          const x = (i*97) % gameW;
-          const y = (i*53) % gameH;
-          ctx.globalAlpha = 0.18;
-          ctx.beginPath();
-          ctx.arc(x+18, y+12, 6, 0, Math.PI*2);
-          ctx.fillStyle = "#000";
-          ctx.fill();
-        }
-        ctx.globalAlpha = 1;
-      }
-
-      function drawDuck(){
-        const x = duck.x, y = duck.y;
-        // body
-        ctx.fillStyle = "#FFD54A";
-        ctx.strokeStyle = "#141417";
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        ctx.ellipse(x, y, 26, 20, 0, 0, Math.PI*2);
-        ctx.fill();
-        ctx.stroke();
-
-        // head
-        ctx.beginPath();
-        ctx.arc(x+20, y-16, 16, 0, Math.PI*2);
-        ctx.fill();
-        ctx.stroke();
-
-        // beak
-        ctx.fillStyle = "#FF7A59";
-        ctx.beginPath();
-        ctx.roundRect(x+28, y-14, 18, 10, 6);
-        ctx.fill();
-        ctx.stroke();
-
-        // eye
-        ctx.fillStyle = "#141417";
-        ctx.beginPath();
-        ctx.arc(x+24, y-20, 2.8, 0, Math.PI*2);
-        ctx.fill();
-
-        // tiny blush
-        ctx.globalAlpha = 0.35;
-        ctx.fillStyle = "#FF5FA2";
-        ctx.beginPath();
-        ctx.arc(x+19, y-12, 4.8, 0, Math.PI*2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-
-      function drawStar(s){
-        s.t += 0.05;
-        const pulse = 1 + 0.12*Math.sin(s.t);
-        ctx.save();
-        ctx.translate(s.x, s.y);
-        ctx.scale(pulse, pulse);
-        ctx.fillStyle = "#141417";
-        ctx.beginPath();
-        for(let i=0;i<10;i++){
-          const a = i * Math.PI/5;
-          const r = i%2===0 ? 12 : 5.5;
-          ctx.lineTo(Math.cos(a)*r, Math.sin(a)*r);
-        }
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.globalAlpha = 0.18;
-        ctx.fillStyle = "#FFD54A";
-        ctx.beginPath();
-        for(let i=0;i<10;i++){
-          const a = i * Math.PI/5;
-          const r = i%2===0 ? 11 : 5;
-          ctx.lineTo(Math.cos(a)*r, Math.sin(a)*r);
-        }
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-        ctx.globalAlpha = 1;
-      }
-
-      function drawBubble(b){
-        ctx.globalAlpha = 0.95;
-        ctx.fillStyle = "#7C3AED"; // purple bubble
-        ctx.strokeStyle = "#141417";
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.globalAlpha = 0.22;
-        ctx.fillStyle = "#fff";
-        ctx.beginPath();
-        ctx.arc(b.x - b.r*0.25, b.y - b.r*0.25, b.r*0.35, 0, Math.PI*2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-
-      function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-
-      function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
-
-      // Game loop
-      let last = performance.now();
-
-      function tick(now){
-        const dt = Math.min(0.033, (now-last)/1000);
-        last = now;
-
-        // Movement intent
-        let ax = 0, ay = 0;
-        if(input.left) ax -= 1;
-        if(input.right) ax += 1;
-        if(input.up) ay -= 1;
-        if(input.down) ay += 1;
-
-        // drag steering gently pulls duck towards finger
-        if(input.dragging){
-          const dx = input.tx - duck.x;
-          const dy = input.ty - duck.y;
-          const mag = Math.hypot(dx,dy) || 1;
-          ax += dx/mag * 1.15;
-          ay += dy/mag * 1.15;
-        }
-
-        // normalize
-        const mag = Math.hypot(ax,ay) || 1;
-        ax /= mag; ay /= mag;
-
-        duck.vx = ax * duck.speed;
-        duck.vy = ay * duck.speed;
-
-        duck.x += duck.vx * dt;
-        duck.y += duck.vy * dt;
-
-        // keep inside bounds
-        duck.x = clamp(duck.x, duck.r+6, gameW - duck.r-6);
-        duck.y = clamp(duck.y, duck.r+6, gameH - duck.r-6);
-
-        // move bubbles
-        for(const b of bubbles){
-          b.x += b.vx * dt;
-          b.y += b.vy * dt;
-
-          if(b.x < b.r+4 || b.x > gameW - b.r-4) b.vx *= -1;
-          if(b.y < b.r+4 || b.y > gameH - b.r-4) b.vy *= -1;
-          b.x = clamp(b.x, b.r+4, gameW - b.r-4);
-          b.y = clamp(b.y, b.r+4, gameH - b.r-4);
-        }
-
-        // collisions: stars
-        for(let i=stars.length-1;i>=0;i--){
-          const s = stars[i];
-          if(dist({x:duck.x,y:duck.y}, {x:s.x,y:s.y}) < duck.r + 14){
-            stars.splice(i,1);
-            state.score += 1;
-            if(state.score > state.best){
-              state.best = state.score;
-              localStorage.setItem(LS_BEST, String(state.best));
-            }
-            updateScore();
-            // respawn a star
-            stars.push(makeStar());
-            say(state.score % 5 === 0 ? "Quack combo" : "Star collected");
+        btn.addEventListener("click", () => handleFlip(i, wrap, btn));
+        btn.addEventListener("keydown", (e) => {
+          if(e.key === "Enter" || e.key === " "){
+            e.preventDefault();
+            handleFlip(i, wrap, btn);
           }
-        }
+        });
+      });
 
-        // collisions: bubbles
-        for(const b of bubbles){
-          if(dist({x:duck.x,y:duck.y}, {x:b.x,y:b.y}) < duck.r + b.r - 2){
-            // penalty
-            state.score = Math.max(0, state.score - 2);
-            updateScore();
-            // push duck away a bit
-            duck.x = clamp(duck.x - (b.vx>0?22:-22), duck.r+6, gameW-duck.r-6);
-            duck.y = clamp(duck.y - (b.vy>0?18:-18), duck.r+6, gameH-duck.r-6);
-            say("Bonk. Bubble got you.");
-          }
-        }
+      opened = 0;
+      updateProgress();
+    }
 
-        // render
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        drawBackground();
+    function handleFlip(i, wrap, btn){
+      if(state[i].flipped) return;
 
-        // draw entities
-        for(const s of stars) drawStar(s);
-        for(const b of bubbles) drawBubble(b);
-        drawDuck();
+      state[i].flipped = true;
+      wrap.setAttribute("data-flipped", "true");
+      opened += 1;
+      updateProgress();
 
-        requestAnimationFrame(tick);
+      openModal(state[i], btn);
+    }
+
+    function updateProgress(){
+      const pct = Math.round((opened / 6) * 100);
+      barFill.style.width = pct + "%";
+      counter.textContent = `${opened} of 6`;
+    }
+
+    function openModal(card, focusEl){
+      lastFocusedEl = focusEl;
+
+      modalTitle.textContent = card.title;
+      const choices = card.choices.map((c) => `<li>${c}</li>`).join("");
+
+      modalBody.innerHTML = `
+        <div>
+          <p>${card.text}</p>
+          <div class="bubble">
+            <strong>Pick one option:</strong>
+            <ul>${choices}</ul>
+          </div>
+          <div class="bubble">
+            <strong>My note:</strong>
+            This is a tiny co design prompt. I like seeing how different people make trade offs.
+          </div>
+        </div>
+      `;
+
+      modalOverlay.setAttribute("data-open", "true");
+      closeModalBtn.focus();
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      modalOverlay.setAttribute("data-open", "false");
+      document.body.style.overflow = "";
+
+      if(lastFocusedEl) lastFocusedEl.focus();
+    }
+
+    closeModalBtn.addEventListener("click", closeModal);
+    modalOverlay.addEventListener("click", (e) => {
+      if(e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if(modalOverlay.getAttribute("data-open") === "true" && e.key === "Escape"){
+        closeModal();
       }
+    });
 
-      // Polyfill roundRect for older browsers
-      if(!CanvasRenderingContext2D.prototype.roundRect){
-        CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
-          const min = Math.min(w,h)/2;
-          r = Math.min(r, min);
-          this.beginPath();
-          this.moveTo(x+r,y);
-          this.arcTo(x+w,y,x+w,y+h,r);
-          this.arcTo(x+w,y+h,x,y+h,r);
-          this.arcTo(x,y+h,x,y,r);
-          this.arcTo(x,y,x+w,y,r);
-          this.closePath();
-          return this;
-        };
-      }
+    nextBtn.addEventListener("click", () => closeModal());
 
-      // init
-      fitCanvas();
-      updateScore();
-      reset();
-      requestAnimationFrame(tick);
-    </script>
-  </body>
+    resetBtn.addEventListener("click", () => {
+      render([...prompts]);
+    });
+
+    shuffleBtn.addEventListener("click", () => {
+      render(shuffleArray(prompts));
+    });
+
+    // initial
+    render([...prompts]);
+  </script>
+</body>
 </html>
