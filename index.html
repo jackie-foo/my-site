@@ -2,992 +2,633 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jackie Foo • Soft Launch</title>
-  <meta name="description" content="Soft launch page for Jackie Foo. Portfolio in progress + a tiny card flip game." />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Jackie Foo — Soft Launch</title>
+  <meta name="description" content="Jackie Foo — soft-launching a portfolio site. Still building. Play a tiny game while you're here." />
 
   <style>
     :root{
-      /* Pastel base + sharp contrast */
-      --bg: #0b0f1a;
-      --panel: rgba(255,255,255,0.08);
-      --panel2: rgba(255,255,255,0.12);
-      --text: #f6f7ff;
-      --muted: rgba(246,247,255,0.72);
+      --bg:#06070A;
+      --panel:#0E1220;
+      --text:#F4F6FF;
+      --muted:#A9B0D0;
 
-      --accent: #7c5cff;   /* punchy purple */
-      --accent2:#22d3ee;   /* cyan */
-      --accent3:#ffd166;   /* ducky yellow */
-      --danger: #ff4d6d;
+      /* sharp/static (not pastel) */
+      --accent:#00E5FF;
+      --accent2:#FF2BD6;
+      --good:#2BFF88;
+      --warn:#FFB020;
+      --danger:#FF365B;
 
+      --ring: 0 0 0 3px rgba(0,229,255,.28), 0 0 0 1px rgba(244,246,255,.10) inset;
+      --shadow: 0 12px 40px rgba(0,0,0,.55);
       --radius: 18px;
-      --shadow: 0 18px 60px rgba(0,0,0,0.55);
-      --shadow2: 0 12px 30px rgba(0,0,0,0.35);
-      --stroke: rgba(255,255,255,0.14);
-
-      --tap: 52px;
-      --max: 1080px;
     }
 
-    *{ box-sizing: border-box; }
-    html,body{ height: 100%; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color: var(--text);
-      background: radial-gradient(1200px 800px at 20% 10%, rgba(124,92,255,0.38), transparent 60%),
-                  radial-gradient(900px 600px at 85% 20%, rgba(34,211,238,0.28), transparent 60%),
-                  radial-gradient(900px 600px at 65% 90%, rgba(255,209,102,0.18), transparent 60%),
-                  var(--bg);
-      overflow-x: hidden;
-    }
-
-    a{ color: inherit; }
-    .wrap{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: clamp(18px, 3.2vw, 34px);
-    }
-
-    /* Subtle animated grain */
-    .grain{
-      position: fixed; inset: 0;
-      pointer-events: none;
-      opacity: 0.08;
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-    }
-
-    header{
-      display:flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .brand{
-      display:flex; align-items:center; gap: 12px;
-      min-width: 0;
-    }
-
-    .duck{
-      width: 44px; height: 44px;
-      border-radius: 14px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
       background:
-        radial-gradient(16px 16px at 32% 38%, #00000055 0 60%, transparent 61%),
-        radial-gradient(16px 16px at 64% 38%, #00000055 0 60%, transparent 61%),
-        radial-gradient(26px 22px at 52% 68%, rgba(255,77,109,0.9) 0 52%, transparent 53%),
-        linear-gradient(135deg, rgba(255,209,102,1), rgba(255,209,102,0.6));
-      border: 1px solid rgba(255,255,255,0.22);
-      box-shadow: var(--shadow2);
-      position: relative;
-      flex: 0 0 auto;
-    }
-    .duck:after{
-      content:"";
-      position:absolute; inset:-10px;
-      border-radius: 22px;
-      background: radial-gradient(closest-side, rgba(255,209,102,0.35), transparent 70%);
-      filter: blur(10px);
-      z-index: -1;
+        radial-gradient(1100px 700px at 15% 10%, rgba(255,43,214,.18), transparent 50%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(0,229,255,.18), transparent 55%),
+        radial-gradient(900px 650px at 50% 100%, rgba(43,255,136,.10), transparent 55%),
+        var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
-    .brand h1{
-      margin:0;
-      font-size: clamp(18px, 3.3vw, 22px);
-      letter-spacing: 0.2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .brand p{
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.25;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .chipRow{
+    a{color:inherit; text-decoration:none}
+    .wrap{
+      min-height:100%;
       display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-    .chip{
-      display:inline-flex;
       align-items:center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--stroke);
-      color: rgba(246,247,255,0.92);
-      font-size: 13px;
-      line-height: 1;
-      min-height: 40px;
-      user-select: none;
-    }
-    .dot{
-      width: 10px; height: 10px; border-radius: 99px;
-      background: var(--accent2);
-      box-shadow: 0 0 0 4px rgba(34,211,238,0.16);
-    }
-    .dot.pulse{
-      animation: pulse 1.8s ease-in-out infinite;
-    }
-    @keyframes pulse{
-      0%,100%{ transform: scale(1); opacity: 1; }
-      50%{ transform: scale(1.25); opacity: 0.75; }
+      justify-content:center;
+      padding: 20px;
     }
 
-    .hero{
+    .grid{
+      width:min(1040px, 100%);
       display:grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: clamp(14px, 2.4vw, 22px);
-      align-items: stretch;
-      margin-top: 14px;
+      gap:16px;
+      grid-template-columns: 1fr;
     }
 
-    @media (max-width: 860px){
-      .hero{ grid-template-columns: 1fr; }
-      .chipRow{ justify-content: flex-start; }
+    @media (min-width: 860px){
+      .grid{grid-template-columns: 1.05fr .95fr}
     }
 
     .card{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
-      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(14,18,32,.82), rgba(14,18,32,.62));
+      border: 1px solid rgba(244,246,255,.10);
       box-shadow: var(--shadow);
+      border-radius: var(--radius);
       overflow:hidden;
-      position: relative;
     }
-    .card::before{
-      content:"";
-      position:absolute; inset: -1px;
-      background: linear-gradient(135deg, rgba(124,92,255,0.35), rgba(34,211,238,0.20), rgba(255,209,102,0.20));
-      opacity: 0.35;
-      filter: blur(18px);
-      z-index: 0;
-    }
-    .card > *{ position: relative; z-index: 1; }
 
-    .cardPad{ padding: clamp(16px, 2.6vw, 24px); }
+    .card-inner{padding:18px}
+    @media (min-width: 520px){ .card-inner{padding:22px} }
 
-    .headline{
-      margin: 0 0 8px;
-      font-size: clamp(26px, 4.2vw, 42px);
-      line-height: 1.05;
-      letter-spacing: -0.6px;
-    }
-    .subhead{
-      margin: 0 0 14px;
-      color: rgba(246,247,255,0.82);
-      font-size: clamp(14px, 2.3vw, 16px);
-      line-height: 1.5;
-      max-width: 62ch;
+    .topline{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
     }
 
     .badge{
       display:inline-flex;
       align-items:center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(124,92,255,0.16);
-      border: 1px solid rgba(124,92,255,0.35);
-      font-weight: 650;
-      letter-spacing: 0.2px;
-      margin-bottom: 12px;
-    }
-    .badge .spark{
-      width: 10px; height: 10px; border-radius: 99px;
-      background: var(--accent);
-      box-shadow: 0 0 0 5px rgba(124,92,255,0.18);
+      gap:8px;
+      font-weight:700;
+      letter-spacing:.2px;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(0,229,255,.10);
+      border: 1px solid rgba(0,229,255,.22);
+      box-shadow: 0 0 0 1px rgba(0,229,255,.06) inset;
+      user-select:none;
+      white-space:nowrap;
     }
 
-    .ctaRow{
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--warn);
+      box-shadow: 0 0 0 3px rgba(255,176,32,.18);
+      flex: 0 0 auto;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(28px, 4.2vw, 44px);
+      line-height: 1.06;
+      letter-spacing: -0.7px;
+    }
+
+    .accent{
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+    }
+
+    .lede{
+      margin:0 0 14px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height:1.55;
+    }
+
+    .chips{
       display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
+      flex-wrap:wrap;
+      gap:10px;
+      margin: 14px 0 6px;
     }
 
-    button, .btn{
-      appearance: none;
-      border: 0;
-      cursor: pointer;
-      border-radius: 14px;
-      padding: 12px 14px;
-      min-height: var(--tap);
-      font-weight: 700;
-      letter-spacing: 0.2px;
+    .chip{
+      padding:10px 12px;
+      border-radius:999px;
+      border: 1px solid rgba(244,246,255,.12);
+      background: rgba(244,246,255,.06);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 650;
+      user-select:none;
+    }
+
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .btn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap: 10px;
-      text-decoration: none;
-      user-select: none;
-      transition: transform 0.08s ease, filter 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    button:active, .btn:active{ transform: translateY(1px) scale(0.99); }
-
-    .primary{
-      background: linear-gradient(135deg, var(--accent), rgba(124,92,255,0.65));
-      color: white;
-      box-shadow: 0 12px 26px rgba(124,92,255,0.22);
-      border: 1px solid rgba(255,255,255,0.16);
-    }
-    .primary:hover{ filter: brightness(1.05); }
-
-    .secondary{
-      background: rgba(255,255,255,0.08);
-      color: rgba(246,247,255,0.92);
-      border: 1px solid var(--stroke);
-    }
-    .secondary:hover{
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.20);
-    }
-
-    .kpiGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 16px;
-    }
-    @media (max-width: 420px){
-      .kpiGrid{ grid-template-columns: 1fr; }
-    }
-    .kpi{
-      border-radius: 16px;
-      padding: 14px 14px;
-      background: rgba(0,0,0,0.18);
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-    .kpi .label{
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-      display:flex;
-      align-items:center;
-      gap: 8px;
-    }
-    .pill{
-      font-size: 11px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: rgba(246,247,255,0.86);
-    }
-    .kpi .value{
-      font-size: 16px;
+      gap:10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(244,246,255,.14);
+      background: rgba(244,246,255,.06);
+      color: var(--text);
       font-weight: 750;
-      line-height: 1.2;
+      letter-spacing:.2px;
+      width: 100%;
+      touch-action: manipulation;
+      transition: transform .08s ease, border-color .12s ease, background .12s ease;
     }
 
-    /* GAME */
-    .gameHeader{
-      display:flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 12px;
+    @media (min-width: 520px){
+      .btn{width:auto}
     }
-    .gameHeader h2{
-      margin: 0;
+
+    .btn:active{transform: translateY(1px) scale(.99)}
+    .btn:focus{outline:none; box-shadow: var(--ring)}
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(0,229,255,.18), rgba(255,43,214,.16));
+      border-color: rgba(0,229,255,.28);
+    }
+    .btn.primary .icon{filter: drop-shadow(0 6px 16px rgba(0,229,255,.22))}
+    .btn.good{border-color: rgba(43,255,136,.35); background: rgba(43,255,136,.10)}
+    .btn.warn{border-color: rgba(255,176,32,.35); background: rgba(255,176,32,.10)}
+
+    .icon{
+      width:18px;height:18px; flex:0 0 auto;
+      display:inline-block;
+    }
+
+    /* Right: game */
+    .game-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .game-title{
+      margin:0;
       font-size: 18px;
       letter-spacing: -0.2px;
     }
-    .gameHeader p{
-      margin: 6px 0 0;
-      color: rgba(246,247,255,0.80);
-      font-size: 13px;
+
+    .game-sub{
+      margin:6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
       line-height: 1.45;
     }
 
-    .scorebar{
-      display:flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-      min-width: 128px;
-    }
-    .score{
-      font-weight: 800;
-      font-size: 13px;
-      background: rgba(34,211,238,0.14);
-      border: 1px solid rgba(34,211,238,0.35);
-      padding: 8px 10px;
-      border-radius: 999px;
-      text-align: center;
-      width: 100%;
-    }
-    .streak{
-      font-weight: 800;
-      font-size: 13px;
-      background: rgba(255,209,102,0.14);
-      border: 1px solid rgba(255,209,102,0.32);
-      padding: 8px 10px;
-      border-radius: 999px;
-      text-align: center;
-      width: 100%;
-    }
-
-    .grid{
+    .stats{
       display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-    @media (min-width: 720px){
-      .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin: 14px 0 12px;
     }
 
-    .flip{
-      perspective: 900px;
+    .stat{
+      padding:12px;
+      border-radius: 14px;
+      border: 1px solid rgba(244,246,255,.10);
+      background: rgba(244,246,255,.05);
     }
-    .flipBtn{
-      width: 100%;
-      min-height: 140px;
-      padding: 0;
-      background: transparent;
-      border: 0;
-    }
-    .tile{
+    .stat .label{color: var(--muted); font-size: 12px; margin:0 0 4px}
+    .stat .val{margin:0; font-size: 18px; font-weight: 850; letter-spacing: -0.2px}
+
+    .arena{
+      margin-top:10px;
+      border-radius: 16px;
+      border: 1px dashed rgba(244,246,255,.16);
+      background:
+        radial-gradient(600px 220px at 50% 0%, rgba(0,229,255,.10), transparent 55%),
+        radial-gradient(520px 200px at 30% 100%, rgba(255,43,214,.09), transparent 55%),
+        rgba(244,246,255,.03);
+      height: 320px;
       position: relative;
-      width: 100%;
-      height: 100%;
-      min-height: 140px;
-      border-radius: 18px;
-      transform-style: preserve-3d;
-      transition: transform 380ms cubic-bezier(.2,.8,.2,1);
-      box-shadow: 0 14px 36px rgba(0,0,0,0.35);
-      outline: 1px solid rgba(255,255,255,0.10);
-      overflow: hidden;
+      overflow:hidden;
+      touch-action: manipulation;
+    }
+    @media (max-width: 420px){
+      .arena{height: 280px}
     }
 
-    .flipBtn[aria-pressed="true"] .tile{
-      transform: rotateY(180deg);
-    }
-
-    .face{
-      position:absolute; inset:0;
-      display:flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: space-between;
-      padding: 14px;
-      backface-visibility: hidden;
-    }
-
-    .front{
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)),
-        radial-gradient(220px 180px at 15% 20%, rgba(124,92,255,0.35), transparent 60%),
-        radial-gradient(220px 180px at 90% 30%, rgba(34,211,238,0.28), transparent 65%),
-        rgba(0,0,0,0.18);
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .back{
-      transform: rotateY(180deg);
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05)),
-        radial-gradient(240px 200px at 70% 30%, rgba(255,209,102,0.32), transparent 64%),
-        rgba(0,0,0,0.22);
-      border: 1px solid rgba(255,255,255,0.14);
-    }
-
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 7px 10px;
+    .orb{
+      position:absolute;
+      width: 64px;
+      height: 64px;
       border-radius: 999px;
-      background: rgba(0,0,0,0.24);
-      border: 1px solid rgba(255,255,255,0.14);
-      font-size: 12px;
-      font-weight: 750;
-      letter-spacing: 0.2px;
-    }
-
-    .icon{
-      width: 14px; height: 14px; border-radius: 4px;
-      background: var(--accent2);
-      box-shadow: 0 0 0 4px rgba(34,211,238,0.15);
-      flex: 0 0 auto;
-    }
-    .icon.ducky{ background: var(--accent3); box-shadow: 0 0 0 4px rgba(255,209,102,0.16); }
-    .icon.purple{ background: var(--accent); box-shadow: 0 0 0 4px rgba(124,92,255,0.16); }
-
-    .tileTitle{
-      margin: 0;
-      font-size: 16px;
-      letter-spacing: -0.3px;
-    }
-    .tileHint{
-      margin: 0;
-      font-size: 13px;
-      color: rgba(246,247,255,0.82);
-      line-height: 1.35;
-    }
-
-    .tileFooter{
-      width:100%;
-      display:flex;
-      justify-content: space-between;
-      align-items:center;
-      color: rgba(246,247,255,0.72);
-      font-size: 12px;
-    }
-    .kbd{
-      font-weight: 800;
-      padding: 6px 10px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
-    }
-
-    /* Modal */
-    .modalBackdrop{
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.62);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(244,246,255,.95), rgba(244,246,255,.15) 28%, transparent 40%),
+        radial-gradient(circle at 60% 70%, rgba(255,43,214,.85), rgba(0,229,255,.85));
+      box-shadow:
+        0 18px 40px rgba(0,0,0,.38),
+        0 0 0 2px rgba(244,246,255,.14) inset,
+        0 0 24px rgba(0,229,255,.18);
+      border: 1px solid rgba(244,246,255,.12);
+      transform: translate(-50%, -50%);
       display:none;
+      cursor:pointer;
+    }
+    .orb:active{transform: translate(-50%, -50%) scale(.98)}
+    .orb:focus{outline:none; box-shadow: var(--ring), 0 18px 40px rgba(0,0,0,.38)}
+    .hint{
+      position:absolute;
+      inset:0;
+      display:flex;
+      flex-direction:column;
       align-items:center;
       justify-content:center;
-      padding: 18px;
-      z-index: 50;
+      padding:18px;
+      text-align:center;
+      gap:10px;
+      color: var(--muted);
     }
-    .modalBackdrop.show{ display:flex; }
-    .modal{
-      width: min(560px, 100%);
-      border-radius: 20px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08));
-      border: 1px solid rgba(255,255,255,0.18);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.55);
-      overflow:hidden;
+    .hint strong{color: var(--text)}
+    .tiny{
+      font-size:12px;
+      opacity:.9;
+      line-height:1.4;
     }
-    .modalTop{
-      padding: 16px 16px 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      display:flex;
-      justify-content: space-between;
-      align-items:center;
-      gap: 10px;
-    }
-    .modalTop h3{
-      margin:0;
-      font-size: 16px;
-      letter-spacing: -0.2px;
-    }
-    .close{
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.16);
-      color: rgba(246,247,255,0.92);
-      border-radius: 12px;
-      min-height: 40px;
-      padding: 8px 10px;
-      font-weight: 800;
-    }
-    .modalBody{
-      padding: 14px 16px 16px;
-      color: rgba(246,247,255,0.88);
-      line-height: 1.55;
-      font-size: 14px;
-    }
-    .modalBody .mini{
+
+    .footer{
       margin-top: 12px;
-      padding: 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.18);
-    }
-    .modalActions{
       display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding: 0 16px 16px;
+      flex-direction:column;
+      gap:10px;
     }
 
-    footer{
-      margin-top: 18px;
-      padding: 16px 4px 8px;
-      color: rgba(246,247,255,0.60);
+    .kbd{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(244,246,255,.10);
+      background: rgba(244,246,255,.05);
+      color: var(--muted);
       font-size: 12px;
-      line-height: 1.5;
-      display:flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+      width: fit-content;
+      user-select:none;
     }
 
-    /* Accessibility helpers */
-    .sr{
-      position:absolute;
-      width:1px;height:1px;
-      padding:0;margin:-1px;
-      overflow:hidden;clip:rect(0,0,0,0);
-      border:0;
-    }
-    :focus-visible{
-      outline: 3px solid rgba(34,211,238,0.75);
-      outline-offset: 3px;
+    .toast{
+      margin-top: 10px;
+      padding: 12px 12px;
       border-radius: 14px;
+      border: 1px solid rgba(244,246,255,.12);
+      background: rgba(6,7,10,.55);
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.4;
     }
+    .toast b{color: var(--text)}
   </style>
 </head>
 
 <body>
-  <div class="grain"></div>
+  <main class="wrap">
+    <section class="grid" aria-label="Soft launch intro + mini game">
+      <!-- LEFT: Intro -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="topline">
+            <div class="badge" aria-label="Soft launch status">
+              <span class="dot" aria-hidden="true"></span>
+              Soft launch • still building
+            </div>
+            <div class="badge" style="background:rgba(255,43,214,.10);border-color:rgba(255,43,214,.22)">
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);box-shadow:0 0 0 3px rgba(255,43,214,.16)" aria-hidden="true"></span>
+              v0.1
+            </div>
+          </div>
 
-  <div class="wrap">
-    <header>
-      <div class="brand" aria-label="Site header">
-        <div class="duck" aria-hidden="true"></div>
-        <div style="min-width:0">
-          <h1>Jackie Foo</h1>
-          <p>Soft launch • portfolio still in progress</p>
-        </div>
-      </div>
+          <h1>
+            Hi, I’m <span class="accent">Jackie Foo</span>.
+          </h1>
 
-      <div class="chipRow" aria-label="Quick status">
-        <div class="chip"><span class="dot pulse" aria-hidden="true"></span>Building in public</div>
-        <div class="chip"><span class="dot" style="background:var(--accent3); box-shadow: 0 0 0 4px rgba(255,209,102,0.16);" aria-hidden="true"></span>Duck mode: ON</div>
-      </div>
-    </header>
-
-    <section class="hero" aria-label="Main content">
-      <!-- Intro card -->
-      <div class="card">
-        <div class="cardPad">
-          <div class="badge"><span class="spark" aria-hidden="true"></span>Soft launch</div>
-
-          <h2 class="headline">Hi, I’m Jackie 👋</h2>
-          <p class="subhead">
-            I’m building this site as a clean, playful home for my work.
-            It is still under development, so consider this a friendly preview.
-            If you want, play the mini game on the right and see how I think about design decisions.
+          <p class="lede">
+            I’m soft-launching my portfolio right now. This site is still in development, so some pages may be empty,
+            links may move, and I’m actively refining the design as I go.
           </p>
 
-          <div class="ctaRow">
-            <button class="primary" id="btnShuffle" type="button" aria-label="Shuffle the mini game cards">
-              Shuffle game
-              <span aria-hidden="true">🎴</span>
+          <div class="chips" aria-label="Quick identity chips">
+            <!-- swap these to match you -->
+            <span class="chip">Master’s in Data Science</span>
+            <span class="chip">HCI + interaction design</span>
+            <span class="chip">Accessibility-minded</span>
+            <span class="chip">Research + prototypes</span>
+          </div>
+
+          <div class="row" role="group" aria-label="Actions">
+            <button class="btn primary" id="btnProgress">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              What’s coming
             </button>
 
-            <button class="secondary" id="btnReset" type="button" aria-label="Reset score and flips">
-              Reset
-              <span aria-hidden="true">↺</span>
-            </button>
+            <a class="btn" href="#" id="btnEmail" aria-label="Email Jackie">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 6h16v12H4z" stroke="currentColor" stroke-width="2" />
+                <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Say hi
+            </a>
 
-            <a class="btn secondary" href="#game" aria-label="Jump to mini game">
-              Go to game
-              <span aria-hidden="true">↓</span>
+            <a class="btn" href="#" id="btnLinkedin" aria-label="LinkedIn">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6.5 9.5V18M6.5 6.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M10 18v-5.2c0-1.8 1.2-3.3 3-3.3s3 1.5 3 3.3V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M10 12.8V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              LinkedIn
             </a>
           </div>
 
-          <div class="kpiGrid" aria-label="What to expect">
-            <div class="kpi">
-              <div class="label">What I care about <span class="pill">clarity</span></div>
-              <div class="value">Simple flows, honest feedback, and good vibes</div>
-            </div>
-            <div class="kpi">
-              <div class="label">What is coming <span class="pill">soon</span></div>
-              <div class="value">Projects, research notes, and a proper case study section</div>
-            </div>
+          <div class="toast" id="toast">
+            <b>Heads up:</b> you’re seeing a “soft launch” version. I’m iterating fast, so expect polish updates.
           </div>
         </div>
-      </div>
+      </article>
 
-      <!-- Game card -->
-      <div class="card" id="game">
-        <div class="cardPad">
-          <div class="gameHeader">
+      <!-- RIGHT: Mini game -->
+      <article class="card">
+        <div class="card-inner">
+          <div class="game-head">
             <div>
-              <h2>Mini game: Flip a card</h2>
-              <p>
-                Pick a card. Each one reveals a design decision.
-                You get points for variety, so try not to pick the same type twice.
+              <p class="game-title">Tiny game: Tap The Orb</p>
+              <p class="game-sub">
+                Purely for fun. Start, then tap the glowing orb whenever it appears.
+                Your reaction time gets measured.
               </p>
             </div>
-            <div class="scorebar" aria-label="Scoreboard">
-              <div class="score" id="score">Score: 0</div>
-              <div class="streak" id="streak">Variety: 0</div>
+            <div class="badge" style="background:rgba(43,255,136,.10);border-color:rgba(43,255,136,.22)">
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px rgba(43,255,136,.16)" aria-hidden="true"></span>
+              mobile-friendly
             </div>
           </div>
 
-          <div class="grid" role="list" aria-label="Flip cards">
-            <!-- Cards injected by JS -->
+          <div class="stats" aria-label="Game stats">
+            <div class="stat">
+              <p class="label">Score</p>
+              <p class="val" id="score">0</p>
+            </div>
+            <div class="stat">
+              <p class="label">Best reaction</p>
+              <p class="val" id="best">—</p>
+            </div>
           </div>
+
+          <div class="row" role="group" aria-label="Game controls">
+            <button class="btn good" id="btnStart">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 5v14l12-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+              Start
+            </button>
+            <button class="btn warn" id="btnReset">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M20 12a8 8 0 1 1-2.3-5.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M20 4v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Reset
+            </button>
+          </div>
+
+          <div class="arena" id="arena" aria-label="Game arena">
+            <button class="orb" id="orb" aria-label="Tap the orb"></button>
+            <div class="hint" id="hint">
+              <div><strong>Goal:</strong> tap the orb as fast as you can.</div>
+              <div class="tiny">Tip: You can play with one thumb. Works great on mobile.</div>
+              <div class="kbd">Round lasts 20 seconds</div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <div class="toast" id="gameToast">
+              <b>How it works:</b> after you press Start, the orb appears at random spots.
+              Each tap = +1. Faster reaction = better best score.
+            </div>
+          </div>
+
         </div>
-      </div>
+      </article>
     </section>
-
-    <footer>
-      <div>
-        Tip: This page is intentionally lightweight and mobile friendly.
-        Tap targets are large, text is responsive, and everything works without libraries.
-      </div>
-      <div>
-        <span aria-hidden="true">🦆</span> Soft launch build • <span id="today"></span>
-      </div>
-    </footer>
-  </div>
-
-  <!-- Modal -->
-  <div class="modalBackdrop" id="modalBackdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modalTop">
-        <h3 id="modalTitle">Decision</h3>
-        <button class="close" id="btnClose" type="button" aria-label="Close dialog">Close</button>
-      </div>
-      <div class="modalBody" id="modalBody"></div>
-      <div class="modalActions">
-        <button class="primary" id="btnNext" type="button">Flip another</button>
-        <button class="secondary" id="btnCopy" type="button">Copy summary</button>
-      </div>
-    </div>
-  </div>
+  </main>
 
   <script>
-    // --- Content you can tweak to match your voice more ---
-    const ABOUT = {
+    // ====== QUICK PERSONAL LINKS (EDIT THESE) ======
+    const PROFILE = {
       name: "Jackie Foo",
-      oneLiner: "Building a clean, fun portfolio. Still cooking it.",
-      contactHint: "If you want to chat, add your links here later."
+      email: "your.email@example.com",      // <-- replace
+      linkedin: "https://www.linkedin.com/in/your-handle/" // <-- replace
     };
 
-    // Card pool: co-design / decisions vibe, duck flavored.
-    const CARD_DECK = [
-      {
-        id: "clarity",
-        tag: "Clarity first",
-        icon: "purple",
-        title: "Less is more",
-        hint: "I cut features until the flow feels obvious.",
-        decisionTitle: "Design decision: Clarity first",
-        decisionBody:
-          "When a page starts feeling noisy, I remove choices, tighten copy, and improve the default path. " +
-          "If people can succeed without reading a manual, I count that as a win.",
-        mini: "Try this: What is the one action you want visitors to take on your site?"
-      },
-      {
-        id: "contrast",
-        tag: "Bold contrast",
-        icon: "cyan",
-        title: "Readable at a glance",
-        hint: "Pastel vibes, but high contrast for legibility.",
-        decisionTitle: "Design decision: Strong contrast",
-        decisionBody:
-          "I like soft colors, but I do not compromise on readability. " +
-          "Big type, clear hierarchy, and enough contrast so it works on bright phones.",
-        mini: "Quick check: Can you read this screen at arm’s length?"
-      },
-      {
-        id: "coDesign",
-        tag: "Co-design",
-        icon: "cyan",
-        title: "People in the loop",
-        hint: "Feedback shapes the product, not just the final polish.",
-        decisionTitle: "Design decision: Co-design mindset",
-        decisionBody:
-          "I build with users, not for users. " +
-          "That means early prototypes, structured prompts, and lots of iteration instead of guessing.",
-        mini: "If you had 10 minutes with a user, what would you ask first?"
-      },
-      {
-        id: "play",
-        tag: "Playful",
-        icon: "ducky",
-        title: "Make it fun",
-        hint: "Small interactions can make a site feel alive.",
-        decisionTitle: "Design decision: Add small delight",
-        decisionBody:
-          "I like tiny moments of joy. A micro game, a smooth animation, a friendly message. " +
-          "It keeps things human, especially when the topic is serious.",
-        mini: "Duck prompt: If your product was a duck, what would it be proud of?"
-      },
-      {
-        id: "mobile",
-        tag: "Mobile first",
-        icon: "purple",
-        title: "Thumb friendly",
-        hint: "Big buttons, simple layouts, no tiny targets.",
-        decisionTitle: "Design decision: Mobile first",
-        decisionBody:
-          "I design for the smallest screen first. " +
-          "If it works well on mobile, desktop becomes the easy upgrade.",
-        mini: "Rule of thumb: 48px minimum tap targets."
-      },
-      {
-        id: "honest",
-        tag: "Honest",
-        icon: "ducky",
-        title: "Soft launch energy",
-        hint: "Show progress without pretending it is finished.",
-        decisionTitle: "Design decision: Be honest about WIP",
-        decisionBody:
-          "I prefer a soft launch with a clear message: this is in progress. " +
-          "It reduces pressure and invites better feedback from early visitors.",
-        mini: "One sentence WIP line you can steal: “Still building, but you are welcome here.”"
-      }
-    ];
+    // Wire links
+    const btnEmail = document.getElementById("btnEmail");
+    const btnLinkedin = document.getElementById("btnLinkedin");
+    btnEmail.href = `mailto:${PROFILE.email}?subject=Hello%20from%20your%20site&body=Hi%20Jackie%2C%0A%0A`;
+    btnLinkedin.href = PROFILE.linkedin;
 
-    // --- Mini game logic ---
-    const grid = document.querySelector(".grid");
+    // "What's coming" toast toggle
+    const btnProgress = document.getElementById("btnProgress");
+    const toast = document.getElementById("toast");
+    let showingProgress = false;
+
+    btnProgress.addEventListener("click", () => {
+      showingProgress = !showingProgress;
+      toast.innerHTML = showingProgress
+        ? `<b>Coming soon:</b> projects, research notes, and a cleaner case-study flow. Also fixing links and polishing mobile layouts.`
+        : `<b>Heads up:</b> you’re seeing a “soft launch” version. I’m iterating fast, so expect polish updates.`;
+    });
+
+    // ====== MINI GAME: TAP THE ORB ======
+    const arena = document.getElementById("arena");
+    const orb = document.getElementById("orb");
+    const hint = document.getElementById("hint");
     const scoreEl = document.getElementById("score");
-    const streakEl = document.getElementById("streak");
-    const todayEl = document.getElementById("today");
-
-    const modalBackdrop = document.getElementById("modalBackdrop");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalBody = document.getElementById("modalBody");
-    const btnClose = document.getElementById("btnClose");
-    const btnNext = document.getElementById("btnNext");
-    const btnCopy = document.getElementById("btnCopy");
-
-    const btnShuffle = document.getElementById("btnShuffle");
+    const bestEl = document.getElementById("best");
+    const btnStart = document.getElementById("btnStart");
     const btnReset = document.getElementById("btnReset");
+    const gameToast = document.getElementById("gameToast");
 
-    const state = {
-      score: 0,
-      variety: 0,
-      lastType: null,
-      lastOpenedCardId: null,
-      cards: []
-    };
+    let running = false;
+    let score = 0;
+    let best = null; // ms
+    let orbShownAt = 0;
+    let roundTimer = null;
+    let spawnTimer = null;
+    const ROUND_MS = 20000;
 
-    function formatDate(){
-      try{
-        const d = new Date();
-        return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"2-digit" });
-      }catch(e){
-        return "";
-      }
+    // Keep best across refresh (optional)
+    const savedBest = localStorage.getItem("jackie_best_reaction_ms");
+    if (savedBest) {
+      best = Number(savedBest);
+      bestEl.textContent = `${best}ms`;
     }
 
-    function shuffle(arr){
-      const a = [...arr];
-      for(let i=a.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function pickCards(){
-      // Pick 4 unique cards for the board
-      const deck = shuffle(CARD_DECK);
-      return deck.slice(0, 4);
+    function placeOrb() {
+      const rect = arena.getBoundingClientRect();
+      const size = 64; // orb size in css
+      const padding = 16;
+
+      // safe placement boundaries
+      const minX = padding + size / 2;
+      const maxX = rect.width - padding - size / 2;
+      const minY = padding + size / 2;
+      const maxY = rect.height - padding - size / 2;
+
+      const x = rand(minX, maxX);
+      const y = rand(minY, maxY);
+
+      orb.style.left = `${x}px`;
+      orb.style.top = `${y}px`;
+      orb.style.display = "block";
+      orbShownAt = performance.now();
+      orb.focus({ preventScroll: true });
     }
 
-    function iconClass(kind){
-      if(kind === "ducky") return "icon ducky";
-      if(kind === "purple") return "icon purple";
-      return "icon";
+    function hideOrb() {
+      orb.style.display = "none";
     }
 
-    function render(){
-      grid.innerHTML = "";
-      state.cards.forEach((c, idx) => {
-        const wrap = document.createElement("div");
-        wrap.className = "flip";
-        wrap.setAttribute("role","listitem");
-
-        const btn = document.createElement("button");
-        btn.className = "flipBtn";
-        btn.type = "button";
-        btn.setAttribute("aria-pressed", "false");
-        btn.setAttribute("aria-label", `Flip card: ${c.title}`);
-
-        btn.innerHTML = `
-          <div class="tile">
-            <div class="face front">
-              <div class="tag">
-                <span class="${iconClass(c.icon)}" aria-hidden="true"></span>
-                ${c.tag}
-              </div>
-              <div>
-                <p class="tileTitle">${c.title}</p>
-                <p class="tileHint">${c.hint}</p>
-              </div>
-              <div class="tileFooter">
-                <span>Tap to flip</span>
-                <span class="kbd">Flip</span>
-              </div>
-            </div>
-
-            <div class="face back">
-              <div class="tag">
-                <span class="${iconClass(c.icon)}" aria-hidden="true"></span>
-                Reveal
-              </div>
-              <div>
-                <p class="tileTitle">${c.decisionTitle}</p>
-                <p class="tileHint">Tap again for details.</p>
-              </div>
-              <div class="tileFooter">
-                <span>Open popup</span>
-                <span class="kbd">View</span>
-              </div>
-            </div>
-          </div>
-        `;
-
-        btn.addEventListener("click", () => onFlip(btn, c));
-        wrap.appendChild(btn);
-        grid.appendChild(wrap);
-      });
+    function scheduleNextSpawn() {
+      // random delay (fast + fun)
+      const delay = rand(350, 1100);
+      spawnTimer = setTimeout(() => {
+        if (!running) return;
+        placeOrb();
+      }, delay);
     }
 
-    function updateScore(){
-      scoreEl.textContent = `Score: ${state.score}`;
-      streakEl.textContent = `Variety: ${state.variety}`;
-    }
+    function startRound() {
+      if (running) return;
+      running = true;
+      score = 0;
+      scoreEl.textContent = score;
+      hint.style.display = "none";
 
-    function openModal(card){
-      state.lastOpenedCardId = card.id;
-      modalTitle.textContent = card.decisionTitle;
-      modalBody.innerHTML = `
-        <div>${escapeHtml(card.decisionBody)}</div>
-        <div class="mini"><strong>Mini prompt:</strong> ${escapeHtml(card.mini)}</div>
-      `;
-      modalBackdrop.classList.add("show");
-      modalBackdrop.setAttribute("aria-hidden","false");
+      gameToast.innerHTML = `<b>Go!</b> Tap the orb as soon as it appears.`;
+      btnStart.disabled = true;
+      btnStart.style.opacity = ".6";
 
-      // Focus management
-      btnClose.focus();
-      document.body.style.overflow = "hidden";
-    }
+      // start round timer
+      const endsAt = Date.now() + ROUND_MS;
+      roundTimer = setInterval(() => {
+        const left = Math.max(0, endsAt - Date.now());
+        const secs = Math.ceil(left / 1000);
 
-    function closeModal(){
-      modalBackdrop.classList.remove("show");
-      modalBackdrop.setAttribute("aria-hidden","true");
-      document.body.style.overflow = "";
-    }
-
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function onFlip(btn, card){
-      const pressed = btn.getAttribute("aria-pressed") === "true";
-
-      if(!pressed){
-        // First tap: flip + scoring
-        btn.setAttribute("aria-pressed","true");
-
-        const isVariety = state.lastType && state.lastType !== card.id;
-        if(state.lastType === null){
-          state.variety = 1;
-        }else if(isVariety){
-          state.variety += 1;
-        }else{
-          state.variety = Math.max(0, state.variety - 1);
+        if (left <= 0) {
+          endRound();
+          return;
         }
+        // light status in toast (no flashing)
+        gameToast.innerHTML = `<b>Time left:</b> ${secs}s • <b>Score:</b> ${score}`;
+      }, 220);
 
-        // Points: base + variety bonus
-        state.score += 10 + (isVariety ? 6 : 0);
-        state.lastType = card.id;
-        updateScore();
-        return;
-      }
-
-      // Second tap: open modal details
-      openModal(card);
+      scheduleNextSpawn();
     }
 
-    function resetBoard(keepCards = false){
-      state.score = 0;
-      state.variety = 0;
-      state.lastType = null;
-      state.lastOpenedCardId = null;
-      updateScore();
+    function endRound() {
+      running = false;
+      hideOrb();
+      clearInterval(roundTimer);
+      clearTimeout(spawnTimer);
+      roundTimer = null;
+      spawnTimer = null;
 
-      // Reset flip states
-      document.querySelectorAll(".flipBtn").forEach(b => b.setAttribute("aria-pressed","false"));
+      btnStart.disabled = false;
+      btnStart.style.opacity = "1";
 
-      if(!keepCards){
-        state.cards = pickCards();
-        render();
-      }
+      hint.style.display = "flex";
+      gameToast.innerHTML = `<b>Round over.</b> Final score: ${score}. Tap Start to play again.`;
     }
 
-    function init(){
-      todayEl.textContent = formatDate();
-      state.cards = pickCards();
-      render();
-      updateScore();
+    function resetGame() {
+      running = false;
+      hideOrb();
+      clearInterval(roundTimer);
+      clearTimeout(spawnTimer);
+      roundTimer = null;
+      spawnTimer = null;
+
+      score = 0;
+      scoreEl.textContent = score;
+      best = null;
+      bestEl.textContent = "—";
+      localStorage.removeItem("jackie_best_reaction_ms");
+
+      btnStart.disabled = false;
+      btnStart.style.opacity = "1";
+      hint.style.display = "flex";
+      gameToast.innerHTML = `<b>Reset.</b> Press Start when you’re ready.`;
     }
 
-    // Buttons
-    btnShuffle.addEventListener("click", () => {
-      state.cards = pickCards();
-      render();
-      // Keep score, just reshuffle board for fun
-      document.querySelectorAll(".flipBtn").forEach(b => b.setAttribute("aria-pressed","false"));
+    orb.addEventListener("click", () => {
+      if (!running) return;
+
+      const reaction = Math.max(0, Math.round(performance.now() - orbShownAt));
+      score += 1;
+      scoreEl.textContent = score;
+
+      if (best === null || reaction < best) {
+        best = reaction;
+        bestEl.textContent = `${best}ms`;
+        localStorage.setItem("jackie_best_reaction_ms", String(best));
+      }
+
+      // feedback text (brief)
+      gameToast.innerHTML = `<b>Nice.</b> ${reaction}ms • <b>Score:</b> ${score}`;
+      hideOrb();
+      scheduleNextSpawn();
     });
 
-    btnReset.addEventListener("click", () => resetBoard(false));
-
-    // Modal controls
-    btnClose.addEventListener("click", closeModal);
-    modalBackdrop.addEventListener("click", (e) => {
-      if(e.target === modalBackdrop) closeModal();
-    });
-
-    btnNext.addEventListener("click", () => {
-      closeModal();
-      // Auto shuffle so "next" feels fresh
-      state.cards = pickCards();
-      render();
-      // Small reward for continuing
-      state.score += 4;
-      updateScore();
-      // Scroll to game on small screens
-      document.getElementById("game").scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-
-    btnCopy.addEventListener("click", async () => {
-      const card = CARD_DECK.find(c => c.id === state.lastOpenedCardId);
-      if(!card) return;
-
-      const text =
-        `${ABOUT.name} • Soft launch\n` +
-        `${card.decisionTitle}\n` +
-        `${card.decisionBody}\n` +
-        `Prompt: ${card.mini}\n`;
-
-      try{
-        await navigator.clipboard.writeText(text);
-        btnCopy.textContent = "Copied!";
-        setTimeout(() => btnCopy.textContent = "Copy summary", 900);
-      }catch(e){
-        btnCopy.textContent = "Copy failed";
-        setTimeout(() => btnCopy.textContent = "Copy summary", 900);
+    // keyboard accessibility (space/enter)
+    orb.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        orb.click();
       }
     });
 
-    // Keyboard: Escape closes modal
-    window.addEventListener("keydown", (e) => {
-      if(e.key === "Escape" && modalBackdrop.classList.contains("show")){
-        closeModal();
-      }
-    });
+    btnStart.addEventListener("click", startRound);
+    btnReset.addEventListener("click", resetGame);
 
-    init();
+    // Prevent double-tap zoom on iOS for controls (keeps it snappy)
+    document.querySelectorAll("button, a").forEach(el => {
+      el.addEventListener("touchend", () => {}, {passive:true});
+    });
   </script>
 </body>
 </html>
