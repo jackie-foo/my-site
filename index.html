@@ -59,7 +59,7 @@ body::before{
   }
 }
 
-/* ROUND CHIBI (main) */
+/* Main chibi */
 .chibi{
   width:clamp(160px, 26vw, 220px);
   aspect-ratio:1/1;
@@ -75,12 +75,10 @@ body::before{
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center;
   display:block;
   transform:scale(1.03);
 }
 
-/* Typography */
 h1{
   font-size:clamp(56px, 8vw, 96px);
   margin:0;
@@ -93,7 +91,6 @@ h1{
   display:inline-block;
   padding:0 4px;
 }
-
 .highlight::after{
   content:"";
   position:absolute;
@@ -114,7 +111,6 @@ h1{
 }
 .lead b{color:var(--text)}
 
-/* Workshop line + button */
 .workshopLine{
   margin-top:26px;
   font-size:16px;
@@ -134,16 +130,13 @@ button.primary{
   transition:.2s ease;
 }
 button.primary:hover{background:rgba(255,43,214,.16)}
-button.primary:active{transform:translateY(1px)}
 
-/* Links */
 .links{
   margin-top:32px;
   display:flex;
   gap:26px;
   flex-wrap:wrap;
 }
-
 a.link{
   text-decoration:none;
   font-size:16px;
@@ -151,7 +144,6 @@ a.link{
   color:var(--text);
   position:relative;
 }
-
 a.link::after{
   content:"";
   position:absolute;
@@ -195,38 +187,35 @@ small{
   box-shadow:0 26px 80px rgba(0,0,0,.6);
 }
 
-.modalTop{
+.modalRow{
   display:flex;
+  gap:24px;
   align-items:center;
-  gap:20px;
 }
 
 /* Chibi2 */
 .modalChibi{
-  width:88px;
-  height:88px;
+  width:100px;
+  height:100px;
   border-radius:999px;
   overflow:hidden;
   border:1px solid rgba(255,255,255,.16);
-  background:rgba(255,255,255,.06);
   flex:0 0 auto;
 }
 .modalChibi img{
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center;
   display:block;
 }
 
-/* Content */
 .modalContent{
   flex:1;
 }
 
 .modal h2{
   margin:0;
-  font-size:18px;
+  font-size:20px;
 }
 
 .modal p{
@@ -236,17 +225,16 @@ small{
   line-height:1.55;
 }
 
-/* White choice buttons */
+/* White buttons */
 .choices{
-  margin-top:18px;
+  margin-top:24px;
   display:grid;
   gap:14px;
 }
-
 .choice{
   padding:16px;
   border-radius:16px;
-  border:1px solid rgba(255,255,255,.25);
+  border:1px solid rgba(255,255,255,.3);
   background:#ffffff;
   color:#111;
   font-weight:800;
@@ -255,28 +243,8 @@ small{
   transition:.18s ease;
 }
 .choice:hover{
-  background:#f3f3f3;
+  background:#f2f2f2;
   transform:translateY(-1px);
-}
-
-.modalBottom{
-  margin-top:18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.smallNote{
-  font-size:12px;
-  color:rgba(246,246,255,.52);
-}
-
-.closeBtn{
-  background:none;
-  border:none;
-  color:rgba(246,246,255,.65);
-  cursor:pointer;
-  font-weight:800;
 }
 </style>
 </head>
@@ -297,15 +265,15 @@ small{
       </p>
 
       <div class="workshopLine">
-        If you’re here for the workshop, click the item below to indicate.
+        If you're here for the workshop, click below to indicate.
       </div>
-      <button class="primary" id="workshopBtn" type="button">Workshop 1</button>
+      <button class="primary" id="workshopBtn">Workshop 1</button>
 
       <div class="links">
-        <a class="link" href="#" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="link" href="#" target="_blank" rel="noopener">GitHub</a>
+        <a class="link" href="#" target="_blank">LinkedIn</a>
+        <a class="link" href="#" target="_blank">GitHub</a>
         <a class="link" href="mailto:you@email.com">Email</a>
-        <a class="link" href="#" target="_blank" rel="noopener">Resume</a>
+        <a class="link" href="#" target="_blank">Resume</a>
       </div>
 
       <small>© <span id="year"></span></small>
@@ -314,10 +282,9 @@ small{
 </div>
 
 <!-- Modal -->
-<div class="overlay" id="overlay" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true">
-
-    <div class="modalTop">
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modalRow">
       <div class="modalChibi">
         <img src="/pic/chibi2.png" alt="">
       </div>
@@ -329,61 +296,23 @@ small{
     </div>
 
     <div class="choices">
-      <button class="choice" type="button" data-uni="Monash">
+      <button class="choice" onclick="window.location.href='https://example.com/monash'">
         Monash University
       </button>
-      <button class="choice" type="button" data-uni="UPNG">
+      <button class="choice" onclick="window.location.href='https://example.com/upng'">
         UPNG
       </button>
     </div>
-
-    <div class="modalBottom">
-      <div class="smallNote">You’ll remain on jackiefoo.me for now.</div>
-      <button class="closeBtn" id="closeModal" type="button">Close</button>
-    </div>
-
   </div>
 </div>
 
 <script>
-  // Year
-  document.getElementById("year").textContent = new Date().getFullYear();
+document.getElementById("year").textContent = new Date().getFullYear();
 
-  // Modal controls
-  const overlay = document.getElementById("overlay");
-  const workshopBtn = document.getElementById("workshopBtn");
-  const closeModal = document.getElementById("closeModal");
-
-  function openModal(){
-    overlay.classList.add("open");
-    overlay.setAttribute("aria-hidden","false");
-    document.body.style.overflow = "hidden";
-  }
-  function closeModalFn(){
-    overlay.classList.remove("open");
-    overlay.setAttribute("aria-hidden","true");
-    document.body.style.overflow = "";
-  }
-
-  workshopBtn.addEventListener("click", openModal);
-  closeModal.addEventListener("click", closeModalFn);
-  overlay.addEventListener("click", (e) => { if(e.target === overlay) closeModalFn(); });
-  window.addEventListener("keydown", (e) => {
-    if(e.key === "Escape" && overlay.classList.contains("open")) closeModalFn();
-  });
-
-  // Uni selection (for now: stay on the same page; save choice)
-  document.querySelectorAll("[data-uni]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const uni = btn.getAttribute("data-uni");
-      localStorage.setItem("workshop1_uni", uni);
-      closeModalFn();
-
-      // Later routing if/when you create these pages:
-      // if(uni === "Monash") window.location.href = "/workshop1/monash";
-      // if(uni === "UPNG") window.location.href = "/workshop1/upng";
-    });
-  });
+const overlay = document.getElementById("overlay");
+document.getElementById("workshopBtn").onclick = () => overlay.classList.add("open");
+overlay.onclick = (e) => { if(e.target === overlay) overlay.classList.remove("open"); };
 </script>
+
 </body>
 </html>
