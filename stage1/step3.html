@@ -21,6 +21,9 @@
     .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:900;font-size:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);padding:3px 8px;border-radius:999px}
     button{appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:1000;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28)}
     button:hover{border-color:color-mix(in srgb,var(--accent) 60%, var(--border))}
+    .btnPrimary{
+    border-color:color-mix(in srgb,var(--accent) 70%, var(--border));
+    box-shadow:0 14px 34px rgba(0,229,255,.12);}
     button:disabled{opacity:.55;cursor:not-allowed}
     .btnDanger{border-color:color-mix(in srgb,var(--bad) 65%, var(--border))}
     .btnGhost{background:rgba(255,255,255,.03)}
@@ -149,6 +152,7 @@
       <div class="row" style="justify-content:flex-end">
         <button id="btnTutorial" class="btnGhost">Tutorial</button>
         <button id="btnBack">← Step 2</button>
+        <button id="btnToStep4" class="btnPrimary">Next → Step 4</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
       </div>
     </header>
@@ -419,6 +423,10 @@
           const obj = safeJson(e.dataTransfer.getData("text/plain"));
           if(!obj) return;
           if(obj.kind==="placedEvent") await movePlaced(obj.id, w);
+        });
+
+        $("#btnToStep4").addEventListener("click", () => {
+          location.href = `${BASE_PATH}/step4.html?room=${encodeURIComponent(room)}`;
         });
 
         weekEl.addEventListener("contextmenu",(e)=>{
