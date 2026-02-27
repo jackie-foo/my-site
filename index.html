@@ -6,159 +6,218 @@
   <title>Jackie Foo</title>
   <style>
     :root{
-      --bg: #FFF7FB;
-      --ink: #0B1220;
-      --muted: #2B3445;
-      --soft: #5B6475;
+      --ink:#0B1220;
+      --muted:#22304A;
+      --soft:#5E6A80;
 
-      --p1:#BDE0FE; /* pastel blue */
-      --p2:#C7F9CC; /* pastel green */
-      --p3:#FFD6A5; /* pastel peach */
-      --p4:#FFADAD; /* pastel pink */
-      --p5:#E9D5FF; /* pastel lavender */
-      --p6:#FFF1A8; /* pastel yellow */
+      /* Pastels */
+      --p1:#BDE0FE; /* blue */
+      --p2:#C7F9CC; /* green */
+      --p3:#FFD6A5; /* peach */
+      --p4:#FFADAD; /* pink */
+      --p5:#E9D5FF; /* lavender */
+      --p6:#FFF1A8; /* yellow */
 
-      --panel: rgba(255,255,255,0.82);
+      --bg:#FFF7FB;
+      --panel: rgba(255,255,255,0.78);
       --border: rgba(11,18,32,0.12);
-      --shadow: 0 18px 60px rgba(11,18,32,0.12);
-      --shadow2: 0 10px 26px rgba(11,18,32,0.12);
+      --shadow: 0 18px 70px rgba(11,18,32,0.12);
+      --shadow2: 0 12px 30px rgba(11,18,32,0.12);
 
-      --r1: 26px;
+      --r1: 28px;
       --r2: 18px;
+
       --ring: 0 0 0 4px rgba(11,18,32,0.14);
     }
 
-    *{ box-sizing: border-box; }
+    *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(1000px 600px at 10% 10%, rgba(189,224,254,0.70), transparent 60%),
-        radial-gradient(1000px 600px at 90% 15%, rgba(255,173,173,0.55), transparent 60%),
-        radial-gradient(900px 600px at 75% 95%, rgba(199,249,204,0.60), transparent 60%),
-        radial-gradient(900px 600px at 20% 90%, rgba(233,213,255,0.60), transparent 60%),
+        radial-gradient(1100px 700px at 10% 10%, rgba(189,224,254,0.72), transparent 60%),
+        radial-gradient(1100px 700px at 92% 12%, rgba(255,173,173,0.56), transparent 60%),
+        radial-gradient(900px 650px at 80% 94%, rgba(199,249,204,0.62), transparent 60%),
+        radial-gradient(900px 650px at 18% 92%, rgba(233,213,255,0.62), transparent 60%),
         var(--bg);
-      overflow-x: hidden;
+      overflow-x:hidden;
     }
 
-    a{ color: inherit; text-decoration: none; }
-    button:focus-visible, .flipBtn:focus-visible{ outline:none; box-shadow: var(--ring); border-radius: 14px; }
+    button:focus-visible, a:focus-visible{ outline:none; box-shadow: var(--ring); border-radius: 14px; }
+    a{ color: inherit; text-decoration:none; }
+
+    /* Full-page effect layer */
+    .fxFlash{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      opacity: 0;
+      z-index: 900;
+      background: radial-gradient(800px 500px at 50% 45%, rgba(255,255,255,0.85), rgba(255,255,255,0.0) 60%);
+      transition: opacity 220ms ease;
+    }
+    .fxFlash.on{ opacity: 1; }
+
+    .themeWave{
+      position: fixed;
+      inset: -40vh -40vw;
+      pointer-events:none;
+      z-index: 899;
+      opacity: 0;
+      filter: blur(24px);
+      transform: scale(1.0);
+      transition: opacity 260ms ease, transform 480ms ease;
+      background:
+        radial-gradient(700px 500px at 20% 20%, rgba(189,224,254,0.85), transparent 60%),
+        radial-gradient(700px 500px at 80% 20%, rgba(255,173,173,0.75), transparent 60%),
+        radial-gradient(700px 500px at 75% 85%, rgba(199,249,204,0.75), transparent 60%),
+        radial-gradient(700px 500px at 25% 85%, rgba(233,213,255,0.75), transparent 60%);
+    }
+    .themeWave.on{ opacity: 1; transform: scale(1.04); }
+
+    canvas#confetti{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      z-index: 901;
+    }
 
     .wrap{
       min-height: 100%;
       display:flex;
       justify-content:center;
       align-items:center;
-      padding: 22px 14px 46px;
+      padding: 22px 14px 52px;
     }
 
     .shell{
-      width: min(1040px, 100%);
+      width: min(1080px, 100%);
       display:grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: 1.08fr 0.92fr;
       gap: 18px;
       align-items: stretch;
     }
-    @media (max-width: 920px){
+    @media (max-width: 940px){
       .shell{ grid-template-columns: 1fr; }
     }
 
     .card{
       background: var(--panel);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border);
       border-radius: var(--r1);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-    .pad{ padding: 22px; }
-    @media (max-width: 480px){ .pad{ padding: 18px; } }
 
-    /* Intro */
-    .top{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap: 14px;
-    }
-    h1{
-      margin:0 0 10px;
-      font-size: clamp(30px, 4.6vw, 46px);
-      letter-spacing: -0.02em;
-      line-height: 1.05;
-    }
-    .desc{
-      margin:0;
-      color: var(--muted);
-      font-size: 15.5px;
-      line-height: 1.7;
-      max-width: 52ch;
-    }
-    .subrow{
-      margin-top: 14px;
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .pill{
-      user-select:none;
-      border: 1px solid rgba(11,18,32,0.12);
-      background: rgba(255,255,255,0.78);
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      color: var(--muted);
-      box-shadow: 0 10px 18px rgba(11,18,32,0.06);
-      font-weight: 650;
-    }
-
-    /* Duck badge */
-    .duck{
-      width: 94px;
-      height: 94px;
-      border-radius: 28px;
+    /* -------- Creative intro: "Duck Pond Poster" -------- */
+    .poster{
       position: relative;
-      border: 1px solid rgba(11,18,32,0.12);
-      box-shadow: var(--shadow2);
-      background: linear-gradient(135deg, var(--p6), #FFE47A);
-      flex: 0 0 auto;
+      min-height: 420px;
+    }
+    @media (max-width: 480px){
+      .poster{ min-height: 440px; }
+    }
+
+    .posterPad{
+      padding: 22px;
+      height: 100%;
+      display:flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    @media (max-width: 480px){ .posterPad{ padding: 18px; } }
+
+    .pond{
+      position:absolute;
+      inset: 0;
+      pointer-events:none;
       overflow:hidden;
     }
-    .duck:before{
+
+    /* layered blobs */
+    .blob{
+      position:absolute;
+      border-radius: 999px;
+      filter: blur(0.2px);
+      opacity: 0.95;
+      transform: rotate(6deg);
+    }
+    .b1{ width: 420px; height: 240px; left: -130px; top: -60px; background: linear-gradient(135deg, var(--p1), rgba(255,255,255,0.0)); }
+    .b2{ width: 380px; height: 260px; right: -140px; top: 40px; background: linear-gradient(135deg, var(--p4), rgba(255,255,255,0.0)); }
+    .b3{ width: 520px; height: 280px; left: 40px; bottom: -140px; background: linear-gradient(135deg, var(--p2), rgba(255,255,255,0.0)); }
+    .b4{ width: 360px; height: 220px; right: 20px; bottom: -120px; background: linear-gradient(135deg, var(--p5), rgba(255,255,255,0.0)); opacity: 0.85; }
+
+    /* subtle waves */
+    .wave{
+      position:absolute;
+      left: -10%;
+      right: -10%;
+      height: 120px;
+      bottom: -40px;
+      background:
+        radial-gradient(90px 30px at 10% 30%, rgba(255,255,255,0.65), transparent 60%),
+        radial-gradient(120px 40px at 30% 50%, rgba(255,255,255,0.55), transparent 60%),
+        radial-gradient(130px 45px at 55% 35%, rgba(255,255,255,0.55), transparent 60%),
+        radial-gradient(110px 40px at 80% 55%, rgba(255,255,255,0.55), transparent 60%);
+      opacity: 0.8;
+      transform: rotate(-2deg);
+    }
+
+    /* duck float */
+    .duckFloat{
+      position:absolute;
+      right: 22px;
+      bottom: 26px;
+      width: 112px;
+      height: 112px;
+      border-radius: 32px;
+      background: linear-gradient(135deg, var(--p6), #FFE47A);
+      border: 1px solid rgba(11,18,32,0.14);
+      box-shadow: var(--shadow2);
+      transform: translateZ(0);
+      animation: bob 2.8s ease-in-out infinite;
+    }
+    @keyframes bob{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-7px); }
+    }
+    .duckFloat:before{
       content:"";
       position:absolute;
-      inset: 16px 18px 22px 18px;
+      inset: 18px 20px 26px 20px;
       border-radius: 999px;
       background: rgba(255,255,255,0.68);
       transform: rotate(-6deg);
     }
-    .eye{
+    .duckFloat .eye{
       position:absolute;
-      top: 35px;
-      width: 10px;
-      height: 10px;
+      top: 42px;
+      width: 11px;
+      height: 11px;
       border-radius: 50%;
-      background: #0B1220;
+      background: var(--ink);
     }
-    .eye.l{ left: 32px; }
-    .eye.r{ right: 32px; }
-    .beak{
+    .duckFloat .eye.l{ left: 38px; }
+    .duckFloat .eye.r{ right: 38px; }
+    .duckFloat .beak{
       position:absolute;
       left: 50%;
-      top: 53px;
+      top: 62px;
       transform: translateX(-50%);
-      width: 36px;
-      height: 18px;
+      width: 42px;
+      height: 20px;
       border-radius: 999px;
       background: linear-gradient(180deg, #FFB703, #FFA000);
-      border: 1px solid rgba(11,18,32,0.12);
+      border: 1px solid rgba(11,18,32,0.14);
     }
-    .shine{
+    .duckFloat .shine{
       position:absolute;
-      right: 10px;
-      top: 10px;
+      right: 12px;
+      top: 12px;
       width: 12px;
       height: 12px;
       border-radius: 4px;
@@ -166,17 +225,78 @@
       transform: rotate(15deg);
     }
 
-    .footer{
-      margin-top: 16px;
-      display:flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
+    .heroText{
+      position: relative;
+      z-index: 2;
+    }
+    .heroText h1{
+      margin:0;
+      font-size: clamp(34px, 5vw, 54px);
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+    }
+    .heroText .line2{
+      margin-top: 10px;
+      font-size: clamp(16px, 2.2vw, 18px);
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 56ch;
+      font-weight: 650;
+    }
+    .heroText .soft{
+      margin-top: 10px;
       color: var(--soft);
-      font-size: 13px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      max-width: 60ch;
+      font-weight: 650;
     }
 
-    /* Game */
+    .tagRow{
+      position: relative;
+      z-index: 2;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+      justify-content: flex-start;
+    }
+    .tag{
+      user-select:none;
+      border: 1px solid rgba(11,18,32,0.14);
+      background: rgba(255,255,255,0.78);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 800;
+      box-shadow: 0 10px 18px rgba(11,18,32,0.06);
+    }
+
+    .links{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .linkBtn{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,0.14);
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 10px 18px rgba(11,18,32,0.06);
+      font-weight: 850;
+      color: var(--ink);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+    .linkBtn:hover{ transform: translateY(-1px); box-shadow: 0 14px 22px rgba(11,18,32,0.10); }
+
+    /* -------- Game panel -------- */
+    .pad{ padding: 22px; }
+    @media (max-width: 480px){ .pad{ padding: 18px; } }
+
     .gameHead{
       display:flex;
       justify-content: space-between;
@@ -187,21 +307,22 @@
     .gameHead h2{
       margin:0;
       font-size: 18px;
-      letter-spacing: -0.01em;
+      letter-spacing:-0.01em;
     }
     .gameHead .sub{
       margin-top: 6px;
       color: var(--soft);
       font-size: 13.5px;
       line-height: 1.5;
+      font-weight: 650;
     }
-
     .btnRow{ display:flex; gap: 10px; flex-wrap:wrap; justify-content:flex-end; }
+
     button{
       border: 1px solid rgba(11,18,32,0.14);
       background: rgba(255,255,255,0.88);
       color: var(--ink);
-      font-weight: 750;
+      font-weight: 900;
       border-radius: 14px;
       padding: 10px 12px;
       cursor:pointer;
@@ -213,20 +334,21 @@
 
     .grid{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0,1fr));
       gap: 12px;
       margin-top: 16px;
     }
     @media (max-width: 520px){
-      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
 
-    .flip{ perspective: 1000px; height: 126px; }
+    .flip{ perspective: 1000px; height: 132px; }
     .flipBtn{
       width:100%; height:100%;
       border:none; background: transparent; padding:0;
       cursor:pointer;
       border-radius: var(--r2);
+      -webkit-tap-highlight-color: transparent;
     }
     .inner{
       width:100%; height:100%;
@@ -247,48 +369,46 @@
       padding: 12px;
       text-align:center;
     }
-    .front{
-      background: rgba(255,255,255,0.94);
-    }
-    .front .emoji{ font-size: 28px; }
+    .front{ background: rgba(255,255,255,0.94); }
+    .front .emoji{ font-size: 30px; }
     .front .hint{
       margin-top: 8px;
       font-size: 13px;
-      font-weight: 850;
+      font-weight: 950;
       color: var(--muted);
     }
     .front .tiny{
       margin-top: 6px;
       font-size: 12px;
       color: var(--soft);
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .back{
       transform: rotateY(180deg);
-      font-weight: 900;
-      color: rgba(11,18,32,0.92);
       display:flex;
       flex-direction:column;
       gap: 10px;
       justify-content:center;
       align-items:center;
       padding: 12px 10px;
+      color: rgba(11,18,32,0.92);
+      font-weight: 950;
     }
     .back .title{
-      font-size: 13.2px;
+      font-size: 13.4px;
       line-height: 1.25;
       max-width: 18ch;
-      font-weight: 900;
     }
     .chip{
       font-size: 12px;
-      font-weight: 900;
+      font-weight: 950;
       border-radius: 999px;
       padding: 6px 10px;
       border: 1px solid rgba(11,18,32,0.14);
       background: rgba(255,255,255,0.72);
     }
+
     .c1 .back{ background: linear-gradient(135deg, var(--p1), #fff); }
     .c2 .back{ background: linear-gradient(135deg, var(--p2), #fff); }
     .c3 .back{ background: linear-gradient(135deg, var(--p3), #fff); }
@@ -300,7 +420,7 @@
     .overlay{
       position: fixed;
       inset: 0;
-      background: rgba(11,18,32,0.58);
+      background: rgba(11,18,32,0.60);
       display:none;
       align-items:center;
       justify-content:center;
@@ -316,7 +436,6 @@
       background: rgba(255,255,255,0.92);
       box-shadow: 0 30px 90px rgba(11,18,32,0.30);
       overflow:hidden;
-      position: relative;
     }
     .modalTop{
       padding: 16px 16px 10px;
@@ -325,20 +444,17 @@
       align-items:flex-start;
       gap: 10px;
     }
-    .modalTop h3{
-      margin:0;
-      font-size: 18px;
-      letter-spacing: -0.01em;
-    }
+    .modalTop h3{ margin:0; font-size: 18px; letter-spacing:-0.01em; }
     .modalBody{
       padding: 0 16px 16px;
       color: var(--muted);
       font-size: 14.8px;
       line-height: 1.65;
+      font-weight: 650;
     }
     .big{
       margin: 10px 0 8px;
-      font-size: clamp(30px, 7vw, 48px);
+      font-size: clamp(32px, 8vw, 54px);
       line-height: 1;
     }
     .bubble{
@@ -362,85 +478,98 @@
       color: var(--soft);
       font-size: 12.8px;
       line-height: 1.5;
-      max-width: 44ch;
+      max-width: 46ch;
+      font-weight: 650;
     }
 
-    /* Confetti canvas */
-    canvas#confetti{
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 998;
-    }
-
-    /* Surprise: page shake */
-    .shake{
-      animation: shake 420ms ease-in-out;
-    }
-    @keyframes shake{
-      0%{ transform: translateX(0); }
-      20%{ transform: translateX(-8px); }
-      40%{ transform: translateX(8px); }
-      60%{ transform: translateX(-6px); }
-      80%{ transform: translateX(6px); }
-      100%{ transform: translateX(0); }
-    }
-
-    /* Little sticker that floats up */
+    /* Stronger mobile sticker effect */
     .sticker{
       position: fixed;
       left: 50%;
-      top: 55%;
+      top: 56%;
       transform: translate(-50%, -50%);
-      z-index: 997;
-      font-size: 44px;
-      filter: drop-shadow(0 18px 20px rgba(11,18,32,0.20));
-      animation: floatUp 900ms cubic-bezier(.2,.8,.2,1) forwards;
-      pointer-events: none;
+      z-index: 902;
+      font-size: 54px;
+      filter: drop-shadow(0 18px 22px rgba(11,18,32,0.22));
+      animation: popFloat 900ms cubic-bezier(.15,.9,.2,1) forwards;
+      pointer-events:none;
     }
-    @keyframes floatUp{
-      0%{ opacity: 0; transform: translate(-50%,-30%) scale(0.92); }
-      20%{ opacity: 1; transform: translate(-50%,-50%) scale(1.02); }
-      100%{ opacity: 0; transform: translate(-50%,-92%) scale(1.06); }
+    @keyframes popFloat{
+      0%{ opacity:0; transform: translate(-50%,-40%) scale(0.72) rotate(-6deg); }
+      15%{ opacity:1; transform: translate(-50%,-50%) scale(1.12) rotate(4deg); }
+      40%{ transform: translate(-50%,-55%) scale(1.02) rotate(-2deg); }
+      100%{ opacity:0; transform: translate(-50%,-110%) scale(1.10) rotate(10deg); }
+    }
+
+    /* Stronger shake on mobile */
+    .shake{
+      animation: shake 460ms ease-in-out;
+    }
+    @keyframes shake{
+      0%{ transform: translateX(0); }
+      18%{ transform: translateX(-10px); }
+      36%{ transform: translateX(10px); }
+      54%{ transform: translateX(-8px); }
+      72%{ transform: translateX(8px); }
+      100%{ transform: translateX(0); }
+    }
+
+    /* Small helper */
+    .srOnly{
+      position:absolute;
+      width:1px;height:1px;
+      padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
     }
   </style>
 </head>
 
 <body>
+  <div class="themeWave" id="themeWave"></div>
+  <div class="fxFlash" id="fxFlash"></div>
   <canvas id="confetti"></canvas>
 
   <div class="wrap" id="page">
     <main class="shell">
-      <!-- Intro -->
-      <section class="card">
-        <div class="pad">
-          <div class="top">
-            <div>
-              <h1>Jackie Foo</h1>
-              <p class="desc">
-                I build small experiments and playful systems with a calm and curious vibe.
-                Developing this site still.
-              </p>
+      <!-- Creative poster intro -->
+      <section class="card poster">
+        <div class="pond" aria-hidden="true">
+          <div class="blob b1"></div>
+          <div class="blob b2"></div>
+          <div class="blob b3"></div>
+          <div class="blob b4"></div>
+          <div class="wave"></div>
 
-              <div class="subrow">
-                <div class="pill">Pastel and high contrast</div>
-                <div class="pill">Tiny games</div>
-                <div class="pill">Duck energy</div>
-                <div class="pill">Clean and minimal</div>
-              </div>
+          <div class="duckFloat">
+            <div class="shine"></div>
+            <div class="eye l"></div>
+            <div class="eye r"></div>
+            <div class="beak"></div>
+          </div>
+        </div>
+
+        <div class="posterPad">
+          <div class="heroText">
+            <h1>Jackie Foo</h1>
+            <div class="line2">
+              Building playful and thoughtful things with pastel energy.
             </div>
-
-            <div class="duck" aria-hidden="true">
-              <div class="shine"></div>
-              <div class="eye l"></div>
-              <div class="eye r"></div>
-              <div class="beak"></div>
+            <div class="soft">
+              Developing this site still. For now, flip cards and collect surprises.
             </div>
           </div>
 
-          <div class="footer">
-            <div>Tap a card for a surprise popup</div>
-            <div>Mobile friendly</div>
+          <div>
+            <div class="tagRow" aria-label="Quick tags">
+              <div class="tag">Minimal</div>
+              <div class="tag">High contrast</div>
+              <div class="tag">Mobile first</div>
+              <div class="tag">Duck themed</div>
+            </div>
+
+            <div class="tagRow" style="margin-top:12px;">
+              <a class="linkBtn" href="#" id="surpriseNow" role="button" aria-label="Trigger a surprise now">✨ Surprise me</a>
+              <a class="linkBtn" href="mailto:" aria-label="Email placeholder">📬 Contact later</a>
+            </div>
           </div>
         </div>
       </section>
@@ -451,7 +580,7 @@
           <div class="gameHead">
             <div>
               <h2>Flip Card Surprise</h2>
-              <div class="sub">Flip any card and see what the duck drops.</div>
+              <div class="sub">Made for thumbs. Big effects on mobile.</div>
             </div>
             <div class="btnRow">
               <button id="resetBtn" type="button">Reset</button>
@@ -460,15 +589,15 @@
             </div>
           </div>
 
-          <div class="grid" id="grid" aria-label="Flip cards">
-            <!-- injected -->
-          </div>
+          <div class="grid" id="grid" aria-label="Flip cards"></div>
+
+          <div class="srOnly" aria-live="polite" id="ariaLive"></div>
         </div>
       </section>
     </main>
   </div>
 
-  <!-- Surprise popup -->
+  <!-- Popup -->
   <div class="overlay" id="overlay" data-open="false" role="dialog" aria-modal="true" aria-labelledby="title">
     <div class="modal">
       <div class="modalTop">
@@ -484,7 +613,10 @@
   </div>
 
   <script>
-    // --------- Cards ---------
+    // ---------- Mobile detection ----------
+    const isMobile = matchMedia("(max-width: 520px)").matches || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
+    // ---------- Cards ----------
     const cardFront = [
       { emoji:"🦆", hint:"Flip me", tiny:"Duck drop 1" },
       { emoji:"🎁", hint:"Flip me", tiny:"Duck drop 2" },
@@ -493,71 +625,20 @@
       { emoji:"🍬", hint:"Flip me", tiny:"Duck drop 5" },
       { emoji:"🌈", hint:"Flip me", tiny:"Duck drop 6" }
     ];
-
-    const backTitles = [
-      "Duck Approved",
-      "Secret Found",
-      "Lucky Sparkle",
-      "Chaos Mode",
-      "Sweet Surprise",
-      "Pastel Power"
-    ];
-
+    const backTitles = ["Duck Approved","Secret Found","Lucky Sparkle","Chaos Mode","Sweet Surprise","Pastel Power"];
     const palette = ["c1","c2","c3","c4","c5","c6"];
 
-    // --------- Surprise content ---------
+    // ---------- Surprise content ----------
     const surprises = [
-      {
-        title: "Duck says hi",
-        big: "🦆",
-        text: "You unlocked the official duck greeting.",
-        mini: "Tip: try shuffling and collect different surprises.",
-        sticker: "🦆",
-        effect: ["confetti"]
-      },
-      {
-        title: "Confetti rain",
-        big: "✨",
-        text: "Pastel confetti for your soft launch.",
-        mini: "This site is still cooking, but the duck is already celebrating.",
-        sticker: "✨",
-        effect: ["confetti","shake"]
-      },
-      {
-        title: "Secret message",
-        big: "🔒",
-        text: "You found a hidden note: Keep building in tiny steps.",
-        mini: "Small progress looks cute on a website.",
-        sticker: "🔒",
-        effect: ["sticker"]
-      },
-      {
-        title: "Duck drops a badge",
-        big: "🏷️",
-        text: "Badge unlocked: Calm and curious.",
-        mini: "You can change these badges later as your site grows.",
-        sticker: "🏷️",
-        effect: ["confetti","sticker"]
-      },
-      {
-        title: "Mini fortune",
-        big: "🥠",
-        text: "Fortune: Your next iteration will be cleaner than you expect.",
-        mini: "Flip another card for a different fortune.",
-        sticker: "🥠",
-        effect: ["sticker"]
-      },
-      {
-        title: "Chaos sparkle",
-        big: "🎲",
-        text: "A little chaos makes things memorable.",
-        mini: "Still minimal, just a tiny surprise.",
-        sticker: "🎲",
-        effect: ["shake","confetti"]
-      }
+      { title:"Duck says hi", big:"🦆", text:"You unlocked a duck greeting.", mini:"Flip more cards. This site is still growing.", sticker:"🦆", fx:["confetti","flash","wave"] },
+      { title:"Confetti blast", big:"✨", text:"Pastel confetti, full power.", mini:"This is your soft launch celebration.", sticker:"✨", fx:["confetti","shake","flash","wave"] },
+      { title:"Secret message", big:"🔒", text:"Hidden note: Keep it simple, then make it fun.", mini:"You can evolve this site anytime.", sticker:"🔒", fx:["sticker","flash"] },
+      { title:"Duck sticker drop", big:"🏷️", text:"Sticker unlocked: Duck Energy.", mini:"Try Shuffle for different vibes.", sticker:"🏷️", fx:["sticker","confetti","wave"] },
+      { title:"Mini fortune", big:"🥠", text:"Fortune: Your next iteration will be cleaner than you expect.", mini:"Flip again for another fortune.", sticker:"🥠", fx:["sticker","flash"] },
+      { title:"Chaos sparkle", big:"🎲", text:"A little chaos makes the page memorable.", mini:"Still minimal. Just spicy.", sticker:"🎲", fx:["shake","confetti","flash","wave"] }
     ];
 
-    // --------- DOM ---------
+    // ---------- DOM ----------
     const grid = document.getElementById("grid");
     const overlay = document.getElementById("overlay");
     const closeBtn = document.getElementById("closeBtn");
@@ -565,40 +646,44 @@
     const resetBtn = document.getElementById("resetBtn");
     const shuffleBtn = document.getElementById("shuffleBtn");
     const soundBtn = document.getElementById("soundBtn");
+    const surpriseNow = document.getElementById("surpriseNow");
 
     const titleEl = document.getElementById("title");
     const bodyEl = document.getElementById("body");
     const miniEl = document.getElementById("mini");
     const page = document.getElementById("page");
+    const ariaLive = document.getElementById("ariaLive");
 
-    // --------- Sound (no external files) ---------
+    const fxFlash = document.getElementById("fxFlash");
+    const themeWave = document.getElementById("themeWave");
+
+    // ---------- Sound (no external files) ----------
     let soundOn = true;
     let audioCtx = null;
 
-    function beep(type="quack"){
+    function beep(mode="quack"){
       if(!soundOn) return;
       try{
         audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
         const o = audioCtx.createOscillator();
         const g = audioCtx.createGain();
-
-        // A cute quack-like blip
         const now = audioCtx.currentTime;
+
         o.type = "square";
-        o.frequency.setValueAtTime(type==="quack" ? 520 : 660, now);
-        o.frequency.exponentialRampToValueAtTime(type==="quack" ? 220 : 440, now + 0.09);
+        const start = mode==="quack" ? 520 : 680;
+        const end = mode==="quack" ? 220 : 420;
+        o.frequency.setValueAtTime(start, now);
+        o.frequency.exponentialRampToValueAtTime(end, now + 0.10);
 
         g.gain.setValueAtTime(0.0001, now);
-        g.gain.exponentialRampToValueAtTime(0.15, now + 0.01);
-        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+        g.gain.exponentialRampToValueAtTime(0.18, now + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
 
         o.connect(g);
         g.connect(audioCtx.destination);
         o.start(now);
-        o.stop(now + 0.13);
-      }catch(e){
-        // ignore if audio blocked
-      }
+        o.stop(now + 0.15);
+      }catch(e){}
     }
 
     soundBtn.addEventListener("click", () => {
@@ -608,10 +693,10 @@
       beep("pop");
     });
 
-    // --------- Helpers ---------
+    // ---------- Helpers ----------
     function shuffle(arr){
       const a = [...arr];
-      for(let i=a.length-1; i>0; i--){
+      for(let i=a.length-1;i>0;i--){
         const j = Math.floor(Math.random()*(i+1));
         [a[i],a[j]] = [a[j],a[i]];
       }
@@ -623,79 +708,87 @@
       s.className = "sticker";
       s.textContent = emoji;
       document.body.appendChild(s);
-      setTimeout(()=> s.remove(), 920);
+      setTimeout(()=> s.remove(), 950);
     }
 
     function shakePage(){
       page.classList.remove("shake");
-      // force reflow
       void page.offsetWidth;
       page.classList.add("shake");
-      setTimeout(()=> page.classList.remove("shake"), 460);
+      setTimeout(()=> page.classList.remove("shake"), 520);
     }
 
-    // --------- Confetti ---------
+    function flash(){
+      fxFlash.classList.add("on");
+      setTimeout(()=> fxFlash.classList.remove("on"), isMobile ? 260 : 200);
+    }
+
+    function wave(){
+      themeWave.classList.add("on");
+      setTimeout(()=> themeWave.classList.remove("on"), isMobile ? 520 : 420);
+    }
+
+    // ---------- Confetti (stronger on mobile) ----------
     const canvas = document.getElementById("confetti");
     const ctx = canvas.getContext("2d");
-    let confettiPieces = [];
-    let confettiTimer = null;
+    let pieces = [];
+    let raf = null;
 
     function resize(){
       canvas.width = window.innerWidth * devicePixelRatio;
       canvas.height = window.innerHeight * devicePixelRatio;
       ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
     }
-    window.addEventListener("resize", resize);
+    addEventListener("resize", resize);
     resize();
 
     function popConfetti(){
       const colors = ["#BDE0FE","#C7F9CC","#FFD6A5","#FFADAD","#E9D5FF","#FFF1A8"];
-      const count = 120;
-      confettiPieces = [];
+      const count = isMobile ? 200 : 120;
+      pieces = [];
       for(let i=0;i<count;i++){
-        confettiPieces.push({
-          x: Math.random()*window.innerWidth,
-          y: -20 - Math.random()*window.innerHeight*0.2,
-          r: 3 + Math.random()*4,
-          vy: 2 + Math.random()*5,
-          vx: -1.5 + Math.random()*3,
+        pieces.push({
+          x: Math.random()*innerWidth,
+          y: -30 - Math.random()*innerHeight*0.25,
+          w: 4 + Math.random()*6,
+          h: 3 + Math.random()*5,
+          vy: (isMobile ? 3.2 : 2.4) + Math.random()*(isMobile ? 6 : 4),
+          vx: -2.0 + Math.random()*4.0,
           rot: Math.random()*Math.PI,
-          vr: -0.12 + Math.random()*0.24,
+          vr: -0.14 + Math.random()*0.28,
           c: colors[Math.floor(Math.random()*colors.length)],
-          life: 120 + Math.floor(Math.random()*80)
+          life: (isMobile ? 160 : 120) + Math.floor(Math.random()*70)
         });
       }
-
-      if(confettiTimer) cancelAnimationFrame(confettiTimer);
-      animateConfetti();
-      setTimeout(()=> { confettiPieces = []; }, 1200);
+      if(raf) cancelAnimationFrame(raf);
+      animate();
+      setTimeout(()=> { pieces = []; }, isMobile ? 1500 : 1200);
     }
 
-    function animateConfetti(){
-      ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
-      confettiPieces.forEach(p=>{
+    function animate(){
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      pieces.forEach(p=>{
         p.x += p.vx;
         p.y += p.vy;
         p.rot += p.vr;
-        p.life -= 1;
+        p.life--;
 
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rot);
         ctx.fillStyle = p.c;
-        ctx.fillRect(-p.r, -p.r, p.r*2.2, p.r*1.4);
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
         ctx.restore();
       });
-
-      confettiPieces = confettiPieces.filter(p=> p.y < window.innerHeight + 40 && p.life > 0);
-      if(confettiPieces.length){
-        confettiTimer = requestAnimationFrame(animateConfetti);
+      pieces = pieces.filter(p=> p.y < innerHeight + 50 && p.life > 0);
+      if(pieces.length){
+        raf = requestAnimationFrame(animate);
       }else{
-        ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+        ctx.clearRect(0,0,innerWidth,innerHeight);
       }
     }
 
-    // --------- Modal ---------
+    // ---------- Modal ----------
     function openModal(s){
       titleEl.textContent = s.title;
       bodyEl.innerHTML = `
@@ -708,11 +801,16 @@
       document.body.style.overflow = "hidden";
       closeBtn.focus();
 
-      // effects
+      ariaLive.textContent = s.title;
+
+      // Stronger effects on mobile
       beep("quack");
-      if(s.effect.includes("confetti")) popConfetti();
-      if(s.effect.includes("shake")) shakePage();
-      if(s.effect.includes("sticker")) showSticker(s.sticker);
+      if(s.fx.includes("flash")) flash();
+      if(s.fx.includes("wave")) wave();
+      if(s.fx.includes("confetti")) popConfetti();
+      if(s.fx.includes("shake")) shakePage();
+      if(s.fx.includes("sticker")) showSticker(s.sticker);
+      if(isMobile) showSticker("🦆"); // extra punch for mobile
     }
 
     function closeModal(){
@@ -733,12 +831,12 @@
       }[s]));
     }
 
-    // --------- Render cards ---------
+    // ---------- Render cards ----------
     let order = [...Array(6)].map((_,i)=>i);
 
     function render(){
       grid.innerHTML = "";
-      order.forEach((idx, i) => {
+      order.forEach((_, i) => {
         const wrap = document.createElement("div");
         wrap.className = "flip " + palette[i % palette.length];
         wrap.setAttribute("data-flipped","false");
@@ -774,29 +872,28 @@
         wrap.appendChild(btn);
         grid.appendChild(wrap);
 
-        btn.addEventListener("click", () => flip(i, wrap));
+        btn.addEventListener("click", () => flip(wrap));
         btn.addEventListener("keydown", (e) => {
           if(e.key === "Enter" || e.key === " "){
             e.preventDefault();
-            flip(i, wrap);
+            flip(wrap);
           }
         });
       });
     }
 
-    function flip(i, wrap){
+    function flip(wrap){
       if(wrap.getAttribute("data-flipped")==="true") return;
       wrap.setAttribute("data-flipped","true");
 
-      // pick a surprise, slightly randomized
       const s = surprises[Math.floor(Math.random()*surprises.length)];
-      // delay popup slightly so flip feels real
-      setTimeout(()=> openModal(s), 240);
+      setTimeout(()=> openModal(s), 220);
     }
 
     resetBtn.addEventListener("click", () => {
       document.querySelectorAll(".flip").forEach(el => el.setAttribute("data-flipped","false"));
       beep("pop");
+      if(isMobile) flash();
     });
 
     shuffleBtn.addEventListener("click", () => {
@@ -804,6 +901,13 @@
       render();
       beep("pop");
       showSticker("🦆");
+      wave();
+    });
+
+    surpriseNow.addEventListener("click", (e) => {
+      e.preventDefault();
+      const s = surprises[Math.floor(Math.random()*surprises.length)];
+      openModal(s);
     });
 
     // Init
