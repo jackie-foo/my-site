@@ -1,394 +1,154 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Jackie Foo — Soft Launch</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Jackie Foo</title>
 
-  <!-- Clean + aesthetic display font (optional). Falls back gracefully. -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      /* Aesthetic, bold, good-vibes palette */
-      --bg:#07070b;
-      --ink:#f6f6ff;
-      --muted:rgba(246,246,255,.72);
+<style>
+:root{
+  --bg:#07070b;
+  --text:#f6f6ff;
+  --muted:rgba(246,246,255,.65);
 
-      --card:rgba(255,255,255,.06);
-      --border:rgba(255,255,255,.14);
-      --shadow:rgba(0,0,0,.55);
+  --accent:#7c5cff;
+  --accent2:#ff2bd6;
+}
 
-      --a:#00f5d4;   /* teal */
-      --b:#ff2bd6;   /* magenta */
-      --c:#ffd400;   /* lemon */
-      --d:#7c5cff;   /* violet */
-    }
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"Space Grotesk", sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  overflow:hidden;
+}
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      color:var(--ink);
-      background:var(--bg);
-      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      overflow-x:hidden;
-    }
+/* soft glow background */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-20%;
+  background:
+    radial-gradient(700px 500px at 20% 10%, rgba(255,43,214,.15), transparent 60%),
+    radial-gradient(800px 600px at 80% 20%, rgba(124,92,255,.15), transparent 60%);
+  z-index:-1;
+}
 
-    /* Soft-but-bold glow (still no gradients on big blocks) */
-    .glow{
-      position:fixed; inset:-20%;
-      pointer-events:none;
-      z-index:-2;
-      background:
-        radial-gradient(700px 520px at 18% 10%, rgba(255,43,214,.20), transparent 60%),
-        radial-gradient(820px 560px at 86% 16%, rgba(0,245,212,.18), transparent 62%),
-        radial-gradient(920px 680px at 50% 115%, rgba(124,92,255,.16), transparent 62%);
-      filter:saturate(1.2);
-    }
+.container{
+  max-width:720px;
+  width:100%;
+}
 
-    /* Minimal grain */
-    .grain{
-      position:fixed; inset:0;
-      pointer-events:none;
-      z-index:-1;
-      background:
-        radial-gradient(circle at 10px 10px, rgba(255,255,255,.08) 1px, transparent 1px) 0 0/24px 24px;
-      opacity:.10;
-      mask: radial-gradient(ellipse at 50% 18%, rgba(0,0,0,1), rgba(0,0,0,.35) 60%, transparent 75%);
-    }
+h1{
+  font-size:clamp(48px, 8vw, 90px);
+  margin:0;
+  line-height:.9;
+  letter-spacing:-.03em;
+}
 
-    .wrap{
-      min-height:100%;
-      display:flex;
-      justify-content:center;
-      padding:20px;
-      padding-bottom:34px;
-    }
+.highlight{
+  position:relative;
+  display:inline-block;
+}
 
-    .shell{
-      width:min(980px, 100%);
-      display:grid;
-      gap:16px;
-      align-content:start;
-    }
+.highlight::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:8px;
+  height:10px;
+  background:rgba(124,92,255,.25);
+  z-index:-1;
+}
 
-    .frame{
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-      box-shadow: 0 26px 90px var(--shadow);
-      border-radius:28px;
-      overflow:hidden;
-      position:relative;
-    }
+p{
+  margin:24px 0 0;
+  font-size:18px;
+  line-height:1.7;
+  color:var(--muted);
+  max-width:520px;
+}
 
-    /* Decorative corner dots */
-    .frame::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 28px 28px, rgba(0,245,212,.9) 0 3px, transparent 4px),
-        radial-gradient(circle at calc(100% - 28px) 28px, rgba(255,43,214,.9) 0 3px, transparent 4px),
-        radial-gradient(circle at 28px calc(100% - 28px), rgba(255,212,0,.95) 0 3px, transparent 4px),
-        radial-gradient(circle at calc(100% - 28px) calc(100% - 28px), rgba(124,92,255,.9) 0 3px, transparent 4px);
-      opacity:.9;
-    }
+.links{
+  margin-top:40px;
+  display:flex;
+  gap:28px;
+  flex-wrap:wrap;
+}
 
-    .inner{
-      padding:22px;
-      display:grid;
-      gap:18px;
-    }
+a{
+  text-decoration:none;
+  font-size:16px;
+  font-weight:600;
+  color:var(--text);
+  position:relative;
+  transition:.2s ease;
+}
 
-    /* Top row */
-    .top{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
+a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:100%;
+  height:2px;
+  background:var(--accent2);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:.25s ease;
+}
 
-    .pillRow{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
-    .pill{
-      padding:10px 12px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.22);
-      border-radius:999px;
-      font-size:13px;
-      color:var(--muted);
-      backdrop-filter: blur(10px);
-    }
-    .pill b{color:var(--ink)}
-    .pill .dot{
-      display:inline-block;
-      width:10px;height:10px;border-radius:999px;
-      margin-right:8px; vertical-align:middle;
-      background:var(--b);
-      box-shadow:0 0 22px rgba(255,43,214,.35);
-    }
+a:hover::after{
+  transform:scaleX(1);
+}
 
-    /* Hero typography */
-    .kicker{
-      margin:0;
-      font-size:14px;
-      color:rgba(246,246,255,.70);
-      letter-spacing:.18em;
-      text-transform:uppercase;
-    }
-
-    .headline{
-      margin:6px 0 0;
-      font-family:"Fraunces", ui-serif, Georgia, serif;
-      font-size: clamp(44px, 7vw, 78px);
-      line-height: .95;
-      letter-spacing: -.02em;
-    }
-
-    .headline .name{
-      display:inline-block;
-      position:relative;
-      padding:0 6px;
-    }
-    .headline .name::after{
-      content:"";
-      position:absolute;
-      left:0; right:0; bottom:8px;
-      height:10px;
-      background:rgba(255,212,0,.26);
-      z-index:-1;
-      transform:skewX(-10deg);
-    }
-
-    .desc{
-      margin:10px 0 0;
-      max-width:64ch;
-      font-size:16px;
-      line-height:1.75;
-      color:var(--muted);
-    }
-    .desc strong{color:var(--ink)}
-    .desc .wip{
-      display:inline-block;
-      padding:3px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.06);
-      color:rgba(246,246,255,.88);
-      margin-left:6px;
-      font-size:13px;
-      vertical-align:middle;
-      white-space:nowrap;
-    }
-
-    /* Content grid */
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:14px;
-    }
-    @media (max-width:900px){
-      .grid{grid-template-columns:1fr}
-    }
-
-    .card{
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.05);
-      border-radius:22px;
-      padding:16px;
-      backdrop-filter: blur(10px);
-    }
-
-    .card h2{
-      margin:0 0 8px 0;
-      font-size:14px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:rgba(246,246,255,.72);
-    }
-
-    .tags{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .tag{
-      font-size:13px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.20);
-      color:rgba(246,246,255,.78);
-    }
-    .tag:nth-child(1){border-color:rgba(0,245,212,.28)}
-    .tag:nth-child(2){border-color:rgba(255,43,214,.28)}
-    .tag:nth-child(3){border-color:rgba(255,212,0,.28)}
-    .tag:nth-child(4){border-color:rgba(124,92,255,.28)}
-
-    /* Links */
-    .links{
-      display:grid;
-      gap:10px;
-      margin-top:12px;
-    }
-
-    a.btn{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:14px 14px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.18);
-      color:var(--ink);
-      text-decoration:none;
-      font-size:15px;
-      font-weight:700;
-      letter-spacing:.2px;
-      backdrop-filter: blur(10px);
-      transition: transform .08s ease, border-color .12s ease, background .12s ease;
-    }
-    a.btn:hover{
-      border-color: rgba(255,255,255,.24);
-      background: rgba(255,255,255,.06);
-    }
-    a.btn:active{transform: translateY(1px);}
-
-    .left{
-      display:flex; align-items:center; gap:10px; min-width:0;
-    }
-
-    .chip{
-      width:12px;height:12px;border-radius:4px; flex:0 0 auto;
-      box-shadow:0 0 0 2px rgba(0,0,0,.25);
-    }
-    .chip.a{background:var(--a)}
-    .chip.b{background:var(--b)}
-    .chip.c{background:var(--c)}
-    .chip.d{background:var(--d)}
-
-    .label{
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .arrow{
-      color:rgba(246,246,255,.55);
-      font-size:16px;
-      flex:0 0 auto;
-    }
-
-    .note{
-      margin:0;
-      color:rgba(246,246,255,.62);
-      line-height:1.7;
-      font-size:14px;
-    }
-
-    footer{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      padding-top:4px;
-      color:rgba(246,246,255,.55);
-      font-size:13px;
-    }
-
-    .tiny{
-      display:inline-block;
-      padding:4px 10px;
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:999px;
-      background:rgba(255,255,255,.05);
-      color:rgba(246,246,255,.68);
-    }
-  </style>
+small{
+  display:block;
+  margin-top:60px;
+  font-size:14px;
+  color:rgba(246,246,255,.4);
+}
+</style>
 </head>
 
 <body>
-  <div class="glow" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
 
-  <div class="wrap">
-    <main class="shell" role="main">
-      <section class="frame">
-        <div class="inner">
-          <div class="top">
-            <div>
-              <p class="kicker">Soft launch</p>
-              <h1 class="headline"><span class="name">Jackie Foo</span></h1>
-              <p class="desc">
-                I’m building this site in public. It’s a clean base right now, and I’ll add projects, notes, and more personality soon.
-                <span class="wip">Still developing</span>
-              </p>
-            </div>
+<div class="container">
+  <h1>
+    <span class="highlight">Jackie Foo</span>
+  </h1>
 
-            <div class="pillRow" aria-label="status">
-              <div class="pill"><span class="dot"></span>Build <b>WIP</b></div>
-              <div class="pill">Mood <b>Bold + playful</b></div>
-            </div>
-          </div>
+  <p>
+    Soft launch. This site is still developing.
+    I’m building it in public and refining it as I go.
+  </p>
 
-          <div class="grid">
-            <div class="card">
-              <h2>Me in 10 seconds</h2>
-              <p class="note">
-                Data × design energy. I like human-centred tools, clean interfaces, and shipping fast then polishing.
-              </p>
-
-              <div class="tags" aria-label="tags">
-                <div class="tag">Data × Design</div>
-                <div class="tag">Human-centred</div>
-                <div class="tag">Ship fast</div>
-                <div class="tag">Polish later</div>
-              </div>
-            </div>
-
-            <div class="card">
-              <h2>Connect</h2>
-              <p class="note" style="margin-bottom:12px;">Pick a door.</p>
-
-              <nav class="links" aria-label="links">
-                <!-- Replace # and email -->
-                <a class="btn" href="#" target="_blank" rel="noopener">
-                  <span class="left"><span class="chip a"></span><span class="label">LinkedIn</span></span>
-                  <span class="arrow">↗</span>
-                </a>
-                <a class="btn" href="mailto:you@email.com">
-                  <span class="left"><span class="chip b"></span><span class="label">Email</span></span>
-                  <span class="arrow">↗</span>
-                </a>
-                <a class="btn" href="#" target="_blank" rel="noopener">
-                  <span class="left"><span class="chip c"></span><span class="label">GitHub</span></span>
-                  <span class="arrow">↗</span>
-                </a>
-                <a class="btn" href="#" target="_blank" rel="noopener">
-                  <span class="left"><span class="chip d"></span><span class="label">Resume / CV</span></span>
-                  <span class="arrow">↗</span>
-                </a>
-              </nav>
-            </div>
-          </div>
-
-          <footer>
-            <span class="tiny">Now building: portfolio + experiments</span>
-            <span>© <span id="year"></span> Jackie Foo</span>
-          </footer>
-        </div>
-      </section>
-    </main>
+  <div class="links">
+    <a href="#" target="_blank">LinkedIn</a>
+    <a href="#" target="_blank">GitHub</a>
+    <a href="mailto:you@email.com">Email</a>
+    <a href="#" target="_blank">Resume</a>
   </div>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <small>
+    © <span id="year"></span>
+  </small>
+</div>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
 </body>
 </html>
