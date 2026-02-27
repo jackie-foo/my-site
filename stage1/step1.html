@@ -119,12 +119,6 @@
       font-size:12px;
       line-height:1.45;
     }
-    .errText{
-      color: color-mix(in srgb, var(--bad) 75%, var(--text));
-      font-weight:1000;
-      font-size:12px;
-      display:none;
-    }
 
     /* ===== Loading Screen ===== */
     .loading{
@@ -216,7 +210,7 @@
       <div class="cardBody">
         <div class="row">
           <div class="subtitle" style="margin:0">
-            This step is locked. Click <span class="mono">Unlock</span> to enter your name + passcode.
+            This step is locked. Click <span class="mono">Unlock</span> to enter the passcode.
           </div>
           <button id="btnOpenPw" class="btnPrimary">Unlock</button>
         </div>
@@ -262,29 +256,21 @@
     </div>
   </div>
 
-  <!-- ===== Password Modal (ID + passcode) ===== -->
+  <!-- ===== Password Modal (NO rationale / NO tutorial link) ===== -->
   <div class="overlay" id="pwOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
       <div class="modalHead">
         <div>
-          <h3 id="pwTitle">Enter your name + passcode</h3>
-          <div class="kicker">Use your name as your ID for this room.</div>
+          <h3 id="pwTitle">Enter Passcode</h3>
+          <div class="kicker">This room is gated. Please enter the passcode to proceed.</div>
         </div>
         <button id="btnClosePw" class="btnGhost" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
-        <div class="row" style="align-items:flex-end">
-          <div style="display:flex;flex-direction:column;gap:6px;min-width:260px;flex:1">
-            <div class="kicker">Your name (ID)</div>
-            <input id="nameInput" type="text" placeholder="e.g., Jackie Foo" autocomplete="name" />
-          </div>
-          <div style="display:flex;flex-direction:column;gap:6px;min-width:260px;flex:1">
-            <div class="kicker">Passcode</div>
-            <input id="pwInput" type="password" placeholder="Passcode" autocomplete="one-time-code"/>
-          </div>
+        <div class="row">
+          <input id="pwInput" type="password" placeholder="Passcode" autocomplete="one-time-code"/>
           <button id="btnUnlock" class="btnPrimary">Unlock</button>
         </div>
-        <div class="errText" id="pwErr">Please enter your name and the correct passcode.</div>
         <div class="callout">
           You should have received a room link like <span class="mono">?room=demo</span> + a separate passcode.
         </div>
@@ -298,7 +284,7 @@
     </div>
   </div>
 
-  <!-- ===== Locked Tutorial Modal ===== -->
+  <!-- ===== Locked Tutorial Modal (no rationale, just directs to passcode) ===== -->
   <div class="overlay" id="lockedOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="lockedTitle">
       <div class="modalHead">
@@ -310,7 +296,7 @@
       </div>
       <div class="modalBody">
         <div class="callout">
-          Enter your name + passcode to access the tutorial and start Step 1.
+          Enter the passcode to access the tutorial and start Step 1.
         </div>
       </div>
       <div class="modalFoot">
@@ -322,7 +308,7 @@
     </div>
   </div>
 
-  <!-- ===== Tutorial Modal ===== -->
+  <!-- ===== Tutorial Modal (only accessible after unlock) ===== -->
   <div class="overlay" id="tutOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
       <div class="modalHead">
@@ -372,11 +358,17 @@
       throw new Error("Missing room");
     }
 
-    // ====== ID (Name) per room ======
-    const NAME_KEY = `stage1_name_${room}`;
-    const PID_KEY  = `stage1_participant_id_${room}`; // derived stable id from room+name
+    // participant id per browser
+    const PID_KEY = "stage1_participant_id";
+    let participantId = localStorage.getItem(PID_KEY);
+    if (!participantId) {
+      participantId = crypto.randomUUID();
+      localStorage.setItem(PID_KEY, participantId);
+    }
+
+    // auth flag per room
     const AUTH_KEY = `stage1_authed_${room}`;
-    const TUT_KEY  = `stage1_tut_seen_${room}`;
+    const TUT_KEY = `stage1_tut_seen_${room}`;
 
     // UI refs
     const $ = (q, el=document) => el.querySelector(q);
@@ -408,9 +400,7 @@
     const btnOpenPw = $("#btnOpenPw");
     const btnClosePw = $("#btnClosePw");
     const btnPwCancel = $("#btnPwCancel");
-    const nameInput = $("#nameInput");
     const pwInput = $("#pwInput");
-    const pwErr = $("#pwErr");
     const btnUnlock = $("#btnUnlock");
 
     // locked tutorial modal
@@ -425,6 +415,7 @@
     const btnNextStep = $("#btnNextStep");
 
     roomOut.textContent = room;
+    meOut.textContent = participantId.slice(0, 8);
 
     // preload chibi
     chibiImg.src = CHIBI3_SRC;
@@ -460,12 +451,6 @@
       document.body.style.overflow = "";
     }
 
-    function setPwError(on, msg){
-      if (!pwErr) return;
-      pwErr.style.display = on ? "block" : "none";
-      if (msg) pwErr.textContent = msg;
-    }
-
     // Close overlays on outside click
     [pwOverlay, lockedOverlay, tutOverlay].forEach(ov => {
       ov.addEventListener("mousedown", (e) => {
@@ -481,33 +466,6 @@
       if (pwOverlay.style.display === "flex") closeOverlay(pwOverlay);
     });
 
-    // ===== Helpers: stable ID from room+name =====
-    function normalizeName(name){
-      return (name || "")
-        .trim()
-        .replace(/\s+/g, " ")
-        .slice(0, 64);
-    }
-
-    async function sha256Hex(str){
-      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
-    }
-
-    function displayName(name){
-      const n = normalizeName(name);
-      if (!n) return "Unknown";
-      return (n.length > 18) ? (n.slice(0, 18) + "…") : n;
-    }
-
-    function getStoredName(){
-      return localStorage.getItem(NAME_KEY) || "";
-    }
-
-    function setHeaderIdentity(name){
-      meOut.textContent = displayName(name);
-    }
-
     const personaCards = [
       { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want examples." },
       { id:"optimizer", title:"Optimizer", text:"Give me actions. I iterate. I care about efficiency." },
@@ -522,9 +480,7 @@
     const state = {
       role: "student",
       persona_id: null,
-      persona_title: null,
-      name: "",
-      participantId: "" // stable hashed id
+      persona_title: null
     };
 
     function escapeHtml(str){
@@ -551,6 +507,7 @@
           [...personaGrid.children].forEach(x => x.classList.remove("selected"));
           el.classList.add("selected");
 
+          // light loading during update (optional, but makes it feel responsive)
           showLoading("Saving your card…", "Hang on a sec — Supabase can be a bit slow sometimes.");
           try{
             await saveParticipant({ persona_id: state.persona_id });
@@ -583,35 +540,20 @@
     }
 
     async function ensureParticipant(){
-      const payload = {
-        id: state.participantId,
+      const { error } = await supabase.from("workshop_participants").upsert({
+        id: participantId,
         session_id: room,
         role: state.role,
-        persona_id: state.persona_id,
-        display_name: state.name  // optional column (safe if you have it)
-      };
-
-      // If your table DOESN'T have display_name, Supabase will error.
-      // We'll retry without it.
-      let res = await supabase.from("workshop_participants").upsert(payload, { onConflict: "id" });
-      if (res.error && /display_name/i.test(res.error.message || "")){
-        const { error } = await supabase.from("workshop_participants").upsert({
-          id: state.participantId,
-          session_id: room,
-          role: state.role,
-          persona_id: state.persona_id
-        }, { onConflict: "id" });
-        if (error) throw error;
-        return;
-      }
-      if (res.error) throw res.error;
+        persona_id: state.persona_id
+      }, { onConflict: "id" });
+      if (error) throw error;
     }
 
     async function loadParticipant(){
       const { data, error } = await supabase
         .from("workshop_participants")
         .select("*")
-        .eq("id", state.participantId)
+        .eq("id", participantId)
         .maybeSingle();
       if (error) throw error;
 
@@ -626,7 +568,7 @@
     }
 
     async function saveParticipant(patch){
-      const { error } = await supabase.from("workshop_participants").update(patch).eq("id", state.participantId);
+      const { error } = await supabase.from("workshop_participants").update(patch).eq("id", participantId);
       if (error) throw error;
     }
 
@@ -751,28 +693,17 @@
     $("#btnLockedUnlock").addEventListener("click", () => {
       closeOverlay(lockedOverlay);
       openOverlay(pwOverlay);
-      setTimeout(() => nameInput?.focus(), 0);
+      setTimeout(() => pwInput?.focus(), 0);
     });
 
     // ===== Password modal behaviour =====
     btnOpenPw.addEventListener("click", () => {
       openOverlay(pwOverlay);
-      setPwError(false);
-      // prefill name if already known
-      const n = getStoredName();
-      if (n) nameInput.value = n;
-      setTimeout(() => (n ? pwInput?.focus() : nameInput?.focus()), 0);
+      setTimeout(() => pwInput?.focus(), 0);
     });
     btnClosePw.addEventListener("click", () => closeOverlay(pwOverlay));
     btnPwCancel.addEventListener("click", () => closeOverlay(pwOverlay));
 
-    // enter key: if on name -> jump to pw, if on pw -> unlock
-    nameInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter"){
-        e.preventDefault();
-        pwInput.focus();
-      }
-    });
     pwInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") btnUnlock.click();
     });
@@ -799,37 +730,14 @@
       }
     }
 
-    async function setIdentityFromName(name){
-      state.name = normalizeName(name);
-      localStorage.setItem(NAME_KEY, state.name);
-
-      // stable hashed id (room + name) to avoid collisions
-      const hex = await sha256Hex(`${room}::${state.name.toLowerCase()}`);
-      state.participantId = `p_${hex.slice(0, 24)}`; // short + consistent
-      localStorage.setItem(PID_KEY, state.participantId);
-
-      setHeaderIdentity(state.name);
-    }
-
     btnUnlock.addEventListener("click", async () => {
-      setPwError(false);
-
-      const enteredName = normalizeName(nameInput.value);
       const pw = (pwInput.value || "").trim();
-
-      if (!enteredName){
-        setPwError(true, "Please enter your name (ID).");
-        nameInput.focus();
-        return;
-      }
       if (pw !== REQUIRED_PASSCODE){
-        setPwError(true, "Wrong passcode.");
+        showToast("Wrong passcode");
         pwInput.focus();
         pwInput.select?.();
         return;
       }
-
-      await setIdentityFromName(enteredName);
 
       localStorage.setItem(AUTH_KEY, "1");
       closeOverlay(pwOverlay);
@@ -840,37 +748,15 @@
     });
 
     // ===== Initial state =====
-    (async () => {
-      const storedName = getStoredName();
-      if (storedName) setHeaderIdentity(storedName);
-      else meOut.textContent = "—";
-
-      // if already authed, we still need identity; if missing, force login
-      if (localStorage.getItem(AUTH_KEY) === "1"){
-        const pid = localStorage.getItem(PID_KEY) || "";
-        const nm  = getStoredName();
-        if (!pid || !nm){
-          // missing identity -> require re-unlock
-          localStorage.removeItem(AUTH_KEY);
-          openOverlay(pwOverlay);
-          setTimeout(() => nameInput?.focus(), 0);
-          return;
-        }
-        state.name = nm;
-        state.participantId = pid;
-        setHeaderIdentity(state.name);
-
-        // bootstrap quietly
-        postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
-          .then(() => localStorage.setItem(TUT_KEY, "1"));
-      } else {
-        // locked: open password modal immediately
-        const n = getStoredName();
-        if (n) nameInput.value = n;
-        openOverlay(pwOverlay);
-        setTimeout(() => (n ? pwInput?.focus() : nameInput?.focus()), 0);
-      }
-    })();
+    if (localStorage.getItem(AUTH_KEY) === "1"){
+      // already authed, bootstrap quietly
+      postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
+        .then(() => localStorage.setItem(TUT_KEY, "1"));
+    } else {
+      // locked: open password modal immediately
+      openOverlay(pwOverlay);
+      setTimeout(() => pwInput?.focus(), 0);
+    }
 
     btnNext.addEventListener("click", () => {
       if (!state.persona_id) return;
@@ -882,7 +768,6 @@
     btnReset.addEventListener("click", () => {
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;
-      localStorage.removeItem(NAME_KEY);
       localStorage.removeItem(PID_KEY);
       localStorage.removeItem(AUTH_KEY);
       localStorage.removeItem(TUT_KEY);
