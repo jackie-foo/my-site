@@ -7,28 +7,18 @@
 
   <style>
     :root{
-      /* Pastel + soft contrast */
-      --bg0:#fff6fb;
-      --bg1:#f2f7ff;
-      --ink:#1e1e2a;
-      --muted:#5a5a74;
+      /* Bold + strong (no gradients) */
+      --bg:#0b0b12;
+      --panel:#10101a;
+      --ink:#f5f7ff;
+      --muted:#b7b9d6;
+      --border:rgba(245,247,255,.16);
+      --shadow:rgba(0,0,0,.55);
 
-      --card:rgba(255,255,255,.72);
-      --border:rgba(30,30,42,.12);
-      --shadow:rgba(30,30,42,.12);
-
-      --mint:#a7f3d0;
-      --sky:#bfe3ff;
-      --lilac:#d8c7ff;
-      --peach:#ffd2c2;
-      --lemon:#fff2a6;
-
-      --accent:#6c63ff;     /* lilac-indigo */
-      --accent2:#ff7ab6;    /* pink */
-      --ok:#10b981;         /* mint green */
-      --danger:#ff5b6e;
-
-      --radius:20px;
+      --a:#00f5d4;   /* teal */
+      --b:#ff2bd6;   /* magenta */
+      --c:#ffd400;   /* yellow */
+      --d:#7c5cff;   /* violet */
     }
 
     *{box-sizing:border-box}
@@ -36,24 +26,35 @@
     body{
       margin:0;
       color:var(--ink);
+      background:var(--bg);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background:
-        radial-gradient(900px 520px at 12% 10%, rgba(216,199,255,.55), transparent 62%),
-        radial-gradient(780px 520px at 90% 12%, rgba(191,227,255,.65), transparent 58%),
-        radial-gradient(920px 600px at 55% 110%, rgba(255,210,194,.55), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
       overflow-x:hidden;
     }
 
-    /* subtle noise-ish dots */
-    body::before{
-      content:"";
+    /* Sharp, high-contrast graphic background (no gradients) */
+    .bg{
       position:fixed; inset:0;
       pointer-events:none;
+      z-index:-1;
+    }
+    .bg::before, .bg::after{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      opacity:.16;
+    }
+    .bg::before{
       background:
-        radial-gradient(circle at 10px 10px, rgba(30,30,42,.08) 1px, transparent 1px) 0 0/26px 26px;
-      opacity:.35;
-      mask: radial-gradient(ellipse at 50% 18%, rgba(0,0,0,.95), rgba(0,0,0,.15) 58%, transparent 72%);
+        linear-gradient(90deg, transparent 0 38%, rgba(0,245,212,.9) 38% 42%, transparent 42% 100%),
+        linear-gradient(0deg, transparent 0 56%, rgba(255,43,214,.9) 56% 60%, transparent 60% 100%),
+        linear-gradient(135deg, transparent 0 46%, rgba(255,212,0,.95) 46% 50%, transparent 50% 100%);
+      transform: rotate(-10deg);
+    }
+    .bg::after{
+      background:
+        repeating-linear-gradient(90deg, rgba(245,247,255,.25) 0 1px, transparent 1px 22px),
+        repeating-linear-gradient(0deg, rgba(245,247,255,.20) 0 1px, transparent 1px 22px);
+      opacity:.08;
     }
 
     .wrap{
@@ -63,844 +64,246 @@
       padding:18px;
       padding-bottom:28px;
     }
-    .shell{
-      width:min(980px,100%);
-      display:grid;
-      gap:14px;
-      align-content:start;
+
+    .card{
+      width:min(900px, 100%);
+      border:2px solid var(--border);
+      background:rgba(16,16,26,.86);
+      box-shadow: 0 18px 55px var(--shadow);
+      padding:18px;
+      position:relative;
+      backdrop-filter: blur(10px);
+    }
+    .card::after{
+      content:"";
+      position:absolute; inset:-2px;
+      border:2px dashed rgba(124,92,255,.35);
+      pointer-events:none;
+      mix-blend-mode:screen;
     }
 
-    .topbar{
+    header{
       display:flex;
-      gap:12px;
-      align-items:flex-start;
-      justify-content:space-between;
+      gap:14px;
       flex-wrap:wrap;
-      padding:16px;
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      background:var(--card);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 18px 45px var(--shadow);
+      justify-content:space-between;
+      align-items:flex-start;
+      margin-bottom:14px;
     }
+
     h1{
       margin:0;
-      font-size:18px;
+      font-size:22px;
       letter-spacing:.2px;
-      line-height:1.2;
+      line-height:1.1;
+      text-transform:uppercase;
     }
-    .sub{
-      margin:8px 0 0;
-      font-size:13px;
+    .tagline{
+      margin:10px 0 0;
       color:var(--muted);
+      font-size:14px;
       line-height:1.6;
-      max-width:64ch;
+      max-width:60ch;
     }
-    .badges{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
+
+    .badges{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
     .badge{
       font-size:12px;
       padding:8px 10px;
-      border:1px solid var(--border);
-      border-radius:999px;
-      background:rgba(255,255,255,.65);
+      border:2px solid var(--border);
+      background:#0c0c14;
       white-space:nowrap;
     }
-    .badge b{color:var(--accent)}
+    .badge b{color:var(--a)}
     .dot{
       display:inline-block;
-      width:10px; height:10px; border-radius:999px;
-      margin-right:8px; vertical-align:middle;
-      background:linear-gradient(180deg, var(--accent2), var(--accent));
-      box-shadow:0 6px 18px rgba(108,99,255,.22);
+      width:10px;height:10px;
+      background:var(--b);
+      margin-right:8px;
+      vertical-align:middle;
+      box-shadow:0 0 0 2px rgba(0,0,0,.35);
     }
 
-    .card{
-      padding:16px;
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      background:var(--card);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 18px 45px var(--shadow);
-    }
-
-    .sectionTitle{
-      margin:0 0 10px 0;
-      font-size:12px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:rgba(30,30,42,.65);
-    }
-    .mini{
-      margin:0;
-      font-size:13px;
-      line-height:1.65;
-      color:var(--muted);
-    }
-
-    .introBox{
+    .hero{
       display:grid;
       gap:12px;
       padding:14px;
-      border:1px solid var(--border);
-      border-radius:16px;
-      background:rgba(255,255,255,.58);
+      border:2px solid rgba(245,247,255,.12);
+      background:#0c0c14;
+      box-shadow:0 10px 0 rgba(0,0,0,.25);
     }
-    .bullets{
+
+    .big{
       margin:0;
-      padding-left:18px;
+      font-size:16px;
+      line-height:1.55;
+      letter-spacing:.1px;
+    }
+    .big strong{color:var(--c)}
+    .mini{
+      margin:0;
       color:var(--muted);
       font-size:13px;
       line-height:1.7;
     }
 
-    .row{
-      display:flex;
+    .links{
+      margin-top:6px;
+      display:grid;
       gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+    @media (max-width:640px){
+      .links{grid-template-columns:1fr}
+      h1{font-size:20px}
     }
 
-    button{
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.78);
-      color:var(--ink);
-      padding:11px 12px;
-      border-radius:14px;
-      font-size:13px;
-      cursor:pointer;
-      touch-action:manipulation;
-      box-shadow: 0 10px 22px rgba(30,30,42,.10);
-      transition: transform .08s ease, box-shadow .12s ease;
-    }
-    button:active{transform:translateY(1px); box-shadow: 0 8px 18px rgba(30,30,42,.10)}
-    .primary{
-      border-color: rgba(108,99,255,.22);
-      background: linear-gradient(180deg, rgba(216,199,255,.55), rgba(191,227,255,.55));
-    }
-    .primary span{color:var(--accent)}
-    .ghost{
-      border-style:dashed;
-      background:rgba(255,255,255,.55);
-      color:rgba(30,30,42,.70);
-    }
-
-    /* ========= Timer Drawer / Sheet ========= */
-    .drawerOverlay{
-      position:fixed; inset:0;
-      background:rgba(20,20,34,.22);
-      backdrop-filter: blur(3px);
-      opacity:0;
-      pointer-events:none;
-      transition: opacity .18s ease;
-      z-index:40;
-    }
-    .drawerOverlay.open{opacity:1; pointer-events:auto;}
-
-    /* Desktop: left drawer */
-    .drawer{
-      position:fixed;
-      top:0; left:0;
-      height:100%;
-      width:min(420px, 92vw);
-      background:rgba(255,255,255,.78);
-      border-right:1px solid var(--border);
-      box-shadow: 30px 0 80px rgba(30,30,42,.20);
-      backdrop-filter: blur(12px);
-      transform: translateX(-105%);
-      transition: transform .22s cubic-bezier(.2,.85,.2,1);
-      z-index:50;
-      padding:14px;
+    a.btn{
       display:flex;
-      flex-direction:column;
+      align-items:center;
+      justify-content:space-between;
       gap:12px;
+      padding:14px 12px;
+      border:2px solid var(--border);
+      background:#0b0b12;
+      color:var(--ink);
+      text-decoration:none;
+      font-weight:700;
+      letter-spacing:.2px;
+      box-shadow:0 10px 0 rgba(0,0,0,.25);
+      touch-action:manipulation;
+      transition: transform .08s ease, box-shadow .08s ease, border-color .12s ease;
     }
-    .drawer.open{transform: translateX(0);}
-
-    /* Mobile: bottom sheet */
-    @media (max-width: 720px){
-      .drawer{
-        top:auto; bottom:0; left:0;
-        width:100%;
-        height:min(78vh, 720px);
-        border-right:none;
-        border-top:1px solid var(--border);
-        border-radius: 22px 22px 0 0;
-        transform: translateY(105%);
-      }
-      .drawer.open{transform: translateY(0);}
-    }
-
-    .drawerTop{
+    a.btn:active{transform:translateY(2px); box-shadow:0 8px 0 rgba(0,0,0,.25)}
+    a.btn:hover{border-color:rgba(245,247,255,.28)}
+    .left{
       display:flex;
       align-items:center;
-      justify-content:space-between;
       gap:10px;
+      min-width:0;
     }
-    .handle{
-      display:none;
-      width:44px; height:5px;
-      border-radius:999px;
-      background:rgba(30,30,42,.14);
-      margin:0 auto 6px auto;
+    .icon{
+      width:14px;height:14px;
+      background:var(--a);
+      box-shadow:0 0 0 2px rgba(0,0,0,.35);
+      flex:0 0 auto;
     }
-    @media (max-width:720px){
-      .handle{display:block;}
-    }
-
-    .drawerTitle{
-      margin:0;
+    .label{
       font-size:13px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:rgba(30,30,42,.65);
-    }
-
-    .duckWrap{
-      border:1px solid var(--border);
-      border-radius:16px;
-      background:linear-gradient(180deg, rgba(191,227,255,.50), rgba(255,242,166,.40));
-      padding:12px;
-      overflow:hidden;
-      position:relative;
-    }
-    .duckLane{
-      position:relative;
-      height:48px;
-      border-radius:12px;
-      background:rgba(255,255,255,.55);
-      border:1px dashed rgba(30,30,42,.18);
-      overflow:hidden;
-    }
-    .duck{
-      position:absolute;
-      top:50%;
-      transform: translateY(-50%);
-      left:12px;
-      font-size:26px;
-      transition: left .25s cubic-bezier(.2,.85,.2,1);
-      user-select:none;
-    }
-    .duckBubble{
-      margin-top:10px;
-      font-size:13px;
-      color:rgba(30,30,42,.75);
-      line-height:1.5;
-      padding:10px 12px;
-      border-radius:14px;
-      background:rgba(255,255,255,.65);
-      border:1px solid rgba(30,30,42,.10);
-    }
-    .duckBubble b{color:var(--accent)}
-    .progressRow{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:10px;
-      font-size:12px;
-      color:rgba(30,30,42,.65);
-    }
-
-    .tasks{display:grid; gap:10px;}
-    .task{
-      display:flex; gap:10px;
-      align-items:flex-start;
-      padding:12px;
-      border:1px solid var(--border);
-      border-radius:16px;
-      background:rgba(255,255,255,.60);
-    }
-    .task input{
-      margin-top:3px;
-      width:18px; height:18px;
-      accent-color: var(--accent);
-    }
-    .task label{cursor:pointer; font-size:13px; line-height:1.55;}
-    .task small{display:block; margin-top:6px; color:var(--muted); line-height:1.55;}
-    .tag{
-      display:inline-block;
-      margin-left:8px;
-      padding:2px 10px;
-      border-radius:999px;
-      border:1px solid rgba(108,99,255,.22);
-      background:rgba(216,199,255,.35);
-      color:rgba(30,30,42,.75);
-      font-size:12px;
-      vertical-align:middle;
-    }
-
-    .controls{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width:520px){
-      .controls{grid-template-columns:1fr}
-    }
-    .field{
-      border:1px solid var(--border);
-      border-radius:16px;
-      background:rgba(255,255,255,.60);
-      padding:12px;
-    }
-    .field label{
-      display:block;
-      font-size:12px;
-      color:rgba(30,30,42,.62);
-      margin-bottom:8px;
-    }
-    select, input[type="number"]{
-      width:100%;
-      border:1px solid rgba(30,30,42,.14);
-      background:rgba(255,255,255,.85);
-      color:var(--ink);
-      padding:11px 10px;
-      border-radius:14px;
-      outline:none;
-      font-size:13px;
-    }
-    select:focus, input[type="number"]:focus{
-      border-color: rgba(108,99,255,.45);
-      box-shadow: 0 0 0 3px rgba(108,99,255,.14);
-    }
-
-    .timeBox{
-      border:1px solid rgba(108,99,255,.25);
-      background:linear-gradient(180deg, rgba(216,199,255,.35), rgba(191,227,255,.30));
-      border-radius:18px;
-      padding:14px;
-      text-align:center;
-      box-shadow: 0 14px 34px rgba(30,30,42,.12);
-    }
-    .time{
-      font-variant-numeric: tabular-nums;
-      font-size:34px;
-      letter-spacing:.4px;
-      color:rgba(30,30,42,.88);
       line-height:1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
-    .status{
-      margin-top:10px;
-      color:rgba(30,30,42,.70);
-      font-size:13px;
-      line-height:1.6;
-    }
-
-    .btnRow{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width:560px){
-      .btnRow{grid-template-columns:1fr}
-    }
-    .dangerBtn{
-      border-color: rgba(255,91,110,.35);
-      background: linear-gradient(180deg, rgba(255,210,194,.60), rgba(255,255,255,.75));
-      color:rgba(30,30,42,.85);
+    .arrow{
+      color:var(--muted);
+      font-size:14px;
+      flex:0 0 auto;
     }
 
     .footer{
+      margin-top:14px;
       display:flex;
       justify-content:space-between;
-      gap:12px;
+      gap:10px;
       flex-wrap:wrap;
-      color:rgba(30,30,42,.62);
+      color:var(--muted);
       font-size:12px;
-      padding-top:2px;
+      line-height:1.6;
+      border-top:2px solid rgba(245,247,255,.10);
+      padding-top:12px;
     }
-    a{color:rgba(108,99,255,.95); text-decoration:none}
-    a:hover{text-decoration:underline}
-    .kbd{
-      display:inline-block;
-      padding:2px 9px;
-      border-radius:12px;
-      border:1px solid rgba(30,30,42,.12);
-      background:rgba(255,255,255,.75);
-      color:rgba(30,30,42,.78);
+
+    /* Little personality “stamps” */
+    .stamps{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+    .stamp{
       font-size:12px;
+      padding:6px 10px;
+      border:2px solid rgba(245,247,255,.14);
+      background:#0b0b12;
     }
+    .stamp:nth-child(1){border-color:rgba(0,245,212,.35)}
+    .stamp:nth-child(2){border-color:rgba(255,43,214,.35)}
+    .stamp:nth-child(3){border-color:rgba(255,212,0,.35)}
+    .stamp:nth-child(4){border-color:rgba(124,92,255,.35)}
   </style>
 </head>
 
 <body>
+  <div class="bg" aria-hidden="true"></div>
+
   <div class="wrap">
-    <main class="shell" role="main">
-      <header class="topbar">
+    <main class="card" role="main">
+      <header>
         <div>
           <h1>Jackie Foo</h1>
-          <p class="sub">
-            Soft launch. This site is still developing. I’m putting a clean base online first, then adding the fun bits as I go.
-          </p>
+          <p class="tagline">Soft launch. This site is still developing. I’m building it in public and tightening it up as I go.</p>
         </div>
         <div class="badges" aria-label="status badges">
           <div class="badge"><span class="dot"></span>Build: <b>WIP</b></div>
-          <div class="badge">Theme: <b>Pastel duck</b></div>
+          <div class="badge">Vibe: <b>Bold</b></div>
         </div>
       </header>
 
-      <section class="card" aria-label="intro">
-        <p class="sectionTitle">Quick intro</p>
-        <div class="introBox">
-          <p class="mini" style="margin:0;">
-            Hi, I’m Jackie. I’m building this as my personal corner for projects, notes, and experiments.
-          </p>
-          <ul class="bullets">
-            <li>Data + design energy, practical and curious</li>
-            <li>Interested in human-centred tools and feedback systems</li>
-            <li>Currently: shipping in public, polishing later</li>
-          </ul>
+      <section class="hero" aria-label="intro">
+        <p class="big">
+          Hi, I’m <strong>Jackie</strong>. I like building things that feel clean, useful, and slightly fun.
+        </p>
+        <p class="mini">
+          If you’re here early: welcome. If you want to connect, use the buttons below.
+        </p>
 
-          <div class="row">
-            <button class="primary" id="openTimer" type="button">Open <span>Duck Study Timer</span></button>
-            <button class="ghost" id="openTimer2" type="button">I’m here to focus</button>
-          </div>
+        <div class="stamps" aria-label="personality tags">
+          <div class="stamp">Data × Design</div>
+          <div class="stamp">Human-centred</div>
+          <div class="stamp">Ship fast</div>
+          <div class="stamp">Polish later</div>
         </div>
 
-        <p class="mini" style="margin-top:12px;">
-          If you’re visiting during the soft launch, the timer is a little gift. Use it for one tiny session and call it a win.
-        </p>
+        <nav class="links" aria-label="contact links">
+          <!-- Replace the # with your real links -->
+          <a class="btn" href="#" target="_blank" rel="noopener">
+            <span class="left"><span class="icon" style="background:var(--a)"></span><span class="label">LinkedIn</span></span>
+            <span class="arrow">→</span>
+          </a>
+
+          <a class="btn" href="mailto:you@email.com">
+            <span class="left"><span class="icon" style="background:var(--b)"></span><span class="label">Email me</span></span>
+            <span class="arrow">→</span>
+          </a>
+
+          <a class="btn" href="#" target="_blank" rel="noopener">
+            <span class="left"><span class="icon" style="background:var(--c)"></span><span class="label">GitHub</span></span>
+            <span class="arrow">→</span>
+          </a>
+
+          <a class="btn" href="#" target="_blank" rel="noopener">
+            <span class="left"><span class="icon" style="background:var(--d)"></span><span class="label">Resume / CV</span></span>
+            <span class="arrow">→</span>
+          </a>
+        </nav>
+
+        <div class="footer">
+          <div>Now building: portfolio, projects, and a few playful experiments.</div>
+          <div>© <span id="year"></span> Jackie Foo</div>
+        </div>
       </section>
     </main>
   </div>
 
-  <!-- Overlay + Drawer -->
-  <div class="drawerOverlay" id="overlay" aria-hidden="true"></div>
-
-  <aside class="drawer" id="drawer" aria-label="Duck Study Timer">
-    <div class="handle" aria-hidden="true"></div>
-
-    <div class="drawerTop">
-      <div>
-        <p class="drawerTitle" style="margin:0;">Duck Study Timer</p>
-        <p class="mini" style="margin:6px 0 0;">Pick missions, set time, press start. Your duck will waddle with progress.</p>
-      </div>
-      <button class="ghost" id="closeTimer" type="button" aria-label="Close timer">Close</button>
-    </div>
-
-    <!-- Duck interaction -->
-    <section class="duckWrap" aria-label="duck progress">
-      <div class="duckLane" aria-hidden="true">
-        <div class="duck" id="duck">🦆</div>
-      </div>
-      <div class="duckBubble" id="duckBubble">
-        🫧 Quack. Pick a mission and press <b>START</b>.
-      </div>
-      <div class="progressRow">
-        <span id="phaseLabel">Focus</span>
-        <span id="progressLabel">0%</span>
-      </div>
-    </section>
-
-    <!-- Missions -->
-    <section class="tasks" id="tasks" aria-label="missions">
-      <div class="task">
-        <input id="t1" type="checkbox" />
-        <label for="t1">Read notes + highlight key points <span class="tag">10–25m</span>
-          <small>Understand first, then speed up.</small>
-        </label>
-      </div>
-      <div class="task">
-        <input id="t2" type="checkbox" />
-        <label for="t2">Do 10 practice questions <span class="tag">15–30m</span>
-          <small>One set, no multitasking.</small>
-        </label>
-      </div>
-      <div class="task">
-        <input id="t3" type="checkbox" />
-        <label for="t3">Summarise 1 topic in 5 bullets <span class="tag">10–20m</span>
-          <small>Make your own version.</small>
-        </label>
-      </div>
-      <div class="task">
-        <input id="t4" type="checkbox" />
-        <label for="t4">Fix 1 stuck problem from last time <span class="tag">15–40m</span>
-          <small>Close loops.</small>
-        </label>
-      </div>
-    </section>
-
-    <!-- Controls -->
-    <section class="controls" aria-label="timer setup">
-      <div class="field">
-        <label for="mode">Timer mode</label>
-        <select id="mode">
-          <option value="focus" selected>Focus (single session)</option>
-          <option value="pomodoro">Pomodoro (focus + break)</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="minutes">Focus minutes</label>
-        <input id="minutes" type="number" min="1" max="180" value="25" inputmode="numeric" />
-      </div>
-
-      <div class="field" id="breakWrap" style="display:none;">
-        <label for="breakMinutes">Break minutes</label>
-        <input id="breakMinutes" type="number" min="1" max="60" value="5" inputmode="numeric" />
-      </div>
-
-      <div class="field">
-        <label>Quick set</label>
-        <div class="row" style="margin:0;">
-          <button class="ghost" type="button" data-set="10">10m</button>
-          <button class="ghost" type="button" data-set="25">25m</button>
-          <button class="ghost" type="button" data-set="45">45m</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Timer -->
-    <section class="timeBox" role="status" aria-live="polite">
-      <div class="time" id="time">25:00</div>
-      <div class="status" id="status">Ready. Pick missions. Press START.</div>
-      <div class="status" style="margin-top:8px;">Selected: <span id="picked">none yet</span></div>
-    </section>
-
-    <section class="btnRow" aria-label="timer buttons">
-      <button class="primary" id="start" type="button">START</button>
-      <button id="pause" type="button">PAUSE</button>
-      <button class="dangerBtn" id="reset" type="button">RESET</button>
-    </section>
-
-    <div class="footer">
-      <div>Shortcuts: <span class="kbd">S</span> start/pause, <span class="kbd">R</span> reset</div>
-      <div><a href="#" id="clear">Clear saved</a></div>
-    </div>
-  </aside>
-
   <script>
-    // ===== Helpers =====
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => Array.from(document.querySelectorAll(s));
-
-    const els = {
-      openTimer: $("#openTimer"),
-      openTimer2: $("#openTimer2"),
-      closeTimer: $("#closeTimer"),
-      overlay: $("#overlay"),
-      drawer: $("#drawer"),
-
-      mode: $("#mode"),
-      minutes: $("#minutes"),
-      breakWrap: $("#breakWrap"),
-      breakMinutes: $("#breakMinutes"),
-
-      time: $("#time"),
-      status: $("#status"),
-      start: $("#start"),
-      pause: $("#pause"),
-      reset: $("#reset"),
-
-      duck: $("#duck"),
-      duckBubble: $("#duckBubble"),
-      phaseLabel: $("#phaseLabel"),
-      progressLabel: $("#progressLabel"),
-
-      picked: $("#picked"),
-      clear: $("#clear"),
-      taskInputs: $$("#tasks input[type=checkbox]"),
-      quickBtns: $$("button[data-set]")
-    };
-
-    const KEY_TASKS = "jf_duck_tasks_v1";
-    const KEY_TIMER = "jf_duck_timer_v1";
-
-    // ===== Drawer open/close (desktop left / mobile bottom) =====
-    function openDrawer(){
-      els.drawer.classList.add("open");
-      els.overlay.classList.add("open");
-      els.overlay.setAttribute("aria-hidden", "false");
-      // Prevent background scroll
-      document.body.style.overflow = "hidden";
-      // Focus on timer for accessibility
-      els.start.focus({preventScroll:true});
-    }
-    function closeDrawer(){
-      els.drawer.classList.remove("open");
-      els.overlay.classList.remove("open");
-      els.overlay.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-    }
-
-    els.openTimer.addEventListener("click", openDrawer);
-    els.openTimer2.addEventListener("click", openDrawer);
-    els.closeTimer.addEventListener("click", closeDrawer);
-    els.overlay.addEventListener("click", closeDrawer);
-    window.addEventListener("keydown", (e) => {
-      if(e.key === "Escape" && els.drawer.classList.contains("open")) closeDrawer();
-    });
-
-    // ===== Tasks persistence =====
-    function loadTasks(){
-      try{
-        const raw = localStorage.getItem(KEY_TASKS);
-        if(!raw) return;
-        const state = JSON.parse(raw);
-        els.taskInputs.forEach(inp => inp.checked = !!state[inp.id]);
-      }catch(e){}
-    }
-    function saveTasks(){
-      const state = {};
-      els.taskInputs.forEach(inp => state[inp.id] = inp.checked);
-      localStorage.setItem(KEY_TASKS, JSON.stringify(state));
-      renderPicked();
-      updateDuckBubble("pick");
-    }
-    function clearTasks(){
-      localStorage.removeItem(KEY_TASKS);
-      els.taskInputs.forEach(inp => inp.checked = false);
-      renderPicked();
-      updateDuckBubble("clear");
-    }
-    function renderPicked(){
-      const picked = els.taskInputs
-        .filter(i => i.checked)
-        .map(i => (document.querySelector(`label[for="${i.id}"]`)?.childNodes?.[0]?.textContent || "").trim())
-        .filter(Boolean);
-      els.picked.textContent = picked.length ? picked.join(" + ") : "none yet";
-      return picked.length;
-    }
-
-    // ===== Timer =====
-    let timer = null;
-    let phase = "focus";     // "focus" | "break"
-    let running = false;
-    let remainingSec = 25*60;
-    let totalPhaseSec = 25*60;
-
-    function fmt(sec){
-      sec = Math.max(0, Math.floor(sec));
-      const m = String(Math.floor(sec/60)).padStart(2,"0");
-      const s = String(sec%60).padStart(2,"0");
-      return `${m}:${s}`;
-    }
-    function isPomodoro(){ return els.mode.value === "pomodoro"; }
-    function focusSec(){ return Math.max(1, Number(els.minutes.value||25)) * 60; }
-    function breakSec(){ return Math.max(1, Number(els.breakMinutes.value||5)) * 60; }
-
-    function setStatus(t){ els.status.textContent = t; }
-
-    function applyModeUI(){
-      els.breakWrap.style.display = isPomodoro() ? "" : "none";
-      hardReset(true);
-    }
-
-    function progressPct(){
-      const done = Math.max(0, totalPhaseSec - remainingSec);
-      const pct = totalPhaseSec ? Math.min(100, Math.max(0, (done/totalPhaseSec)*100)) : 0;
-      return pct;
-    }
-
-    function setDuckByProgress(){
-      const pct = progressPct();
-      els.progressLabel.textContent = `${Math.round(pct)}%`;
-
-      els.phaseLabel.textContent = (phase === "focus") ? "Focus" : "Break";
-
-      // Duck lane width minus padding (keep simple)
-      const lane = els.duck.parentElement;
-      const laneWidth = lane.clientWidth;
-      const pad = 12; // left padding
-      const duckW = 28; // approx
-      const maxLeft = Math.max(pad, laneWidth - pad - duckW);
-      const left = pad + (maxLeft - pad) * (pct / 100);
-      els.duck.style.left = `${left}px`;
-
-      // A tiny "waddle" effect while running
-      if(running){
-        els.duck.style.transform = "translateY(-50%) rotate(-3deg)";
-        setTimeout(() => { els.duck.style.transform = "translateY(-50%) rotate(3deg)"; }, 120);
-      }else{
-        els.duck.style.transform = "translateY(-50%)";
-      }
-    }
-
-    function updateDuckBubble(kind){
-      const pickedCount = renderPicked();
-      const modeTxt = isPomodoro() ? "pomodoro" : "focus";
-
-      const lines = {
-        pick: pickedCount
-          ? `🫧 Quack. ${pickedCount} mission${pickedCount>1?"s":""} locked. Press START when ready.`
-          : `🫧 Quack. Pick at least one mission so I can cheer you on.`,
-        start: `🦆 Waddle time. ${phase === "focus" ? "Focus" : "Break"} is live. You got this.`,
-        pause: `🦆 Paused. Tiny break is allowed. Press START to continue.`,
-        reset: `🦆 Reset complete. New run, clean slate.`,
-        done: `🦆 GG. Session done. Tick one mission and be proud.`,
-        break: `🦆 Break mode. Stretch, water, blink.`,
-        focus: `🦆 Back to focus. One mission at a time.`,
-        clear: `🫧 Cleared. Pick your next mission.`,
-        restore: `🦆 Restored. Press START when you’re ready.`
-      };
-
-      els.duckBubble.innerHTML = (lines[kind] || `🫧 Quack. Mode: <b>${modeTxt}</b>.`);
-    }
-
-    function persistTimer(){
-      const data = {
-        phase, remainingSec, totalPhaseSec,
-        mode: els.mode.value,
-        focusMin: Number(els.minutes.value||25),
-        breakMin: Number(els.breakMinutes.value||5),
-        savedAt: Date.now()
-      };
-      localStorage.setItem(KEY_TIMER, JSON.stringify(data));
-    }
-
-    function restoreTimer(){
-      try{
-        const raw = localStorage.getItem(KEY_TIMER);
-        if(!raw) return;
-        const data = JSON.parse(raw);
-
-        if(data.mode) els.mode.value = data.mode;
-        if(Number.isFinite(data.focusMin)) els.minutes.value = data.focusMin;
-        if(Number.isFinite(data.breakMin)) els.breakMinutes.value = data.breakMin;
-
-        phase = data.phase || "focus";
-        remainingSec = Number.isFinite(data.remainingSec) ? data.remainingSec : focusSec();
-        totalPhaseSec = Number.isFinite(data.totalPhaseSec) ? data.totalPhaseSec : (phase==="focus"?focusSec():breakSec());
-
-        els.time.textContent = fmt(remainingSec);
-        running = false;
-        stopTimer(false);
-        setDuckByProgress();
-        updateDuckBubble("restore");
-        setStatus("Restored. Pick missions. Press START.");
-      }catch(e){}
-    }
-
-    function beep(){
-      try{
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type = "sine";
-        o.frequency.value = 880;
-        g.gain.value = 0.03;
-        o.connect(g); g.connect(ctx.destination);
-        o.start();
-        setTimeout(() => { o.stop(); ctx.close(); }, 140);
-      }catch(e){}
-    }
-
-    function tick(){
-      remainingSec -= 1;
-      els.time.textContent = fmt(remainingSec);
-      setDuckByProgress();
-      persistTimer();
-
-      if(remainingSec <= 0){
-        beep();
-
-        if(isPomodoro()){
-          if(phase === "focus"){
-            phase = "break";
-            remainingSec = breakSec();
-            totalPhaseSec = remainingSec;
-            els.time.textContent = fmt(remainingSec);
-            setStatus("Break time. Breathe.");
-            updateDuckBubble("break");
-          }else{
-            phase = "focus";
-            remainingSec = focusSec();
-            totalPhaseSec = remainingSec;
-            els.time.textContent = fmt(remainingSec);
-            setStatus("Focus time. Let’s go.");
-            updateDuckBubble("focus");
-          }
-          setDuckByProgress();
-          persistTimer();
-        }else{
-          stopTimer(true);
-          setStatus("Done. Tick one mission.");
-          updateDuckBubble("done");
-          localStorage.removeItem(KEY_TIMER);
-        }
-      }
-    }
-
-    function startTimer(){
-      // Optional: nudge if no missions selected
-      const pickedCount = renderPicked();
-      if(pickedCount === 0){
-        updateDuckBubble("pick");
-        // still allow starting if you want; if you want to force selection, return here.
-      }
-
-      if(running) return;
-      running = true;
-      timer = setInterval(tick, 1000);
-      setStatus((phase === "focus" ? "Focus" : "Break") + " running.");
-      updateDuckBubble("start");
-      els.start.textContent = "RUNNING";
-      els.start.disabled = true;
-      setDuckByProgress();
-    }
-
-    function stopTimer(clearLabel){
-      running = false;
-      if(timer) clearInterval(timer);
-      timer = null;
-      els.start.textContent = "START";
-      els.start.disabled = false;
-      setDuckByProgress();
-      if(clearLabel) els.progressLabel.textContent = "100%";
-    }
-
-    function togglePause(){
-      if(!running){
-        startTimer();
-      }else{
-        stopTimer(false);
-        setStatus("Paused. Press START.");
-        updateDuckBubble("pause");
-        persistTimer();
-      }
-    }
-
-    function hardReset(keepStored=false){
-      stopTimer(false);
-      phase = "focus";
-      remainingSec = focusSec();
-      totalPhaseSec = remainingSec;
-      els.time.textContent = fmt(remainingSec);
-      setStatus("Ready. Pick missions. Press START.");
-      updateDuckBubble("reset");
-      setDuckByProgress();
-      if(!keepStored) localStorage.removeItem(KEY_TIMER);
-    }
-
-    // ===== Wire up =====
-    els.mode.addEventListener("change", applyModeUI);
-    els.minutes.addEventListener("change", () => hardReset(false));
-    els.breakMinutes.addEventListener("change", () => hardReset(false));
-
-    els.taskInputs.forEach(i => i.addEventListener("change", saveTasks));
-    els.clear.addEventListener("click", (e) => { e.preventDefault(); clearTasks(); });
-
-    els.start.addEventListener("click", startTimer);
-    els.pause.addEventListener("click", togglePause);
-    els.reset.addEventListener("click", () => hardReset(false));
-
-    els.quickBtns.forEach(b => b.addEventListener("click", () => {
-      els.minutes.value = b.dataset.set;
-      hardReset(false);
-    }));
-
-    // Keyboard shortcuts (works even with drawer open)
-    window.addEventListener("keydown", (e) => {
-      const k = e.key.toLowerCase();
-      if(k === "s"){ e.preventDefault(); togglePause(); }
-      if(k === "r"){ e.preventDefault(); hardReset(false); }
-    });
-
-    // Init
-    applyModeUI();
-    loadTasks();
-    renderPicked();
-    setDuckByProgress();
-    restoreTimer();
+    document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
