@@ -1,841 +1,993 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jackie Foo</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jackie Foo • Soft Launch</title>
+  <meta name="description" content="Soft launch page for Jackie Foo. Portfolio in progress + a tiny card flip game." />
+
   <style>
     :root{
-      /* High contrast base */
-      --ink:#070B14;
-      --ink2:#111827;
-      --muted:#2B3448;
-      --soft:#5A6478;
-      --white:#FFFFFF;
+      /* Pastel base + sharp contrast */
+      --bg: #0b0f1a;
+      --panel: rgba(255,255,255,0.08);
+      --panel2: rgba(255,255,255,0.12);
+      --text: #f6f7ff;
+      --muted: rgba(246,247,255,0.72);
 
-      /* Pastels (still vibrant) */
-      --p1:#A7D8FF; /* blue */
-      --p2:#BFF4C7; /* green */
-      --p3:#FFD1A3; /* peach */
-      --p4:#FF9EB1; /* pink */
-      --p5:#D9C2FF; /* purple */
-      --p6:#FFE66B; /* yellow */
+      --accent: #7c5cff;   /* punchy purple */
+      --accent2:#22d3ee;   /* cyan */
+      --accent3:#ffd166;   /* ducky yellow */
+      --danger: #ff4d6d;
 
-      --bg:#FFF5FB;
-      --border: rgba(7,11,20,0.14);
-      --shadow: 0 18px 70px rgba(7,11,20,0.16);
-      --shadow2: 0 12px 26px rgba(7,11,20,0.14);
+      --radius: 18px;
+      --shadow: 0 18px 60px rgba(0,0,0,0.55);
+      --shadow2: 0 12px 30px rgba(0,0,0,0.35);
+      --stroke: rgba(255,255,255,0.14);
 
-      --r1: 28px;
-      --r2: 18px;
-      --ring: 0 0 0 4px rgba(7,11,20,0.18);
+      --tap: 52px;
+      --max: 1080px;
     }
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
+    *{ box-sizing: border-box; }
+    html,body{ height: 100%; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(1100px 700px at 12% 12%, rgba(167,216,255,0.75), transparent 60%),
-        radial-gradient(1100px 700px at 88% 16%, rgba(255,158,177,0.55), transparent 60%),
-        radial-gradient(900px 650px at 78% 92%, rgba(191,244,199,0.62), transparent 60%),
-        radial-gradient(900px 650px at 18% 90%, rgba(217,194,255,0.62), transparent 60%),
-        var(--bg);
-      overflow-x:hidden;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(124,92,255,0.38), transparent 60%),
+                  radial-gradient(900px 600px at 85% 20%, rgba(34,211,238,0.28), transparent 60%),
+                  radial-gradient(900px 600px at 65% 90%, rgba(255,209,102,0.18), transparent 60%),
+                  var(--bg);
+      overflow-x: hidden;
     }
 
-    a{ color: inherit; text-decoration:none; }
-    button, select, input { font: inherit; }
-    button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible{
-      outline:none; box-shadow: var(--ring); border-radius: 14px;
-    }
-
-    /* Top layout */
+    a{ color: inherit; }
     .wrap{
-      min-height:100%;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      padding: 22px 14px 54px;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(18px, 3.2vw, 34px);
     }
 
-    .shell{
-      width: min(1120px, 100%);
+    /* Subtle animated grain */
+    .grain{
+      position: fixed; inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    header{
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap: 12px;
+      min-width: 0;
+    }
+
+    .duck{
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      background:
+        radial-gradient(16px 16px at 32% 38%, #00000055 0 60%, transparent 61%),
+        radial-gradient(16px 16px at 64% 38%, #00000055 0 60%, transparent 61%),
+        radial-gradient(26px 22px at 52% 68%, rgba(255,77,109,0.9) 0 52%, transparent 53%),
+        linear-gradient(135deg, rgba(255,209,102,1), rgba(255,209,102,0.6));
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: var(--shadow2);
+      position: relative;
+      flex: 0 0 auto;
+    }
+    .duck:after{
+      content:"";
+      position:absolute; inset:-10px;
+      border-radius: 22px;
+      background: radial-gradient(closest-side, rgba(255,209,102,0.35), transparent 70%);
+      filter: blur(10px);
+      z-index: -1;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size: clamp(18px, 3.3vw, 22px);
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand p{
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chipRow{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--stroke);
+      color: rgba(246,247,255,0.92);
+      font-size: 13px;
+      line-height: 1;
+      min-height: 40px;
+      user-select: none;
+    }
+    .dot{
+      width: 10px; height: 10px; border-radius: 99px;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(34,211,238,0.16);
+    }
+    .dot.pulse{
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); opacity: 1; }
+      50%{ transform: scale(1.25); opacity: 0.75; }
+    }
+
+    .hero{
       display:grid;
       grid-template-columns: 1.1fr 0.9fr;
-      gap: 18px;
+      gap: clamp(14px, 2.4vw, 22px);
       align-items: stretch;
+      margin-top: 14px;
     }
-    @media (max-width: 980px){
-      .shell{ grid-template-columns: 1fr; }
+
+    @media (max-width: 860px){
+      .hero{ grid-template-columns: 1fr; }
+      .chipRow{ justify-content: flex-start; }
     }
 
     .card{
-      border-radius: var(--r1);
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.82);
-      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      border: 1px solid var(--stroke);
       box-shadow: var(--shadow);
       overflow:hidden;
-    }
-
-    /* HERO (more personality, less boxy) */
-    .hero{
       position: relative;
-      min-height: 520px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
     }
-    @media (max-width: 520px){
-      .hero{ min-height: 560px; }
-    }
-
-    .heroPad{ padding: 22px; height:100%; display:flex; flex-direction:column; justify-content:space-between; gap: 18px; }
-    @media (max-width: 520px){ .heroPad{ padding: 18px; } }
-
-    .posterBg{
-      position:absolute; inset:0; pointer-events:none; overflow:hidden;
-    }
-    .stripe{
-      position:absolute;
-      left:-12%;
-      right:-12%;
-      height: 84px;
-      transform: rotate(-6deg);
-      opacity: 0.9;
-      filter: saturate(1.05);
-      border-top: 2px solid rgba(7,11,20,0.12);
-      border-bottom: 2px solid rgba(7,11,20,0.12);
-      box-shadow: 0 18px 40px rgba(7,11,20,0.08);
-    }
-    .s1{ top: 48px; background: linear-gradient(90deg, var(--p6), var(--p3)); }
-    .s2{ top: 160px; background: linear-gradient(90deg, var(--p1), var(--p5)); opacity: 0.75; }
-    .s3{ top: 272px; background: linear-gradient(90deg, var(--p2), var(--p4)); opacity: 0.72; }
-
-    .blob{
-      position:absolute; border-radius: 999px;
-      border: 2px solid rgba(7,11,20,0.12);
-      box-shadow: var(--shadow2);
-      opacity: 0.92;
-    }
-    .b1{ width: 260px; height: 260px; right: -70px; bottom: -70px; background: radial-gradient(circle at 35% 30%, #fff, var(--p6)); }
-    .b2{ width: 220px; height: 220px; right: 110px; bottom: 30px; background: radial-gradient(circle at 35% 30%, #fff, var(--p1)); opacity:0.85; }
-    .b3{ width: 180px; height: 180px; left: -60px; bottom: 20px; background: radial-gradient(circle at 35% 30%, #fff, var(--p4)); opacity:0.70; }
-
-    .heroTop{
-      position:relative; z-index: 2;
-      display:flex;
-      justify-content:space-between;
-      gap: 14px;
-      align-items:flex-start;
-    }
-
-    .name{
-      margin:0;
-      font-size: clamp(38px, 5.4vw, 64px);
-      letter-spacing: -0.04em;
-      line-height: 0.98;
-    }
-    .tagline{
-      margin-top: 12px;
-      font-size: clamp(16px, 2.1vw, 19px);
-      line-height: 1.65;
-      color: var(--muted);
-      font-weight: 750;
-      max-width: 60ch;
-    }
-    .sub{
-      margin-top: 10px;
-      color: var(--soft);
-      font-weight: 700;
-      font-size: 13.5px;
-      line-height: 1.6;
-      max-width: 64ch;
-    }
-
-    .duckBadge{
-      width: 104px; height: 104px;
-      border-radius: 28px;
-      border: 2px solid rgba(7,11,20,0.14);
-      background: linear-gradient(135deg, var(--p6), #FFD84C);
-      box-shadow: var(--shadow2);
-      position: relative;
-      flex: 0 0 auto;
-      transform: rotate(3deg);
-      animation: bob 2.6s ease-in-out infinite;
-    }
-    @keyframes bob{ 0%,100%{ transform: rotate(3deg) translateY(0); } 50%{ transform: rotate(3deg) translateY(-7px);} }
-    .duckBadge:before{
+    .card::before{
       content:"";
-      position:absolute;
-      inset: 18px 20px 26px 20px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.66);
-      transform: rotate(-6deg);
+      position:absolute; inset: -1px;
+      background: linear-gradient(135deg, rgba(124,92,255,0.35), rgba(34,211,238,0.20), rgba(255,209,102,0.20));
+      opacity: 0.35;
+      filter: blur(18px);
+      z-index: 0;
     }
-    .eye{ position:absolute; top: 42px; width: 11px; height: 11px; border-radius: 50%; background: var(--ink); }
-    .eye.l{ left: 38px; } .eye.r{ right: 38px; }
-    .beak{
-      position:absolute; left:50%; top: 62px; transform: translateX(-50%);
-      width: 42px; height: 20px; border-radius: 999px;
-      background: linear-gradient(180deg, #FFB703, #FFA000);
-      border: 2px solid rgba(7,11,20,0.12);
-    }
-    .shine{ position:absolute; right: 12px; top: 12px; width: 12px; height: 12px; border-radius: 4px; background: rgba(255,255,255,0.92); transform: rotate(15deg); }
+    .card > *{ position: relative; z-index: 1; }
 
-    .ctaRow{
-      position:relative; z-index:2;
-      display:flex; flex-wrap:wrap; gap: 10px;
-      align-items:center;
+    .cardPad{ padding: clamp(16px, 2.6vw, 24px); }
+
+    .headline{
+      margin: 0 0 8px;
+      font-size: clamp(26px, 4.2vw, 42px);
+      line-height: 1.05;
+      letter-spacing: -0.6px;
     }
-    .btn{
+    .subhead{
+      margin: 0 0 14px;
+      color: rgba(246,247,255,0.82);
+      font-size: clamp(14px, 2.3vw, 16px);
+      line-height: 1.5;
+      max-width: 62ch;
+    }
+
+    .badge{
       display:inline-flex;
       align-items:center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 2px solid rgba(7,11,20,0.16);
-      background: rgba(255,255,255,0.92);
-      font-weight: 900;
-      box-shadow: 0 12px 20px rgba(7,11,20,0.10);
-      transition: transform 120ms ease, box-shadow 120ms ease;
-      -webkit-tap-highlight-color: transparent;
-      cursor:pointer;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(124,92,255,0.16);
+      border: 1px solid rgba(124,92,255,0.35);
+      font-weight: 650;
+      letter-spacing: 0.2px;
+      margin-bottom: 12px;
     }
-    .btn:hover{ transform: translateY(-1px); box-shadow: 0 16px 26px rgba(7,11,20,0.14); }
-    .btn.primary{
-      background: linear-gradient(135deg, var(--p1), var(--p5));
-    }
-    .tinyNote{
-      position:relative; z-index:2;
-      color: var(--soft);
-      font-size: 13px;
-      font-weight: 750;
-      line-height: 1.6;
+    .badge .spark{
+      width: 10px; height: 10px; border-radius: 99px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(124,92,255,0.18);
     }
 
-    /* RIGHT panel (passport wall) */
-    .pad{ padding: 22px; }
-    @media (max-width: 520px){ .pad{ padding: 18px; } }
-
-    .panelTitle{
-      margin:0;
-      font-size: 18px;
-      letter-spacing: -0.01em;
-    }
-    .panelSub{
-      margin-top: 6px;
-      color: var(--soft);
-      font-size: 13.5px;
-      line-height: 1.55;
-      font-weight: 700;
-    }
-
-    .form{
-      margin-top: 14px;
-      display:grid;
-      grid-template-columns: 1fr 0.8fr;
-      gap: 10px;
-      align-items:end;
-    }
-    @media (max-width: 520px){
-      .form{ grid-template-columns: 1fr; }
-    }
-
-    .field label{
-      display:block;
-      font-size: 12.5px;
-      color: var(--soft);
-      font-weight: 850;
-      margin-bottom: 6px;
-    }
-    select, input{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 2px solid rgba(7,11,20,0.16);
-      background: rgba(255,255,255,0.92);
-      color: var(--ink2);
-      font-weight: 850;
-      box-shadow: 0 10px 18px rgba(7,11,20,0.08);
-    }
-
-    .stampBtn{
-      width:100%;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 2px solid rgba(7,11,20,0.16);
-      background: linear-gradient(135deg, var(--p6), var(--p3));
-      color: var(--ink);
-      font-weight: 950;
-      box-shadow: 0 12px 20px rgba(7,11,20,0.10);
-    }
-
-    .stats{
-      margin-top: 14px;
+    .ctaRow{
       display:flex;
-      gap: 10px;
       flex-wrap: wrap;
-    }
-    .stat{
-      flex: 1;
-      min-width: 160px;
-      border-radius: 18px;
-      border: 2px solid rgba(7,11,20,0.12);
-      background: rgba(255,255,255,0.82);
-      box-shadow: 0 10px 18px rgba(7,11,20,0.08);
-      padding: 12px;
-    }
-    .stat .k{
-      font-size: 12.5px;
-      color: var(--soft);
-      font-weight: 900;
-    }
-    .stat .v{
-      margin-top: 6px;
-      font-size: 20px;
-      font-weight: 1000;
-      letter-spacing: -0.02em;
+      gap: 10px;
+      margin-top: 14px;
     }
 
-    .wall{
-      margin-top: 14px;
-      border-radius: 18px;
-      border: 2px solid rgba(7,11,20,0.12);
-      background: rgba(255,255,255,0.86);
-      box-shadow: 0 12px 22px rgba(7,11,20,0.10);
-      padding: 12px;
-      max-height: 280px;
-      overflow:auto;
+    button, .btn{
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      border-radius: 14px;
+      padding: 12px 14px;
+      min-height: var(--tap);
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      text-decoration: none;
+      user-select: none;
+      transition: transform 0.08s ease, filter 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
     }
-    .stamp{
+    button:active, .btn:active{ transform: translateY(1px) scale(0.99); }
+
+    .primary{
+      background: linear-gradient(135deg, var(--accent), rgba(124,92,255,0.65));
+      color: white;
+      box-shadow: 0 12px 26px rgba(124,92,255,0.22);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+    .primary:hover{ filter: brightness(1.05); }
+
+    .secondary{
+      background: rgba(255,255,255,0.08);
+      color: rgba(246,247,255,0.92);
+      border: 1px solid var(--stroke);
+    }
+    .secondary:hover{
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.20);
+    }
+
+    .kpiGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    @media (max-width: 420px){
+      .kpiGrid{ grid-template-columns: 1fr; }
+    }
+    .kpi{
+      border-radius: 16px;
+      padding: 14px 14px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .kpi .label{
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      padding: 10px 10px;
-      border-radius: 14px;
-      border: 1px solid rgba(7,11,20,0.10);
-      background: rgba(255,255,255,0.92);
-      margin-bottom: 10px;
+      gap: 8px;
     }
-    .stamp:last-child{ margin-bottom:0; }
-    .leftStamp{
-      display:flex; align-items:center; gap: 10px;
-      min-width: 0;
+    .pill{
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: rgba(246,247,255,0.86);
     }
-    .badge{
-      width: 38px; height: 38px;
-      border-radius: 14px;
-      border: 2px solid rgba(7,11,20,0.12);
-      background: linear-gradient(135deg, var(--p2), var(--p1));
-      display:flex; align-items:center; justify-content:center;
-      font-size: 18px;
-      box-shadow: 0 10px 16px rgba(7,11,20,0.10);
-    }
-    .stampTxt{
-      min-width: 0;
-    }
-    .stampTxt .country{
-      font-weight: 950;
-      letter-spacing: -0.01em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .stampTxt .note{
-      margin-top: 2px;
-      color: var(--soft);
-      font-size: 12.5px;
+    .kpi .value{
+      font-size: 16px;
       font-weight: 750;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 42ch;
-    }
-    .time{
-      color: var(--soft);
-      font-size: 12px;
-      font-weight: 850;
-      flex: 0 0 auto;
+      line-height: 1.2;
     }
 
-    /* Modal + effects */
-    .overlay{
-      position: fixed;
-      inset: 0;
-      background: rgba(7,11,20,0.65);
+    /* GAME */
+    .gameHeader{
+      display:flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .gameHeader h2{
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+    .gameHeader p{
+      margin: 6px 0 0;
+      color: rgba(246,247,255,0.80);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .scorebar{
+      display:flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      min-width: 128px;
+    }
+    .score{
+      font-weight: 800;
+      font-size: 13px;
+      background: rgba(34,211,238,0.14);
+      border: 1px solid rgba(34,211,238,0.35);
+      padding: 8px 10px;
+      border-radius: 999px;
+      text-align: center;
+      width: 100%;
+    }
+    .streak{
+      font-weight: 800;
+      font-size: 13px;
+      background: rgba(255,209,102,0.14);
+      border: 1px solid rgba(255,209,102,0.32);
+      padding: 8px 10px;
+      border-radius: 999px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (min-width: 720px){
+      .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    .flip{
+      perspective: 900px;
+    }
+    .flipBtn{
+      width: 100%;
+      min-height: 140px;
+      padding: 0;
+      background: transparent;
+      border: 0;
+    }
+    .tile{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 140px;
+      border-radius: 18px;
+      transform-style: preserve-3d;
+      transition: transform 380ms cubic-bezier(.2,.8,.2,1);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.35);
+      outline: 1px solid rgba(255,255,255,0.10);
+      overflow: hidden;
+    }
+
+    .flipBtn[aria-pressed="true"] .tile{
+      transform: rotateY(180deg);
+    }
+
+    .face{
+      position:absolute; inset:0;
+      display:flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 14px;
+      backface-visibility: hidden;
+    }
+
+    .front{
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)),
+        radial-gradient(220px 180px at 15% 20%, rgba(124,92,255,0.35), transparent 60%),
+        radial-gradient(220px 180px at 90% 30%, rgba(34,211,238,0.28), transparent 65%),
+        rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .back{
+      transform: rotateY(180deg);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05)),
+        radial-gradient(240px 200px at 70% 30%, rgba(255,209,102,0.32), transparent 64%),
+        rgba(0,0,0,0.22);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.24);
+      border: 1px solid rgba(255,255,255,0.14);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 0.2px;
+    }
+
+    .icon{
+      width: 14px; height: 14px; border-radius: 4px;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(34,211,238,0.15);
+      flex: 0 0 auto;
+    }
+    .icon.ducky{ background: var(--accent3); box-shadow: 0 0 0 4px rgba(255,209,102,0.16); }
+    .icon.purple{ background: var(--accent); box-shadow: 0 0 0 4px rgba(124,92,255,0.16); }
+
+    .tileTitle{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+    }
+    .tileHint{
+      margin: 0;
+      font-size: 13px;
+      color: rgba(246,247,255,0.82);
+      line-height: 1.35;
+    }
+
+    .tileFooter{
+      width:100%;
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      color: rgba(246,247,255,0.72);
+      font-size: 12px;
+    }
+    .kbd{
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    /* Modal */
+    .modalBackdrop{
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.62);
       display:none;
       align-items:center;
       justify-content:center;
       padding: 18px;
-      z-index: 999;
+      z-index: 50;
     }
-    .overlay[data-open="true"]{ display:flex; }
+    .modalBackdrop.show{ display:flex; }
     .modal{
-      width: min(640px, 100%);
-      border-radius: 24px;
-      border: 2px solid rgba(7,11,20,0.18);
-      background: rgba(255,255,255,0.94);
-      box-shadow: 0 34px 110px rgba(7,11,20,0.34);
+      width: min(560px, 100%);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.55);
       overflow:hidden;
     }
     .modalTop{
-      padding: 16px 16px 10px;
-      display:flex; justify-content:space-between; gap: 12px; align-items:flex-start;
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap: 10px;
     }
-    .modalTop h3{ margin:0; font-size: 18px; }
+    .modalTop h3{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+    }
+    .close{
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      color: rgba(246,247,255,0.92);
+      border-radius: 12px;
+      min-height: 40px;
+      padding: 8px 10px;
+      font-weight: 800;
+    }
     .modalBody{
-      padding: 0 16px 16px;
-      color: var(--muted);
-      font-weight: 750;
-      line-height: 1.65;
-      font-size: 14.8px;
+      padding: 14px 16px 16px;
+      color: rgba(246,247,255,0.88);
+      line-height: 1.55;
+      font-size: 14px;
     }
-    .big{
-      margin: 10px 0 8px;
-      font-size: clamp(34px, 8vw, 56px);
-      line-height: 1;
-    }
-    .bubble{
+    .modalBody .mini{
       margin-top: 12px;
-      border-radius: 16px;
-      border: 2px solid rgba(7,11,20,0.12);
-      background: rgba(255,255,255,0.86);
       padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.18);
     }
-    .modalFoot{
-      border-top: 1px solid rgba(7,11,20,0.10);
-      background: rgba(255,255,255,0.76);
-      padding: 12px 16px 16px;
-      display:flex; justify-content:space-between; gap: 12px; align-items:center; flex-wrap:wrap;
+    .modalActions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 0 16px 16px;
     }
-    .mini{
-      color: var(--soft);
-      font-size: 12.8px;
-      font-weight: 750;
+
+    footer{
+      margin-top: 18px;
+      padding: 16px 4px 8px;
+      color: rgba(246,247,255,0.60);
+      font-size: 12px;
       line-height: 1.5;
-      max-width: 46ch;
+      display:flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .fxFlash{
-      position: fixed; inset: 0;
-      pointer-events:none;
-      opacity: 0;
-      z-index: 900;
-      background: radial-gradient(800px 500px at 50% 45%, rgba(255,255,255,0.86), rgba(255,255,255,0.0) 60%);
-      transition: opacity 220ms ease;
+    /* Accessibility helpers */
+    .sr{
+      position:absolute;
+      width:1px;height:1px;
+      padding:0;margin:-1px;
+      overflow:hidden;clip:rect(0,0,0,0);
+      border:0;
     }
-    .fxFlash.on{ opacity: 1; }
-
-    .sticker{
-      position: fixed;
-      left: 50%;
-      top: 56%;
-      transform: translate(-50%, -50%);
-      z-index: 902;
-      font-size: 54px;
-      filter: drop-shadow(0 18px 22px rgba(7,11,20,0.24));
-      animation: popFloat 900ms cubic-bezier(.15,.9,.2,1) forwards;
-      pointer-events:none;
-    }
-    @keyframes popFloat{
-      0%{ opacity:0; transform: translate(-50%,-40%) scale(0.72) rotate(-6deg); }
-      15%{ opacity:1; transform: translate(-50%,-50%) scale(1.12) rotate(4deg); }
-      40%{ transform: translate(-50%,-55%) scale(1.02) rotate(-2deg); }
-      100%{ opacity:0; transform: translate(-50%,-110%) scale(1.10) rotate(10deg); }
-    }
-
-    .shake{ animation: shake 480ms ease-in-out; }
-    @keyframes shake{
-      0%{ transform: translateX(0); }
-      18%{ transform: translateX(-10px); }
-      36%{ transform: translateX(10px); }
-      54%{ transform: translateX(-8px); }
-      72%{ transform: translateX(8px); }
-      100%{ transform: translateX(0); }
-    }
-
-    canvas#confetti{
-      position: fixed;
-      inset: 0;
-      pointer-events:none;
-      z-index: 901;
-    }
-
-    .srOnly{
-      position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+    :focus-visible{
+      outline: 3px solid rgba(34,211,238,0.75);
+      outline-offset: 3px;
+      border-radius: 14px;
     }
   </style>
 </head>
 
 <body>
-  <div class="fxFlash" id="fxFlash"></div>
-  <canvas id="confetti"></canvas>
+  <div class="grain"></div>
 
-  <div class="wrap" id="page">
-    <main class="shell">
-      <!-- HERO -->
-      <section class="card hero">
-        <div class="posterBg" aria-hidden="true">
-          <div class="stripe s1"></div>
-          <div class="stripe s2"></div>
-          <div class="stripe s3"></div>
-          <div class="blob b1"></div>
-          <div class="blob b2"></div>
-          <div class="blob b3"></div>
+  <div class="wrap">
+    <header>
+      <div class="brand" aria-label="Site header">
+        <div class="duck" aria-hidden="true"></div>
+        <div style="min-width:0">
+          <h1>Jackie Foo</h1>
+          <p>Soft launch • portfolio still in progress</p>
         </div>
+      </div>
 
-        <div class="heroPad">
-          <div class="heroTop">
+      <div class="chipRow" aria-label="Quick status">
+        <div class="chip"><span class="dot pulse" aria-hidden="true"></span>Building in public</div>
+        <div class="chip"><span class="dot" style="background:var(--accent3); box-shadow: 0 0 0 4px rgba(255,209,102,0.16);" aria-hidden="true"></span>Duck mode: ON</div>
+      </div>
+    </header>
+
+    <section class="hero" aria-label="Main content">
+      <!-- Intro card -->
+      <div class="card">
+        <div class="cardPad">
+          <div class="badge"><span class="spark" aria-hidden="true"></span>Soft launch</div>
+
+          <h2 class="headline">Hi, I’m Jackie 👋</h2>
+          <p class="subhead">
+            I’m building this site as a clean, playful home for my work.
+            It is still under development, so consider this a friendly preview.
+            If you want, play the mini game on the right and see how I think about design decisions.
+          </p>
+
+          <div class="ctaRow">
+            <button class="primary" id="btnShuffle" type="button" aria-label="Shuffle the mini game cards">
+              Shuffle game
+              <span aria-hidden="true">🎴</span>
+            </button>
+
+            <button class="secondary" id="btnReset" type="button" aria-label="Reset score and flips">
+              Reset
+              <span aria-hidden="true">↺</span>
+            </button>
+
+            <a class="btn secondary" href="#game" aria-label="Jump to mini game">
+              Go to game
+              <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+
+          <div class="kpiGrid" aria-label="What to expect">
+            <div class="kpi">
+              <div class="label">What I care about <span class="pill">clarity</span></div>
+              <div class="value">Simple flows, honest feedback, and good vibes</div>
+            </div>
+            <div class="kpi">
+              <div class="label">What is coming <span class="pill">soon</span></div>
+              <div class="value">Projects, research notes, and a proper case study section</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game card -->
+      <div class="card" id="game">
+        <div class="cardPad">
+          <div class="gameHeader">
             <div>
-              <h1 class="name">Jackie Foo</h1>
-              <div class="tagline">
-                I build playful, high-contrast things with pastel energy.
-              </div>
-              <div class="sub">
-                Developing this site still. For now, leave a duck stamp so I can see where people are visiting from.
-              </div>
+              <h2>Mini game: Flip a card</h2>
+              <p>
+                Pick a card. Each one reveals a design decision.
+                You get points for variety, so try not to pick the same type twice.
+              </p>
             </div>
-
-            <div class="duckBadge" aria-hidden="true">
-              <div class="shine"></div>
-              <div class="eye l"></div>
-              <div class="eye r"></div>
-              <div class="beak"></div>
+            <div class="scorebar" aria-label="Scoreboard">
+              <div class="score" id="score">Score: 0</div>
+              <div class="streak" id="streak">Variety: 0</div>
             </div>
           </div>
 
-          <div>
-            <div class="ctaRow">
-              <button class="btn primary" id="duckHorn" type="button">🦆 Duck horn</button>
-              <a class="btn" href="mailto:" role="button">📬 Contact later</a>
-              <button class="btn" id="clearLocal" type="button">🧹 Clear stamps</button>
-            </div>
-            <div class="tinyNote">
-              This is a playful soft launch. The stamp wall is stored on your device for now.
-            </div>
+          <div class="grid" role="list" aria-label="Flip cards">
+            <!-- Cards injected by JS -->
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- PASSPORT WALL -->
-      <section class="card">
-        <div class="pad">
-          <h2 class="panelTitle">Duck Passport Wall</h2>
-          <div class="panelSub">Pick your country and leave a tiny note. It drops a surprise.</div>
-
-          <div class="form" aria-label="Stamp form">
-            <div class="field">
-              <label for="country">Country</label>
-              <select id="country">
-                <option value="">Select a country</option>
-                <option>Malaysia</option><option>Australia</option><option>Singapore</option><option>China</option><option>Taiwan</option>
-                <option>United States</option><option>United Kingdom</option><option>Canada</option><option>Japan</option><option>Korea</option>
-                <option>India</option><option>Indonesia</option><option>Thailand</option><option>Vietnam</option><option>Philippines</option>
-                <option>Other</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="note">Tiny note</label>
-              <input id="note" maxlength="42" placeholder="Hi Jackie, this is cute" />
-            </div>
-
-            <button class="stampBtn" id="stampBtn" type="button">Stamp 🦆</button>
-          </div>
-
-          <div class="stats">
-            <div class="stat">
-              <div class="k">Total stamps</div>
-              <div class="v" id="totalStamps">0</div>
-            </div>
-            <div class="stat">
-              <div class="k">Countries counted</div>
-              <div class="v" id="countriesCount">0</div>
-            </div>
-          </div>
-
-          <div class="wall" id="wall" aria-label="Recent stamps"></div>
-          <div class="srOnly" aria-live="polite" id="ariaLive"></div>
-        </div>
-      </section>
-    </main>
+    <footer>
+      <div>
+        Tip: This page is intentionally lightweight and mobile friendly.
+        Tap targets are large, text is responsive, and everything works without libraries.
+      </div>
+      <div>
+        <span aria-hidden="true">🦆</span> Soft launch build • <span id="today"></span>
+      </div>
+    </footer>
   </div>
 
-  <!-- Popup -->
-  <div class="overlay" id="overlay" data-open="false" role="dialog" aria-modal="true" aria-labelledby="title">
-    <div class="modal">
+  <!-- Modal -->
+  <div class="modalBackdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modalTop">
-        <h3 id="title">Stamped</h3>
-        <button class="btn" id="closeBtn" type="button" style="padding:10px 12px;">Close</button>
+        <h3 id="modalTitle">Decision</h3>
+        <button class="close" id="btnClose" type="button" aria-label="Close dialog">Close</button>
       </div>
-      <div class="modalBody" id="body"></div>
-      <div class="modalFoot">
-        <div class="mini" id="mini"></div>
-        <button class="btn" id="againBtn" type="button" style="padding:10px 12px;">Stamp another</button>
+      <div class="modalBody" id="modalBody"></div>
+      <div class="modalActions">
+        <button class="primary" id="btnNext" type="button">Flip another</button>
+        <button class="secondary" id="btnCopy" type="button">Copy summary</button>
       </div>
     </div>
   </div>
 
   <script>
-    const isMobile = matchMedia("(max-width: 520px)").matches || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-
-    // ---------- Storage ----------
-    const KEY = "jackie_duck_stamps_v1";
-    const getStamps = () => {
-      try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
-      catch { return []; }
+    // --- Content you can tweak to match your voice more ---
+    const ABOUT = {
+      name: "Jackie Foo",
+      oneLiner: "Building a clean, fun portfolio. Still cooking it.",
+      contactHint: "If you want to chat, add your links here later."
     };
-    const setStamps = (arr) => localStorage.setItem(KEY, JSON.stringify(arr));
 
-    // ---------- DOM ----------
-    const countryEl = document.getElementById("country");
-    const noteEl = document.getElementById("note");
-    const stampBtn = document.getElementById("stampBtn");
-    const wallEl = document.getElementById("wall");
-    const totalEl = document.getElementById("totalStamps");
-    const countriesEl = document.getElementById("countriesCount");
-    const ariaLive = document.getElementById("ariaLive");
-
-    const overlay = document.getElementById("overlay");
-    const closeBtn = document.getElementById("closeBtn");
-    const againBtn = document.getElementById("againBtn");
-    const titleEl = document.getElementById("title");
-    const bodyEl = document.getElementById("body");
-    const miniEl = document.getElementById("mini");
-
-    const page = document.getElementById("page");
-    const fxFlash = document.getElementById("fxFlash");
-    const duckHorn = document.getElementById("duckHorn");
-    const clearLocal = document.getElementById("clearLocal");
-
-    // ---------- Sound ----------
-    let soundOn = true;
-    let audioCtx = null;
-    function beep(mode="quack"){
-      if(!soundOn) return;
-      try{
-        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-        const o = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        const now = audioCtx.currentTime;
-
-        o.type = "square";
-        const start = mode==="quack" ? 540 : 720;
-        const end   = mode==="quack" ? 220 : 420;
-        o.frequency.setValueAtTime(start, now);
-        o.frequency.exponentialRampToValueAtTime(end, now + 0.10);
-
-        g.gain.setValueAtTime(0.0001, now);
-        g.gain.exponentialRampToValueAtTime(0.20, now + 0.012);
-        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
-
-        o.connect(g);
-        g.connect(audioCtx.destination);
-        o.start(now);
-        o.stop(now + 0.16);
-      }catch(e){}
-    }
-
-    // ---------- Effects ----------
-    const canvas = document.getElementById("confetti");
-    const ctx = canvas.getContext("2d");
-    let pieces = [];
-    let raf = null;
-
-    function resize(){
-      canvas.width = innerWidth * devicePixelRatio;
-      canvas.height = innerHeight * devicePixelRatio;
-      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-    }
-    addEventListener("resize", resize);
-    resize();
-
-    function flash(){
-      fxFlash.classList.add("on");
-      setTimeout(()=> fxFlash.classList.remove("on"), isMobile ? 260 : 200);
-    }
-
-    function shake(){
-      page.classList.remove("shake");
-      void page.offsetWidth;
-      page.classList.add("shake");
-      setTimeout(()=> page.classList.remove("shake"), 520);
-    }
-
-    function sticker(emoji){
-      const s = document.createElement("div");
-      s.className = "sticker";
-      s.textContent = emoji;
-      document.body.appendChild(s);
-      setTimeout(()=> s.remove(), 950);
-    }
-
-    function popConfetti(){
-      const colors = ["#A7D8FF","#BFF4C7","#FFD1A3","#FF9EB1","#D9C2FF","#FFE66B"];
-      const count = isMobile ? 220 : 140;
-      pieces = [];
-      for(let i=0;i<count;i++){
-        pieces.push({
-          x: Math.random()*innerWidth,
-          y: -30 - Math.random()*innerHeight*0.25,
-          w: 4 + Math.random()*6,
-          h: 3 + Math.random()*5,
-          vy: (isMobile ? 3.4 : 2.5) + Math.random()*(isMobile ? 6.2 : 4.2),
-          vx: -2.2 + Math.random()*4.4,
-          rot: Math.random()*Math.PI,
-          vr: -0.14 + Math.random()*0.28,
-          c: colors[Math.floor(Math.random()*colors.length)],
-          life: (isMobile ? 170 : 130) + Math.floor(Math.random()*70)
-        });
+    // Card pool: co-design / decisions vibe, duck flavored.
+    const CARD_DECK = [
+      {
+        id: "clarity",
+        tag: "Clarity first",
+        icon: "purple",
+        title: "Less is more",
+        hint: "I cut features until the flow feels obvious.",
+        decisionTitle: "Design decision: Clarity first",
+        decisionBody:
+          "When a page starts feeling noisy, I remove choices, tighten copy, and improve the default path. " +
+          "If people can succeed without reading a manual, I count that as a win.",
+        mini: "Try this: What is the one action you want visitors to take on your site?"
+      },
+      {
+        id: "contrast",
+        tag: "Bold contrast",
+        icon: "cyan",
+        title: "Readable at a glance",
+        hint: "Pastel vibes, but high contrast for legibility.",
+        decisionTitle: "Design decision: Strong contrast",
+        decisionBody:
+          "I like soft colors, but I do not compromise on readability. " +
+          "Big type, clear hierarchy, and enough contrast so it works on bright phones.",
+        mini: "Quick check: Can you read this screen at arm’s length?"
+      },
+      {
+        id: "coDesign",
+        tag: "Co-design",
+        icon: "cyan",
+        title: "People in the loop",
+        hint: "Feedback shapes the product, not just the final polish.",
+        decisionTitle: "Design decision: Co-design mindset",
+        decisionBody:
+          "I build with users, not for users. " +
+          "That means early prototypes, structured prompts, and lots of iteration instead of guessing.",
+        mini: "If you had 10 minutes with a user, what would you ask first?"
+      },
+      {
+        id: "play",
+        tag: "Playful",
+        icon: "ducky",
+        title: "Make it fun",
+        hint: "Small interactions can make a site feel alive.",
+        decisionTitle: "Design decision: Add small delight",
+        decisionBody:
+          "I like tiny moments of joy. A micro game, a smooth animation, a friendly message. " +
+          "It keeps things human, especially when the topic is serious.",
+        mini: "Duck prompt: If your product was a duck, what would it be proud of?"
+      },
+      {
+        id: "mobile",
+        tag: "Mobile first",
+        icon: "purple",
+        title: "Thumb friendly",
+        hint: "Big buttons, simple layouts, no tiny targets.",
+        decisionTitle: "Design decision: Mobile first",
+        decisionBody:
+          "I design for the smallest screen first. " +
+          "If it works well on mobile, desktop becomes the easy upgrade.",
+        mini: "Rule of thumb: 48px minimum tap targets."
+      },
+      {
+        id: "honest",
+        tag: "Honest",
+        icon: "ducky",
+        title: "Soft launch energy",
+        hint: "Show progress without pretending it is finished.",
+        decisionTitle: "Design decision: Be honest about WIP",
+        decisionBody:
+          "I prefer a soft launch with a clear message: this is in progress. " +
+          "It reduces pressure and invites better feedback from early visitors.",
+        mini: "One sentence WIP line you can steal: “Still building, but you are welcome here.”"
       }
-      if(raf) cancelAnimationFrame(raf);
-      animate();
-      setTimeout(()=> { pieces = []; }, isMobile ? 1500 : 1200);
+    ];
+
+    // --- Mini game logic ---
+    const grid = document.querySelector(".grid");
+    const scoreEl = document.getElementById("score");
+    const streakEl = document.getElementById("streak");
+    const todayEl = document.getElementById("today");
+
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const btnClose = document.getElementById("btnClose");
+    const btnNext = document.getElementById("btnNext");
+    const btnCopy = document.getElementById("btnCopy");
+
+    const btnShuffle = document.getElementById("btnShuffle");
+    const btnReset = document.getElementById("btnReset");
+
+    const state = {
+      score: 0,
+      variety: 0,
+      lastType: null,
+      lastOpenedCardId: null,
+      cards: []
+    };
+
+    function formatDate(){
+      try{
+        const d = new Date();
+        return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"2-digit" });
+      }catch(e){
+        return "";
+      }
     }
 
-    function animate(){
-      ctx.clearRect(0,0,innerWidth,innerHeight);
-      pieces.forEach(p=>{
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rot += p.vr;
-        p.life--;
-
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot);
-        ctx.fillStyle = p.c;
-        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
-        ctx.restore();
-      });
-      pieces = pieces.filter(p=> p.y < innerHeight + 50 && p.life > 0);
-      if(pieces.length) raf = requestAnimationFrame(animate);
-      else ctx.clearRect(0,0,innerWidth,innerHeight);
+    function shuffle(arr){
+      const a = [...arr];
+      for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
     }
 
-    // ---------- UI ----------
-    function timeAgo(ts){
-      const diff = Date.now() - ts;
-      const s = Math.floor(diff/1000);
-      if(s < 10) return "just now";
-      if(s < 60) return s + "s ago";
-      const m = Math.floor(s/60);
-      if(m < 60) return m + "m ago";
-      const h = Math.floor(m/60);
-      if(h < 24) return h + "h ago";
-      const d = Math.floor(h/24);
-      return d + "d ago";
+    function pickCards(){
+      // Pick 4 unique cards for the board
+      const deck = shuffle(CARD_DECK);
+      return deck.slice(0, 4);
+    }
+
+    function iconClass(kind){
+      if(kind === "ducky") return "icon ducky";
+      if(kind === "purple") return "icon purple";
+      return "icon";
     }
 
     function render(){
-      const stamps = getStamps().slice().reverse();
-      wallEl.innerHTML = stamps.length ? "" : `<div style="color: var(--soft); font-weight:800;">No stamps yet. Be the first duck.</div>`;
+      grid.innerHTML = "";
+      state.cards.forEach((c, idx) => {
+        const wrap = document.createElement("div");
+        wrap.className = "flip";
+        wrap.setAttribute("role","listitem");
 
-      stamps.slice(0, 12).forEach(s=>{
-        const row = document.createElement("div");
-        row.className = "stamp";
-        row.innerHTML = `
-          <div class="leftStamp">
-            <div class="badge">🦆</div>
-            <div class="stampTxt">
-              <div class="country">${escapeHtml(s.country)}</div>
-              <div class="note">${escapeHtml(s.note || "No note, just duck vibes")}</div>
+        const btn = document.createElement("button");
+        btn.className = "flipBtn";
+        btn.type = "button";
+        btn.setAttribute("aria-pressed", "false");
+        btn.setAttribute("aria-label", `Flip card: ${c.title}`);
+
+        btn.innerHTML = `
+          <div class="tile">
+            <div class="face front">
+              <div class="tag">
+                <span class="${iconClass(c.icon)}" aria-hidden="true"></span>
+                ${c.tag}
+              </div>
+              <div>
+                <p class="tileTitle">${c.title}</p>
+                <p class="tileHint">${c.hint}</p>
+              </div>
+              <div class="tileFooter">
+                <span>Tap to flip</span>
+                <span class="kbd">Flip</span>
+              </div>
+            </div>
+
+            <div class="face back">
+              <div class="tag">
+                <span class="${iconClass(c.icon)}" aria-hidden="true"></span>
+                Reveal
+              </div>
+              <div>
+                <p class="tileTitle">${c.decisionTitle}</p>
+                <p class="tileHint">Tap again for details.</p>
+              </div>
+              <div class="tileFooter">
+                <span>Open popup</span>
+                <span class="kbd">View</span>
+              </div>
             </div>
           </div>
-          <div class="time">${timeAgo(s.ts)}</div>
         `;
-        wallEl.appendChild(row);
-      });
 
-      const all = getStamps();
-      totalEl.textContent = all.length;
-      const uniqueCountries = new Set(all.map(s => s.country).filter(Boolean));
-      countriesEl.textContent = uniqueCountries.size;
+        btn.addEventListener("click", () => onFlip(btn, c));
+        wrap.appendChild(btn);
+        grid.appendChild(wrap);
+      });
     }
 
-    function openModal(title, bigEmoji, message, mini){
-      titleEl.textContent = title;
-      bodyEl.innerHTML = `
-        <div class="big">${bigEmoji}</div>
-        <div class="bubble"><strong>${escapeHtml(message)}</strong></div>
-      `;
-      miniEl.textContent = mini;
+    function updateScore(){
+      scoreEl.textContent = `Score: ${state.score}`;
+      streakEl.textContent = `Variety: ${state.variety}`;
+    }
 
-      overlay.setAttribute("data-open","true");
+    function openModal(card){
+      state.lastOpenedCardId = card.id;
+      modalTitle.textContent = card.decisionTitle;
+      modalBody.innerHTML = `
+        <div>${escapeHtml(card.decisionBody)}</div>
+        <div class="mini"><strong>Mini prompt:</strong> ${escapeHtml(card.mini)}</div>
+      `;
+      modalBackdrop.classList.add("show");
+      modalBackdrop.setAttribute("aria-hidden","false");
+
+      // Focus management
+      btnClose.focus();
       document.body.style.overflow = "hidden";
-      closeBtn.focus();
     }
 
     function closeModal(){
-      overlay.setAttribute("data-open","false");
+      modalBackdrop.classList.remove("show");
+      modalBackdrop.setAttribute("aria-hidden","true");
       document.body.style.overflow = "";
     }
 
-    closeBtn.addEventListener("click", closeModal);
-    againBtn.addEventListener("click", () => {
-      closeModal();
-      setTimeout(()=> countryEl.focus(), 80);
-    });
-    overlay.addEventListener("click", (e)=> { if(e.target === overlay) closeModal(); });
-    document.addEventListener("keydown", (e)=> {
-      if(overlay.getAttribute("data-open")==="true" && e.key==="Escape") closeModal();
-    });
-
     function escapeHtml(str){
-      return String(str).replace(/[&<>"']/g, s => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-      }[s]));
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
-    // ---------- Actions ----------
-    stampBtn.addEventListener("click", () => {
-      const country = countryEl.value.trim();
-      const note = noteEl.value.trim();
+    function onFlip(btn, card){
+      const pressed = btn.getAttribute("aria-pressed") === "true";
 
-      if(!country){
-        flash(); shake(); beep("pop");
-        openModal("Pick a country first", "🧭", "Choose a country so the duck knows where you came from.", "Then stamp again.");
+      if(!pressed){
+        // First tap: flip + scoring
+        btn.setAttribute("aria-pressed","true");
+
+        const isVariety = state.lastType && state.lastType !== card.id;
+        if(state.lastType === null){
+          state.variety = 1;
+        }else if(isVariety){
+          state.variety += 1;
+        }else{
+          state.variety = Math.max(0, state.variety - 1);
+        }
+
+        // Points: base + variety bonus
+        state.score += 10 + (isVariety ? 6 : 0);
+        state.lastType = card.id;
+        updateScore();
         return;
       }
 
-      const stamps = getStamps();
-      stamps.push({ country, note, ts: Date.now() });
-      setStamps(stamps);
+      // Second tap: open modal details
+      openModal(card);
+    }
 
-      // Strong punchy effects
-      beep("quack");
-      flash();
-      popConfetti();
-      sticker("🦆");
-      if(isMobile) sticker("✨");
+    function resetBoard(keepCards = false){
+      state.score = 0;
+      state.variety = 0;
+      state.lastType = null;
+      state.lastOpenedCardId = null;
+      updateScore();
 
-      ariaLive.textContent = "Stamped from " + country;
+      // Reset flip states
+      document.querySelectorAll(".flipBtn").forEach(b => b.setAttribute("aria-pressed","false"));
+
+      if(!keepCards){
+        state.cards = pickCards();
+        render();
+      }
+    }
+
+    function init(){
+      todayEl.textContent = formatDate();
+      state.cards = pickCards();
       render();
+      updateScore();
+    }
 
-      openModal("Stamped", "🦆", `Duck received your stamp from ${country}.`, "This wall is local for now. Later I can make it global.");
-      noteEl.value = "";
-    });
-
-    duckHorn.addEventListener("click", () => {
-      beep("quack");
-      flash(); popConfetti(); sticker("🦆");
-      if(isMobile) { shake(); sticker("🌈"); }
-      openModal("Duck horn", "🦆", "You pressed the duck horn. This is the correct choice.", "Thank you for supporting duck culture.");
-    });
-
-    clearLocal.addEventListener("click", () => {
-      setStamps([]);
+    // Buttons
+    btnShuffle.addEventListener("click", () => {
+      state.cards = pickCards();
       render();
-      flash(); beep("pop");
-      openModal("Cleared", "🧹", "Local stamps cleared on this device.", "Your real global map can come later.");
+      // Keep score, just reshuffle board for fun
+      document.querySelectorAll(".flipBtn").forEach(b => b.setAttribute("aria-pressed","false"));
     });
 
-    // Init
-    render();
+    btnReset.addEventListener("click", () => resetBoard(false));
+
+    // Modal controls
+    btnClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => {
+      if(e.target === modalBackdrop) closeModal();
+    });
+
+    btnNext.addEventListener("click", () => {
+      closeModal();
+      // Auto shuffle so "next" feels fresh
+      state.cards = pickCards();
+      render();
+      // Small reward for continuing
+      state.score += 4;
+      updateScore();
+      // Scroll to game on small screens
+      document.getElementById("game").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    btnCopy.addEventListener("click", async () => {
+      const card = CARD_DECK.find(c => c.id === state.lastOpenedCardId);
+      if(!card) return;
+
+      const text =
+        `${ABOUT.name} • Soft launch\n` +
+        `${card.decisionTitle}\n` +
+        `${card.decisionBody}\n` +
+        `Prompt: ${card.mini}\n`;
+
+      try{
+        await navigator.clipboard.writeText(text);
+        btnCopy.textContent = "Copied!";
+        setTimeout(() => btnCopy.textContent = "Copy summary", 900);
+      }catch(e){
+        btnCopy.textContent = "Copy failed";
+        setTimeout(() => btnCopy.textContent = "Copy summary", 900);
+      }
+    });
+
+    // Keyboard: Escape closes modal
+    window.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && modalBackdrop.classList.contains("show")){
+        closeModal();
+      }
+    });
+
+    init();
   </script>
 </body>
 </html>
