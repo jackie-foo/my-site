@@ -2,733 +2,652 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0B0B0F" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Jackie Foo — Soft Launch</title>
+
+  <!-- Pixel-ish font (optional). If blocked, falls back to monospace. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
   <style>
     :root{
-      --bg:#0B0B0F;
-      --panel:#12121A;
-      --ink:#F6F7FF;
-      --muted:#A9AAC3;
-
-      /* Static, high-contrast accent colors (no gradients) */
-      --a:#00E5FF;  /* cyan */
-      --b:#FF2D55;  /* magenta-red */
-      --c:#A3FF12;  /* neon green */
-      --d:#FFD60A;  /* punchy yellow */
-
-      --stroke: rgba(246,247,255,.12);
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
-      --radius: 18px;
-
-      --maxw: 980px;
-      --pad: clamp(14px, 3.2vw, 22px);
-      --gap: clamp(12px, 2.6vw, 18px);
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-
-      --tap: 54px; /* minimum tap target height */
+      --bg:#0a0a0f;
+      --panel:#121222;
+      --ink:#f2f2ff;
+      --muted:#b9b9d6;
+      --accent:#00ff6a;      /* neon green */
+      --accent2:#ff2bd6;     /* neon magenta */
+      --warning:#ffd400;     /* neon yellow */
+      --danger:#ff3b3b;      /* neon red */
+      --shadow:rgba(0,0,0,.55);
+      --border:rgba(242,242,255,.18);
+      --border2:rgba(0,255,106,.35);
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family:var(--font);
       color:var(--ink);
       background:var(--bg);
-      -webkit-font-smoothing:antialiased;
-      text-rendering:optimizeLegibility;
+      font-family:"Press Start 2P", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      letter-spacing:.3px;
+      -webkit-font-smoothing:none;
+      -moz-osx-font-smoothing:grayscale;
+      image-rendering: pixelated;
     }
 
-    /* Subtle “runway tape” background, still static colors */
-    .bg{
-      position:fixed; inset:0; pointer-events:none; z-index:-1;
+    /* Pixel grid overlay */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
       background:
-        radial-gradient(circle at 20% 15%, rgba(0,229,255,.08), transparent 40%),
-        radial-gradient(circle at 80% 30%, rgba(255,45,85,.08), transparent 45%),
-        radial-gradient(circle at 50% 85%, rgba(163,255,18,.07), transparent 50%),
-        linear-gradient(0deg, rgba(255,214,10,.06), transparent 28%),
-        var(--bg);
-      /* Note: these are overlays; no gradient color ramps across the UI components.
-         If you want ZERO gradients anywhere, tell me and I’ll swap these for solid shapes. */
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px) 0 0/14px 14px,
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px) 0 0/14px 14px;
+      opacity:.18;
+      mix-blend-mode:screen;
     }
 
     .wrap{
-      max-width:var(--maxw);
-      margin:0 auto;
-      padding: calc(var(--pad) + env(safe-area-inset-top)) var(--pad) calc(var(--pad) + env(safe-area-inset-bottom));
+      min-height:100%;
+      display:flex;
+      justify-content:center;
+      padding:16px;
+      padding-bottom:24px;
+    }
+    .card{
+      width:min(920px,100%);
+      background:var(--panel);
+      border:2px solid var(--border);
+      box-shadow:0 14px 0 0 rgba(0,0,0,.25), 0 22px 55px var(--shadow);
+      padding:14px;
+      position:relative;
+    }
+    .card::after{
+      content:"";
+      position:absolute; inset:-2px;
+      border:2px dashed rgba(255,43,214,.35);
+      pointer-events:none;
+      mix-blend-mode:screen;
     }
 
     header{
       display:flex;
+      gap:12px;
+      flex-wrap:wrap;
       align-items:flex-start;
       justify-content:space-between;
-      gap:var(--gap);
-      margin-top: 6px;
+      margin-bottom:12px;
     }
-
-    .brand{
+    .title{
       display:flex;
       flex-direction:column;
-      gap:10px;
-      min-width: 0;
+      gap:6px;
     }
-
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 12px;
-      border:1px solid var(--stroke);
-      background:rgba(18,18,26,.7);
-      border-radius:999px;
-      width:fit-content;
-      box-shadow: 0 10px 30px rgba(0,0,0,.3);
-    }
-    .dot{
-      width:10px; height:10px; border-radius:999px;
-      background:var(--c);
-      box-shadow: 0 0 0 3px rgba(163,255,18,.18);
-      flex:0 0 auto;
-    }
-    .tag span{
-      font-size:13px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:var(--muted);
-      white-space:nowrap;
-    }
-
     h1{
       margin:0;
-      font-size: clamp(28px, 6vw, 54px);
-      line-height:1.04;
-      letter-spacing:-0.02em;
-      word-break:break-word;
+      font-size:14px;
+      line-height:1.35;
+      text-transform:uppercase;
     }
-    h1 .slash{
-      color:var(--a);
-    }
-
     .sub{
       margin:0;
+      font-size:10px;
+      line-height:1.6;
       color:var(--muted);
-      font-size: clamp(14px, 2.5vw, 17px);
-      line-height:1.55;
-      max-width: 54ch;
+      max-width:52ch;
     }
 
     .pillRow{
       display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top: 14px;
-    }
-    .pill{
-      border:1px solid var(--stroke);
-      background: rgba(18,18,26,.72);
-      padding:10px 12px;
-      border-radius:999px;
-      font-size:13px;
-      color:var(--ink);
-      display:inline-flex;
       gap:8px;
-      align-items:center;
-      user-select:none;
-    }
-    .pill b{
-      font-family:var(--mono);
-      font-weight:700;
-      letter-spacing:.03em;
-      font-size:12px;
-      opacity:.95;
-    }
-
-    .cta{
-      display:flex;
-      gap:12px;
+      flex-wrap:wrap;
       align-items:center;
       justify-content:flex-end;
-      flex-wrap:wrap;
-      margin-top: 6px;
     }
-    button, a.btn{
-      appearance:none;
-      border:none;
-      cursor:pointer;
-      border-radius: 14px;
-      min-height: var(--tap);
-      padding: 14px 16px;
-      font-weight:700;
-      letter-spacing:.01em;
-      background: var(--ink);
-      color: #0B0B0F;
-      box-shadow: var(--shadow);
-      transition: transform .12s ease, opacity .12s ease;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
+    .pill{
+      font-size:10px;
+      padding:8px 10px;
+      border:2px solid var(--border);
+      background:#0f0f1a;
+      white-space:nowrap;
+      box-shadow:0 6px 0 rgba(0,0,0,.25);
     }
-    button:active, a.btn:active{ transform: translateY(1px) scale(.99); }
-    .btnAlt{
-      background: transparent;
-      color: var(--ink);
-      border: 1px solid var(--stroke);
-      box-shadow:none;
+    .pill b{color:var(--accent)}
+    .pill .dot{
+      display:inline-block;
+      width:8px; height:8px;
+      background:var(--accent2);
+      margin-right:8px;
+      vertical-align:middle;
+      box-shadow:0 0 0 2px rgba(0,0,0,.35);
     }
 
-    main{
+    .grid{
       display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-      margin-top: 18px;
+      grid-template-columns: 1.2fr .8fr;
+      gap:12px;
     }
-
-    @media (min-width: 860px){
-      main{ grid-template-columns: 1.15fr .85fr; align-items:start; }
-      header{ align-items:center; }
-    }
-
-    .card{
-      background: rgba(18,18,26,.78);
-      border: 1px solid var(--stroke);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    .cardHead{
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--stroke);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .cardHead h2{
-      margin:0;
-      font-size: 15px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color: var(--muted);
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-    .chip{
-      width:10px;height:10px;border-radius:999px; flex:0 0 auto;
-      background: var(--a);
-      box-shadow: 0 0 0 3px rgba(0,229,255,.16);
-    }
-
-    .cardBody{ padding: 16px; }
-
-    .grid2{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-    @media(min-width: 520px){
-      .grid2{ grid-template-columns: 1fr 1fr; }
+    @media (max-width:820px){
+      .grid{grid-template-columns:1fr}
     }
 
     .panel{
-      border: 1px solid var(--stroke);
-      border-radius: 16px;
-      padding: 14px;
-      background: rgba(11,11,15,.45);
+      background:#0f0f1a;
+      border:2px solid var(--border);
+      padding:12px;
+      box-shadow:0 10px 0 rgba(0,0,0,.25);
     }
-
-    .kicker{
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing:.10em;
+    .panel h2{
+      margin:0 0 10px 0;
+      font-size:11px;
+      line-height:1.5;
       text-transform:uppercase;
-      color: var(--muted);
+      color:var(--warning);
+    }
+    .mini{
+      font-size:10px;
+      line-height:1.7;
+      color:var(--muted);
       margin:0 0 10px 0;
     }
 
-    .bigLine{
-      margin:0;
-      font-size: 18px;
-      line-height:1.35;
-      letter-spacing:-0.01em;
-    }
-    .bigLine strong{ color: var(--d); }
-
-    .list{
-      margin: 12px 0 0 0;
-      padding:0;
-      list-style:none;
+    .tasks{
       display:grid;
-      gap:10px;
+      grid-template-columns:1fr;
+      gap:8px;
+      margin-top:8px;
     }
-    .li{
+    .task{
       display:flex;
       gap:10px;
       align-items:flex-start;
+      padding:10px;
+      border:2px solid var(--border);
+      background:#0b0b14;
     }
-    .tick{
-      width:12px;height:12px;border-radius:4px;
-      background: var(--c);
+    .task input{
+      margin-top:2px;
+      width:18px; height:18px;
+      accent-color: var(--accent);
+    }
+    .task label{
+      font-size:10px;
+      line-height:1.65;
+      cursor:pointer;
+    }
+    .task small{
+      display:block;
+      color:var(--muted);
       margin-top:4px;
-      flex:0 0 auto;
-      box-shadow: 0 0 0 3px rgba(163,255,18,.14);
-    }
-    .li p{
-      margin:0;
-      color: var(--muted);
-      line-height:1.55;
-      font-size: 14px;
-    }
-    .li p b{ color: var(--ink); font-weight: 800; }
-
-    /* GAME */
-    .gameTop{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    .statRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      font-family: var(--mono);
-      font-size:12px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color: var(--muted);
-    }
-
-    .stat{
-      padding:10px 12px;
-      border:1px solid var(--stroke);
-      border-radius: 999px;
-      background: rgba(11,11,15,.35);
-    }
-    .stat b{
-      color: var(--ink);
-      letter-spacing:.02em;
-    }
-
-    .arena{
-      margin-top: 14px;
-      border-radius: 18px;
-      border: 1px solid var(--stroke);
-      background: rgba(11,11,15,.55);
-      padding: 14px;
-    }
-
-    .prompt{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
-    .promptText{
-      margin:0;
-      font-size: 16px;
-      line-height:1.4;
-      color: var(--ink);
-    }
-    .promptText b{
-      font-family: var(--mono);
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: rgba(18,18,26,.7);
-    }
-
-    .choices{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .choice{
-      min-height: 92px;
-      border-radius: 16px;
-      border: 2px solid transparent;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight: 900;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      font-size: 14px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.35);
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .choice:focus{ outline: none; }
-    .choice:active{ transform: translateY(1px) scale(.99); }
-
-    .choice[data-color="A"]{ background: var(--a); color:#071016; }
-    .choice[data-color="B"]{ background: var(--b); color:#12030A; }
-    .choice[data-color="C"]{ background: var(--c); color:#071206; }
-    .choice[data-color="D"]{ background: var(--d); color:#120F02; }
-
-    .msg{
-      margin-top: 12px;
-      font-size: 14px;
-      line-height:1.55;
-      color: var(--muted);
-    }
-
-    .hr{
-      height:1px;
-      background: var(--stroke);
-      margin: 14px 0;
-    }
-
-    footer{
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 12px;
+      font-size:9px;
       line-height:1.6;
+    }
+    .task .tag{
+      display:inline-block;
+      margin-left:6px;
+      padding:2px 6px;
+      border:2px solid var(--border2);
+      color:var(--accent);
+      font-size:9px;
+      line-height:1.5;
+      background:rgba(0,255,106,.06);
+      vertical-align:middle;
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:10px;
+    }
+    @media (max-width:520px){
+      .controls{grid-template-columns:1fr}
+    }
+    .field{
+      border:2px solid var(--border);
+      background:#0b0b14;
+      padding:10px;
+    }
+    .field label{
+      display:block;
+      font-size:9px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .row{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    select, input[type="number"]{
+      width:100%;
+      border:2px solid var(--border);
+      background:#07070d;
+      color:var(--ink);
+      padding:10px;
+      font-size:10px;
+      outline:none;
+      font-family:inherit;
+    }
+    select:focus, input[type="number"]:focus{
+      border-color: var(--accent);
+      box-shadow:0 0 0 2px rgba(0,255,106,.18);
+    }
+
+    .timer{
+      display:grid;
+      gap:10px;
+      text-align:center;
+    }
+    .timeBox{
+      padding:14px 10px;
+      border:2px solid var(--border2);
+      background:#06060b;
+      box-shadow:0 10px 0 rgba(0,0,0,.35);
+    }
+    .time{
+      font-size:18px;
+      line-height:1.3;
+      color:var(--accent);
+      text-shadow:0 2px 0 rgba(0,0,0,.5);
+    }
+    .status{
+      font-size:9px;
+      color:var(--muted);
+      line-height:1.7;
+      margin-top:8px;
+    }
+    .btnRow{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+    }
+    @media (max-width:520px){
+      .btnRow{grid-template-columns:1fr}
+    }
+    button{
+      border:2px solid var(--border);
+      background:#0b0b14;
+      color:var(--ink);
+      padding:12px 10px;
+      font-size:10px;
+      font-family:inherit;
+      cursor:pointer;
+      box-shadow:0 10px 0 rgba(0,0,0,.25);
+      touch-action:manipulation;
+    }
+    button:active{transform:translateY(2px); box-shadow:0 8px 0 rgba(0,0,0,.25)}
+    .primary{
+      border-color: var(--border2);
+      background: rgba(0,255,106,.08);
+      color: var(--accent);
+    }
+    .danger{
+      border-color: rgba(255,59,59,.55);
+      background: rgba(255,59,59,.08);
+      color: #ffd1d1;
+    }
+    .ghost{
+      border-style:dashed;
+      color:var(--muted);
+    }
+
+    .footer{
+      margin-top:12px;
+      font-size:9px;
+      line-height:1.7;
+      color:var(--muted);
       display:flex;
       justify-content:space-between;
-      gap:12px;
+      gap:10px;
       flex-wrap:wrap;
-      opacity:.92;
     }
-
+    a{color:var(--accent2); text-decoration:none}
+    a:focus,a:hover{text-decoration:underline}
     .kbd{
-      font-family: var(--mono);
-      border:1px solid var(--stroke);
-      border-bottom-width:2px;
-      border-radius: 10px;
-      padding: 4px 8px;
-      background: rgba(18,18,26,.7);
-      color: var(--ink);
       display:inline-block;
-    }
-
-    /* Accessibility */
-    @media (prefers-reduced-motion: reduce){
-      *{ transition:none !important; scroll-behavior:auto !important; }
+      padding:2px 6px;
+      border:2px solid var(--border);
+      background:#07070d;
+      color:var(--ink);
+      font-size:9px;
+      vertical-align:middle;
     }
   </style>
 </head>
 
 <body>
-  <div class="bg" aria-hidden="true"></div>
-
   <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="tag">
-          <span class="dot" aria-hidden="true"></span>
-          <span>Soft launch • still building</span>
+    <main class="card" role="main">
+      <header>
+        <div class="title">
+          <h1>Jackie Foo — Soft Launch</h1>
+          <p class="sub">Site is still in development. While you’re here, pick a mission and start a focused timer.</p>
         </div>
-
-        <h1>
-          Jackie Foo <span class="slash">/</span> Art × Fashion × IT
-        </h1>
-
-        <p class="sub">
-          This site is in-progress. I am shaping it like a studio space: clean lines, bold contrast, and playful systems.
-          Come back soon for the full portfolio, research, and experiments.
-        </p>
-
-        <div class="pillRow" aria-label="quick traits">
-          <div class="pill"><b>MODE</b> Minimal, sharp, high-contrast</div>
-          <div class="pill"><b>VIBE</b> Gallery energy, tech brain</div>
-          <div class="pill"><b>STATUS</b> Under construction</div>
+        <div class="pillRow" aria-label="status badges">
+          <div class="pill"><span class="dot"></span>Build: <b>WIP</b></div>
+          <div class="pill">Mode: <b>PIXEL</b></div>
         </div>
-      </div>
+      </header>
 
-      <div class="cta">
-        <button class="btnAlt" id="toggleSound" type="button" aria-pressed="false" title="Toggle sound">
-          Sound: Off
-        </button>
-        <a class="btn" href="#game" aria-label="Jump to the mini game">Play mini game →</a>
-      </div>
-    </header>
+      <section class="grid" aria-label="content">
+        <!-- LEFT: Tasks -->
+        <section class="panel" aria-label="tasks">
+          <h2>Pick your missions</h2>
+          <p class="mini">Select what you want to complete in one session. Keep it small. Keep it doable.</p>
 
-    <main>
-      <!-- LEFT: INTRO / BRAND -->
-      <section class="card" aria-labelledby="aboutTitle">
-        <div class="cardHead">
-          <h2 id="aboutTitle"><span class="chip" aria-hidden="true"></span> About this soft launch</h2>
-        </div>
-        <div class="cardBody">
-          <div class="grid2">
-            <div class="panel">
-              <p class="kicker">What I am building</p>
-              <p class="bigLine">
-                A personal site that blends <strong>visual taste</strong> with <strong>technical craft</strong>.
-                Think runway meets interface design.
-              </p>
-              <ul class="list">
-                <li class="li"><span class="tick" aria-hidden="true"></span><p><b>Art</b> as composition, rhythm, and meaning.</p></li>
-                <li class="li"><span class="tick" aria-hidden="true"></span><p><b>Fashion</b> as silhouette, restraint, and edge.</p></li>
-                <li class="li"><span class="tick" aria-hidden="true"></span><p><b>IT</b> as systems, interaction, and clarity.</p></li>
-              </ul>
+          <div class="tasks" id="tasks">
+            <div class="task">
+              <input id="t1" type="checkbox" />
+              <label for="t1">Read notes + highlight key points <span class="tag">10–25m</span>
+                <small>Goal: understand, not memorise.</small>
+              </label>
             </div>
-
-            <div class="panel">
-              <p class="kicker">What is coming next</p>
-              <p class="bigLine">
-                Portfolio modules, research notes, prototypes, and small “design toys” that are fun to touch.
-              </p>
-              <div class="hr"></div>
-              <p class="msg" style="margin:0">
-                Meanwhile: take a quick break and play the mini game.
-                It is pure chaos and has zero relation to my work.
-              </p>
+            <div class="task">
+              <input id="t2" type="checkbox" />
+              <label for="t2">Do 10 practice questions <span class="tag">15–30m</span>
+                <small>Goal: build pattern recognition.</small>
+              </label>
+            </div>
+            <div class="task">
+              <input id="t3" type="checkbox" />
+              <label for="t3">Summarise 1 topic in 5 bullets <span class="tag">10–20m</span>
+                <small>Goal: compress and rephrase.</small>
+              </label>
+            </div>
+            <div class="task">
+              <input id="t4" type="checkbox" />
+              <label for="t4">Fix 1 “stuck” problem from last time <span class="tag">15–40m</span>
+                <small>Goal: unblock yourself fast.</small>
+              </label>
             </div>
           </div>
 
-          <div class="hr"></div>
+          <div class="controls" aria-label="timer setup">
+            <div class="field">
+              <label for="mode">Timer mode</label>
+              <select id="mode">
+                <option value="focus" selected>Focus (single session)</option>
+                <option value="pomodoro">Pomodoro (focus + break)</option>
+              </select>
+            </div>
 
-          <p class="msg" style="margin:0">
-            Tip: this page is built to be <b>thumb-first</b>.
-            Everything is big-tap, readable, and fast.
-          </p>
-        </div>
-      </section>
+            <div class="field">
+              <label for="minutes">Focus minutes</label>
+              <input id="minutes" type="number" min="1" max="180" value="25" inputmode="numeric" />
+            </div>
 
-      <!-- RIGHT: GAME -->
-      <section class="card" id="game" aria-labelledby="gameTitle">
-        <div class="cardHead">
-          <h2 id="gameTitle"><span class="chip" style="background: var(--b); box-shadow:0 0 0 3px rgba(255,45,85,.16);" aria-hidden="true"></span> Mini game: Color Clash</h2>
-          <div class="statRow" aria-label="game stats">
-            <span class="stat">Score <b id="score">0</b></span>
-            <span class="stat">Best <b id="best">0</b></span>
-            <span class="stat">Time <b id="time">20</b>s</span>
+            <div class="field" id="breakWrap" style="display:none;">
+              <label for="breakMinutes">Break minutes</label>
+              <input id="breakMinutes" type="number" min="1" max="60" value="5" inputmode="numeric" />
+            </div>
+
+            <div class="field">
+              <label>Quick set</label>
+              <div class="row">
+                <button class="ghost" type="button" data-set="10">10m</button>
+                <button class="ghost" type="button" data-set="25">25m</button>
+                <button class="ghost" type="button" data-set="45">45m</button>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="cardBody">
-          <div class="gameTop">
-            <p class="msg" style="margin:0">
-              Match the instruction, not the vibe. It gets faster.
-              <span class="kbd">Tap</span> any tile.
+          <div class="footer">
+            <div>Tip: press <span class="kbd">S</span> to Start/Pause, <span class="kbd">R</span> to Reset.</div>
+            <div><a href="#" id="clear">Clear saved tasks</a></div>
+          </div>
+        </section>
+
+        <!-- RIGHT: Timer -->
+        <section class="panel" aria-label="timer">
+          <h2>Study timer</h2>
+
+          <div class="timer">
+            <div class="timeBox" role="status" aria-live="polite">
+              <div class="time" id="time">25:00</div>
+              <div class="status" id="status">READY · pick missions · press START</div>
+            </div>
+
+            <div class="btnRow">
+              <button class="primary" id="start" type="button">START</button>
+              <button id="pause" type="button">PAUSE</button>
+              <button class="danger" id="reset" type="button">RESET</button>
+            </div>
+
+            <p class="mini" id="sessionNote" style="margin:0;">
+              Selected: <span id="picked">none yet</span>
             </p>
-            <button class="btnAlt" id="startBtn" type="button">Start</button>
           </div>
-
-          <div class="arena" aria-live="polite">
-            <div class="prompt">
-              <p class="promptText" id="promptText">
-                Press <b>Start</b> to begin.
-              </p>
-            </div>
-
-            <div class="choices" role="group" aria-label="color choices">
-              <button class="choice" type="button" data-color="A" aria-label="Cyan tile">CYAN</button>
-              <button class="choice" type="button" data-color="B" aria-label="Hot pink tile">PINK</button>
-              <button class="choice" type="button" data-color="C" aria-label="Neon green tile">GREEN</button>
-              <button class="choice" type="button" data-color="D" aria-label="Yellow tile">YELLOW</button>
-            </div>
-
-            <p class="msg" id="gameMsg">Rule: if it says “Tap GREEN”, tap the GREEN tile. Simple. Until it is not.</p>
-          </div>
-
-          <div class="hr"></div>
-
-          <p class="msg" style="margin:0">
-            Want the game to be “change the layout” instead (drag cards to rearrange the page)?
-            Tell me and I will swap this game to a layout remix mini game.
-          </p>
-        </div>
+        </section>
       </section>
     </main>
-
-    <footer>
-      <div>
-        <span class="kbd">No gradients</span> in UI components • high contrast • mobile-first
-      </div>
-      <div>
-        © <span id="year"></span> Jackie Foo • soft launch build
-      </div>
-    </footer>
   </div>
 
   <script>
-    // ---------- tiny sound (optional) ----------
-    let soundOn = false;
-    let audioCtx = null;
+    // ====== Small pixel timer + task picker (mobile-friendly) ======
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => Array.from(document.querySelectorAll(s));
 
-    function beep(freq=880, dur=0.06){
-      if(!soundOn) return;
+    const els = {
+      mode: $("#mode"),
+      minutes: $("#minutes"),
+      breakWrap: $("#breakWrap"),
+      breakMinutes: $("#breakMinutes"),
+      time: $("#time"),
+      status: $("#status"),
+      start: $("#start"),
+      pause: $("#pause"),
+      reset: $("#reset"),
+      picked: $("#picked"),
+      clear: $("#clear"),
+      taskInputs: $$("#tasks input[type=checkbox]"),
+      quickBtns: $$("button[data-set]")
+    };
+
+    // Persist tasks
+    const KEY_TASKS = "jf_softlaunch_tasks_v1";
+    const KEY_TIMER = "jf_softlaunch_timer_v1";
+
+    function loadTasks(){
       try{
-        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const o = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        o.type = "square";
-        o.frequency.value = freq;
-        g.gain.value = 0.03;
-        o.connect(g); g.connect(audioCtx.destination);
-        o.start();
-        setTimeout(()=>{ o.stop(); }, dur*1000);
+        const raw = localStorage.getItem(KEY_TASKS);
+        if(!raw) return;
+        const state = JSON.parse(raw);
+        els.taskInputs.forEach((inp) => inp.checked = !!state[inp.id]);
       }catch(e){}
     }
+    function saveTasks(){
+      const state = {};
+      els.taskInputs.forEach((inp) => state[inp.id] = inp.checked);
+      localStorage.setItem(KEY_TASKS, JSON.stringify(state));
+      renderPicked();
+    }
+    function clearTasks(){
+      localStorage.removeItem(KEY_TASKS);
+      els.taskInputs.forEach((inp) => inp.checked = false);
+      renderPicked();
+    }
 
-    const toggleSound = document.getElementById("toggleSound");
-    toggleSound.addEventListener("click", () => {
-      soundOn = !soundOn;
-      toggleSound.textContent = `Sound: ${soundOn ? "On" : "Off"}`;
-      toggleSound.setAttribute("aria-pressed", String(soundOn));
-      beep(soundOn ? 980 : 320, 0.05);
-    });
+    function renderPicked(){
+      const picked = els.taskInputs
+        .filter(i => i.checked)
+        .map(i => (document.querySelector(`label[for="${i.id}"]`)?.childNodes?.[0]?.textContent || "").trim())
+        .filter(Boolean);
+      els.picked.textContent = picked.length ? picked.join(" + ") : "none yet";
+    }
 
-    // ---------- game state ----------
-    const scoreEl = document.getElementById("score");
-    const bestEl  = document.getElementById("best");
-    const timeEl  = document.getElementById("time");
-    const promptEl = document.getElementById("promptText");
-    const msgEl = document.getElementById("gameMsg");
-    const startBtn = document.getElementById("startBtn");
-    const tiles = Array.from(document.querySelectorAll(".choice"));
-
-    const STORAGE_KEY = "jf_softlaunch_best_v1";
-    let best = Number(localStorage.getItem(STORAGE_KEY) || 0);
-    bestEl.textContent = best;
-
-    const COLORS = [
-      { key:"A", name:"CYAN"  },
-      { key:"B", name:"PINK"  },
-      { key:"C", name:"GREEN" },
-      { key:"D", name:"YELLOW"}
-    ];
-
-    let running = false;
-    let score = 0;
-    let timeLeft = 20;
+    // Timer state
     let timer = null;
-    let target = null;
-    let speedBonus = 0; // increases difficulty
+    let phase = "focus";         // "focus" | "break"
+    let running = false;
+    let remainingSec = 25*60;
 
-    function setPrompt(){
-      // Trick element: show instruction using one label but random emphasis word
-      // Keep rule clear: always match the target NAME shown.
-      target = COLORS[Math.floor(Math.random()*COLORS.length)];
-      promptEl.innerHTML = `Tap <b>${target.name}</b> now.`;
-      msgEl.textContent = speedBonus < 6
-        ? "Easy. Just match the word."
-        : "Faster now. Stay calm. Tap the word.";
+    function fmt(sec){
+      sec = Math.max(0, Math.floor(sec));
+      const m = String(Math.floor(sec/60)).padStart(2,"0");
+      const s = String(sec%60).padStart(2,"0");
+      return `${m}:${s}`;
     }
 
-    function setTilesText(){
-      // Optional mild confusion: shuffle tile labels occasionally (still fair)
-      // The rule remains: tap the tile whose *label* matches prompt.
-      const names = COLORS.map(c=>c.name);
-      for(let i=names.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [names[i], names[j]] = [names[j], names[i]];
-      }
-      tiles.forEach((btn, i) => btn.textContent = names[i]);
+    function getFocusSec(){ return Math.max(1, Number(els.minutes.value||25)) * 60; }
+    function getBreakSec(){ return Math.max(1, Number(els.breakMinutes.value||5)) * 60; }
+    function isPomodoro(){ return els.mode.value === "pomodoro"; }
+
+    function applyModeUI(){
+      els.breakWrap.style.display = isPomodoro() ? "" : "none";
+      // If switching mode, reset to keep it clean.
+      hardReset(false);
     }
 
-    function startGame(){
-      running = true;
-      score = 0;
-      timeLeft = 20;
-      speedBonus = 0;
-      scoreEl.textContent = score;
-      timeEl.textContent = timeLeft;
-      startBtn.textContent = "Restart";
-      startBtn.classList.add("btnAlt");
-      setTilesText();
-      setPrompt();
-      beep(980, 0.06);
+    function setStatus(text){ els.status.textContent = text; }
 
-      if(timer) clearInterval(timer);
-      timer = setInterval(() => {
-        timeLeft--;
-        timeEl.textContent = timeLeft;
-        if(timeLeft <= 0){
-          endGame();
-        }else{
-          // as score grows, add a slight time pressure feel with occasional reshuffle
-          if(timeLeft % 5 === 0 && score >= 4){
-            setTilesText();
+    function tick(){
+      remainingSec -= 1;
+      els.time.textContent = fmt(remainingSec);
+
+      persistTimer();
+
+      if(remainingSec <= 0){
+        beep();
+
+        if(isPomodoro()){
+          if(phase === "focus"){
+            phase = "break";
+            remainingSec = getBreakSec();
+            els.time.textContent = fmt(remainingSec);
+            setStatus("BREAK · breathe · no guilt");
+          }else{
+            phase = "focus";
+            remainingSec = getFocusSec();
+            els.time.textContent = fmt(remainingSec);
+            setStatus("FOCUS · round two");
           }
+          persistTimer();
+        }else{
+          stopTimer();
+          setStatus("DONE · GG · mark one thing as complete");
+          localStorage.removeItem(KEY_TIMER);
         }
-      }, 1000);
+      }
     }
 
-    function endGame(){
+    function startTimer(){
+      if(running) return;
+      running = true;
+      timer = setInterval(tick, 1000);
+      setStatus((phase === "focus" ? "FOCUS" : "BREAK") + " · timer running");
+      els.start.textContent = "RUNNING";
+      els.start.disabled = true;
+    }
+
+    function stopTimer(){
       running = false;
       if(timer) clearInterval(timer);
       timer = null;
-
-      if(score > best){
-        best = score;
-        localStorage.setItem(STORAGE_KEY, String(best));
-        bestEl.textContent = best;
-        msgEl.textContent = "New best. That was sharp.";
-        beep(1200, 0.07); beep(1500, 0.07);
-      }else{
-        msgEl.textContent = "Time. Run it back.";
-        beep(260, 0.07);
-      }
-      promptEl.innerHTML = `Game over. Your score: <b>${score}</b>.`;
+      els.start.textContent = "START";
+      els.start.disabled = false;
     }
 
-    function handlePick(btn){
-      if(!running) return;
-      const chosen = btn.textContent.trim().toUpperCase();
-      const correct = target && chosen === target.name;
-
-      if(correct){
-        score++;
-        scoreEl.textContent = score;
-        speedBonus = Math.min(10, Math.floor(score/3));
-
-        // Micro reward: extend time slightly early-game
-        if(score <= 6){
-          timeLeft = Math.min(25, timeLeft + 1);
-          timeEl.textContent = timeLeft;
-        }
-
-        // Make it “faster”: reshuffle more often
-        if(speedBonus >= 3 && Math.random() < 0.55){
-          setTilesText();
-        }
-
-        setPrompt();
-        beep(980 + score*8, 0.04);
+    function togglePause(){
+      if(!running){
+        startTimer();
       }else{
-        // penalty
-        score = Math.max(0, score - 1);
-        scoreEl.textContent = score;
-        timeLeft = Math.max(0, timeLeft - 2);
-        timeEl.textContent = timeLeft;
-        msgEl.textContent = "Nope. Match the word on the prompt.";
-        beep(220, 0.06);
-        if(timeLeft <= 0) endGame();
+        stopTimer();
+        setStatus("PAUSED · press START");
+        persistTimer();
       }
     }
 
-    tiles.forEach(btn => btn.addEventListener("click", () => handlePick(btn)));
-    startBtn.addEventListener("click", startGame);
+    function hardReset(keepTasks=true){
+      stopTimer();
+      phase = "focus";
+      remainingSec = getFocusSec();
+      els.time.textContent = fmt(remainingSec);
+      setStatus("READY · pick missions · press START");
+      localStorage.removeItem(KEY_TIMER);
+      if(!keepTasks) renderPicked();
+    }
 
-    // Footer year
-    document.getElementById("year").textContent = new Date().getFullYear();
+    function persistTimer(){
+      const data = {
+        phase, running, remainingSec,
+        mode: els.mode.value,
+        focusMin: Number(els.minutes.value||25),
+        breakMin: Number(els.breakMinutes.value||5),
+        savedAt: Date.now()
+      };
+      localStorage.setItem(KEY_TIMER, JSON.stringify(data));
+    }
 
-    // Keyboard support (optional)
+    function restoreTimer(){
+      try{
+        const raw = localStorage.getItem(KEY_TIMER);
+        if(!raw) return;
+        const data = JSON.parse(raw);
+
+        // restore inputs
+        if(data.mode) els.mode.value = data.mode;
+        applyModeUI(); // resets, then we override
+        if(Number.isFinite(data.focusMin)) els.minutes.value = data.focusMin;
+        if(Number.isFinite(data.breakMin)) els.breakMinutes.value = data.breakMin;
+
+        phase = data.phase || "focus";
+        remainingSec = Number.isFinite(data.remainingSec) ? data.remainingSec : getFocusSec();
+
+        els.time.textContent = fmt(remainingSec);
+
+        // Do not auto-run on load (feels nicer). Keep paused.
+        running = false;
+        stopTimer();
+        setStatus("RESTORED · press START");
+      }catch(e){}
+    }
+
+    // Small beep (no external files)
+    function beep(){
+      try{
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = "square";
+        o.frequency.value = 880;
+        g.gain.value = 0.03;
+        o.connect(g); g.connect(ctx.destination);
+        o.start();
+        setTimeout(() => { o.stop(); ctx.close(); }, 140);
+      }catch(e){}
+    }
+
+    // Events
+    els.mode.addEventListener("change", applyModeUI);
+    els.minutes.addEventListener("change", () => hardReset());
+    els.breakMinutes.addEventListener("change", () => hardReset());
+    els.taskInputs.forEach(i => i.addEventListener("change", saveTasks));
+    els.clear.addEventListener("click", (e) => { e.preventDefault(); clearTasks(); });
+
+    els.start.addEventListener("click", startTimer);
+    els.pause.addEventListener("click", togglePause);
+    els.reset.addEventListener("click", () => hardReset());
+
+    els.quickBtns.forEach(b => b.addEventListener("click", () => {
+      els.minutes.value = b.dataset.set;
+      hardReset();
+    }));
+
+    // Keyboard shortcuts
     window.addEventListener("keydown", (e) => {
-      if(e.key === "Enter") startGame();
-      // 1-4 quick picks
-      const map = { "1":0, "2":1, "3":2, "4":3 };
-      if(map[e.key] !== undefined && tiles[map[e.key]]) handlePick(tiles[map[e.key]]);
+      if(e.key.toLowerCase() === "s"){ e.preventDefault(); togglePause(); }
+      if(e.key.toLowerCase() === "r"){ e.preventDefault(); hardReset(); }
     });
+
+    // Init
+    applyModeUI();
+    loadTasks();
+    renderPicked();
+    restoreTimer();
   </script>
 </body>
 </html>
