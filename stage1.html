@@ -1,0 +1,1502 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stage 1 Workshop • Card → Goals → Journey</title>
+  <style>
+    :root{
+      --bg:#0b0d12;
+      --panel:#121625;
+      --panel2:#0f1320;
+      --border:#2a3350;
+      --text:#e9ecff;
+      --muted:#aab0d6;
+
+      --accent:#00e5ff;    /* bright cyan */
+      --accent2:#ff2bd6;   /* magenta */
+      --good:#47ff87;      /* neon green */
+      --warn:#ffe44d;      /* yellow */
+      --bad:#ff4d4d;       /* red */
+      --ink:#0b0d12;
+
+      --constraint:#ff4d4d;
+      --support:#00e5ff;
+      --wish:#47ff87;
+      --neutral:#ffe44d;
+
+      --r:18px;
+      --shadow: 0 16px 40px rgba(0,0,0,.38);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    a{ color: var(--accent); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    .wrap{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 16px 14px 80px;
+    }
+
+    header{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      justify-content:space-between;
+      padding: 12px 10px 6px;
+      position: sticky;
+      top: 0;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(10px);
+      z-index: 50;
+      border-bottom: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width: 0;
+    }
+    .title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      text-transform: uppercase;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,.28);
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .dot{
+      width:10px; height:10px;
+      border-radius: 3px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,229,255,.14);
+    }
+
+    .subtitle{
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.35;
+      max-width: 60ch;
+    }
+
+    .topActions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    button, .btn{
+      appearance:none;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      cursor:pointer;
+      box-shadow: 0 10px 26px rgba(0,0,0,.28);
+      transition: transform .08s ease, border-color .12s ease;
+      font-size: 13px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    button:active{ transform: translateY(1px); }
+    button:hover{ border-color: color-mix(in srgb, var(--accent) 60%, var(--border)); }
+    .btnPrimary{
+      border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
+      box-shadow: 0 14px 34px rgba(0,229,255,.12);
+    }
+    .btnDanger{
+      border-color: color-mix(in srgb, var(--bad) 65%, var(--border));
+    }
+    .btnGhost{
+      background: transparent;
+      box-shadow:none;
+    }
+
+    main{
+      display:flex;
+      flex-direction:column;
+      gap: 16px;
+      padding-top: 12px;
+    }
+
+    .card{
+      border: 1px solid var(--border);
+      background: linear-gradient(0deg, var(--panel2), var(--panel)); /* subtle, not gradient-y; still flat-ish */
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .cardHead{
+      padding: 14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+    }
+    .cardHead h2{
+      margin:0;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: .35px;
+      text-transform: uppercase;
+    }
+    .stepHint{
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      white-space: nowrap;
+    }
+
+    .cardBody{
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .row{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items:stretch;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      border:1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+    .pill strong{ color: var(--text); }
+
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+    }
+    @media (max-width: 860px){
+      .grid3{ grid-template-columns: 1fr; }
+      header{ position: static; backdrop-filter:none; }
+      .subtitle{ max-width: unset; }
+    }
+
+    /* Stepper */
+    .steps{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      padding: 10px 14px 0;
+    }
+    .step{
+      flex: 1 1 160px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 10px;
+      background: rgba(255,255,255,.03);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      min-width: 160px;
+    }
+    .stepLeft{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      min-width: 0;
+    }
+    .num{
+      width: 30px; height: 30px;
+      border-radius: 10px;
+      display:grid; place-items:center;
+      font-weight: 1000;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      flex:0 0 auto;
+    }
+    .stepName{
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      margin:0;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .stepState{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .step.active{
+      border-color: color-mix(in srgb, var(--accent) 65%, var(--border));
+      box-shadow: 0 16px 40px rgba(0,229,255,.10);
+    }
+    .step.done .num{
+      background: color-mix(in srgb, var(--good) 25%, var(--panel));
+      border-color: color-mix(in srgb, var(--good) 55%, var(--border));
+    }
+
+    /* Personality cards */
+    .personaGrid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 10px;
+    }
+    @media (max-width: 860px){
+      .personaGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    .persona{
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+      cursor:pointer;
+      position:relative;
+      transition: transform .08s ease, border-color .12s ease;
+      min-height: 110px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .persona:hover{ border-color: color-mix(in srgb, var(--accent2) 55%, var(--border)); }
+    .persona:active{ transform: translateY(1px); }
+
+    .personaTitle{
+      font-weight: 1000;
+      letter-spacing: .2px;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin:0;
+    }
+    .personaText{
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 12px;
+      line-height: 1.35;
+      margin:0;
+    }
+    .personaTag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:auto;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--text);
+      opacity: .9;
+    }
+    .persona .chip{
+      width: 10px; height: 10px;
+      border-radius: 4px;
+      background: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(255,43,214,.12);
+    }
+    .persona.selected{
+      border-color: color-mix(in srgb, var(--accent2) 75%, var(--border));
+      box-shadow: 0 18px 44px rgba(255,43,214,.12);
+      background: rgba(255,43,214,.06);
+    }
+    .persona.selected::after{
+      content:"SELECTED";
+      position:absolute;
+      top:10px;
+      right:10px;
+      font-size: 10px;
+      font-weight: 1000;
+      letter-spacing: .4px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      color: var(--ink);
+      background: var(--accent2);
+    }
+
+    /* Sticky notes */
+    .stickyArea{
+      border: 1px dashed color-mix(in srgb, var(--border) 85%, transparent);
+      background: rgba(255,255,255,.02);
+      border-radius: 16px;
+      padding: 12px;
+      min-height: 240px;
+      position:relative;
+      overflow:hidden;
+    }
+    .sticky{
+      position:absolute;
+      width: 170px;
+      min-height: 90px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 16px 40px rgba(0,0,0,.34);
+      padding: 10px 10px 12px;
+      cursor: grab;
+      touch-action: none;
+      user-select:none;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .sticky:active{ cursor:grabbing; }
+    .sticky textarea{
+      width:100%;
+      background: transparent;
+      color: var(--ink);
+      border: none;
+      outline:none;
+      resize:none;
+      font-weight: 900;
+      line-height: 1.2;
+      font-size: 13px;
+      min-height: 56px;
+    }
+    .sticky .mini{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .sticky .tinyBtn{
+      border:none;
+      background: rgba(0,0,0,.18);
+      color: rgba(0,0,0,.8);
+      font-weight: 1000;
+      border-radius: 10px;
+      padding: 6px 8px;
+      cursor:pointer;
+    }
+
+    /* Journey */
+    .journeyLayout{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap: 12px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .journeyLayout{ grid-template-columns: 1fr; }
+    }
+
+    .palette{
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .palette h3{
+      margin:0;
+      font-size: 12px;
+      font-weight: 1000;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .palette p{
+      margin:0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+
+    .eventList{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .event{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      padding: 10px 10px;
+      background: rgba(255,255,255,.06);
+      cursor: grab;
+      user-select:none;
+      touch-action:none;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.26);
+    }
+    .event:active{ cursor:grabbing; }
+    .eventTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+    }
+    .eventName{
+      margin:0;
+      font-size: 12px;
+      font-weight: 1000;
+      letter-spacing: .2px;
+      text-transform: uppercase;
+    }
+    .eventHint{
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .typePills{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .typePill{
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 1000;
+      letter-spacing: .2px;
+      cursor:pointer;
+      background: rgba(255,255,255,.06);
+    }
+
+    .legend{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      padding-top: 4px;
+    }
+    .key{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      border:1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 1000;
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+    .swatch{
+      width: 12px; height: 12px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,.24);
+    }
+
+    .timeline{
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+      overflow:auto;
+    }
+
+    .weeks{
+      display:grid;
+      grid-template-columns: repeat(13, minmax(160px, 1fr));
+      gap: 10px;
+      min-width: 1000px;
+    }
+    @media (max-width: 980px){
+      .weeks{ min-width: 980px; }
+    }
+
+    .week{
+      border-radius: 16px;
+      border: 1px dashed rgba(255,255,255,.20);
+      background: rgba(255,255,255,.02);
+      padding: 10px;
+      min-height: 210px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      position:relative;
+    }
+
+    .weekHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .weekHead strong{
+      font-size: 12px;
+      font-weight: 1000;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+    .weekHead span{
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .dropZone{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      padding-top: 2px;
+    }
+
+    .placed{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      padding: 10px 10px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.26);
+      cursor: grab;
+      user-select:none;
+      touch-action:none;
+    }
+    .placed:active{ cursor:grabbing; }
+
+    .placedTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      margin-bottom: 6px;
+    }
+    .placedTitle{
+      font-weight: 1000;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin:0;
+      letter-spacing: .2px;
+    }
+    .placedMeta{
+      font-size: 11px;
+      font-weight: 1000;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .placedTags{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .tagBtn{
+      border:none;
+      border-radius: 12px;
+      padding: 7px 9px;
+      font-weight: 1000;
+      font-size: 11px;
+      cursor:pointer;
+      color: var(--ink);
+    }
+    .miniX{
+      border:none;
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      padding: 7px 9px;
+      border-radius: 12px;
+      font-weight: 1000;
+      cursor:pointer;
+    }
+
+    .type-constraint{ background: var(--constraint); }
+    .type-support{ background: var(--support); }
+    .type-wish{ background: var(--wish); }
+    .type-neutral{ background: var(--neutral); }
+
+    .hidden{ display:none !important; }
+
+    .note{
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+    .divider{
+      height:1px;
+      background: rgba(255,255,255,.08);
+      margin: 4px 0;
+    }
+
+    .footerBar{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      border-top: 1px solid rgba(255,255,255,.08);
+      backdrop-filter: blur(12px);
+      padding: 10px 12px;
+      z-index: 60;
+    }
+    .footerInner{
+      max-width: 1120px;
+      margin: 0 auto;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .status{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12px;
+    }
+    .status strong{ color: var(--text); }
+    .toast{
+      position: fixed;
+      right: 14px;
+      bottom: 74px;
+      z-index: 80;
+      background: rgba(18,22,37,.92);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow);
+      max-width: 360px;
+      color: var(--text);
+      font-weight: 850;
+      font-size: 12px;
+      display:none;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="wrap">
+    <div class="brand">
+      <div class="title">
+        <span class="badge"><span class="dot"></span> Stage 1 Workshop</span>
+        <span style="color:var(--muted); font-weight:900; font-size:12px; letter-spacing:.2px;">Card → Goals → Journey</span>
+      </div>
+      <div class="subtitle">
+        Pick a personality card, drop your goals as sticky notes, then drag events onto Week 1–13 and tag them as Constraint, Support, or Wish.
+        Everything saves automatically on this device.
+      </div>
+    </div>
+
+    <div class="topActions">
+      <button class="btnGhost" id="btnBack" title="Go back">
+        ← Back
+      </button>
+      <button id="btnExport" class="btnPrimary" title="Export your work as a JSON file">
+        ⤓ Export
+      </button>
+      <button id="btnReset" class="btnDanger" title="Clear everything on this page">
+        ⟲ Reset
+      </button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="steps" id="stepper">
+      <div class="step active" data-step="1">
+        <div class="stepLeft">
+          <div class="num">1</div>
+          <p class="stepName">Pick a card</p>
+        </div>
+        <div class="stepState" id="state1">In progress</div>
+      </div>
+      <div class="step" data-step="2">
+        <div class="stepLeft">
+          <div class="num">2</div>
+          <p class="stepName">Goals (sticky)</p>
+        </div>
+        <div class="stepState" id="state2">Locked</div>
+      </div>
+      <div class="step" data-step="3">
+        <div class="stepLeft">
+          <div class="num">3</div>
+          <p class="stepName">Journey (W1–W13)</p>
+        </div>
+        <div class="stepState" id="state3">Locked</div>
+      </div>
+    </div>
+
+    <main>
+      <!-- STEP 1 -->
+      <section class="card" id="step1">
+        <div class="cardHead">
+          <h2>Stage 1 • Personality Card</h2>
+          <div class="stepHint">Tap one card to continue →</div>
+        </div>
+        <div class="cardBody">
+          <div class="note">
+            Choose the card that feels closest to your vibe when receiving and using feedback.
+            This is a placeholder set, you can rename later.
+          </div>
+
+          <div class="personaGrid" id="personaGrid"></div>
+
+          <div class="row">
+            <span class="pill">Selected: <strong id="selectedPersona">None yet</strong></span>
+            <button id="btnToStep2" class="btnPrimary" disabled>Next: Goals →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="card hidden" id="step2">
+        <div class="cardHead">
+          <h2>Stage 2 • Goals as Sticky Notes</h2>
+          <div class="stepHint">Add notes • drag • delete</div>
+        </div>
+        <div class="cardBody">
+          <div class="row" style="justify-content:space-between;">
+            <div class="note">
+              Write your goals for this unit / assignment. One sticky note = one goal.
+              Drag notes around. Tap “X” to delete.
+            </div>
+            <div class="row" style="margin-left:auto;">
+              <button id="btnAddSticky" class="btnPrimary">＋ Add sticky</button>
+              <button id="btnToStep3">Next: Journey →</button>
+            </div>
+          </div>
+
+          <div class="stickyArea" id="stickyArea" aria-label="Sticky notes canvas"></div>
+
+          <div class="note">
+            Tip: Keep them short. Example: “Understand why I lost marks” or “Know exactly what to change next time”.
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3 -->
+      <section class="card hidden" id="step3">
+        <div class="cardHead">
+          <h2>Stage 3 • Feedback Journey Map (Week 1 → Week 13)</h2>
+          <div class="stepHint">Drag boxes into weeks • tap tag to change colour</div>
+        </div>
+
+        <div class="cardBody">
+          <div class="journeyLayout">
+            <aside class="palette">
+              <h3>Event boxes (drag into weeks)</h3>
+              <p>
+                Drag an event into a week. Then tag it as <b>Constraint</b>, <b>Support</b>, or <b>Wish</b> to show what happened and what you needed.
+              </p>
+
+              <div class="legend">
+                <div class="key"><span class="swatch" style="background:var(--constraint)"></span> Constraint</div>
+                <div class="key"><span class="swatch" style="background:var(--support)"></span> Support</div>
+                <div class="key"><span class="swatch" style="background:var(--wish)"></span> Wish</div>
+                <div class="key"><span class="swatch" style="background:var(--neutral)"></span> Neutral</div>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="eventList" id="eventList"></div>
+
+              <div class="divider"></div>
+
+              <div class="note">
+                You can also drag placed boxes between weeks. Tap “Remove” to send it back to the list.
+              </div>
+            </aside>
+
+            <section class="timeline" aria-label="Timeline Week 1 to Week 13">
+              <div class="weeks" id="weeks"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="footerBar">
+    <div class="footerInner">
+      <div class="status">
+        <span>Progress:</span>
+        <strong id="progressText">Stage 1</strong>
+        <span id="autosaveText">• Autosaved</span>
+      </div>
+      <div class="row" style="justify-content:flex-end; margin:0;">
+        <button id="btnJump1" class="btnGhost">1</button>
+        <button id="btnJump2" class="btnGhost">2</button>
+        <button id="btnJump3" class="btnGhost">3</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const STORAGE_KEY = "stage1_workshop_v1";
+
+  const personaCards = [
+    { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want specific examples.", tag:"Needs clarity fast" },
+    { id:"optimizer", title:"Optimizer", text:"I want actionable steps and I iterate. I care about efficiency.", tag:"Likes concrete next steps" },
+    { id:"validator", title:"Validator", text:"I look for fairness and alignment with rubric. I compare vs criteria.", tag:"Wants rubric alignment" },
+    { id:"overwhelmed", title:"Overwhelmed", text:"I shut down when feedback is too vague or too much at once.", tag:"Needs gentle structure" },
+    { id:"independent", title:"Independent", text:"I’ll figure it out myself but I need a direction to start.", tag:"Wants a starting point" },
+    { id:"storybuilder", title:"Story Builder", text:"I want the ‘why’ behind comments to connect the whole picture.", tag:"Needs meaning & context" },
+    { id:"perfectionist", title:"Perfectionist", text:"I fix everything, but I need to know what matters most.", tag:"Needs prioritisation" },
+    { id:"strategist", title:"Strategist", text:"I plan ahead. I want timeline + checkpoints for improvement.", tag:"Likes planning + milestones" }
+  ];
+
+  const baseEvents = [
+    { id:"evt-brief", name:"Assessment brief / rubric arrives", hint:"W1–W2" },
+    { id:"evt-work", name:"Working on assignment", hint:"Any week" },
+    { id:"evt-submit", name:"Submit assignment", hint:"Due week" },
+    { id:"evt-feedback", name:"Feedback released", hint:"Key moment" },
+    { id:"evt-reflect", name:"Reflect & decide next action", hint:"After feedback" },
+    { id:"evt-ask", name:"Ask for clarification", hint:"Support moment" },
+    { id:"evt-peer", name:"Talk to peers", hint:"Support moment" },
+    { id:"evt-revise", name:"Revise approach for next task", hint:"Iteration" },
+    { id:"evt-wish", name:"I wish… (custom)", hint:"Add your wish" }
+  ];
+
+  const $ = (q, el=document) => el.querySelector(q);
+  const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
+
+  const personaGrid = $("#personaGrid");
+  const selectedPersonaText = $("#selectedPersona");
+  const btnToStep2 = $("#btnToStep2");
+  const btnToStep3 = $("#btnToStep3");
+  const btnAddSticky = $("#btnAddSticky");
+  const stickyArea = $("#stickyArea");
+  const eventList = $("#eventList");
+  const weeksWrap = $("#weeks");
+
+  const step1 = $("#step1");
+  const step2 = $("#step2");
+  const step3 = $("#step3");
+
+  const state1 = $("#state1");
+  const state2 = $("#state2");
+  const state3 = $("#state3");
+
+  const progressText = $("#progressText");
+  const toast = $("#toast");
+
+  let data = {
+    personaId: null,
+    personaTitle: null,
+    stickies: [],
+    placedEvents: [] // {instanceId, baseId, name, week, type}
+  };
+
+  // ---------- Toast ----------
+  let toastTimer = null;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.style.display = "block";
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=> toast.style.display="none", 2200);
+  }
+
+  // ---------- Storage ----------
+  function save(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      $("#autosaveText").textContent = "• Autosaved";
+    }catch(e){
+      $("#autosaveText").textContent = "• Save failed";
+    }
+  }
+
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const parsed = JSON.parse(raw);
+      if(parsed && typeof parsed === "object"){
+        data = Object.assign(data, parsed);
+      }
+    }catch(e){}
+  }
+
+  function resetAll(){
+    localStorage.removeItem(STORAGE_KEY);
+    data = { personaId:null, personaTitle:null, stickies:[], placedEvents:[] };
+    renderAll();
+    goToStage(1);
+    showToast("Reset done");
+  }
+
+  // ---------- Stepper ----------
+  function setStepper(active){
+    const steps = $$(".step", $("#stepper"));
+    steps.forEach(s=>{
+      const n = Number(s.dataset.step);
+      s.classList.toggle("active", n === active);
+    });
+
+    // done/locked states
+    const hasPersona = !!data.personaId;
+    const hasSticky = data.stickies.length > 0;
+
+    state1.textContent = hasPersona ? "Done" : (active===1 ? "In progress" : "Not done");
+    state2.textContent = hasPersona ? (hasSticky ? "Done" : (active===2 ? "In progress" : "Ready")) : "Locked";
+    state3.textContent = (hasPersona && hasSticky) ? (active===3 ? "In progress" : "Ready") : "Locked";
+
+    // classes
+    const s1 = $('.step[data-step="1"]');
+    const s2 = $('.step[data-step="2"]');
+    const s3 = $('.step[data-step="3"]');
+
+    s1.classList.toggle("done", hasPersona);
+    s2.classList.toggle("done", hasPersona && hasSticky);
+    s2.classList.toggle("active", active===2);
+    s3.classList.toggle("active", active===3);
+
+    s2.classList.toggle("disabled", !hasPersona);
+    s3.classList.toggle("disabled", !(hasPersona && hasSticky));
+
+    progressText.textContent = active===1 ? "Stage 1" : active===2 ? "Stage 2" : "Stage 3";
+  }
+
+  function goToStage(n){
+    step1.classList.toggle("hidden", n!==1);
+    step2.classList.toggle("hidden", n!==2);
+    step3.classList.toggle("hidden", n!==3);
+    setStepper(n);
+
+    // scroll top-ish
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ---------- Render Persona ----------
+  function renderPersonas(){
+    personaGrid.innerHTML = "";
+    personaCards.forEach(c=>{
+      const el = document.createElement("div");
+      el.className = "persona" + (data.personaId === c.id ? " selected":"");
+      el.dataset.id = c.id;
+      el.innerHTML = `
+        <p class="personaTitle">${c.title}</p>
+        <p class="personaText">${c.text}</p>
+        <div class="personaTag"><span class="chip"></span> ${c.tag}</div>
+      `;
+      el.addEventListener("click", ()=>{
+        data.personaId = c.id;
+        data.personaTitle = c.title;
+        selectedPersonaText.textContent = c.title;
+        btnToStep2.disabled = false;
+
+        // update selection UI
+        $$(".persona", personaGrid).forEach(p=>p.classList.remove("selected"));
+        el.classList.add("selected");
+
+        save();
+        showToast("Personality selected");
+        setStepper(1);
+      });
+      personaGrid.appendChild(el);
+    });
+
+    selectedPersonaText.textContent = data.personaTitle || "None yet";
+    btnToStep2.disabled = !data.personaId;
+  }
+
+  // ---------- Sticky Notes ----------
+  function randomStickyColor(){
+    // loud, flat, high-contrast
+    const options = [
+      "#47ff87", // neon green
+      "#00e5ff", // cyan
+      "#ffe44d", // yellow
+      "#ff2bd6", // magenta
+      "#ff884d"  // orange
+    ];
+    return options[Math.floor(Math.random()*options.length)];
+  }
+
+  function addSticky(initialText=""){
+    const id = "st-" + Math.random().toString(16).slice(2);
+    const rect = stickyArea.getBoundingClientRect();
+
+    const x = Math.max(10, Math.min(rect.width - 190, 12 + Math.random()*40));
+    const y = Math.max(10, Math.min(rect.height - 120, 12 + Math.random()*40));
+
+    data.stickies.push({
+      id,
+      x, y,
+      color: randomStickyColor(),
+      text: initialText || ""
+    });
+    save();
+    renderStickies();
+    setStepper(2);
+  }
+
+  function removeSticky(id){
+    data.stickies = data.stickies.filter(s=>s.id!==id);
+    save();
+    renderStickies();
+    setStepper(2);
+  }
+
+  function renderStickies(){
+    stickyArea.innerHTML = "";
+    data.stickies.forEach(s=>{
+      const el = document.createElement("div");
+      el.className = "sticky";
+      el.style.left = s.x + "px";
+      el.style.top  = s.y + "px";
+      el.style.background = s.color;
+      el.dataset.id = s.id;
+
+      el.innerHTML = `
+        <div class="mini">
+          <span style="font-weight:1000; color: rgba(0,0,0,.82); font-size: 11px; letter-spacing:.2px; text-transform:uppercase;">Goal</span>
+          <button class="tinyBtn" title="Delete">X</button>
+        </div>
+        <textarea placeholder="Write your goal...">${escapeHtml(s.text)}</textarea>
+      `;
+
+      // delete
+      el.querySelector(".tinyBtn").addEventListener("click", (e)=>{
+        e.stopPropagation();
+        removeSticky(s.id);
+        showToast("Sticky deleted");
+      });
+
+      // edit
+      const ta = el.querySelector("textarea");
+      ta.addEventListener("input", ()=>{
+        const item = data.stickies.find(x=>x.id===s.id);
+        if(item){ item.text = ta.value; save(); }
+      });
+
+      // drag (pointer)
+      makePointerDraggable(el, {
+        onMove:(dx,dy)=>{
+          const item = data.stickies.find(x=>x.id===s.id);
+          if(!item) return;
+
+          const maxX = stickyArea.clientWidth - el.offsetWidth;
+          const maxY = stickyArea.clientHeight - el.offsetHeight;
+
+          item.x = clamp(item.x + dx, 6, Math.max(6, maxX-6));
+          item.y = clamp(item.y + dy, 6, Math.max(6, maxY-6));
+
+          el.style.left = item.x + "px";
+          el.style.top  = item.y + "px";
+        },
+        onEnd: ()=> save()
+      });
+
+      stickyArea.appendChild(el);
+    });
+  }
+
+  // ---------- Journey Timeline ----------
+  function renderWeeks(){
+    weeksWrap.innerHTML = "";
+    for(let w=1; w<=13; w++){
+      const weekEl = document.createElement("div");
+      weekEl.className = "week";
+      weekEl.dataset.week = String(w);
+      weekEl.innerHTML = `
+        <div class="weekHead">
+          <strong>Week ${w}</strong>
+          <span>Drop here</span>
+        </div>
+        <div class="dropZone" data-week="${w}"></div>
+      `;
+
+      // allow drop
+      weekEl.addEventListener("dragover", (e)=> e.preventDefault());
+      weekEl.addEventListener("drop", (e)=> {
+        e.preventDefault();
+        const payload = e.dataTransfer.getData("text/plain");
+        if(!payload) return;
+
+        const obj = safeJson(payload);
+        if(!obj) return;
+
+        if(obj.kind === "baseEvent"){
+          placeBaseEvent(obj.baseId, w);
+        }else if(obj.kind === "placedEvent"){
+          movePlacedEvent(obj.instanceId, w);
+        }
+      });
+
+      weeksWrap.appendChild(weekEl);
+    }
+  }
+
+  function renderEventPalette(){
+    eventList.innerHTML = "";
+    baseEvents.forEach(evt=>{
+      const el = document.createElement("div");
+      el.className = "event";
+      el.draggable = true;
+      el.dataset.baseId = evt.id;
+
+      el.innerHTML = `
+        <div class="eventTop">
+          <p class="eventName">${evt.name}</p>
+          <span class="eventHint">${evt.hint}</span>
+        </div>
+        <div class="note">Drag into a week.</div>
+      `;
+
+      el.addEventListener("dragstart", (e)=>{
+        e.dataTransfer.setData("text/plain", JSON.stringify({
+          kind:"baseEvent",
+          baseId: evt.id
+        }));
+      });
+
+      // mobile: pointer drag (ghost)
+      enableMobileDrag(el, {
+        kind:"baseEvent",
+        baseId: evt.id
+      });
+
+      eventList.appendChild(el);
+    });
+  }
+
+  function placeBaseEvent(baseId, week){
+    const base = baseEvents.find(x=>x.id===baseId);
+    if(!base) return;
+
+    let name = base.name;
+    if(baseId === "evt-wish"){
+      name = prompt("Write your wish (short)") || "I wish… (custom)";
+      name = name.trim() || "I wish… (custom)";
+    }
+
+    const instanceId = "pe-" + Math.random().toString(16).slice(2);
+    data.placedEvents.push({
+      instanceId,
+      baseId,
+      name,
+      week,
+      type: "neutral"
+    });
+    save();
+    renderPlacedEvents();
+    showToast("Placed on Week " + week);
+  }
+
+  function movePlacedEvent(instanceId, week){
+    const item = data.placedEvents.find(x=>x.instanceId===instanceId);
+    if(!item) return;
+    item.week = week;
+    save();
+    renderPlacedEvents();
+  }
+
+  function removePlacedEvent(instanceId){
+    data.placedEvents = data.placedEvents.filter(x=>x.instanceId!==instanceId);
+    save();
+    renderPlacedEvents();
+  }
+
+  function cycleType(curr){
+    const order = ["neutral","constraint","support","wish"];
+    const idx = order.indexOf(curr);
+    return order[(idx+1) % order.length];
+  }
+
+  function typeLabel(t){
+    if(t==="constraint") return "Constraint";
+    if(t==="support") return "Support";
+    if(t==="wish") return "Wish";
+    return "Neutral";
+  }
+
+  function renderPlacedEvents(){
+    // clear zones
+    $$(".dropZone", weeksWrap).forEach(z => z.innerHTML = "");
+
+    data.placedEvents.forEach(pe=>{
+      const zone = $(`.dropZone[data-week="${pe.week}"]`, weeksWrap);
+      if(!zone) return;
+
+      const el = document.createElement("div");
+      el.className = "placed";
+      el.draggable = true;
+      el.dataset.instanceId = pe.instanceId;
+
+      el.innerHTML = `
+        <div class="placedTop">
+          <p class="placedTitle">${escapeHtml(pe.name)}</p>
+          <span class="placedMeta">${typeLabel(pe.type)}</span>
+        </div>
+        <div class="placedTags">
+          <button class="tagBtn type-${pe.type}" title="Tap to change type (colour)">${typeLabel(pe.type)} (tap)</button>
+          <button class="miniX" title="Remove">Remove</button>
+        </div>
+      `;
+
+      // drag start (desktop)
+      el.addEventListener("dragstart", (e)=>{
+        e.dataTransfer.setData("text/plain", JSON.stringify({
+          kind:"placedEvent",
+          instanceId: pe.instanceId
+        }));
+      });
+
+      // mobile drag
+      enableMobileDrag(el, {
+        kind:"placedEvent",
+        instanceId: pe.instanceId
+      });
+
+      // change type
+      el.querySelector(".tagBtn").addEventListener("click", ()=>{
+        const item = data.placedEvents.find(x=>x.instanceId===pe.instanceId);
+        if(!item) return;
+        item.type = cycleType(item.type);
+        save();
+        renderPlacedEvents();
+      });
+
+      // remove
+      el.querySelector(".miniX").addEventListener("click", ()=>{
+        removePlacedEvent(pe.instanceId);
+        showToast("Removed");
+      });
+
+      zone.appendChild(el);
+    });
+  }
+
+  // ---------- Mobile Drag (Pointer) ----------
+  // For touch devices, emulate drag-drop:
+  // - On pointerdown, create a ghost clone that follows finger
+  // - On pointerup, detect target week column and trigger place/move
+  function enableMobileDrag(el, payload){
+    let ghost = null;
+    let start = null;
+
+    el.addEventListener("pointerdown", (e)=>{
+      if(e.pointerType !== "touch") return;
+      e.preventDefault();
+
+      start = { x:e.clientX, y:e.clientY };
+      ghost = el.cloneNode(true);
+      ghost.style.position = "fixed";
+      ghost.style.left = (e.clientX - 80) + "px";
+      ghost.style.top  = (e.clientY - 20) + "px";
+      ghost.style.width = Math.min(240, el.getBoundingClientRect().width) + "px";
+      ghost.style.opacity = "0.92";
+      ghost.style.zIndex = "9999";
+      ghost.style.pointerEvents = "none";
+      document.body.appendChild(ghost);
+
+      el.setPointerCapture(e.pointerId);
+    });
+
+    el.addEventListener("pointermove", (e)=>{
+      if(!ghost) return;
+      ghost.style.left = (e.clientX - 80) + "px";
+      ghost.style.top  = (e.clientY - 20) + "px";
+    });
+
+    el.addEventListener("pointerup", (e)=>{
+      if(!ghost) return;
+      ghost.remove();
+      ghost = null;
+
+      // find week under finger
+      const under = document.elementFromPoint(e.clientX, e.clientY);
+      const weekEl = under ? under.closest(".week") : null;
+      if(!weekEl){
+        showToast("Drop on a Week box");
+        return;
+      }
+      const week = Number(weekEl.dataset.week);
+
+      if(payload.kind === "baseEvent"){
+        placeBaseEvent(payload.baseId, week);
+      }else if(payload.kind === "placedEvent"){
+        movePlacedEvent(payload.instanceId, week);
+      }
+    });
+  }
+
+  // ---------- Generic Pointer Drag for Stickies ----------
+  function makePointerDraggable(el, {onMove, onEnd}){
+    let last = null;
+    el.addEventListener("pointerdown", (e)=>{
+      // ignore when editing textarea
+      if(e.target && e.target.tagName === "TEXTAREA") return;
+      el.setPointerCapture(e.pointerId);
+      last = { x:e.clientX, y:e.clientY };
+    });
+    el.addEventListener("pointermove", (e)=>{
+      if(!last) return;
+      const dx = e.clientX - last.x;
+      const dy = e.clientY - last.y;
+      last = { x:e.clientX, y:e.clientY };
+      onMove(dx,dy);
+    });
+    el.addEventListener("pointerup", ()=>{
+      if(!last) return;
+      last = null;
+      onEnd && onEnd();
+    });
+    el.addEventListener("pointercancel", ()=>{
+      if(!last) return;
+      last = null;
+      onEnd && onEnd();
+    });
+  }
+
+  // ---------- Helpers ----------
+  function clamp(v,min,max){ return Math.min(max, Math.max(min, v)); }
+  function safeJson(s){ try{ return JSON.parse(s); }catch(e){ return null; } }
+  function escapeHtml(str){
+    return (str ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // ---------- Navigation buttons ----------
+  $("#btnToStep2").addEventListener("click", ()=>{
+    if(!data.personaId) return;
+    goToStage(2);
+    setStepper(2);
+  });
+
+  $("#btnToStep3").addEventListener("click", ()=>{
+    if(!data.personaId) return;
+    if(data.stickies.length === 0){
+      showToast("Add at least 1 sticky goal first");
+      return;
+    }
+    goToStage(3);
+    setStepper(3);
+  });
+
+  $("#btnAddSticky").addEventListener("click", ()=> addSticky(""));
+
+  $("#btnBack").addEventListener("click", ()=>{
+    // simple back: from 3 -> 2 -> 1
+    const visible = !step1.classList.contains("hidden") ? 1 : !step2.classList.contains("hidden") ? 2 : 3;
+    if(visible===3) goToStage(2);
+    else if(visible===2) goToStage(1);
+    else window.location.href = "index.html";
+  });
+
+  $("#btnJump1").addEventListener("click", ()=> goToStage(1));
+  $("#btnJump2").addEventListener("click", ()=>{
+    if(!data.personaId){ showToast("Pick a card first"); return; }
+    goToStage(2);
+  });
+  $("#btnJump3").addEventListener("click", ()=>{
+    if(!(data.personaId && data.stickies.length>0)){ showToast("Finish Stage 2 first"); return; }
+    goToStage(3);
+  });
+
+  $("#btnReset").addEventListener("click", ()=>{
+    const ok = confirm("Reset everything on this page?");
+    if(ok) resetAll();
+  });
+
+  $("#btnExport").addEventListener("click", ()=>{
+    const blob = new Blob([JSON.stringify({
+      exportedAt: new Date().toISOString(),
+      persona: { id: data.personaId, title: data.personaTitle },
+      stickies: data.stickies,
+      placedEvents: data.placedEvents
+    }, null, 2)], {type:"application/json"});
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "stage1-workshop-export.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast("Exported JSON");
+  });
+
+  // ---------- Render all ----------
+  function renderAll(){
+    renderPersonas();
+    renderStickies();
+    renderEventPalette();
+    renderWeeks();
+    renderPlacedEvents();
+
+    // determine stage to show
+    if(!data.personaId){
+      goToStage(1);
+      setStepper(1);
+    }else if(data.stickies.length === 0){
+      goToStage(2);
+      setStepper(2);
+    }else{
+      goToStage(3);
+      setStepper(3);
+    }
+  }
+
+  // ---------- Init ----------
+  load();
+  renderAll();
+
+  // ensure sticky area has height on small screens
+  function ensureStickyHeight(){
+    const min = 260;
+    const h = Math.max(min, Math.round(window.innerHeight * 0.34));
+    stickyArea.style.minHeight = h + "px";
+  }
+  ensureStickyHeight();
+  window.addEventListener("resize", ensureStickyHeight);
+
+  // small “autosave pulse”
+  setInterval(()=> {
+    $("#autosaveText").textContent = "• Autosaved";
+  }, 5000);
+
+})();
+</script>
+</body>
+</html>

@@ -5,19 +5,25 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Jackie Foo — Soft Launch</title>
 
+  <!-- Clean + aesthetic display font (optional). Falls back gracefully. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+
   <style>
     :root{
-      /* Bold + strong (no gradients) */
-      --bg:#0b0b12;
-      --panel:#10101a;
-      --ink:#f5f7ff;
-      --muted:#b7b9d6;
-      --border:rgba(245,247,255,.16);
+      /* Aesthetic, bold, good-vibes palette */
+      --bg:#07070b;
+      --ink:#f6f6ff;
+      --muted:rgba(246,246,255,.72);
+
+      --card:rgba(255,255,255,.06);
+      --border:rgba(255,255,255,.14);
       --shadow:rgba(0,0,0,.55);
 
       --a:#00f5d4;   /* teal */
       --b:#ff2bd6;   /* magenta */
-      --c:#ffd400;   /* yellow */
+      --c:#ffd400;   /* lemon */
       --d:#7c5cff;   /* violet */
     }
 
@@ -27,276 +33,355 @@
       margin:0;
       color:var(--ink);
       background:var(--bg);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       overflow-x:hidden;
     }
 
-    /* Sharp, high-contrast graphic background (no gradients) */
-    .bg{
+    /* Soft-but-bold glow (still no gradients on big blocks) */
+    .glow{
+      position:fixed; inset:-20%;
+      pointer-events:none;
+      z-index:-2;
+      background:
+        radial-gradient(700px 520px at 18% 10%, rgba(255,43,214,.20), transparent 60%),
+        radial-gradient(820px 560px at 86% 16%, rgba(0,245,212,.18), transparent 62%),
+        radial-gradient(920px 680px at 50% 115%, rgba(124,92,255,.16), transparent 62%);
+      filter:saturate(1.2);
+    }
+
+    /* Minimal grain */
+    .grain{
       position:fixed; inset:0;
       pointer-events:none;
       z-index:-1;
-    }
-    .bg::before, .bg::after{
-      content:"";
-      position:absolute;
-      inset:-20%;
-      opacity:.16;
-    }
-    .bg::before{
       background:
-        linear-gradient(90deg, transparent 0 38%, rgba(0,245,212,.9) 38% 42%, transparent 42% 100%),
-        linear-gradient(0deg, transparent 0 56%, rgba(255,43,214,.9) 56% 60%, transparent 60% 100%),
-        linear-gradient(135deg, transparent 0 46%, rgba(255,212,0,.95) 46% 50%, transparent 50% 100%);
-      transform: rotate(-10deg);
-    }
-    .bg::after{
-      background:
-        repeating-linear-gradient(90deg, rgba(245,247,255,.25) 0 1px, transparent 1px 22px),
-        repeating-linear-gradient(0deg, rgba(245,247,255,.20) 0 1px, transparent 1px 22px);
-      opacity:.08;
+        radial-gradient(circle at 10px 10px, rgba(255,255,255,.08) 1px, transparent 1px) 0 0/24px 24px;
+      opacity:.10;
+      mask: radial-gradient(ellipse at 50% 18%, rgba(0,0,0,1), rgba(0,0,0,.35) 60%, transparent 75%);
     }
 
     .wrap{
       min-height:100%;
       display:flex;
       justify-content:center;
-      padding:18px;
-      padding-bottom:28px;
+      padding:20px;
+      padding-bottom:34px;
+    }
+
+    .shell{
+      width:min(980px, 100%);
+      display:grid;
+      gap:16px;
+      align-content:start;
+    }
+
+    .frame{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      box-shadow: 0 26px 90px var(--shadow);
+      border-radius:28px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Decorative corner dots */
+    .frame::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 28px 28px, rgba(0,245,212,.9) 0 3px, transparent 4px),
+        radial-gradient(circle at calc(100% - 28px) 28px, rgba(255,43,214,.9) 0 3px, transparent 4px),
+        radial-gradient(circle at 28px calc(100% - 28px), rgba(255,212,0,.95) 0 3px, transparent 4px),
+        radial-gradient(circle at calc(100% - 28px) calc(100% - 28px), rgba(124,92,255,.9) 0 3px, transparent 4px);
+      opacity:.9;
+    }
+
+    .inner{
+      padding:22px;
+      display:grid;
+      gap:18px;
+    }
+
+    /* Top row */
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .pillRow{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+    .pill{
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(0,0,0,.22);
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+      backdrop-filter: blur(10px);
+    }
+    .pill b{color:var(--ink)}
+    .pill .dot{
+      display:inline-block;
+      width:10px;height:10px;border-radius:999px;
+      margin-right:8px; vertical-align:middle;
+      background:var(--b);
+      box-shadow:0 0 22px rgba(255,43,214,.35);
+    }
+
+    /* Hero typography */
+    .kicker{
+      margin:0;
+      font-size:14px;
+      color:rgba(246,246,255,.70);
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
+
+    .headline{
+      margin:6px 0 0;
+      font-family:"Fraunces", ui-serif, Georgia, serif;
+      font-size: clamp(44px, 7vw, 78px);
+      line-height: .95;
+      letter-spacing: -.02em;
+    }
+
+    .headline .name{
+      display:inline-block;
+      position:relative;
+      padding:0 6px;
+    }
+    .headline .name::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:8px;
+      height:10px;
+      background:rgba(255,212,0,.26);
+      z-index:-1;
+      transform:skewX(-10deg);
+    }
+
+    .desc{
+      margin:10px 0 0;
+      max-width:64ch;
+      font-size:16px;
+      line-height:1.75;
+      color:var(--muted);
+    }
+    .desc strong{color:var(--ink)}
+    .desc .wip{
+      display:inline-block;
+      padding:3px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      color:rgba(246,246,255,.88);
+      margin-left:6px;
+      font-size:13px;
+      vertical-align:middle;
+      white-space:nowrap;
+    }
+
+    /* Content grid */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+    }
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr}
     }
 
     .card{
-      width:min(900px, 100%);
-      border:2px solid var(--border);
-      background:rgba(16,16,26,.86);
-      box-shadow: 0 18px 55px var(--shadow);
-      padding:18px;
-      position:relative;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.05);
+      border-radius:22px;
+      padding:16px;
       backdrop-filter: blur(10px);
     }
-    .card::after{
-      content:"";
-      position:absolute; inset:-2px;
-      border:2px dashed rgba(124,92,255,.35);
-      pointer-events:none;
-      mix-blend-mode:screen;
-    }
 
-    header{
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-      justify-content:space-between;
-      align-items:flex-start;
-      margin-bottom:14px;
-    }
-
-    h1{
-      margin:0;
-      font-size:22px;
-      letter-spacing:.2px;
-      line-height:1.1;
-      text-transform:uppercase;
-    }
-    .tagline{
-      margin:10px 0 0;
-      color:var(--muted);
+    .card h2{
+      margin:0 0 8px 0;
       font-size:14px;
-      line-height:1.6;
-      max-width:60ch;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(246,246,255,.72);
     }
 
-    .badges{
+    .tags{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      justify-content:flex-end;
-      align-items:center;
+      margin-top:10px;
     }
-    .badge{
-      font-size:12px;
-      padding:8px 10px;
-      border:2px solid var(--border);
-      background:#0c0c14;
-      white-space:nowrap;
-    }
-    .badge b{color:var(--a)}
-    .dot{
-      display:inline-block;
-      width:10px;height:10px;
-      background:var(--b);
-      margin-right:8px;
-      vertical-align:middle;
-      box-shadow:0 0 0 2px rgba(0,0,0,.35);
-    }
-
-    .hero{
-      display:grid;
-      gap:12px;
-      padding:14px;
-      border:2px solid rgba(245,247,255,.12);
-      background:#0c0c14;
-      box-shadow:0 10px 0 rgba(0,0,0,.25);
-    }
-
-    .big{
-      margin:0;
-      font-size:16px;
-      line-height:1.55;
-      letter-spacing:.1px;
-    }
-    .big strong{color:var(--c)}
-    .mini{
-      margin:0;
-      color:var(--muted);
+    .tag{
       font-size:13px;
-      line-height:1.7;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.20);
+      color:rgba(246,246,255,.78);
     }
+    .tag:nth-child(1){border-color:rgba(0,245,212,.28)}
+    .tag:nth-child(2){border-color:rgba(255,43,214,.28)}
+    .tag:nth-child(3){border-color:rgba(255,212,0,.28)}
+    .tag:nth-child(4){border-color:rgba(124,92,255,.28)}
 
+    /* Links */
     .links{
-      margin-top:6px;
       display:grid;
       gap:10px;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-    }
-    @media (max-width:640px){
-      .links{grid-template-columns:1fr}
-      h1{font-size:20px}
+      margin-top:12px;
     }
 
     a.btn{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      padding:14px 12px;
-      border:2px solid var(--border);
-      background:#0b0b12;
+      gap:10px;
+      padding:14px 14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(0,0,0,.18);
       color:var(--ink);
       text-decoration:none;
+      font-size:15px;
       font-weight:700;
       letter-spacing:.2px;
-      box-shadow:0 10px 0 rgba(0,0,0,.25);
-      touch-action:manipulation;
-      transition: transform .08s ease, box-shadow .08s ease, border-color .12s ease;
+      backdrop-filter: blur(10px);
+      transition: transform .08s ease, border-color .12s ease, background .12s ease;
     }
-    a.btn:active{transform:translateY(2px); box-shadow:0 8px 0 rgba(0,0,0,.25)}
-    a.btn:hover{border-color:rgba(245,247,255,.28)}
+    a.btn:hover{
+      border-color: rgba(255,255,255,.24);
+      background: rgba(255,255,255,.06);
+    }
+    a.btn:active{transform: translateY(1px);}
+
     .left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
+      display:flex; align-items:center; gap:10px; min-width:0;
     }
-    .icon{
-      width:14px;height:14px;
-      background:var(--a);
-      box-shadow:0 0 0 2px rgba(0,0,0,.35);
-      flex:0 0 auto;
+
+    .chip{
+      width:12px;height:12px;border-radius:4px; flex:0 0 auto;
+      box-shadow:0 0 0 2px rgba(0,0,0,.25);
     }
+    .chip.a{background:var(--a)}
+    .chip.b{background:var(--b)}
+    .chip.c{background:var(--c)}
+    .chip.d{background:var(--d)}
+
     .label{
-      font-size:13px;
-      line-height:1.2;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
     }
+
     .arrow{
-      color:var(--muted);
-      font-size:14px;
+      color:rgba(246,246,255,.55);
+      font-size:16px;
       flex:0 0 auto;
     }
 
-    .footer{
-      margin-top:14px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.6;
-      border-top:2px solid rgba(245,247,255,.10);
-      padding-top:12px;
+    .note{
+      margin:0;
+      color:rgba(246,246,255,.62);
+      line-height:1.7;
+      font-size:14px;
     }
 
-    /* Little personality “stamps” */
-    .stamps{
+    footer{
       display:flex;
-      gap:8px;
+      justify-content:space-between;
+      gap:12px;
       flex-wrap:wrap;
-      margin-top:6px;
+      padding-top:4px;
+      color:rgba(246,246,255,.55);
+      font-size:13px;
     }
-    .stamp{
-      font-size:12px;
-      padding:6px 10px;
-      border:2px solid rgba(245,247,255,.14);
-      background:#0b0b12;
+
+    .tiny{
+      display:inline-block;
+      padding:4px 10px;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      color:rgba(246,246,255,.68);
     }
-    .stamp:nth-child(1){border-color:rgba(0,245,212,.35)}
-    .stamp:nth-child(2){border-color:rgba(255,43,214,.35)}
-    .stamp:nth-child(3){border-color:rgba(255,212,0,.35)}
-    .stamp:nth-child(4){border-color:rgba(124,92,255,.35)}
   </style>
 </head>
 
 <body>
-  <div class="bg" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
 
   <div class="wrap">
-    <main class="card" role="main">
-      <header>
-        <div>
-          <h1>Jackie Foo</h1>
-          <p class="tagline">Soft launch. This site is still developing. I’m building it in public and tightening it up as I go.</p>
-        </div>
-        <div class="badges" aria-label="status badges">
-          <div class="badge"><span class="dot"></span>Build: <b>WIP</b></div>
-          <div class="badge">Vibe: <b>Bold</b></div>
-        </div>
-      </header>
+    <main class="shell" role="main">
+      <section class="frame">
+        <div class="inner">
+          <div class="top">
+            <div>
+              <p class="kicker">Soft launch</p>
+              <h1 class="headline"><span class="name">Jackie Foo</span></h1>
+              <p class="desc">
+                I’m building this site in public. It’s a clean base right now, and I’ll add projects, notes, and more personality soon.
+                <span class="wip">Still developing</span>
+              </p>
+            </div>
 
-      <section class="hero" aria-label="intro">
-        <p class="big">
-          Hi, I’m <strong>Jackie</strong>. I like building things that feel clean, useful, and slightly fun.
-        </p>
-        <p class="mini">
-          If you’re here early: welcome. If you want to connect, use the buttons below.
-        </p>
+            <div class="pillRow" aria-label="status">
+              <div class="pill"><span class="dot"></span>Build <b>WIP</b></div>
+              <div class="pill">Mood <b>Bold + playful</b></div>
+            </div>
+          </div>
 
-        <div class="stamps" aria-label="personality tags">
-          <div class="stamp">Data × Design</div>
-          <div class="stamp">Human-centred</div>
-          <div class="stamp">Ship fast</div>
-          <div class="stamp">Polish later</div>
-        </div>
+          <div class="grid">
+            <div class="card">
+              <h2>Me in 10 seconds</h2>
+              <p class="note">
+                Data × design energy. I like human-centred tools, clean interfaces, and shipping fast then polishing.
+              </p>
 
-        <nav class="links" aria-label="contact links">
-          <!-- Replace the # with your real links -->
-          <a class="btn" href="#" target="_blank" rel="noopener">
-            <span class="left"><span class="icon" style="background:var(--a)"></span><span class="label">LinkedIn</span></span>
-            <span class="arrow">→</span>
-          </a>
+              <div class="tags" aria-label="tags">
+                <div class="tag">Data × Design</div>
+                <div class="tag">Human-centred</div>
+                <div class="tag">Ship fast</div>
+                <div class="tag">Polish later</div>
+              </div>
+            </div>
 
-          <a class="btn" href="mailto:you@email.com">
-            <span class="left"><span class="icon" style="background:var(--b)"></span><span class="label">Email me</span></span>
-            <span class="arrow">→</span>
-          </a>
+            <div class="card">
+              <h2>Connect</h2>
+              <p class="note" style="margin-bottom:12px;">Pick a door.</p>
 
-          <a class="btn" href="#" target="_blank" rel="noopener">
-            <span class="left"><span class="icon" style="background:var(--c)"></span><span class="label">GitHub</span></span>
-            <span class="arrow">→</span>
-          </a>
+              <nav class="links" aria-label="links">
+                <!-- Replace # and email -->
+                <a class="btn" href="#" target="_blank" rel="noopener">
+                  <span class="left"><span class="chip a"></span><span class="label">LinkedIn</span></span>
+                  <span class="arrow">↗</span>
+                </a>
+                <a class="btn" href="mailto:you@email.com">
+                  <span class="left"><span class="chip b"></span><span class="label">Email</span></span>
+                  <span class="arrow">↗</span>
+                </a>
+                <a class="btn" href="#" target="_blank" rel="noopener">
+                  <span class="left"><span class="chip c"></span><span class="label">GitHub</span></span>
+                  <span class="arrow">↗</span>
+                </a>
+                <a class="btn" href="#" target="_blank" rel="noopener">
+                  <span class="left"><span class="chip d"></span><span class="label">Resume / CV</span></span>
+                  <span class="arrow">↗</span>
+                </a>
+              </nav>
+            </div>
+          </div>
 
-          <a class="btn" href="#" target="_blank" rel="noopener">
-            <span class="left"><span class="icon" style="background:var(--d)"></span><span class="label">Resume / CV</span></span>
-            <span class="arrow">→</span>
-          </a>
-        </nav>
-
-        <div class="footer">
-          <div>Now building: portfolio, projects, and a few playful experiments.</div>
-          <div>© <span id="year"></span> Jackie Foo</div>
+          <footer>
+            <span class="tiny">Now building: portfolio + experiments</span>
+            <span>© <span id="year"></span> Jackie Foo</span>
+          </footer>
         </div>
       </section>
     </main>
