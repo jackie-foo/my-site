@@ -13,7 +13,7 @@
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--text)}
-    .wrap{max-width:1120px;margin:0 auto;padding:16px 14px 88px}
+    .wrap{max-width:1240px;margin:0 auto;padding:16px 14px 88px}
     header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
     .badge{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:var(--panel);box-shadow:0 10px 30px rgba(0,0,0,.28);font-weight:1000;font-size:12px}
     .dot{width:10px;height:10px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 3px rgba(0,229,255,.14)}
@@ -31,22 +31,10 @@
     .cardHead h2{margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase}
     .cardBody{padding:14px;display:flex;flex-direction:column;gap:12px}
 
-    .layout{display:grid;grid-template-columns:320px 1fr;gap:12px;align-items:start}
-    @media (max-width:980px){.layout{grid-template-columns:1fr}}
-    .palette{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);padding:12px;display:flex;flex-direction:column;gap:10px}
-    .palette h3{margin:0;font-size:12px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
-    .legend{display:flex;gap:8px;flex-wrap:wrap}
-    .key{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--border);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:1000;color:var(--muted);background:rgba(255,255,255,.03)}
-    .swatch{width:12px;height:12px;border-radius:5px;border:1px solid rgba(255,255,255,.24)}
-    .event{border-radius:14px;border:1px solid rgba(255,255,255,.16);padding:10px;background:rgba(255,255,255,.06);cursor:grab;user-select:none;touch-action:none;box-shadow:0 14px 30px rgba(0,0,0,.26)}
-    .event:active{cursor:grabbing}
-    .eventTop{display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .eventName{margin:0;font-size:12px;font-weight:1000;letter-spacing:.2px;text-transform:uppercase}
-    .eventHint{font-size:11px;color:var(--muted);font-weight:900;white-space:nowrap}
-
+    /* Single-column layout (bigger weeks) */
     .timeline{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);padding:12px;overflow:auto}
-    .weeks{display:grid;grid-template-columns:repeat(13,minmax(160px,1fr));gap:10px;min-width:1000px}
-    .week{border-radius:16px;border:1px dashed rgba(255,255,255,.20);background:rgba(255,255,255,.02);padding:10px;min-height:210px;display:flex;flex-direction:column;gap:10px; position:relative}
+    .weeks{display:grid;grid-template-columns:repeat(13,minmax(170px,1fr));gap:10px;min-width:1120px}
+    .week{border-radius:16px;border:1px dashed rgba(255,255,255,.20);background:rgba(255,255,255,.02);padding:10px;min-height:230px;display:flex;flex-direction:column;gap:10px; position:relative}
     .weekHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08)}
     .weekHead strong{font-size:12px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
     .weekHead span{font-size:11px;color:var(--muted);font-weight:900;white-space:nowrap}
@@ -68,7 +56,51 @@
     .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
       border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);max-width:360px;color:var(--text);font-weight:900;font-size:12px;display:none}
 
-    /* ===== Modals (tutorial) ===== */
+    /* ===== Loading Screen ===== */
+    .loading{
+      position:fixed; inset:0; z-index:120;
+      display:none; align-items:center; justify-content:center;
+      background:radial-gradient(1200px 600px at 30% 20%, rgba(0,229,255,.10), transparent 55%),
+                 radial-gradient(900px 500px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
+                 rgba(0,0,0,.72);
+      backdrop-filter: blur(6px);
+      padding:16px;
+    }
+    .loadingCard{
+      width:min(520px, 100%);
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      text-align:center;
+      padding:18px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+    }
+    .chibi{
+      width:140px; height:140px;
+      object-fit:contain;
+      filter: drop-shadow(0 16px 22px rgba(0,0,0,.45));
+      border-radius:18px;
+    }
+    .loadingTitle{font-weight:1000;letter-spacing:.2px;font-size:16px;margin:0}
+    .loadingSub{margin:0;color:var(--muted);font-weight:800;font-size:12px;line-height:1.45}
+    .bar{width:100%;height:10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);overflow:hidden}
+    .bar > div{
+      height:100%;width:40%;border-radius:999px;
+      background:linear-gradient(90deg, rgba(0,229,255,.85), rgba(255,43,214,.85));
+      animation: glide 1.2s ease-in-out infinite;
+    }
+    @keyframes glide{
+      0%{transform:translateX(-40%)}
+      50%{transform:translateX(120%)}
+      100%{transform:translateX(-40%)}
+    }
+
+    /* ===== Modals (tutorial + add card) ===== */
     .overlay{
       position:fixed; inset:0; z-index:95;
       background:rgba(0,0,0,.62);
@@ -77,7 +109,7 @@
       padding:16px;
     }
     .modal{
-      width:min(760px, 100%);
+      width:min(780px, 100%);
       border:1px solid rgba(255,255,255,.12);
       background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
       border-radius:20px;
@@ -137,48 +169,32 @@
       line-height:1.45;
     }
 
-    /* ===== Context Menu ===== */
-    .ctx{
-      position:fixed;
-      z-index:110;
-      display:none;
-      width:min(320px, calc(100vw - 24px));
-      border:1px solid rgba(255,255,255,.12);
-      background:linear-gradient(0deg, rgba(18,22,37,.96), rgba(15,19,32,.96));
-      border-radius:16px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .ctxHead{
-      padding:12px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      display:flex;justify-content:space-between;align-items:center;gap:10px;
-    }
-    .ctxHead strong{font-size:12px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
-    .ctxBody{padding:10px;display:flex;flex-direction:column;gap:8px}
-    .ctxBtn{
-      width:100%;
-      text-align:left;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-      padding:10px 10px;
-      border-radius:14px;
-      font-weight:1000;
-      cursor:pointer;
-      box-shadow:none;
-    }
-    .ctxBtn:hover{border-color:color-mix(in srgb,var(--accent2) 55%, rgba(255,255,255,.10))}
-    .ctxSelect{
+    /* Add-card modal specifics */
+    .field{
       width:100%;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.04);
       color:var(--text);
       border-radius:14px;
-      padding:10px 10px;
-      font-weight:1000;
+      padding:10px 12px;
+      font-weight:900;
       outline:none;
     }
-    .ctxSmall{color:var(--muted);font-weight:800;font-size:12px;line-height:1.35}
+    .seg{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+    }
+    .seg button{
+      box-shadow:none;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .seg button.active{
+      border-color:color-mix(in srgb,var(--accent2) 55%, rgba(255,255,255,.10));
+      background:rgba(255,43,214,.08);
+    }
+    .hintTiny{color:var(--muted);font-weight:800;font-size:12px;line-height:1.35}
   </style>
 </head>
 <body>
@@ -188,7 +204,7 @@
         <div class="badge"><span class="dot"></span> Stage 1 • Step 3</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
-          Drag template cards into weeks. Add custom cards. Tap tag to cycle: Neutral → Constraint → Support → Wish.
+          Add cards into weeks. Long-press or right-click a week to add faster. Tap tag to cycle: Neutral → Constraint → Support → Wish.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
@@ -201,31 +217,31 @@
     <section class="card">
       <div class="cardHead">
         <h2>Feedback Journey Map (W1–W13)</h2>
-        <button id="btnAddCustom" class="btnPrimary">＋ Add custom card</button>
+        <button id="btnAddGlobal" class="btnPrimary">＋ Add card</button>
       </div>
       <div class="cardBody">
-        <div class="layout">
-          <aside class="palette">
-            <h3>Template cards</h3>
-            <div class="legend">
-              <div class="key"><span class="swatch" style="background:var(--neutral)"></span> Neutral</div>
-              <div class="key"><span class="swatch" style="background:var(--constraint)"></span> Constraint</div>
-              <div class="key"><span class="swatch" style="background:var(--support)"></span> Support</div>
-              <div class="key"><span class="swatch" style="background:var(--wish)"></span> Wish</div>
-            </div>
-            <div class="subtitle" style="margin:0">Tip: Right-click a week to add cards faster.</div>
-            <div id="eventList" style="display:flex;flex-direction:column;gap:10px"></div>
-          </aside>
-
-          <section class="timeline">
-            <div class="weeks" id="weeks"></div>
-          </section>
+        <section class="timeline">
+          <div class="weeks" id="weeks"></div>
+        </section>
+        <div class="subtitle" style="margin:0">
+          Tip: Right-click / long-press a week → add a card directly into that week.
         </div>
       </div>
     </section>
   </div>
 
   <div class="toast" id="toast"></div>
+
+  <!-- Loading -->
+  <div class="loading" id="loading" aria-hidden="true">
+    <div class="loadingCard">
+      <img id="chibiImg" class="chibi" alt="Loading chibi"/>
+      <p class="loadingTitle" id="loadingTitle">Loading journey…</p>
+      <p class="loadingSub" id="loadingSub">Syncing your room + fetching items.</p>
+      <div class="bar" aria-hidden="true"><div></div></div>
+      <div class="subtitle" style="margin:0;max-width:420px">If this takes long, network might be slow — don’t panic.</div>
+    </div>
+  </div>
 
   <!-- Tutorial Modal -->
   <div class="overlay" id="tutOverlay" aria-hidden="true">
@@ -251,29 +267,69 @@
     </div>
   </div>
 
-  <!-- Context Menu -->
-  <div class="ctx" id="ctxMenu" role="dialog" aria-modal="false">
-    <div class="ctxHead">
-      <strong id="ctxTitle">Week</strong>
-      <button id="ctxClose" class="btnGhost" style="padding:6px 10px;border-radius:12px;box-shadow:none">✕</button>
-    </div>
-    <div class="ctxBody">
-      <div class="ctxSmall">Add a card directly into this week:</div>
-      <select class="ctxSelect" id="ctxSelect"></select>
-      <button class="ctxBtn" id="ctxAddPreset">＋ Add selected template</button>
-      <button class="ctxBtn" id="ctxAddCustom">＋ Add custom card…</button>
-      <div class="ctxSmall">Tip: On Mac trackpad, use two-finger click.</div>
+  <!-- Add Card Modal (smart: preset OR custom in one flow) -->
+  <div class="overlay" id="addOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="addTitle">Add a card</h3>
+          <div class="kicker" id="addKicker">Pick a template OR write your own, then drop it into a week.</div>
+        </div>
+        <button id="btnCloseAdd" class="btnGhost" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="callout">
+          Smart rule: if you choose a template, text is filled automatically. If you type, it becomes a custom card.
+        </div>
+
+        <div class="row" style="justify-content:flex-start">
+          <label class="kicker" style="margin:0">Week</label>
+          <span class="mono" id="addWeekPill">Week 1</span>
+        </div>
+
+        <div class="row" style="gap:10px;align-items:flex-start">
+          <div style="flex:1;min-width:260px">
+            <div class="kicker">Template (optional)</div>
+            <select class="field" id="tmplSelect"></select>
+            <div class="hintTiny" style="margin-top:6px">Pick one to auto-fill the text. You can still edit.</div>
+          </div>
+          <div style="flex:1;min-width:260px">
+            <div class="kicker">Card text</div>
+            <input class="field" id="cardText" placeholder="e.g., Feedback is too vague to act on"/>
+            <div class="hintTiny" style="margin-top:6px">Keep it short. One card = one moment.</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="kicker">Starting tag</div>
+          <div class="seg" id="typeSeg">
+            <button type="button" data-type="neutral" class="active">Neutral</button>
+            <button type="button" data-type="constraint">Constraint</button>
+            <button type="button" data-type="support">Support</button>
+            <button type="button" data-type="wish">Wish</button>
+          </div>
+        </div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">Right-click / long-press a week opens this pre-set to that week.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnAddNow" class="btnPrimary">Add</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   (() => {
+    // ===== config =====
     const SUPABASE_URL = "https://djqwztoavtkqspxpvluc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcXd6dG9hdnRrcXNweHB2bHVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMDU3MDEsImV4cCI6MjA4Nzc4MTcwMX0.ZVcMU8DeHxHMw3WWegz88BmCei9z4UX3tZR7n1XFRj0";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const BASE_PATH = "/stage1";
+    const CHIBI3_SRC = "/pic/chibi3.png"; // <- change if needed
+
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
     if (!room) { location.href = `${BASE_PATH}/step1.html?room=demo`; return; }
@@ -290,8 +346,15 @@
 
     const $ = (q, el=document) => el.querySelector(q);
     const roomOut = $("#roomOut"), meOut = $("#meOut");
-    const weeksWrap = $("#weeks"), eventList = $("#eventList");
+    const weeksWrap = $("#weeks");
     const toast = $("#toast");
+
+    const loading = $("#loading");
+    const chibiImg = $("#chibiImg");
+    const loadingTitle = $("#loadingTitle");
+    const loadingSub = $("#loadingSub");
+    chibiImg.src = CHIBI3_SRC;
+
     roomOut.textContent = room;
     meOut.textContent = participantId.slice(0,8);
 
@@ -302,22 +365,46 @@
       showToast._t = setTimeout(() => toast.style.display = "none", 2200);
     }
 
+    function showLoading(title="Loading journey…", sub="Syncing your room + fetching items."){
+      loadingTitle.textContent = title;
+      loadingSub.textContent = sub;
+      loading.style.display = "flex";
+      loading.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+    function hideLoading(){
+      loading.style.display = "none";
+      loading.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    // ===== overlay helpers =====
+    function openOverlay(el){
+      el.style.display="flex";
+      el.setAttribute("aria-hidden","false");
+      document.body.style.overflow="hidden";
+    }
+    function closeOverlay(el){
+      el.style.display="none";
+      el.setAttribute("aria-hidden","true");
+      document.body.style.overflow="";
+    }
+
+    // ===== data =====
     const baseEvents = [
-      { id:"evt-brief",   name:"Assessment brief / rubric arrives", hint:"W1–W2" },
-      { id:"evt-work",    name:"Working on assignment",             hint:"Any week" },
-      { id:"evt-submit",  name:"Submit assignment",                 hint:"Due week" },
-      { id:"evt-feedback",name:"Feedback released",                 hint:"Key moment" },
-      { id:"evt-reflect", name:"Reflect & decide next action",      hint:"After feedback" },
-      { id:"evt-ask",     name:"Ask for clarification",             hint:"Support moment" },
-      { id:"evt-peer",    name:"Talk to peers",                     hint:"Support moment" },
-      { id:"evt-revise",  name:"Revise approach for next task",     hint:"Iteration" }
+      { id:"evt-brief",    name:"Assessment brief / rubric arrives", hint:"W1–W2" },
+      { id:"evt-work",     name:"Working on assignment",             hint:"Any week" },
+      { id:"evt-submit",   name:"Submit assignment",                 hint:"Due week" },
+      { id:"evt-feedback", name:"Feedback released",                 hint:"Key moment" },
+      { id:"evt-reflect",  name:"Reflect & decide next action",      hint:"After feedback" },
+      { id:"evt-ask",      name:"Ask for clarification",             hint:"Support moment" },
+      { id:"evt-peer",     name:"Talk to peers",                     hint:"Support moment" },
+      { id:"evt-revise",   name:"Revise approach for next task",     hint:"Iteration" }
     ];
 
-    // ===== state =====
     const state = { placed: [] };
 
-    function safeJson(s){ try { return JSON.parse(s); } catch { return null; }
-    }
+    function safeJson(s){ try { return JSON.parse(s); } catch { return null; } }
     function escapeHtml(str){
       return (str ?? "")
         .replaceAll("&","&amp;")
@@ -326,7 +413,6 @@
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
     }
-
     function typeLabel(t){
       if(t==="constraint") return "Constraint";
       if(t==="support") return "Support";
@@ -340,18 +426,61 @@
     }
 
     async function ensureSessionAndParticipant(){
-      await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict: "id" });
-      await supabase.from("workshop_participants").upsert({ id: participantId, session_id: room }, { onConflict: "id" });
+      const a = await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict: "id" });
+      if(a.error) throw a.error;
+      const b = await supabase.from("workshop_participants").upsert({ id: participantId, session_id: room }, { onConflict: "id" });
+      if(b.error) throw b.error;
     }
 
-    // ===== drag helpers =====
-    function enableMobileDrag(el, payload){
+    // ===== render weeks =====
+    function renderWeeks(){
+      weeksWrap.innerHTML = "";
+      for(let w=1; w<=13; w++){
+        const weekEl=document.createElement("div");
+        weekEl.className="week";
+        weekEl.dataset.week=String(w);
+        weekEl.innerHTML = `
+          <div class="weekHead"><strong>Week ${w}</strong><span>Right-click / long-press</span></div>
+          <div class="dropZone" data-week="${w}"></div>
+        `;
+
+        // desktop drag&drop support (moving existing)
+        weekEl.addEventListener("dragover",(e)=>e.preventDefault());
+        weekEl.addEventListener("drop", async (e)=>{
+          e.preventDefault();
+          const obj = safeJson(e.dataTransfer.getData("text/plain"));
+          if(!obj) return;
+          if(obj.kind==="placedEvent") await movePlaced(obj.id, w);
+        });
+
+        // right-click
+        weekEl.addEventListener("contextmenu",(e)=>{
+          e.preventDefault();
+          openAddModal(w);
+        });
+
+        // long-press mobile
+        let pressTimer=null;
+        weekEl.addEventListener("pointerdown",(e)=>{
+          if(e.pointerType!=="touch") return;
+          const t=e.target;
+          if(t && t.closest(".placed")) return;
+          pressTimer=setTimeout(()=>openAddModal(w), 520);
+        });
+        ["pointerup","pointercancel","pointermove"].forEach(ev=>{
+          weekEl.addEventListener(ev, ()=>{ clearTimeout(pressTimer); pressTimer=null; });
+        });
+
+        weeksWrap.appendChild(weekEl);
+      }
+    }
+
+    // ===== placed cards =====
+    function enableMobileDragPlaced(el, id){
       let ghost=null;
       el.addEventListener("pointerdown",(e)=>{
-        // ✅ IMPORTANT: ignore buttons (so remove/tag clicks always work)
         const t=e.target;
         if(t && t.closest("button")) return;
-
         if(e.pointerType!=="touch") return;
         e.preventDefault();
 
@@ -359,7 +488,7 @@
         ghost.style.position="fixed";
         ghost.style.left=(e.clientX-80)+"px";
         ghost.style.top=(e.clientY-20)+"px";
-        ghost.style.width=Math.min(240, el.getBoundingClientRect().width)+"px";
+        ghost.style.width=Math.min(260, el.getBoundingClientRect().width)+"px";
         ghost.style.opacity="0.92";
         ghost.style.zIndex="9999";
         ghost.style.pointerEvents="none";
@@ -379,74 +508,7 @@
         const weekEl = under ? under.closest(".week") : null;
         if(!weekEl){ showToast("Drop on a Week box"); return; }
         const week = Number(weekEl.dataset.week);
-
-        if(payload.kind==="baseEvent") await placeBaseEvent(payload.baseId, week);
-        if(payload.kind==="placedEvent") await movePlaced(payload.id, week);
-      });
-    }
-
-    // ===== render =====
-    function renderWeeks(){
-      weeksWrap.innerHTML = "";
-      for(let w=1; w<=13; w++){
-        const weekEl=document.createElement("div");
-        weekEl.className="week";
-        weekEl.dataset.week=String(w);
-        weekEl.innerHTML = `
-          <div class="weekHead"><strong>Week ${w}</strong><span>Drop here</span></div>
-          <div class="dropZone" data-week="${w}"></div>
-        `;
-
-        weekEl.addEventListener("dragover",(e)=>e.preventDefault());
-        weekEl.addEventListener("drop", async (e)=>{
-          e.preventDefault();
-          const obj = safeJson(e.dataTransfer.getData("text/plain"));
-          if(!obj) return;
-          if(obj.kind==="baseEvent") await placeBaseEvent(obj.baseId, w);
-          if(obj.kind==="placedEvent") await movePlaced(obj.id, w);
-        });
-
-        // ✅ Right click context menu (desktop)
-        weekEl.addEventListener("contextmenu",(e)=>{
-          e.preventDefault();
-          openContextMenu(w, e.clientX, e.clientY);
-        });
-
-        // ✅ Long-press context menu (mobile)
-        let pressTimer=null;
-        weekEl.addEventListener("pointerdown",(e)=>{
-          if(e.pointerType!=="touch") return;
-          // ignore if they start dragging a card
-          const t=e.target;
-          if(t && (t.closest(".placed") || t.closest(".event"))) return;
-          pressTimer=setTimeout(()=>openContextMenu(w, e.clientX, e.clientY), 520);
-        });
-        ["pointerup","pointercancel","pointermove"].forEach(ev=>{
-          weekEl.addEventListener(ev, ()=>{ clearTimeout(pressTimer); pressTimer=null; });
-        });
-
-        weeksWrap.appendChild(weekEl);
-      }
-    }
-
-    function renderPalette(){
-      eventList.innerHTML="";
-      baseEvents.forEach(evt=>{
-        const el=document.createElement("div");
-        el.className="event";
-        el.draggable=true;
-        el.innerHTML = `
-          <div class="eventTop">
-            <p class="eventName">${escapeHtml(evt.name)}</p>
-            <span class="eventHint">${escapeHtml(evt.hint)}</span>
-          </div>
-          <div class="subtitle" style="margin:0">Drag into a week</div>
-        `;
-        el.addEventListener("dragstart",(e)=>{
-          e.dataTransfer.setData("text/plain", JSON.stringify({kind:"baseEvent", baseId:evt.id}));
-        });
-        enableMobileDrag(el, {kind:"baseEvent", baseId:evt.id});
-        eventList.appendChild(el);
+        await movePlaced(id, week);
       });
     }
 
@@ -470,14 +532,19 @@
             <button class="miniX" type="button">Remove</button>
           </div>
         `;
+
+        // desktop drag
         el.addEventListener("dragstart",(e)=>{
           e.dataTransfer.setData("text/plain", JSON.stringify({kind:"placedEvent", id:pe.id}));
         });
-        enableMobileDrag(el, {kind:"placedEvent", id:pe.id});
 
-        // ✅ stop drag from stealing clicks (desktop)
+        // mobile drag
+        enableMobileDragPlaced(el, pe.id);
+
         const tagBtn = el.querySelector(".tagBtn");
         const xBtn = el.querySelector(".miniX");
+
+        // stop drag from stealing clicks
         [tagBtn, xBtn].forEach(btn=>{
           btn.addEventListener("pointerdown",(e)=>{ e.stopPropagation(); });
         });
@@ -497,7 +564,6 @@
           state.placed = state.placed.filter(x=>x.id!==pe.id);
           renderPlaced();
 
-          // DB delete + log
           const { data, error } = await supabase
             .from("workshop_journey_items")
             .delete()
@@ -520,54 +586,17 @@
     }
 
     // ===== DB ops =====
-    async function placeBaseEvent(baseId, week){
-      const base = baseEvents.find(x=>x.id===baseId);
-      if(!base) return;
-
-      const payload = { session_id: room, week, label: base.name, type: "neutral" };
+    async function insertJourneyItem({week, label, type}){
+      const payload = { session_id: room, week, label, type };
       payload.participant_id = participantId;
 
       let res = await supabase.from("workshop_journey_items").insert(payload).select().single();
-      if (res.error) {
-        if (String(res.error.message||"").toLowerCase().includes("participant_id")) {
-          delete payload.participant_id;
-          res = await supabase.from("workshop_journey_items").insert(payload).select().single();
-        }
+      if (res.error && String(res.error.message||"").toLowerCase().includes("participant_id")) {
+        delete payload.participant_id;
+        res = await supabase.from("workshop_journey_items").insert(payload).select().single();
       }
-      if (res.error) {
-        console.error(res.error);
-        showToast("Insert failed: " + (res.error.message || "unknown"));
-        return;
-      }
-
-      const row=res.data;
-      state.placed.push({ id:row.id, week:row.week, label:row.label, type:row.type, participant_id:row.participant_id });
-      renderPlaced();
-    }
-
-    async function addCustomAtWeek(week){
-      const txt = prompt("Custom card text (short)");
-      if(!txt) return;
-
-      const payload = { session_id: room, week, label: txt.trim(), type: "wish" };
-      payload.participant_id = participantId;
-
-      let res = await supabase.from("workshop_journey_items").insert(payload).select().single();
-      if (res.error) {
-        if (String(res.error.message||"").toLowerCase().includes("participant_id")) {
-          delete payload.participant_id;
-          res = await supabase.from("workshop_journey_items").insert(payload).select().single();
-        }
-      }
-      if (res.error) {
-        console.error(res.error);
-        showToast("Insert failed: " + (res.error.message || "unknown"));
-        return;
-      }
-
-      const row=res.data;
-      state.placed.push({ id:row.id, week:row.week, label:row.label, type:row.type, participant_id:row.participant_id });
-      renderPlaced();
+      if (res.error) throw res.error;
+      return res.data;
     }
 
     async function movePlaced(id, week){
@@ -575,26 +604,213 @@
       if(error) console.error(error);
     }
 
-    async function addCustom(){
-      await addCustomAtWeek(1);
+    // ===== Add modal (smart) =====
+    const addOverlay = $("#addOverlay");
+    const btnCloseAdd = $("#btnCloseAdd");
+    const addWeekPill = $("#addWeekPill");
+    const tmplSelect = $("#tmplSelect");
+    const cardText = $("#cardText");
+    const typeSeg = $("#typeSeg");
+    const btnAddNow = $("#btnAddNow");
+    let addWeek = 1;
+    let addType = "neutral";
+
+    // fill template select once
+    function initTemplateSelect(){
+      tmplSelect.innerHTML = `<option value="">(No template)</option>` +
+        baseEvents.map(e=>`<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)}</option>`).join("");
+    }
+
+    tmplSelect.addEventListener("change", ()=>{
+      const id = tmplSelect.value;
+      if(!id) return;
+      const base = baseEvents.find(x=>x.id===id);
+      if(!base) return;
+      // auto-fill text (can still edit)
+      cardText.value = base.name;
+    });
+
+    typeSeg.addEventListener("click",(e)=>{
+      const btn = e.target.closest("button[data-type]");
+      if(!btn) return;
+      addType = btn.dataset.type;
+      [...typeSeg.querySelectorAll("button")].forEach(b=>b.classList.toggle("active", b===btn));
+    });
+
+    function openAddModal(week){
+      addWeek = week;
+      addWeekPill.textContent = `Week ${week}`;
+      tmplSelect.value = "";
+      cardText.value = "";
+      addType = "neutral";
+      [...typeSeg.querySelectorAll("button")].forEach((b,i)=>b.classList.toggle("active", i===0));
+      openOverlay(addOverlay);
+      setTimeout(()=>cardText.focus(), 0);
+    }
+    function closeAddModal(){ closeOverlay(addOverlay); }
+
+    btnCloseAdd.addEventListener("click", closeAddModal);
+    addOverlay.addEventListener("mousedown",(e)=>{ if(e.target===addOverlay) closeAddModal(); });
+
+    btnAddNow.addEventListener("click", async ()=>{
+      const label = (cardText.value || "").trim();
+      if(!label){
+        showToast("Please type a card text");
+        cardText.focus();
+        return;
+      }
+
+      // optimistic add (temp)
+      const tempId = "temp_" + crypto.randomUUID();
+      const temp = { id: tempId, week: addWeek, label, type: addType, participant_id: participantId };
+      state.placed.push(temp);
+      renderPlaced();
+      closeAddModal();
+
+      try{
+        const row = await insertJourneyItem({ week:addWeek, label, type:addType });
+        // replace temp with real id
+        const idx = state.placed.findIndex(x=>x.id===tempId);
+        if(idx>=0){
+          state.placed[idx] = { id:row.id, week:row.week, label:row.label, type:row.type, participant_id:row.participant_id };
+        } else {
+          state.placed.push({ id:row.id, week:row.week, label:row.label, type:row.type, participant_id:row.participant_id });
+        }
+        renderPlaced();
+      } catch(err){
+        console.error(err);
+        showToast("Add failed (see console)");
+        state.placed = state.placed.filter(x=>x.id!==tempId);
+        renderPlaced();
+      }
+    });
+
+    // Global add button -> week 1
+    $("#btnAddGlobal").addEventListener("click", ()=>openAddModal(1));
+
+    // ===== tutorial =====
+    const tutOverlay = $("#tutOverlay");
+    const btnCloseTut = $("#btnCloseTut");
+    const tutSteps = $("#tutSteps");
+    const tutContent = $("#tutContent");
+    const btnPrev = $("#btnPrev");
+    const btnNextStep = $("#btnNextStep");
+
+    const TUT_KEY = `stage1_step3_tut_seen_${room}`;
+
+    const tutorialSlides = [
+      {
+        title:"How to add cards (desktop + mobile)",
+        html: `
+          <div class="callout">
+            Desktop: right-click a week. Mobile: long-press a week (~0.5s).
+          </div>
+          <ul class="list">
+            <li>Add a card directly into that week.</li>
+            <li>Pick a template (optional) — it auto-fills the text.</li>
+            <li>Or type your own to make a custom card.</li>
+          </ul>
+        `
+      },
+      {
+        title:"What the tags mean",
+        html: `
+          <div class="callout">Tags help classify moments so patterns pop out.</div>
+          <ul class="list">
+            <li><b>Neutral</b>: a normal step.</li>
+            <li><b>Constraint</b>: friction / blocker.</li>
+            <li><b>Support</b>: helps students progress.</li>
+            <li><b>Wish</b>: improvement idea.</li>
+          </ul>
+        `
+      },
+      {
+        title:"Edit the timeline",
+        html: `
+          <div class="callout">You can revise the map as you discuss.</div>
+          <ul class="list">
+            <li>Drag placed cards between weeks (desktop drag / mobile drag).</li>
+            <li>Tap the tag to cycle types.</li>
+            <li>Remove deletes the card for everyone (realtime).</li>
+          </ul>
+        `
+      }
+    ];
+    let tutIndex=0;
+
+    function renderTutorial(){
+      tutSteps.innerHTML = tutorialSlides.map((_, i)=>{
+        const cls = "pill" + (i===tutIndex ? " active" : "");
+        return `<span class="${cls}">${i+1}</span>`;
+      }).join("");
+
+      const slide = tutorialSlides[tutIndex];
+      tutContent.innerHTML = `
+        <div class="row" style="justify-content:space-between; align-items:flex-end">
+          <div>
+            <div class="mono">Step ${tutIndex+1} / ${tutorialSlides.length}</div>
+            <div style="margin-top:6px;font-weight:1000;font-size:16px;letter-spacing:.2px">${escapeHtml(slide.title)}</div>
+          </div>
+        </div>
+        <div style="height:6px"></div>
+        ${slide.html}
+      `;
+      btnPrev.disabled = (tutIndex===0);
+      btnNextStep.textContent = (tutIndex===tutorialSlides.length-1) ? "Done" : "Next";
+    }
+    function openTutorial(){
+      renderTutorial();
+      openOverlay(tutOverlay);
+    }
+    function closeTutorial(){ closeOverlay(tutOverlay); }
+
+    $("#btnTutorial").addEventListener("click", ()=>{ tutIndex=0; openTutorial(); });
+    btnCloseTut.addEventListener("click", closeTutorial);
+    tutOverlay.addEventListener("mousedown",(e)=>{ if(e.target===tutOverlay) closeTutorial(); });
+    window.addEventListener("keydown",(e)=>{
+      if(e.key==="Escape"){
+        if(tutOverlay.style.display==="flex") closeTutorial();
+        if(addOverlay.style.display==="flex") closeAddModal();
+      }
+    });
+
+    btnPrev.addEventListener("click", ()=>{ tutIndex=Math.max(0, tutIndex-1); renderTutorial(); });
+    btnNextStep.addEventListener("click", ()=>{
+      if(tutIndex===tutorialSlides.length-1){ closeTutorial(); return; }
+      tutIndex=Math.min(tutorialSlides.length-1, tutIndex+1);
+      renderTutorial();
+    });
+
+    function maybeShowTutorialOnce(){
+      if(!localStorage.getItem(TUT_KEY)){
+        localStorage.setItem(TUT_KEY,"1");
+        tutIndex=0;
+        openTutorial();
+      }
     }
 
     // ===== load + realtime =====
     async function loadInitial(){
-      await ensureSessionAndParticipant();
-      const { data, error } = await supabase
-        .from("workshop_journey_items")
-        .select("*")
-        .eq("session_id", room);
-      if(error) console.error(error);
-      state.placed = (data || []).map(it => ({ id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id }));
-      renderPlaced();
+      showLoading("Loading journey…", "Syncing your room + fetching items.");
+      try{
+        await ensureSessionAndParticipant();
+        const { data, error } = await supabase
+          .from("workshop_journey_items")
+          .select("*")
+          .eq("session_id", room);
+        if(error) throw error;
+        state.placed = (data || []).map(it => ({
+          id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id
+        }));
+        renderPlaced();
+      } finally {
+        hideLoading();
+      }
     }
 
     function getDeletedId(payload){
       if (!payload) return null;
       if (payload.old && payload.old.id) return payload.old.id;
-      if (payload.old && payload.old.journey_id) return payload.old.journey_id;
       return null;
     }
 
@@ -626,7 +842,6 @@
                 state.placed = state.placed.filter(x=>x.id!==did);
                 renderPlaced();
               } else {
-                // fallback reload if delete payload lacks PK
                 loadInitial();
               }
             }
@@ -635,189 +850,7 @@
         .subscribe();
     }
 
-    // ===== tutorial =====
-    const tutOverlay = $("#tutOverlay");
-    function openOverlay(el){
-      el.style.display="flex";
-      el.setAttribute("aria-hidden","false");
-      document.body.style.overflow="hidden";
-    }
-    function closeOverlay(el){
-      el.style.display="none";
-      el.setAttribute("aria-hidden","true");
-      document.body.style.overflow="";
-    }
-    tutOverlay.addEventListener("mousedown",(e)=>{ if(e.target===tutOverlay) closeOverlay(tutOverlay); });
-    window.addEventListener("keydown",(e)=>{ if(e.key==="Escape" && tutOverlay.style.display==="flex") closeOverlay(tutOverlay); });
-
-    const TUT_KEY = `stage1_step3_tut_seen_${room}`;
-    const tutorialSlides = [
-      {
-        title:"What to do here",
-        html: `
-          <div class="callout">
-            Build a shared “feedback journey” by placing cards into the weeks.
-          </div>
-          <ul class="list">
-            <li>Drag a template card into a week.</li>
-            <li>Or right-click a week to add a card quickly.</li>
-            <li>Use <span class="mono">＋ Add custom card</span> for missing steps.</li>
-          </ul>
-        `
-      },
-      {
-        title:"What the tags mean",
-        html: `
-          <div class="callout">
-            Tap the tag to classify the moment. This helps compare across groups.
-          </div>
-          <ul class="list">
-            <li><b>Neutral</b>: just a step in the flow.</li>
-            <li><b>Constraint</b>: blocks progress / causes friction.</li>
-            <li><b>Support</b>: helps students move forward.</li>
-            <li><b>Wish</b>: “it would be nice if…” improvement idea.</li>
-          </ul>
-        `
-      },
-      {
-        title:"Why map by week",
-        html: `
-          <div class="callout">
-            Week-by-week makes timing visible — delays and pinch points pop out.
-          </div>
-          <ul class="list">
-            <li>It reveals “too late to act” feedback moments.</li>
-            <li>It makes dependencies clear (brief → work → submit → feedback).</li>
-            <li>It supports planning future intervention points.</li>
-          </ul>
-        `
-      },
-      {
-        title:"Pro tips",
-        html: `
-          <div class="callout">
-            Keep cards short and specific. Duplicate cards if needed.
-          </div>
-          <ul class="list">
-            <li>Use <b>Remove</b> to delete a card.</li>
-            <li>Drag placed cards between weeks to revise the timeline.</li>
-            <li>Everything syncs to others via realtime.</li>
-          </ul>
-        `
-      }
-    ];
-    let tutIndex=0;
-    const tutSteps=$("#tutSteps");
-    const tutContent=$("#tutContent");
-    const btnPrev=$("#btnPrev");
-    const btnNextStep=$("#btnNextStep");
-
-    function renderTutorial(){
-      tutSteps.innerHTML = tutorialSlides.map((_, i) => {
-        const cls = "pill" + (i === tutIndex ? " active" : "");
-        return `<span class="${cls}">${i+1}</span>`;
-      }).join("");
-
-      const slide = tutorialSlides[tutIndex];
-      tutContent.innerHTML = `
-        <div class="row" style="justify-content:space-between; align-items:flex-end">
-          <div>
-            <div class="mono">Step ${tutIndex+1} / ${tutorialSlides.length}</div>
-            <div style="margin-top:6px;font-weight:1000;font-size:16px;letter-spacing:.2px">${escapeHtml(slide.title)}</div>
-          </div>
-        </div>
-        <div style="height:6px"></div>
-        ${slide.html}
-      `;
-
-      btnPrev.disabled = (tutIndex === 0);
-      btnNextStep.textContent = (tutIndex === tutorialSlides.length - 1) ? "Done" : "Next";
-    }
-
-    function openTutorial(startAt=0){
-      tutIndex = Math.max(0, Math.min(startAt, tutorialSlides.length - 1));
-      renderTutorial();
-      openOverlay(tutOverlay);
-    }
-
-    $("#btnTutorial").addEventListener("click", ()=> openTutorial(0));
-    $("#btnCloseTut").addEventListener("click", ()=> closeOverlay(tutOverlay));
-    btnPrev.addEventListener("click", ()=>{ tutIndex = Math.max(0, tutIndex - 1); renderTutorial(); });
-    btnNextStep.addEventListener("click", ()=>{
-      if (tutIndex === tutorialSlides.length - 1){
-        closeOverlay(tutOverlay);
-        return;
-      }
-      tutIndex = Math.min(tutorialSlides.length - 1, tutIndex + 1);
-      renderTutorial();
-    });
-
-    function maybeShowTutorialOnce(){
-      if (!localStorage.getItem(TUT_KEY)){
-        localStorage.setItem(TUT_KEY, "1");
-        openTutorial(0);
-      }
-    }
-
-    // ===== context menu =====
-    const ctxMenu = $("#ctxMenu");
-    const ctxTitle = $("#ctxTitle");
-    const ctxSelect = $("#ctxSelect");
-    const ctxAddPreset = $("#ctxAddPreset");
-    const ctxAddCustom = $("#ctxAddCustom");
-    const ctxClose = $("#ctxClose");
-    let ctxWeek = 1;
-
-    function closeCtx(){
-      ctxMenu.style.display="none";
-    }
-    function openContextMenu(week, x, y){
-      ctxWeek = week;
-      ctxTitle.textContent = `Week ${week}`;
-
-      // fill select
-      ctxSelect.innerHTML = baseEvents.map(e=>`<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)}</option>`).join("");
-
-      // position within viewport
-      const pad = 12;
-      const w = Math.min(320, window.innerWidth - pad*2);
-      ctxMenu.style.width = w + "px";
-      ctxMenu.style.display="block";
-      const rect = ctxMenu.getBoundingClientRect();
-
-      let left = x;
-      let top = y;
-      if(left + rect.width > window.innerWidth - pad) left = window.innerWidth - pad - rect.width;
-      if(top + rect.height > window.innerHeight - pad) top = window.innerHeight - pad - rect.height;
-      if(left < pad) left = pad;
-      if(top < pad) top = pad;
-
-      ctxMenu.style.left = left + "px";
-      ctxMenu.style.top = top + "px";
-    }
-
-    // click outside closes
-    window.addEventListener("mousedown",(e)=>{
-      if(ctxMenu.style.display!=="block") return;
-      if(e.target.closest("#ctxMenu")) return;
-      closeCtx();
-    });
-    window.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeCtx(); });
-
-    ctxClose.addEventListener("click", closeCtx);
-
-    ctxAddPreset.addEventListener("click", async ()=>{
-      const baseId = ctxSelect.value;
-      closeCtx();
-      await placeBaseEvent(baseId, ctxWeek);
-    });
-    ctxAddCustom.addEventListener("click", async ()=>{
-      closeCtx();
-      await addCustomAtWeek(ctxWeek);
-    });
-
-    // ===== buttons =====
-    $("#btnAddCustom").addEventListener("click", addCustom);
+    // ===== nav/reset =====
     $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
 
     $("#btnReset").addEventListener("click", ()=>{
@@ -831,7 +864,7 @@
 
     // ===== boot =====
     renderWeeks();
-    renderPalette();
+    initTemplateSelect();
     loadInitial().then(()=>{
       subscribeRealtime();
       maybeShowTutorialOnce();
