@@ -187,24 +187,24 @@ small{
 .overlay.open{display:flex}
 
 .modal{
-  width:min(520px, 100%);
+  width:min(560px, 100%);
   background:#11111b;
-  border-radius:18px;
+  border-radius:20px;
   border:1px solid rgba(255,255,255,.16);
-  padding:18px;
+  padding:22px;
   box-shadow:0 26px 80px rgba(0,0,0,.6);
 }
 
 .modalTop{
   display:flex;
-  gap:14px;
-  align-items:flex-start;
+  align-items:center;
+  gap:20px;
 }
 
-/* Chibi2 in modal */
+/* Chibi2 */
 .modalChibi{
-  width:74px;
-  height:74px;
+  width:88px;
+  height:88px;
   border-radius:999px;
   overflow:hidden;
   border:1px solid rgba(255,255,255,.16);
@@ -217,13 +217,18 @@ small{
   object-fit:cover;
   object-position:center;
   display:block;
-  transform:scale(1.03);
+}
+
+/* Content */
+.modalContent{
+  flex:1;
 }
 
 .modal h2{
   margin:0;
   font-size:18px;
 }
+
 .modal p{
   margin:10px 0 0;
   font-size:15px;
@@ -231,32 +236,41 @@ small{
   line-height:1.55;
 }
 
+/* White choice buttons */
 .choices{
-  margin-top:16px;
+  margin-top:18px;
   display:grid;
-  gap:12px;
+  gap:14px;
 }
+
 .choice{
-  padding:14px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.16);
-  background:rgba(255,255,255,.06);
+  padding:16px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.25);
+  background:#ffffff;
+  color:#111;
   font-weight:800;
+  font-size:15px;
   cursor:pointer;
+  transition:.18s ease;
 }
-.choice:hover{background:rgba(255,255,255,.1)}
+.choice:hover{
+  background:#f3f3f3;
+  transform:translateY(-1px);
+}
 
 .modalBottom{
-  margin-top:14px;
+  margin-top:18px;
   display:flex;
   justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
+  align-items:center;
 }
+
 .smallNote{
   font-size:12px;
   color:rgba(246,246,255,.52);
 }
+
 .closeBtn{
   background:none;
   border:none;
@@ -301,28 +315,33 @@ small{
 
 <!-- Modal -->
 <div class="overlay" id="overlay" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" role="dialog" aria-modal="true">
+
     <div class="modalTop">
-      <div class="modalChibi" aria-hidden="true">
-        <!-- change extension if needed -->
+      <div class="modalChibi">
         <img src="/pic/chibi2.png" alt="">
       </div>
 
-      <div>
-        <h2 id="modalTitle">Workshop 1</h2>
-        <p>Quick check. Which university are you from?</p>
+      <div class="modalContent">
+        <h2>Workshop 1</h2>
+        <p>Select your university below.</p>
       </div>
     </div>
 
     <div class="choices">
-      <button class="choice" type="button" data-uni="Monash">Monash University</button>
-      <button class="choice" type="button" data-uni="UPNG">UPNG</button>
+      <button class="choice" type="button" data-uni="Monash">
+        Monash University
+      </button>
+      <button class="choice" type="button" data-uni="UPNG">
+        UPNG
+      </button>
     </div>
 
     <div class="modalBottom">
-      <div class="smallNote">For now you’ll stay on this page (jackiefoo.me).</div>
+      <div class="smallNote">You’ll remain on jackiefoo.me for now.</div>
       <button class="closeBtn" id="closeModal" type="button">Close</button>
     </div>
+
   </div>
 </div>
 
