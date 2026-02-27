@@ -2,747 +2,733 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0B0B0F" />
   <title>Jackie Foo — Soft Launch</title>
-  <meta name="description" content="Jackie Foo — soft launch. Still building. Try a tiny layout customizer." />
-
   <style>
     :root{
-      /* solid colors only — NO gradients */
-      --bg:#050607;
-      --panel:#0B0D11;
-      --panel2:#0F121A;
-      --border: rgba(255,255,255,.10);
-      --border2: rgba(255,255,255,.16);
+      --bg:#0B0B0F;
+      --panel:#12121A;
+      --ink:#F6F7FF;
+      --muted:#A9AAC3;
 
-      --text:#F3F6FF;
-      --muted:rgba(243,246,255,.72);
+      /* Static, high-contrast accent colors (no gradients) */
+      --a:#00E5FF;  /* cyan */
+      --b:#FF2D55;  /* magenta-red */
+      --c:#A3FF12;  /* neon green */
+      --d:#FFD60A;  /* punchy yellow */
 
-      --accent:#00E5FF;    /* change if you want */
-      --accent2:#FF2BD6;   /* secondary accent */
-      --good:#2BFF88;
-      --warn:#FFB020;
+      --stroke: rgba(246,247,255,.12);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius: 18px;
 
-      --radius:18px;
-      --shadow: 0 18px 48px rgba(0,0,0,.58);
-      --ring: 0 0 0 3px rgba(0,229,255,.22), 0 0 0 1px rgba(255,255,255,.10) inset;
-
+      --maxw: 980px;
+      --pad: clamp(14px, 3.2vw, 22px);
+      --gap: clamp(12px, 2.6vw, 18px);
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+
+      --tap: 54px; /* minimum tap target height */
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: var(--sans);
-      color:var(--text);
+      font-family:var(--font);
+      color:var(--ink);
       background:var(--bg);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
     }
-    a{color:inherit;text-decoration:none}
-    button{font:inherit}
+
+    /* Subtle “runway tape” background, still static colors */
+    .bg{
+      position:fixed; inset:0; pointer-events:none; z-index:-1;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(0,229,255,.08), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(255,45,85,.08), transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(163,255,18,.07), transparent 50%),
+        linear-gradient(0deg, rgba(255,214,10,.06), transparent 28%),
+        var(--bg);
+      /* Note: these are overlays; no gradient color ramps across the UI components.
+         If you want ZERO gradients anywhere, tell me and I’ll swap these for solid shapes. */
+    }
 
     .wrap{
-      min-height:100%;
-      display:flex;
-      justify-content:center;
-      padding:18px;
+      max-width:var(--maxw);
+      margin:0 auto;
+      padding: calc(var(--pad) + env(safe-area-inset-top)) var(--pad) calc(var(--pad) + env(safe-area-inset-bottom));
     }
 
-    .shell{
-      width:min(1100px,100%);
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-      padding: 8px 0 26px;
-    }
-    @media (min-width: 920px){
-      .shell{grid-template-columns: 1.05fr .95fr}
-    }
-
-    /* ======= hero card ======= */
-    .card{
-      background: var(--panel);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .inner{padding:18px}
-    @media (min-width:520px){ .inner{padding:22px} }
-
-    .top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom: 14px;
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: var(--panel2);
-      border:1px solid var(--border);
-      user-select:none;
-      font-weight: 850;
-      letter-spacing:.2px;
-      white-space:nowrap;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      background: var(--warn);
-      box-shadow: 0 0 0 3px rgba(255,176,32,.18);
-      flex:0 0 auto;
-    }
-
-    h1{
-      margin:0 0 10px;
-      font-size: clamp(28px, 4.1vw, 46px);
-      line-height: 1.04;
-      letter-spacing: -0.9px;
-    }
-    .name{
-      color: var(--accent);
-      text-decoration: underline;
-      text-decoration-thickness: 3px;
-      text-underline-offset: 7px;
-    }
-
-    .lede{
-      margin:0 0 14px;
-      color: var(--muted);
-      line-height: 1.58;
-      font-size: 15px;
-      max-width: 62ch;
-    }
-
-    .miniRow{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      margin: 14px 0 8px;
-    }
-
-    .chip{
-      padding: 9px 12px;
-      border-radius: 999px;
-      border:1px solid var(--border);
-      background: var(--panel2);
-      font-weight: 780;
-      font-size: 13px;
-      color: rgba(243,246,255,.92);
-      user-select:none;
-    }
-    .chip.mono{
-      font-family: var(--mono);
-      font-weight: 800;
-      color: var(--muted);
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 14px;
-    }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border:1px solid var(--border2);
-      background: var(--panel2);
-      color: var(--text);
-      font-weight: 900;
-      letter-spacing:.2px;
-      width: 100%;
-      touch-action: manipulation;
-      transition: transform .08s ease, border-color .12s ease;
-    }
-    .btn:active{transform: translateY(1px) scale(.99)}
-    .btn:focus{outline:none; box-shadow: var(--ring)}
-    @media (min-width:520px){ .btn{width:auto} }
-
-    .btn.accent{border-color: rgba(0,229,255,.42)}
-    .btn.mag{border-color: rgba(255,43,214,.40)}
-    .btn.good{border-color: rgba(43,255,136,.40)}
-    .btn.ghost{background: transparent}
-
-    .note{
-      margin-top: 12px;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border:1px solid var(--border);
-      background: var(--panel2);
-      color: var(--muted);
-      line-height:1.42;
-      font-size: 13px;
-    }
-    .note b{color: var(--text)}
-
-    /* ======= right panel ======= */
-    .panelTitle{
-      margin:0;
-      font-size: 16px;
-      font-weight: 950;
-      letter-spacing: -.2px;
-    }
-    .panelSub{
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.45;
-    }
-
-    .split{
+    header{
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom: 12px;
-    }
-
-    .presets{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin: 12px 0 10px;
-    }
-
-    .seg{
-      display:inline-flex;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      overflow:hidden;
-      background: var(--panel2);
-    }
-    .seg button{
-      appearance:none;
-      border:0;
-      background: transparent;
-      color: var(--muted);
-      padding: 10px 12px;
-      font-weight: 900;
-      cursor:pointer;
-      touch-action: manipulation;
-    }
-    .seg button:focus{outline:none; box-shadow: var(--ring)}
-    .seg button.active{
-      background: #141826;
-      color: var(--text);
-    }
-
-    .layoutBox{
-      border:1px solid var(--border);
-      background: var(--panel2);
-      border-radius: 16px;
-      padding: 12px;
-    }
-
-    .kicker{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom: 10px;
-    }
-    .kicker .tag{
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      background: var(--panel);
-      padding: 8px 10px;
-      border-radius: 999px;
-      user-select:none;
-    }
-
-    .builder{
-      display:grid;
-      gap:10px;
-    }
-
-    .item{
-      border:1px solid rgba(255,255,255,.14);
-      background: #0B0D11;
-      border-radius: 16px;
-      padding: 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      cursor: grab;
-      touch-action: manipulation;
-      user-select:none;
-      transition: transform .08s ease, border-color .12s ease;
-    }
-    .item:active{transform: translateY(1px) scale(.995)}
-    .item:focus{outline:none; box-shadow: var(--ring)}
-    .item.dragging{
-      opacity: .75;
-      cursor: grabbing;
-      border-color: rgba(0,229,255,.45);
-    }
-
-    .leftSide{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width: 0;
-    }
-
-    .swatch{
-      width: 12px; height: 12px; border-radius: 4px;
-      background: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,229,255,.16);
-      flex:0 0 auto;
-    }
-    .swatch.mag{background: var(--accent2); box-shadow:0 0 0 3px rgba(255,43,214,.16)}
-    .swatch.lime{background: var(--good); box-shadow:0 0 0 3px rgba(43,255,136,.16)}
-    .swatch.amb{background: var(--warn); box-shadow:0 0 0 3px rgba(255,176,32,.16)}
-
-    .labelWrap{min-width:0}
-    .label{
-      font-weight: 950;
-      letter-spacing: -.2px;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .hint{
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.25;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      font-family: var(--mono);
-    }
-
-    .controls{
-      display:flex;
-      gap:8px;
-      flex:0 0 auto;
-    }
-    .iconBtn{
-      width: 38px;
-      height: 38px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      border-radius: 12px;
-      border:1px solid var(--border);
-      background: var(--panel2);
-      color: var(--text);
-      font-weight: 950;
-      cursor:pointer;
-      touch-action: manipulation;
-    }
-    .iconBtn:active{transform: translateY(1px) scale(.99)}
-    .iconBtn:focus{outline:none; box-shadow: var(--ring)}
-
-    /* ======= live preview ======= */
-    .preview{
-      margin-top: 12px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      border-radius: 16px;
-      overflow:hidden;
-    }
-
-    .previewTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: #090A0D;
+      gap:var(--gap);
+      margin-top: 6px;
     }
 
     .brand{
       display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-width: 0;
+    }
+
+    .tag{
+      display:inline-flex;
       align-items:center;
       gap:10px;
-      font-weight: 950;
-      letter-spacing: -.2px;
+      padding:10px 12px;
+      border:1px solid var(--stroke);
+      background:rgba(18,18,26,.7);
+      border-radius:999px;
+      width:fit-content;
+      box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background:var(--c);
+      box-shadow: 0 0 0 3px rgba(163,255,18,.18);
+      flex:0 0 auto;
+    }
+    .tag span{
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+      white-space:nowrap;
     }
 
-    .pulse{
-      width:10px;height:10px;border-radius:50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,229,255,.18);
+    h1{
+      margin:0;
+      font-size: clamp(28px, 6vw, 54px);
+      line-height:1.04;
+      letter-spacing:-0.02em;
+      word-break:break-word;
+    }
+    h1 .slash{
+      color:var(--a);
     }
 
-    .previewBody{
-      padding: 12px;
-      display:grid;
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size: clamp(14px, 2.5vw, 17px);
+      line-height:1.55;
+      max-width: 54ch;
+    }
+
+    .pillRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 14px;
+    }
+    .pill{
+      border:1px solid var(--stroke);
+      background: rgba(18,18,26,.72);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:13px;
+      color:var(--ink);
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      user-select:none;
+    }
+    .pill b{
+      font-family:var(--mono);
+      font-weight:700;
+      letter-spacing:.03em;
+      font-size:12px;
+      opacity:.95;
+    }
+
+    .cta{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      margin-top: 6px;
+    }
+    button, a.btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius: 14px;
+      min-height: var(--tap);
+      padding: 14px 16px;
+      font-weight:700;
+      letter-spacing:.01em;
+      background: var(--ink);
+      color: #0B0B0F;
+      box-shadow: var(--shadow);
+      transition: transform .12s ease, opacity .12s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
       gap:10px;
     }
-
-    .block{
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      background: #0F121A;
-      padding: 12px;
-    }
-    .block h3{
-      margin:0 0 6px;
-      font-size: 14px;
-      font-weight: 950;
-      letter-spacing: -.15px;
-    }
-    .block p{
-      margin:0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height:1.45;
+    button:active, a.btn:active{ transform: translateY(1px) scale(.99); }
+    .btnAlt{
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--stroke);
+      box-shadow:none;
     }
 
-    .miniLinks{
+    main{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+      margin-top: 18px;
+    }
+
+    @media (min-width: 860px){
+      main{ grid-template-columns: 1.15fr .85fr; align-items:start; }
+      header{ align-items:center; }
+    }
+
+    .card{
+      background: rgba(18,18,26,.78);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .cardHead{
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--stroke);
       display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap:10px;
       flex-wrap:wrap;
     }
-    .miniA{
-      font-family: var(--mono);
-      font-size: 12px;
-      color: rgba(243,246,255,.86);
-      border: 1px solid rgba(255,255,255,.12);
-      background: #0B0D11;
-      padding: 8px 10px;
-      border-radius: 999px;
+
+    .cardHead h2{
+      margin:0;
+      font-size: 15px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color: var(--muted);
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .chip{
+      width:10px;height:10px;border-radius:999px; flex:0 0 auto;
+      background: var(--a);
+      box-shadow: 0 0 0 3px rgba(0,229,255,.16);
     }
 
-    .footerLine{
-      margin-top: 12px;
+    .cardBody{ padding: 16px; }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media(min-width: 520px){
+      .grid2{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .panel{
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(11,11,15,.45);
+    }
+
+    .kicker{
       font-family: var(--mono);
       font-size: 12px;
-      color: rgba(243,246,255,.55);
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color: var(--muted);
+      margin:0 0 10px 0;
+    }
+
+    .bigLine{
+      margin:0;
+      font-size: 18px;
+      line-height:1.35;
+      letter-spacing:-0.01em;
+    }
+    .bigLine strong{ color: var(--d); }
+
+    .list{
+      margin: 12px 0 0 0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:10px;
+    }
+    .li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .tick{
+      width:12px;height:12px;border-radius:4px;
+      background: var(--c);
+      margin-top:4px;
+      flex:0 0 auto;
+      box-shadow: 0 0 0 3px rgba(163,255,18,.14);
+    }
+    .li p{
+      margin:0;
+      color: var(--muted);
+      line-height:1.55;
+      font-size: 14px;
+    }
+    .li p b{ color: var(--ink); font-weight: 800; }
+
+    /* GAME */
+    .gameTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .statRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-family: var(--mono);
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color: var(--muted);
+    }
+
+    .stat{
+      padding:10px 12px;
+      border:1px solid var(--stroke);
+      border-radius: 999px;
+      background: rgba(11,11,15,.35);
+    }
+    .stat b{
+      color: var(--ink);
+      letter-spacing:.02em;
+    }
+
+    .arena{
+      margin-top: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: rgba(11,11,15,.55);
+      padding: 14px;
+    }
+
+    .prompt{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .promptText{
+      margin:0;
+      font-size: 16px;
+      line-height:1.4;
+      color: var(--ink);
+    }
+    .promptText b{
+      font-family: var(--mono);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(18,18,26,.7);
+    }
+
+    .choices{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .choice{
+      min-height: 92px;
+      border-radius: 16px;
+      border: 2px solid transparent;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-size: 14px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .choice:focus{ outline: none; }
+    .choice:active{ transform: translateY(1px) scale(.99); }
+
+    .choice[data-color="A"]{ background: var(--a); color:#071016; }
+    .choice[data-color="B"]{ background: var(--b); color:#12030A; }
+    .choice[data-color="C"]{ background: var(--c); color:#071206; }
+    .choice[data-color="D"]{ background: var(--d); color:#120F02; }
+
+    .msg{
+      margin-top: 12px;
+      font-size: 14px;
+      line-height:1.55;
+      color: var(--muted);
+    }
+
+    .hr{
+      height:1px;
+      background: var(--stroke);
+      margin: 14px 0;
+    }
+
+    footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.6;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      opacity:.92;
+    }
+
+    .kbd{
+      font-family: var(--mono);
+      border:1px solid var(--stroke);
+      border-bottom-width:2px;
+      border-radius: 10px;
+      padding: 4px 8px;
+      background: rgba(18,18,26,.7);
+      color: var(--ink);
+      display:inline-block;
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important; }
     }
   </style>
 </head>
 
 <body>
-  <main class="wrap">
-    <section class="shell" aria-label="Soft launch homepage">
+  <div class="bg" aria-hidden="true"></div>
 
-      <!-- LEFT: Aesthetic intro -->
-      <article class="card">
-        <div class="inner">
-          <div class="top">
-            <div class="pill"><span class="dot" aria-hidden="true"></span>Soft launch • under construction</div>
-            <div class="pill" style="border-color: rgba(255,43,214,.32); color: var(--accent2)">v0.1</div>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="tag">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Soft launch • still building</span>
+        </div>
+
+        <h1>
+          Jackie Foo <span class="slash">/</span> Art × Fashion × IT
+        </h1>
+
+        <p class="sub">
+          This site is in-progress. I am shaping it like a studio space: clean lines, bold contrast, and playful systems.
+          Come back soon for the full portfolio, research, and experiments.
+        </p>
+
+        <div class="pillRow" aria-label="quick traits">
+          <div class="pill"><b>MODE</b> Minimal, sharp, high-contrast</div>
+          <div class="pill"><b>VIBE</b> Gallery energy, tech brain</div>
+          <div class="pill"><b>STATUS</b> Under construction</div>
+        </div>
+      </div>
+
+      <div class="cta">
+        <button class="btnAlt" id="toggleSound" type="button" aria-pressed="false" title="Toggle sound">
+          Sound: Off
+        </button>
+        <a class="btn" href="#game" aria-label="Jump to the mini game">Play mini game →</a>
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT: INTRO / BRAND -->
+      <section class="card" aria-labelledby="aboutTitle">
+        <div class="cardHead">
+          <h2 id="aboutTitle"><span class="chip" aria-hidden="true"></span> About this soft launch</h2>
+        </div>
+        <div class="cardBody">
+          <div class="grid2">
+            <div class="panel">
+              <p class="kicker">What I am building</p>
+              <p class="bigLine">
+                A personal site that blends <strong>visual taste</strong> with <strong>technical craft</strong>.
+                Think runway meets interface design.
+              </p>
+              <ul class="list">
+                <li class="li"><span class="tick" aria-hidden="true"></span><p><b>Art</b> as composition, rhythm, and meaning.</p></li>
+                <li class="li"><span class="tick" aria-hidden="true"></span><p><b>Fashion</b> as silhouette, restraint, and edge.</p></li>
+                <li class="li"><span class="tick" aria-hidden="true"></span><p><b>IT</b> as systems, interaction, and clarity.</p></li>
+              </ul>
+            </div>
+
+            <div class="panel">
+              <p class="kicker">What is coming next</p>
+              <p class="bigLine">
+                Portfolio modules, research notes, prototypes, and small “design toys” that are fun to touch.
+              </p>
+              <div class="hr"></div>
+              <p class="msg" style="margin:0">
+                Meanwhile: take a quick break and play the mini game.
+                It is pure chaos and has zero relation to my work.
+              </p>
+            </div>
           </div>
 
-          <h1>Hi, I’m <span class="name">Jackie Foo</span>.</h1>
+          <div class="hr"></div>
 
-          <p class="lede">
-            I’m still building this portfolio, so it’s intentionally minimal right now.
-            Think of it as a live draft with good typography and slightly chaotic energy.
+          <p class="msg" style="margin:0">
+            Tip: this page is built to be <b>thumb-first</b>.
+            Everything is big-tap, readable, and fast.
           </p>
+        </div>
+      </section>
 
-          <div class="miniRow" aria-label="Quick chips">
-            <span class="chip">Master’s in Data Science</span>
-            <span class="chip">HCI + interaction design</span>
-            <span class="chip">Accessibility-minded</span>
-            <span class="chip mono">site: developing</span>
-          </div>
-
-          <div class="actions" aria-label="Links">
-            <button class="btn accent" id="btnComing">What’s coming</button>
-            <a class="btn mag" id="btnLinkedin" href="#" rel="noreferrer">LinkedIn</a>
-            <a class="btn ghost" id="btnEmail" href="#">Say hi</a>
-          </div>
-
-          <div class="note" id="note">
-            <b>Quick note:</b> pages will shift around while I’m shipping updates. If something looks empty, it’s not you.
+      <!-- RIGHT: GAME -->
+      <section class="card" id="game" aria-labelledby="gameTitle">
+        <div class="cardHead">
+          <h2 id="gameTitle"><span class="chip" style="background: var(--b); box-shadow:0 0 0 3px rgba(255,45,85,.16);" aria-hidden="true"></span> Mini game: Color Clash</h2>
+          <div class="statRow" aria-label="game stats">
+            <span class="stat">Score <b id="score">0</b></span>
+            <span class="stat">Best <b id="best">0</b></span>
+            <span class="stat">Time <b id="time">20</b>s</span>
           </div>
         </div>
-      </article>
 
-      <!-- RIGHT: Layout Customizer (the “game”) -->
-      <article class="card">
-        <div class="inner">
-          <div class="split">
-            <div>
-              <p class="panelTitle">Tiny game: rearrange my homepage</p>
-              <p class="panelSub">
-                Move sections around and watch the preview update instantly.
-                It’s like a playful layout sandbox, not a random mini-game.
+        <div class="cardBody">
+          <div class="gameTop">
+            <p class="msg" style="margin:0">
+              Match the instruction, not the vibe. It gets faster.
+              <span class="kbd">Tap</span> any tile.
+            </p>
+            <button class="btnAlt" id="startBtn" type="button">Start</button>
+          </div>
+
+          <div class="arena" aria-live="polite">
+            <div class="prompt">
+              <p class="promptText" id="promptText">
+                Press <b>Start</b> to begin.
               </p>
             </div>
 
-            <div class="pill" style="border-color: rgba(43,255,136,.28); color: var(--good)">
-              live preview
+            <div class="choices" role="group" aria-label="color choices">
+              <button class="choice" type="button" data-color="A" aria-label="Cyan tile">CYAN</button>
+              <button class="choice" type="button" data-color="B" aria-label="Hot pink tile">PINK</button>
+              <button class="choice" type="button" data-color="C" aria-label="Neon green tile">GREEN</button>
+              <button class="choice" type="button" data-color="D" aria-label="Yellow tile">YELLOW</button>
             </div>
+
+            <p class="msg" id="gameMsg">Rule: if it says “Tap GREEN”, tap the GREEN tile. Simple. Until it is not.</p>
           </div>
 
-          <div class="presets" aria-label="Layout presets">
-            <div class="seg" role="tablist" aria-label="Presets">
-              <button class="active" data-preset="classic" type="button">Classic</button>
-              <button data-preset="projectsFirst" type="button">Projects first</button>
-              <button data-preset="minimal" type="button">Minimal</button>
-            </div>
-          </div>
+          <div class="hr"></div>
 
-          <div class="layoutBox">
-            <div class="kicker">
-              <div class="tag">Builder</div>
-              <div class="tag">Mobile: use ▲▼</div>
-              <div class="tag">Desktop: drag</div>
-            </div>
-
-            <div class="builder" id="builder" aria-label="Layout builder list"></div>
-
-            <div class="preview" aria-label="Live preview">
-              <div class="previewTop">
-                <div class="brand">
-                  <span class="pulse" aria-hidden="true"></span>
-                  <span>jackiefoo.me</span>
-                </div>
-                <div class="miniLinks" id="previewNav" aria-label="Preview nav"></div>
-              </div>
-              <div class="previewBody" id="previewBody" aria-label="Preview body"></div>
-            </div>
-
-            <div class="footerLine" id="footerLine"></div>
-          </div>
+          <p class="msg" style="margin:0">
+            Want the game to be “change the layout” instead (drag cards to rearrange the page)?
+            Tell me and I will swap this game to a layout remix mini game.
+          </p>
         </div>
-      </article>
+      </section>
+    </main>
 
-    </section>
-  </main>
+    <footer>
+      <div>
+        <span class="kbd">No gradients</span> in UI components • high contrast • mobile-first
+      </div>
+      <div>
+        © <span id="year"></span> Jackie Foo • soft launch build
+      </div>
+    </footer>
+  </div>
 
   <script>
-    // ====== EDIT THESE ======
-    const PROFILE = {
-      name: "Jackie Foo",
-      email: "your.email@example.com",                // replace
-      linkedin: "https://www.linkedin.com/in/your-handle/" // replace
-    };
+    // ---------- tiny sound (optional) ----------
+    let soundOn = false;
+    let audioCtx = null;
 
-    // Wire links
-    document.getElementById("btnEmail").href =
-      `mailto:${PROFILE.email}?subject=Hello%20from%20your%20site&body=Hi%20Jackie%2C%0A%0A`;
-    document.getElementById("btnLinkedin").href = PROFILE.linkedin;
+    function beep(freq=880, dur=0.06){
+      if(!soundOn) return;
+      try{
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = "square";
+        o.frequency.value = freq;
+        g.gain.value = 0.03;
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start();
+        setTimeout(()=>{ o.stop(); }, dur*1000);
+      }catch(e){}
+    }
 
-    // Coming soon toggle
-    const note = document.getElementById("note");
-    let noteAlt = false;
-    document.getElementById("btnComing").addEventListener("click", () => {
-      noteAlt = !noteAlt;
-      note.innerHTML = noteAlt
-        ? "<b>Coming soon:</b> case studies, research notes, and a nicer project browsing flow. Also I’m tuning mobile spacing and load speed."
-        : "<b>Quick note:</b> pages will shift around while I’m shipping updates. If something looks empty, it’s not you.";
+    const toggleSound = document.getElementById("toggleSound");
+    toggleSound.addEventListener("click", () => {
+      soundOn = !soundOn;
+      toggleSound.textContent = `Sound: ${soundOn ? "On" : "Off"}`;
+      toggleSound.setAttribute("aria-pressed", String(soundOn));
+      beep(soundOn ? 980 : 320, 0.05);
     });
 
-    // ====== Layout Customizer ======
-    const ITEMS = [
-      { id:"intro",    name:"Intro",    sw:"cyan", hint:"first impression + soft launch" },
-      { id:"projects", name:"Projects", sw:"mag",  hint:"case studies + prototypes" },
-      { id:"about",    name:"About",    sw:"lime", hint:"values + what I’m building toward" },
-      { id:"contact",  name:"Contact",  sw:"amb",  hint:"email + socials" },
+    // ---------- game state ----------
+    const scoreEl = document.getElementById("score");
+    const bestEl  = document.getElementById("best");
+    const timeEl  = document.getElementById("time");
+    const promptEl = document.getElementById("promptText");
+    const msgEl = document.getElementById("gameMsg");
+    const startBtn = document.getElementById("startBtn");
+    const tiles = Array.from(document.querySelectorAll(".choice"));
+
+    const STORAGE_KEY = "jf_softlaunch_best_v1";
+    let best = Number(localStorage.getItem(STORAGE_KEY) || 0);
+    bestEl.textContent = best;
+
+    const COLORS = [
+      { key:"A", name:"CYAN"  },
+      { key:"B", name:"PINK"  },
+      { key:"C", name:"GREEN" },
+      { key:"D", name:"YELLOW"}
     ];
 
-    const PREVIEW_COPY = {
-      intro:   { title:"Intro",    body:"Soft launch. Still building. Minimal on purpose." },
-      projects:{ title:"Projects", body:"A few prototypes first, then polished write-ups." },
-      about:   { title:"About",    body:"Data + HCI + accessibility. I like clarity, not noise." },
-      contact: { title:"Contact",  body:"Say hi, collaborate, or send me a duck meme." },
-    };
+    let running = false;
+    let score = 0;
+    let timeLeft = 20;
+    let timer = null;
+    let target = null;
+    let speedBonus = 0; // increases difficulty
 
-    const PRESETS = {
-      classic: ["intro","projects","about","contact"],
-      projectsFirst: ["projects","intro","about","contact"],
-      minimal: ["intro","projects","contact","about"],
-    };
-
-    const builder = document.getElementById("builder");
-    const previewBody = document.getElementById("previewBody");
-    const previewNav = document.getElementById("previewNav");
-    const footerLine = document.getElementById("footerLine");
-
-    let order = PRESETS.classic.slice();
-
-    // desktop drag state
-    let dragId = null;
-
-    function byId(id){ return ITEMS.find(x => x.id === id); }
-
-    function setPreset(p) {
-      order = PRESETS[p].slice();
-      renderAll();
+    function setPrompt(){
+      // Trick element: show instruction using one label but random emphasis word
+      // Keep rule clear: always match the target NAME shown.
+      target = COLORS[Math.floor(Math.random()*COLORS.length)];
+      promptEl.innerHTML = `Tap <b>${target.name}</b> now.`;
+      msgEl.textContent = speedBonus < 6
+        ? "Easy. Just match the word."
+        : "Faster now. Stay calm. Tap the word.";
     }
 
-    function move(id, dir){
-      const i = order.indexOf(id);
-      if (i < 0) return;
-      const j = i + dir;
-      if (j < 0 || j >= order.length) return;
-      [order[i], order[j]] = [order[j], order[i]];
-      renderAll();
+    function setTilesText(){
+      // Optional mild confusion: shuffle tile labels occasionally (still fair)
+      // The rule remains: tap the tile whose *label* matches prompt.
+      const names = COLORS.map(c=>c.name);
+      for(let i=names.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [names[i], names[j]] = [names[j], names[i]];
+      }
+      tiles.forEach((btn, i) => btn.textContent = names[i]);
     }
 
-    function renderBuilder(){
-      builder.innerHTML = "";
-      order.forEach((id, idx) => {
-        const meta = byId(id);
+    function startGame(){
+      running = true;
+      score = 0;
+      timeLeft = 20;
+      speedBonus = 0;
+      scoreEl.textContent = score;
+      timeEl.textContent = timeLeft;
+      startBtn.textContent = "Restart";
+      startBtn.classList.add("btnAlt");
+      setTilesText();
+      setPrompt();
+      beep(980, 0.06);
 
-        const row = document.createElement("div");
-        row.className = "item";
-        row.tabIndex = 0;
-        row.draggable = true;
-        row.dataset.id = id;
-        row.setAttribute("aria-label", `Section ${idx+1}: ${meta.name}`);
-
-        // desktop drag handlers
-        row.addEventListener("dragstart", (e) => {
-          dragId = id;
-          row.classList.add("dragging");
-          e.dataTransfer.effectAllowed = "move";
-          try { e.dataTransfer.setData("text/plain", id); } catch {}
-        });
-        row.addEventListener("dragend", () => {
-          dragId = null;
-          row.classList.remove("dragging");
-        });
-        row.addEventListener("dragover", (e) => {
-          e.preventDefault();
-          e.dataTransfer.dropEffect = "move";
-        });
-        row.addEventListener("drop", (e) => {
-          e.preventDefault();
-          const from = dragId || (()=>{
-            try { return e.dataTransfer.getData("text/plain"); } catch { return null; }
-          })();
-          const to = id;
-          if (!from || from === to) return;
-
-          const a = order.indexOf(from);
-          const b = order.indexOf(to);
-          if (a < 0 || b < 0) return;
-
-          const next = order.slice();
-          next.splice(a, 1);
-          next.splice(b, 0, from);
-          order = next;
-          renderAll();
-        });
-
-        const left = document.createElement("div");
-        left.className = "leftSide";
-
-        const sw = document.createElement("span");
-        sw.className = "swatch " + (meta.sw === "mag" ? "mag" : meta.sw === "lime" ? "lime" : meta.sw === "amb" ? "amb" : "");
-        left.appendChild(sw);
-
-        const labelWrap = document.createElement("div");
-        labelWrap.className = "labelWrap";
-
-        const label = document.createElement("div");
-        label.className = "label";
-        label.textContent = meta.name;
-
-        const hint = document.createElement("div");
-        hint.className = "hint";
-        hint.textContent = meta.hint;
-
-        labelWrap.appendChild(label);
-        labelWrap.appendChild(hint);
-        left.appendChild(labelWrap);
-
-        const controls = document.createElement("div");
-        controls.className = "controls";
-
-        const up = document.createElement("button");
-        up.className = "iconBtn";
-        up.type = "button";
-        up.innerHTML = "▲";
-        up.setAttribute("aria-label", `Move ${meta.name} up`);
-        up.addEventListener("click", (ev) => { ev.stopPropagation(); move(id, -1); });
-
-        const down = document.createElement("button");
-        down.className = "iconBtn";
-        down.type = "button";
-        down.innerHTML = "▼";
-        down.setAttribute("aria-label", `Move ${meta.name} down`);
-        down.addEventListener("click", (ev) => { ev.stopPropagation(); move(id, +1); });
-
-        controls.appendChild(up);
-        controls.appendChild(down);
-
-        row.appendChild(left);
-        row.appendChild(controls);
-
-        // keyboard re-order
-        row.addEventListener("keydown", (e) => {
-          if (e.key === "ArrowUp") { e.preventDefault(); move(id, -1); }
-          if (e.key === "ArrowDown") { e.preventDefault(); move(id, +1); }
-        });
-
-        builder.appendChild(row);
-      });
+      if(timer) clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        timeEl.textContent = timeLeft;
+        if(timeLeft <= 0){
+          endGame();
+        }else{
+          // as score grows, add a slight time pressure feel with occasional reshuffle
+          if(timeLeft % 5 === 0 && score >= 4){
+            setTilesText();
+          }
+        }
+      }, 1000);
     }
 
-    function renderPreview(){
-      previewNav.innerHTML = "";
-      previewBody.innerHTML = "";
+    function endGame(){
+      running = false;
+      if(timer) clearInterval(timer);
+      timer = null;
 
-      // Nav chips follow current order
-      order.forEach(id => {
-        const meta = byId(id);
-        const a = document.createElement("a");
-        a.className = "miniA";
-        a.href = "#";
-        a.textContent = meta.name.toLowerCase();
-        previewNav.appendChild(a);
-      });
-
-      // Blocks follow current order
-      order.forEach(id => {
-        const copy = PREVIEW_COPY[id];
-        const block = document.createElement("div");
-        block.className = "block";
-        block.innerHTML = `<h3>${copy.title}</h3><p>${copy.body}</p>`;
-        previewBody.appendChild(block);
-      });
-
-      footerLine.textContent = `layout: ${order.join(" → ")}   // still developing`;
+      if(score > best){
+        best = score;
+        localStorage.setItem(STORAGE_KEY, String(best));
+        bestEl.textContent = best;
+        msgEl.textContent = "New best. That was sharp.";
+        beep(1200, 0.07); beep(1500, 0.07);
+      }else{
+        msgEl.textContent = "Time. Run it back.";
+        beep(260, 0.07);
+      }
+      promptEl.innerHTML = `Game over. Your score: <b>${score}</b>.`;
     }
 
-    function renderAll(){
-      renderBuilder();
-      renderPreview();
+    function handlePick(btn){
+      if(!running) return;
+      const chosen = btn.textContent.trim().toUpperCase();
+      const correct = target && chosen === target.name;
+
+      if(correct){
+        score++;
+        scoreEl.textContent = score;
+        speedBonus = Math.min(10, Math.floor(score/3));
+
+        // Micro reward: extend time slightly early-game
+        if(score <= 6){
+          timeLeft = Math.min(25, timeLeft + 1);
+          timeEl.textContent = timeLeft;
+        }
+
+        // Make it “faster”: reshuffle more often
+        if(speedBonus >= 3 && Math.random() < 0.55){
+          setTilesText();
+        }
+
+        setPrompt();
+        beep(980 + score*8, 0.04);
+      }else{
+        // penalty
+        score = Math.max(0, score - 1);
+        scoreEl.textContent = score;
+        timeLeft = Math.max(0, timeLeft - 2);
+        timeEl.textContent = timeLeft;
+        msgEl.textContent = "Nope. Match the word on the prompt.";
+        beep(220, 0.06);
+        if(timeLeft <= 0) endGame();
+      }
     }
 
-    // Preset buttons
-    document.querySelectorAll(".seg button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".seg button").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        setPreset(btn.dataset.preset);
-      });
+    tiles.forEach(btn => btn.addEventListener("click", () => handlePick(btn)));
+    startBtn.addEventListener("click", startGame);
+
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Keyboard support (optional)
+    window.addEventListener("keydown", (e) => {
+      if(e.key === "Enter") startGame();
+      // 1-4 quick picks
+      const map = { "1":0, "2":1, "3":2, "4":3 };
+      if(map[e.key] !== undefined && tiles[map[e.key]]) handlePick(tiles[map[e.key]]);
     });
-
-    // init
-    renderAll();
   </script>
 </body>
 </html>
