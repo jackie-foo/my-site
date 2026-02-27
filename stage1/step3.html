@@ -22,7 +22,6 @@
     button{appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:1000;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28)}
     button:hover{border-color:color-mix(in srgb,var(--accent) 60%, var(--border))}
     button:disabled{opacity:.55;cursor:not-allowed}
-    .btnPrimary{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));box-shadow:0 14px 34px rgba(0,229,255,.12)}
     .btnDanger{border-color:color-mix(in srgb,var(--bad) 65%, var(--border))}
     .btnGhost{background:rgba(255,255,255,.03)}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
@@ -31,7 +30,6 @@
     .cardHead h2{margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase}
     .cardBody{padding:14px;display:flex;flex-direction:column;gap:12px}
 
-    /* Single-column layout (bigger weeks) */
     .timeline{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);padding:12px;overflow:auto}
     .weeks{display:grid;grid-template-columns:repeat(13,minmax(170px,1fr));gap:10px;min-width:1120px}
     .week{border-radius:16px;border:1px dashed rgba(255,255,255,.20);background:rgba(255,255,255,.02);padding:10px;min-height:230px;display:flex;flex-direction:column;gap:10px; position:relative}
@@ -56,144 +54,45 @@
     .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
       border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);max-width:360px;color:var(--text);font-weight:900;font-size:12px;display:none}
 
-    /* ===== Loading Screen ===== */
-    .loading{
-      position:fixed; inset:0; z-index:120;
-      display:none; align-items:center; justify-content:center;
+    /* Loading */
+    .loading{position:fixed; inset:0; z-index:120; display:none; align-items:center; justify-content:center;
       background:radial-gradient(1200px 600px at 30% 20%, rgba(0,229,255,.10), transparent 55%),
                  radial-gradient(900px 500px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
                  rgba(0,0,0,.72);
-      backdrop-filter: blur(6px);
-      padding:16px;
-    }
-    .loadingCard{
-      width:min(520px, 100%);
-      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(6px); padding:16px;}
+    .loadingCard{width:min(520px, 100%); border:1px solid rgba(255,255,255,.12);
       background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
-      border-radius:22px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      text-align:center;
-      padding:18px 16px 16px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      align-items:center;
-    }
-    .chibi{
-      width:140px; height:140px;
-      object-fit:contain;
-      filter: drop-shadow(0 16px 22px rgba(0,0,0,.45));
-      border-radius:18px;
-    }
+      border-radius:22px; box-shadow:var(--shadow); overflow:hidden; text-align:center;
+      padding:18px 16px 16px; display:flex; flex-direction:column; gap:12px; align-items:center;}
+    .chibi{width:140px; height:140px; object-fit:contain; filter: drop-shadow(0 16px 22px rgba(0,0,0,.45)); border-radius:18px;}
     .loadingTitle{font-weight:1000;letter-spacing:.2px;font-size:16px;margin:0}
     .loadingSub{margin:0;color:var(--muted);font-weight:800;font-size:12px;line-height:1.45}
     .bar{width:100%;height:10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);overflow:hidden}
-    .bar > div{
-      height:100%;width:40%;border-radius:999px;
-      background:linear-gradient(90deg, rgba(0,229,255,.85), rgba(255,43,214,.85));
-      animation: glide 1.2s ease-in-out infinite;
-    }
-    @keyframes glide{
-      0%{transform:translateX(-40%)}
-      50%{transform:translateX(120%)}
-      100%{transform:translateX(-40%)}
-    }
+    .bar > div{height:100%;width:40%;border-radius:999px;background:linear-gradient(90deg, rgba(0,229,255,.85), rgba(255,43,214,.85));animation: glide 1.2s ease-in-out infinite;}
+    @keyframes glide{0%{transform:translateX(-40%)}50%{transform:translateX(120%)}100%{transform:translateX(-40%)}}
 
-    /* ===== Modals (tutorial + add card) ===== */
-    .overlay{
-      position:fixed; inset:0; z-index:95;
-      background:rgba(0,0,0,.62);
-      display:none;
-      align-items:center; justify-content:center;
-      padding:16px;
-    }
-    .modal{
-      width:min(780px, 100%);
-      border:1px solid rgba(255,255,255,.12);
+    /* Overlays */
+    .overlay{position:fixed; inset:0; z-index:95; background:rgba(0,0,0,.62); display:none; align-items:center; justify-content:center; padding:16px;}
+    .modal{width:min(780px, 100%); border:1px solid rgba(255,255,255,.12);
       background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
-      border-radius:20px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .modalHead{
-      padding:14px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
-    }
-    .modalHead h3{
-      margin:0;
-      font-size:14px;
-      font-weight:1000;
-      letter-spacing:.35px;
-      text-transform:uppercase;
-    }
+      border-radius:20px; box-shadow:var(--shadow); overflow:hidden;}
+    .modalHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+    .modalHead h3{margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase}
     .modalBody{padding:14px; display:flex; flex-direction:column; gap:10px}
-    .modalFoot{
-      padding:14px;
-      border-top:1px solid rgba(255,255,255,.08);
-      display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
-    }
+    .modalFoot{padding:14px;border-top:1px solid rgba(255,255,255,.08);display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;}
     .kicker{color:var(--muted); font-weight:800; font-size:12px; line-height:1.35}
-    .steps{
-      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
-      color:var(--muted); font-weight:900; font-size:12px;
-    }
-    .pill{
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);
-      padding:4px 8px;
-      border-radius:999px;
-    }
-    .pill.active{
-      border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.12));
-      box-shadow:0 12px 28px rgba(0,229,255,.10);
-      color:var(--text);
-    }
-    .list{
-      margin:0;
-      padding-left:18px;
-      color:var(--muted);
-      font-weight:800;
-      font-size:13px;
-      line-height:1.55;
-    }
-    .callout{
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(0,229,255,.06);
-      border-radius:16px;
-      padding:10px 12px;
-      color:var(--text);
-      font-weight:900;
-      font-size:12px;
-      line-height:1.45;
-    }
+    .steps{display:flex; gap:8px; align-items:center; flex-wrap:wrap; color:var(--muted); font-weight:900; font-size:12px;}
+    .pill{border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); padding:4px 8px; border-radius:999px;}
+    .pill.active{border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.12)); box-shadow:0 12px 28px rgba(0,229,255,.10); color:var(--text);}
+    .list{margin:0; padding-left:18px; color:var(--muted); font-weight:800; font-size:13px; line-height:1.55;}
+    .callout{border:1px solid rgba(255,255,255,.10); background:rgba(0,229,255,.06); border-radius:16px; padding:10px 12px; color:var(--text); font-weight:900; font-size:12px; line-height:1.45;}
 
-    /* Add-card modal specifics */
-    .field{
-      width:100%;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      border-radius:14px;
-      padding:10px 12px;
-      font-weight:900;
-      outline:none;
-    }
-    .seg{
-      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
-    }
-    .seg button{
-      box-shadow:none;
-      padding:8px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .seg button.active{
-      border-color:color-mix(in srgb,var(--accent2) 55%, rgba(255,255,255,.10));
-      background:rgba(255,43,214,.08);
-    }
+    /* Add modal fields */
+    .field{width:100%; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.04); color:var(--text);
+      border-radius:14px; padding:10px 12px; font-weight:900; outline:none;}
+    .seg{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+    .seg button{box-shadow:none; padding:8px 10px; border-radius:999px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);}
+    .seg button.active{border-color:color-mix(in srgb,var(--accent2) 55%, rgba(255,255,255,.10)); background:rgba(255,43,214,.08);}
     .hintTiny{color:var(--muted);font-weight:800;font-size:12px;line-height:1.35}
   </style>
 </head>
@@ -204,7 +103,7 @@
         <div class="badge"><span class="dot"></span> Stage 1 • Step 3</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
-          Add cards into weeks. Long-press or right-click a week to add faster. Tap tag to cycle: Neutral → Constraint → Support → Wish.
+          Desktop: right-click a week. Phone: long-press a week. Tap tag to cycle: Neutral → Constraint → Support → Wish.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
@@ -217,14 +116,14 @@
     <section class="card">
       <div class="cardHead">
         <h2>Feedback Journey Map (W1–W13)</h2>
-        <button id="btnAddGlobal" class="btnPrimary">＋ Add card</button>
+        <span class="mono">Add via week menu</span>
       </div>
       <div class="cardBody">
         <section class="timeline">
           <div class="weeks" id="weeks"></div>
         </section>
         <div class="subtitle" style="margin:0">
-          Tip: Right-click / long-press a week → add a card directly into that week.
+          Tip: Long-press a week on phone to add. Drag cards to move weeks.
         </div>
       </div>
     </section>
@@ -232,7 +131,6 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- Loading -->
   <div class="loading" id="loading" aria-hidden="true">
     <div class="loadingCard">
       <img id="chibiImg" class="chibi" alt="Loading chibi"/>
@@ -243,7 +141,7 @@
     </div>
   </div>
 
-  <!-- Tutorial Modal -->
+  <!-- Tutorial -->
   <div class="overlay" id="tutOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
       <div class="modalHead">
@@ -261,27 +159,23 @@
         <div class="kicker">You can reopen this anytime via “Tutorial”.</div>
         <div class="row" style="justify-content:flex-end">
           <button id="btnPrev" class="btnGhost">← Back</button>
-          <button id="btnNextStep" class="btnPrimary">Next</button>
+          <button id="btnNextStep" class="btnGhost">Next</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Add Card Modal (smart: preset OR custom in one flow) -->
+  <!-- Add Card -->
   <div class="overlay" id="addOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addTitle">
       <div class="modalHead">
         <div>
           <h3 id="addTitle">Add a card</h3>
-          <div class="kicker" id="addKicker">Pick a template OR write your own, then drop it into a week.</div>
+          <div class="kicker">Pick a preset, then type your wording (or leave blank to use the preset text).</div>
         </div>
         <button id="btnCloseAdd" class="btnGhost" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
-        <div class="callout">
-          Smart rule: if you choose a template, text is filled automatically. If you type, it becomes a custom card.
-        </div>
-
         <div class="row" style="justify-content:flex-start">
           <label class="kicker" style="margin:0">Week</label>
           <span class="mono" id="addWeekPill">Week 1</span>
@@ -289,14 +183,14 @@
 
         <div class="row" style="gap:10px;align-items:flex-start">
           <div style="flex:1;min-width:260px">
-            <div class="kicker">Template (optional)</div>
+            <div class="kicker">Preset</div>
             <select class="field" id="tmplSelect"></select>
-            <div class="hintTiny" style="margin-top:6px">Pick one to auto-fill the text. You can still edit.</div>
+            <div class="hintTiny" style="margin-top:6px">Choose a preset to guide you.</div>
           </div>
           <div style="flex:1;min-width:260px">
-            <div class="kicker">Card text</div>
-            <input class="field" id="cardText" placeholder="e.g., Feedback is too vague to act on"/>
-            <div class="hintTiny" style="margin-top:6px">Keep it short. One card = one moment.</div>
+            <div class="kicker">Your wording</div>
+            <input class="field" id="cardText" placeholder="What happened / what you think matters"/>
+            <div class="hintTiny" style="margin-top:6px">Leave blank to use preset text.</div>
           </div>
         </div>
 
@@ -311,9 +205,9 @@
         </div>
       </div>
       <div class="modalFoot">
-        <div class="kicker">Right-click / long-press a week opens this pre-set to that week.</div>
+        <div class="kicker">You can move it later by dragging.</div>
         <div class="row" style="justify-content:flex-end">
-          <button id="btnAddNow" class="btnPrimary">Add</button>
+          <button id="btnAddNow" class="btnGhost">Add</button>
         </div>
       </div>
     </div>
@@ -322,13 +216,12 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   (() => {
-    // ===== config =====
     const SUPABASE_URL = "https://djqwztoavtkqspxpvluc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcXd6dG9hdnRrcXNweHB2bHVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMDU3MDEsImV4cCI6MjA4Nzc4MTcwMX0.ZVcMU8DeHxHMw3WWegz88BmCei9z4UX3tZR7n1XFRj0";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const BASE_PATH = "/stage1";
-    const CHIBI3_SRC = "/pic/chibi3.png"; // <- change if needed
+    const CHIBI3_SRC = "/pic/chibi3.png"; // ✅ your folder is pic
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
@@ -378,7 +271,6 @@
       document.body.style.overflow = "";
     }
 
-    // ===== overlay helpers =====
     function openOverlay(el){
       el.style.display="flex";
       el.setAttribute("aria-hidden","false");
@@ -390,7 +282,6 @@
       document.body.style.overflow="";
     }
 
-    // ===== data =====
     const baseEvents = [
       { id:"evt-brief",    name:"Assessment brief / rubric arrives", hint:"W1–W2" },
       { id:"evt-work",     name:"Working on assignment",             hint:"Any week" },
@@ -432,7 +323,6 @@
       if(b.error) throw b.error;
     }
 
-    // ===== render weeks =====
     function renderWeeks(){
       weeksWrap.innerHTML = "";
       for(let w=1; w<=13; w++){
@@ -440,11 +330,10 @@
         weekEl.className="week";
         weekEl.dataset.week=String(w);
         weekEl.innerHTML = `
-          <div class="weekHead"><strong>Week ${w}</strong><span>Right-click / long-press</span></div>
+          <div class="weekHead"><strong>Week ${w}</strong><span>Hold / right-click</span></div>
           <div class="dropZone" data-week="${w}"></div>
         `;
 
-        // desktop drag&drop support (moving existing)
         weekEl.addEventListener("dragover",(e)=>e.preventDefault());
         weekEl.addEventListener("drop", async (e)=>{
           e.preventDefault();
@@ -453,13 +342,13 @@
           if(obj.kind==="placedEvent") await movePlaced(obj.id, w);
         });
 
-        // right-click
+        // desktop: right click
         weekEl.addEventListener("contextmenu",(e)=>{
           e.preventDefault();
           openAddModal(w);
         });
 
-        // long-press mobile
+        // mobile: long press
         let pressTimer=null;
         weekEl.addEventListener("pointerdown",(e)=>{
           if(e.pointerType!=="touch") return;
@@ -475,7 +364,6 @@
       }
     }
 
-    // ===== placed cards =====
     function enableMobileDragPlaced(el, id){
       let ghost=null;
       el.addEventListener("pointerdown",(e)=>{
@@ -483,7 +371,6 @@
         if(t && t.closest("button")) return;
         if(e.pointerType!=="touch") return;
         e.preventDefault();
-
         ghost = el.cloneNode(true);
         ghost.style.position="fixed";
         ghost.style.left=(e.clientX-80)+"px";
@@ -503,7 +390,6 @@
       el.addEventListener("pointerup", async (e)=>{
         if(!ghost) return;
         ghost.remove(); ghost=null;
-
         const under = document.elementFromPoint(e.clientX, e.clientY);
         const weekEl = under ? under.closest(".week") : null;
         if(!weekEl){ showToast("Drop on a Week box"); return; }
@@ -533,21 +419,15 @@
           </div>
         `;
 
-        // desktop drag
         el.addEventListener("dragstart",(e)=>{
           e.dataTransfer.setData("text/plain", JSON.stringify({kind:"placedEvent", id:pe.id}));
         });
 
-        // mobile drag
         enableMobileDragPlaced(el, pe.id);
 
         const tagBtn = el.querySelector(".tagBtn");
         const xBtn = el.querySelector(".miniX");
-
-        // stop drag from stealing clicks
-        [tagBtn, xBtn].forEach(btn=>{
-          btn.addEventListener("pointerdown",(e)=>{ e.stopPropagation(); });
-        });
+        [tagBtn, xBtn].forEach(btn=>btn.addEventListener("pointerdown",(e)=>e.stopPropagation()));
 
         tagBtn.addEventListener("click", async (e)=>{
           e.stopPropagation();
@@ -558,8 +438,6 @@
 
         xBtn.addEventListener("click", async (e)=>{
           e.stopPropagation();
-
-          // optimistic remove
           const old = pe;
           state.placed = state.placed.filter(x=>x.id!==pe.id);
           renderPlaced();
@@ -575,7 +453,6 @@
           if(error){
             console.error(error);
             showToast("Remove failed (see console)");
-            // rollback
             state.placed.push(old);
             renderPlaced();
           }
@@ -585,7 +462,6 @@
       });
     }
 
-    // ===== DB ops =====
     async function insertJourneyItem({week, label, type}){
       const payload = { session_id: room, week, label, type };
       payload.participant_id = participantId;
@@ -604,31 +480,24 @@
       if(error) console.error(error);
     }
 
-    // ===== Add modal (smart) =====
+    // ===== Add modal =====
     const addOverlay = $("#addOverlay");
-    const btnCloseAdd = $("#btnCloseAdd");
     const addWeekPill = $("#addWeekPill");
     const tmplSelect = $("#tmplSelect");
     const cardText = $("#cardText");
     const typeSeg = $("#typeSeg");
     const btnAddNow = $("#btnAddNow");
+    $("#btnCloseAdd").addEventListener("click", ()=>closeOverlay(addOverlay));
+    addOverlay.addEventListener("mousedown",(e)=>{ if(e.target===addOverlay) closeOverlay(addOverlay); });
+
     let addWeek = 1;
     let addType = "neutral";
 
-    // fill template select once
     function initTemplateSelect(){
-      tmplSelect.innerHTML = `<option value="">(No template)</option>` +
+      tmplSelect.innerHTML =
         baseEvents.map(e=>`<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)}</option>`).join("");
+      tmplSelect.value = baseEvents[0].id;
     }
-
-    tmplSelect.addEventListener("change", ()=>{
-      const id = tmplSelect.value;
-      if(!id) return;
-      const base = baseEvents.find(x=>x.id===id);
-      if(!base) return;
-      // auto-fill text (can still edit)
-      cardText.value = base.name;
-    });
 
     typeSeg.addEventListener("click",(e)=>{
       const btn = e.target.closest("button[data-type]");
@@ -640,41 +509,34 @@
     function openAddModal(week){
       addWeek = week;
       addWeekPill.textContent = `Week ${week}`;
-      tmplSelect.value = "";
-      cardText.value = "";
       addType = "neutral";
       [...typeSeg.querySelectorAll("button")].forEach((b,i)=>b.classList.toggle("active", i===0));
+      cardText.value = "";
       openOverlay(addOverlay);
       setTimeout(()=>cardText.focus(), 0);
     }
-    function closeAddModal(){ closeOverlay(addOverlay); }
-
-    btnCloseAdd.addEventListener("click", closeAddModal);
-    addOverlay.addEventListener("mousedown",(e)=>{ if(e.target===addOverlay) closeAddModal(); });
 
     btnAddNow.addEventListener("click", async ()=>{
-      const label = (cardText.value || "").trim();
+      const presetId = tmplSelect.value;
+      const preset = baseEvents.find(x=>x.id===presetId);
+      const typed = (cardText.value || "").trim();
+      const label = typed || (preset ? preset.name : "");
+
       if(!label){
-        showToast("Please type a card text");
-        cardText.focus();
+        showToast("Pick a preset or type your wording");
         return;
       }
 
-      // optimistic add (temp)
       const tempId = "temp_" + crypto.randomUUID();
-      const temp = { id: tempId, week: addWeek, label, type: addType, participant_id: participantId };
-      state.placed.push(temp);
+      state.placed.push({ id: tempId, week: addWeek, label, type: addType, participant_id: participantId });
       renderPlaced();
-      closeAddModal();
+      closeOverlay(addOverlay);
 
       try{
         const row = await insertJourneyItem({ week:addWeek, label, type:addType });
-        // replace temp with real id
         const idx = state.placed.findIndex(x=>x.id===tempId);
         if(idx>=0){
           state.placed[idx] = { id:row.id, week:row.week, label:row.label, type:row.type, participant_id:row.participant_id };
-        } else {
-          state.placed.push({ id:row.id, week:row.week, label:row.label, type:row.type, participant_id:row.participant_id });
         }
         renderPlaced();
       } catch(err){
@@ -685,9 +547,6 @@
       }
     });
 
-    // Global add button -> week 1
-    $("#btnAddGlobal").addEventListener("click", ()=>openAddModal(1));
-
     // ===== tutorial =====
     const tutOverlay = $("#tutOverlay");
     const btnCloseTut = $("#btnCloseTut");
@@ -695,55 +554,53 @@
     const tutContent = $("#tutContent");
     const btnPrev = $("#btnPrev");
     const btnNextStep = $("#btnNextStep");
-
     const TUT_KEY = `stage1_step3_tut_seen_${room}`;
+    let tutIndex=0;
 
     const tutorialSlides = [
       {
-        title:"How to add cards (desktop + mobile)",
+        title:"Add cards (desktop + phone)",
         html: `
           <div class="callout">
-            Desktop: right-click a week. Mobile: long-press a week (~0.5s).
+            Desktop: right-click a week. Phone: long-press a week (~0.5s).
           </div>
           <ul class="list">
-            <li>Add a card directly into that week.</li>
-            <li>Pick a template (optional) — it auto-fills the text.</li>
-            <li>Or type your own to make a custom card.</li>
+            <li>Choose a preset (dropdown).</li>
+            <li>Type your wording if you want (or leave blank to use the preset text).</li>
+            <li>Pick a starting tag: Neutral / Constraint / Support / Wish.</li>
           </ul>
         `
       },
       {
-        title:"What the tags mean",
+        title:"Tags (why they matter)",
         html: `
-          <div class="callout">Tags help classify moments so patterns pop out.</div>
+          <div class="callout">Tags help the group spot patterns across weeks.</div>
           <ul class="list">
-            <li><b>Neutral</b>: a normal step.</li>
-            <li><b>Constraint</b>: friction / blocker.</li>
-            <li><b>Support</b>: helps students progress.</li>
-            <li><b>Wish</b>: improvement idea.</li>
+            <li><b>Constraint</b> = blocker / friction</li>
+            <li><b>Support</b> = helps move forward</li>
+            <li><b>Wish</b> = improvement idea</li>
+            <li><b>Neutral</b> = just a step</li>
           </ul>
         `
       },
       {
-        title:"Edit the timeline",
+        title:"Edit + revise",
         html: `
-          <div class="callout">You can revise the map as you discuss.</div>
+          <div class="callout">You can change your mind while discussing.</div>
           <ul class="list">
-            <li>Drag placed cards between weeks (desktop drag / mobile drag).</li>
+            <li>Drag cards to move between weeks.</li>
             <li>Tap the tag to cycle types.</li>
             <li>Remove deletes the card for everyone (realtime).</li>
           </ul>
         `
       }
     ];
-    let tutIndex=0;
 
     function renderTutorial(){
       tutSteps.innerHTML = tutorialSlides.map((_, i)=>{
         const cls = "pill" + (i===tutIndex ? " active" : "");
         return `<span class="${cls}">${i+1}</span>`;
       }).join("");
-
       const slide = tutorialSlides[tutIndex];
       tutContent.innerHTML = `
         <div class="row" style="justify-content:space-between; align-items:flex-end">
@@ -758,25 +615,15 @@
       btnPrev.disabled = (tutIndex===0);
       btnNextStep.textContent = (tutIndex===tutorialSlides.length-1) ? "Done" : "Next";
     }
-    function openTutorial(){
-      renderTutorial();
-      openOverlay(tutOverlay);
-    }
-    function closeTutorial(){ closeOverlay(tutOverlay); }
 
-    $("#btnTutorial").addEventListener("click", ()=>{ tutIndex=0; openTutorial(); });
-    btnCloseTut.addEventListener("click", closeTutorial);
-    tutOverlay.addEventListener("mousedown",(e)=>{ if(e.target===tutOverlay) closeTutorial(); });
-    window.addEventListener("keydown",(e)=>{
-      if(e.key==="Escape"){
-        if(tutOverlay.style.display==="flex") closeTutorial();
-        if(addOverlay.style.display==="flex") closeAddModal();
-      }
+    $("#btnTutorial").addEventListener("click", ()=>{
+      tutIndex=0; renderTutorial(); openOverlay(tutOverlay);
     });
-
+    btnCloseTut.addEventListener("click", ()=>closeOverlay(tutOverlay));
+    tutOverlay.addEventListener("mousedown",(e)=>{ if(e.target===tutOverlay) closeOverlay(tutOverlay); });
     btnPrev.addEventListener("click", ()=>{ tutIndex=Math.max(0, tutIndex-1); renderTutorial(); });
     btnNextStep.addEventListener("click", ()=>{
-      if(tutIndex===tutorialSlides.length-1){ closeTutorial(); return; }
+      if(tutIndex===tutorialSlides.length-1){ closeOverlay(tutOverlay); return; }
       tutIndex=Math.min(tutorialSlides.length-1, tutIndex+1);
       renderTutorial();
     });
@@ -785,9 +632,17 @@
       if(!localStorage.getItem(TUT_KEY)){
         localStorage.setItem(TUT_KEY,"1");
         tutIndex=0;
-        openTutorial();
+        renderTutorial();
+        openOverlay(tutOverlay);
       }
     }
+
+    window.addEventListener("keydown",(e)=>{
+      if(e.key==="Escape"){
+        if(tutOverlay.style.display==="flex") closeOverlay(tutOverlay);
+        if(addOverlay.style.display==="flex") closeOverlay(addOverlay);
+      }
+    });
 
     // ===== load + realtime =====
     async function loadInitial(){
@@ -808,12 +663,6 @@
       }
     }
 
-    function getDeletedId(payload){
-      if (!payload) return null;
-      if (payload.old && payload.old.id) return payload.old.id;
-      return null;
-    }
-
     function subscribeRealtime(){
       supabase
         .channel("step3:" + room)
@@ -832,12 +681,9 @@
               if(idx>=0){
                 state.placed[idx] = { id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id };
                 renderPlaced();
-              } else {
-                state.placed.push({ id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id });
-                renderPlaced();
               }
             } else if(payload.eventType==="DELETE"){
-              const did = getDeletedId(payload);
+              const did = payload.old && payload.old.id ? payload.old.id : null;
               if(did){
                 state.placed = state.placed.filter(x=>x.id!==did);
                 renderPlaced();
@@ -852,7 +698,6 @@
 
     // ===== nav/reset =====
     $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
-
     $("#btnReset").addEventListener("click", ()=>{
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;
