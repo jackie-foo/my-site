@@ -4,148 +4,154 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Jackie Foo — Soft Launch</title>
-  <meta name="description" content="Jackie Foo — soft launching. Still building. Play a tiny layout shuffle game." />
+  <meta name="description" content="Jackie Foo — soft launch. Still building. Try a tiny layout customizer." />
 
   <style>
     :root{
-      /* NO GRADIENTS. Only solid colors. */
-      --bg:#050608;
-      --panel:#0B0D12;
+      /* solid colors only — NO gradients */
+      --bg:#050607;
+      --panel:#0B0D11;
       --panel2:#0F121A;
-      --text:#F7F8FF;
-      --muted:#B8BED9;
+      --border: rgba(255,255,255,.10);
+      --border2: rgba(255,255,255,.16);
 
-      /* sharp/static accents */
-      --cyan:#00E5FF;
-      --mag:#FF2BD6;
-      --lime:#2BFF88;
-      --amber:#FFB020;
-      --red:#FF365B;
+      --text:#F3F6FF;
+      --muted:rgba(243,246,255,.72);
 
-      --border: rgba(247,248,255,.12);
-      --border2: rgba(247,248,255,.18);
-      --shadow: 0 18px 46px rgba(0,0,0,.55);
-      --radius: 18px;
+      --accent:#00E5FF;    /* change if you want */
+      --accent2:#FF2BD6;   /* secondary accent */
+      --good:#2BFF88;
+      --warn:#FFB020;
 
-      --ring: 0 0 0 3px rgba(0,229,255,.24), 0 0 0 1px rgba(247,248,255,.10) inset;
+      --radius:18px;
+      --shadow: 0 18px 48px rgba(0,0,0,.58);
+      --ring: 0 0 0 3px rgba(0,229,255,.22), 0 0 0 1px rgba(255,255,255,.10) inset;
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font-family: var(--sans);
       color:var(--text);
-      background: var(--bg);
+      background:var(--bg);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
-
-    a{color:inherit; text-decoration:none}
+    a{color:inherit;text-decoration:none}
     button{font:inherit}
+
     .wrap{
       min-height:100%;
       display:flex;
       justify-content:center;
-      align-items:center;
-      padding: 18px;
+      padding:18px;
     }
 
-    .frame{
-      width: min(1080px, 100%);
+    .shell{
+      width:min(1100px,100%);
       display:grid;
       grid-template-columns: 1fr;
-      gap: 14px;
+      gap:14px;
+      padding: 8px 0 26px;
+    }
+    @media (min-width: 920px){
+      .shell{grid-template-columns: 1.05fr .95fr}
     }
 
-    @media (min-width: 860px){
-      .frame{grid-template-columns: 1.1fr .9fr}
-    }
-
+    /* ======= hero card ======= */
     .card{
       background: var(--panel);
-      border: 1px solid var(--border);
+      border:1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
     .inner{padding:18px}
-    @media (min-width: 520px){ .inner{padding:22px} }
+    @media (min-width:520px){ .inner{padding:22px} }
 
-    .bar{
+    .top{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      margin-bottom:14px;
       flex-wrap:wrap;
+      margin-bottom: 14px;
     }
 
     .pill{
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      padding:10px 12px;
-      border-radius:999px;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
       background: var(--panel2);
-      border: 1px solid var(--border);
-      font-weight:800;
-      letter-spacing:.2px;
+      border:1px solid var(--border);
       user-select:none;
+      font-weight: 850;
+      letter-spacing:.2px;
       white-space:nowrap;
     }
-
     .dot{
       width:10px;height:10px;border-radius:50%;
-      background: var(--amber);
+      background: var(--warn);
       box-shadow: 0 0 0 3px rgba(255,176,32,.18);
       flex:0 0 auto;
     }
 
     h1{
-      margin: 0 0 10px;
-      font-size: clamp(28px, 4.2vw, 44px);
-      line-height: 1.05;
-      letter-spacing: -0.8px;
+      margin:0 0 10px;
+      font-size: clamp(28px, 4.1vw, 46px);
+      line-height: 1.04;
+      letter-spacing: -0.9px;
     }
-
     .name{
-      color: var(--cyan);
+      color: var(--accent);
       text-decoration: underline;
       text-decoration-thickness: 3px;
-      text-underline-offset: 6px;
+      text-underline-offset: 7px;
     }
 
     .lede{
       margin:0 0 14px;
       color: var(--muted);
+      line-height: 1.58;
       font-size: 15px;
-      line-height: 1.55;
+      max-width: 62ch;
     }
 
-    .chips{
+    .miniRow{
       display:flex;
-      flex-wrap:wrap;
+      align-items:center;
       gap:10px;
-      margin: 14px 0 10px;
+      flex-wrap:wrap;
+      margin: 14px 0 8px;
     }
 
     .chip{
-      padding:10px 12px;
-      border-radius:999px;
-      border: 1px solid var(--border);
+      padding: 9px 12px;
+      border-radius: 999px;
+      border:1px solid var(--border);
       background: var(--panel2);
+      font-weight: 780;
       font-size: 13px;
-      font-weight: 750;
-      color: var(--text);
+      color: rgba(243,246,255,.92);
       user-select:none;
     }
+    .chip.mono{
+      font-family: var(--mono);
+      font-weight: 800;
+      color: var(--muted);
+    }
 
-    .row{
+    .actions{
       display:flex;
-      flex-wrap:wrap;
       gap:10px;
+      flex-wrap:wrap;
       margin-top: 14px;
     }
 
@@ -156,10 +162,10 @@
       gap:10px;
       padding: 12px 14px;
       border-radius: 14px;
-      border: 1px solid var(--border2);
+      border:1px solid var(--border2);
       background: var(--panel2);
       color: var(--text);
-      font-weight: 850;
+      font-weight: 900;
       letter-spacing:.2px;
       width: 100%;
       touch-action: manipulation;
@@ -167,263 +173,356 @@
     }
     .btn:active{transform: translateY(1px) scale(.99)}
     .btn:focus{outline:none; box-shadow: var(--ring)}
-    @media (min-width: 520px){ .btn{width:auto} }
+    @media (min-width:520px){ .btn{width:auto} }
 
-    .btn.cyan{border-color: rgba(0,229,255,.42)}
-    .btn.mag{border-color: rgba(255,43,214,.42)}
-    .btn.lime{border-color: rgba(43,255,136,.42)}
-    .btn.warn{border-color: rgba(255,176,32,.42)}
+    .btn.accent{border-color: rgba(0,229,255,.42)}
+    .btn.mag{border-color: rgba(255,43,214,.40)}
+    .btn.good{border-color: rgba(43,255,136,.40)}
+    .btn.ghost{background: transparent}
 
-    .toast{
+    .note{
       margin-top: 12px;
       padding: 12px 12px;
       border-radius: 14px;
-      border: 1px solid var(--border);
+      border:1px solid var(--border);
       background: var(--panel2);
       color: var(--muted);
+      line-height:1.42;
       font-size: 13px;
-      line-height:1.4;
     }
-    .toast b{color: var(--text)}
+    .note b{color: var(--text)}
 
-    /* ===== Layout Shuffle Game ===== */
-    .gameHead{
+    /* ======= right panel ======= */
+    .panelTitle{
+      margin:0;
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: -.2px;
+    }
+    .panelSub{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+
+    .split{
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
       gap:12px;
       flex-wrap:wrap;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
-    .gameTitle{margin:0; font-size:18px; font-weight:900; letter-spacing:-.2px}
-    .gameSub{margin:6px 0 0; color:var(--muted); font-size:14px; line-height:1.45}
 
-    .stats{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
+    .presets{
+      display:flex;
+      flex-wrap:wrap;
       gap:10px;
-      margin: 14px 0 12px;
+      margin: 12px 0 10px;
     }
-    .stat{
-      padding:12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--panel2);
-    }
-    .stat .label{color: var(--muted); font-size: 12px; margin:0 0 4px}
-    .stat .val{margin:0; font-size: 18px; font-weight: 950; letter-spacing: -0.2px}
 
-    .board{
-      margin-top: 10px;
-      border-radius: 16px;
+    .seg{
+      display:inline-flex;
       border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow:hidden;
       background: var(--panel2);
+    }
+    .seg button{
+      appearance:none;
+      border:0;
+      background: transparent;
+      color: var(--muted);
+      padding: 10px 12px;
+      font-weight: 900;
+      cursor:pointer;
+      touch-action: manipulation;
+    }
+    .seg button:focus{outline:none; box-shadow: var(--ring)}
+    .seg button.active{
+      background: #141826;
+      color: var(--text);
+    }
+
+    .layoutBox{
+      border:1px solid var(--border);
+      background: var(--panel2);
+      border-radius: 16px;
       padding: 12px;
     }
 
-    .target{
+    .kicker{
       display:flex;
-      flex-wrap:wrap;
-      gap:10px;
       align-items:center;
       justify-content:space-between;
-      padding: 10px 10px;
-      border-radius: 14px;
-      border: 1px solid rgba(247,248,255,.10);
-      background: var(--panel);
-      margin-bottom: 12px;
-    }
-    .targetLeft{
-      display:flex;
-      gap:8px;
-      align-items:center;
+      gap:10px;
       flex-wrap:wrap;
+      margin-bottom: 10px;
     }
-    .tag{
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.25px;
-      padding:8px 10px;
-      border-radius:999px;
-      border: 1px solid var(--border);
-      background: var(--panel2);
+    .kicker .tag{
+      font-family: var(--mono);
+      font-size: 12px;
       color: var(--muted);
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 8px 10px;
+      border-radius: 999px;
       user-select:none;
     }
-    .tag.cyan{color: var(--cyan); border-color: rgba(0,229,255,.30)}
-    .tag.mag{color: var(--mag); border-color: rgba(255,43,214,.30)}
-    .tag.lime{color: var(--lime); border-color: rgba(43,255,136,.30)}
-    .tag.amb{color: var(--amber); border-color: rgba(255,176,32,.30)}
 
-    .rule{
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.35;
-    }
-
-    .tiles{
+    .builder{
       display:grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
+      gap:10px;
     }
 
-    .tile{
+    .item{
+      border:1px solid rgba(255,255,255,.14);
+      background: #0B0D11;
       border-radius: 16px;
-      border: 1px solid rgba(247,248,255,.16);
-      background: var(--panel);
-      padding: 14px;
-      min-height: 66px;
+      padding: 12px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      cursor:pointer;
+      cursor: grab;
       touch-action: manipulation;
       user-select:none;
       transition: transform .08s ease, border-color .12s ease;
     }
-    .tile:active{transform: translateY(1px) scale(.99)}
-    .tile:focus{outline:none; box-shadow: var(--ring)}
-    .tile.selected{
-      border-color: rgba(0,229,255,.55);
-      box-shadow: 0 0 0 1px rgba(0,229,255,.10) inset;
+    .item:active{transform: translateY(1px) scale(.995)}
+    .item:focus{outline:none; box-shadow: var(--ring)}
+    .item.dragging{
+      opacity: .75;
+      cursor: grabbing;
+      border-color: rgba(0,229,255,.45);
     }
 
-    .tileTitle{
+    .leftSide{
       display:flex;
       align-items:center;
       gap:10px;
-      font-weight:950;
-      letter-spacing:.1px;
+      min-width: 0;
     }
+
     .swatch{
-      width:12px;height:12px;border-radius:4px;
-      background: var(--cyan);
+      width: 12px; height: 12px; border-radius: 4px;
+      background: var(--accent);
       box-shadow: 0 0 0 3px rgba(0,229,255,.16);
       flex:0 0 auto;
     }
-    .swatch.mag{background:var(--mag); box-shadow:0 0 0 3px rgba(255,43,214,.16)}
-    .swatch.lime{background:var(--lime); box-shadow:0 0 0 3px rgba(43,255,136,.16)}
-    .swatch.amb{background:var(--amber); box-shadow:0 0 0 3px rgba(255,176,32,.16)}
+    .swatch.mag{background: var(--accent2); box-shadow:0 0 0 3px rgba(255,43,214,.16)}
+    .swatch.lime{background: var(--good); box-shadow:0 0 0 3px rgba(43,255,136,.16)}
+    .swatch.amb{background: var(--warn); box-shadow:0 0 0 3px rgba(255,176,32,.16)}
 
-    .tileHint{
+    .labelWrap{min-width:0}
+    .label{
+      font-weight: 950;
+      letter-spacing: -.2px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .hint{
+      margin-top: 2px;
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.3;
-      text-align:right;
-      max-width: 52%;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      font-family: var(--mono);
     }
 
-    .success{
-      border-color: rgba(43,255,136,.60) !important;
-      box-shadow: 0 0 0 1px rgba(43,255,136,.10) inset !important;
+    .controls{
+      display:flex;
+      gap:8px;
+      flex:0 0 auto;
     }
-
-    .kbd{
+    .iconBtn{
+      width: 38px;
+      height: 38px;
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      padding:8px 10px;
+      justify-content:center;
       border-radius: 12px;
-      border: 1px solid rgba(247,248,255,.10);
+      border:1px solid var(--border);
       background: var(--panel2);
+      color: var(--text);
+      font-weight: 950;
+      cursor:pointer;
+      touch-action: manipulation;
+    }
+    .iconBtn:active{transform: translateY(1px) scale(.99)}
+    .iconBtn:focus{outline:none; box-shadow: var(--ring)}
+
+    /* ======= live preview ======= */
+    .preview{
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 16px;
+      overflow:hidden;
+    }
+
+    .previewTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: #090A0D;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight: 950;
+      letter-spacing: -.2px;
+    }
+
+    .pulse{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,229,255,.18);
+    }
+
+    .previewBody{
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+
+    .block{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      background: #0F121A;
+      padding: 12px;
+    }
+    .block h3{
+      margin:0 0 6px;
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: -.15px;
+    }
+    .block p{
+      margin:0;
       color: var(--muted);
+      font-size: 13px;
+      line-height:1.45;
+    }
+
+    .miniLinks{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .miniA{
+      font-family: var(--mono);
       font-size: 12px;
-      user-select:none;
-      width: fit-content;
+      color: rgba(243,246,255,.86);
+      border: 1px solid rgba(255,255,255,.12);
+      background: #0B0D11;
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+
+    .footerLine{
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(243,246,255,.55);
     }
   </style>
 </head>
 
 <body>
   <main class="wrap">
-    <section class="frame" aria-label="Soft launch intro + layout shuffle game">
+    <section class="shell" aria-label="Soft launch homepage">
 
-      <!-- LEFT: Intro -->
+      <!-- LEFT: Aesthetic intro -->
       <article class="card">
         <div class="inner">
-          <div class="bar">
-            <div class="pill"><span class="dot" aria-hidden="true"></span>Soft launch • still building</div>
-            <div class="pill" style="border-color: rgba(255,43,214,.32); color: var(--mag)">v0.1</div>
+          <div class="top">
+            <div class="pill"><span class="dot" aria-hidden="true"></span>Soft launch • under construction</div>
+            <div class="pill" style="border-color: rgba(255,43,214,.32); color: var(--accent2)">v0.1</div>
           </div>
 
           <h1>Hi, I’m <span class="name">Jackie Foo</span>.</h1>
 
           <p class="lede">
-            This is my portfolio soft launch. I’m still developing the site, so some pages may be empty,
-            the layout may change, and I’m iterating fast.
+            I’m still building this portfolio, so it’s intentionally minimal right now.
+            Think of it as a live draft with good typography and slightly chaotic energy.
           </p>
 
-          <div class="chips" aria-label="Quick identity chips">
+          <div class="miniRow" aria-label="Quick chips">
             <span class="chip">Master’s in Data Science</span>
             <span class="chip">HCI + interaction design</span>
             <span class="chip">Accessibility-minded</span>
-            <span class="chip">Research + prototypes</span>
+            <span class="chip mono">site: developing</span>
           </div>
 
-          <div class="row" role="group" aria-label="Actions">
-            <button class="btn cyan" id="btnComing">What’s coming</button>
+          <div class="actions" aria-label="Links">
+            <button class="btn accent" id="btnComing">What’s coming</button>
             <a class="btn mag" id="btnLinkedin" href="#" rel="noreferrer">LinkedIn</a>
-            <a class="btn" id="btnEmail" href="#">Say hi</a>
+            <a class="btn ghost" id="btnEmail" href="#">Say hi</a>
           </div>
 
-          <div class="toast" id="toast">
-            <b>Status:</b> soft launch. I’m still building the real case studies and polishing the navigation.
+          <div class="note" id="note">
+            <b>Quick note:</b> pages will shift around while I’m shipping updates. If something looks empty, it’s not you.
           </div>
         </div>
       </article>
 
-      <!-- RIGHT: Game -->
+      <!-- RIGHT: Layout Customizer (the “game”) -->
       <article class="card">
         <div class="inner">
-          <div class="gameHead">
+          <div class="split">
             <div>
-              <p class="gameTitle">Mini game: Layout Shuffle</p>
-              <p class="gameSub">
-                You’re “designing the homepage”. Tap two tiles to swap them until the order matches the target layout.
+              <p class="panelTitle">Tiny game: rearrange my homepage</p>
+              <p class="panelSub">
+                Move sections around and watch the preview update instantly.
+                It’s like a playful layout sandbox, not a random mini-game.
               </p>
             </div>
-            <div class="pill" style="border-color: rgba(0,229,255,.30); color: var(--cyan)">bold mode</div>
-          </div>
 
-          <div class="stats" aria-label="Game stats">
-            <div class="stat">
-              <p class="label">Swaps</p>
-              <p class="val" id="swaps">0</p>
-            </div>
-            <div class="stat">
-              <p class="label">Status</p>
-              <p class="val" id="status">—</p>
+            <div class="pill" style="border-color: rgba(43,255,136,.28); color: var(--good)">
+              live preview
             </div>
           </div>
 
-          <div class="row" role="group" aria-label="Game controls">
-            <button class="btn lime" id="btnNew">New shuffle</button>
-            <button class="btn warn" id="btnHint">Show hint</button>
+          <div class="presets" aria-label="Layout presets">
+            <div class="seg" role="tablist" aria-label="Presets">
+              <button class="active" data-preset="classic" type="button">Classic</button>
+              <button data-preset="projectsFirst" type="button">Projects first</button>
+              <button data-preset="minimal" type="button">Minimal</button>
+            </div>
           </div>
 
-          <div class="board">
-            <div class="target" aria-label="Target order">
-              <div class="targetLeft">
-                <span class="tag">Target order</span>
-                <span class="tag cyan">Intro</span>
-                <span class="tag mag">Projects</span>
-                <span class="tag lime">About</span>
-                <span class="tag amb">Contact</span>
+          <div class="layoutBox">
+            <div class="kicker">
+              <div class="tag">Builder</div>
+              <div class="tag">Mobile: use ▲▼</div>
+              <div class="tag">Desktop: drag</div>
+            </div>
+
+            <div class="builder" id="builder" aria-label="Layout builder list"></div>
+
+            <div class="preview" aria-label="Live preview">
+              <div class="previewTop">
+                <div class="brand">
+                  <span class="pulse" aria-hidden="true"></span>
+                  <span>jackiefoo.me</span>
+                </div>
+                <div class="miniLinks" id="previewNav" aria-label="Preview nav"></div>
               </div>
-              <div class="rule">
-                Tap 2 tiles to swap. Goal: match the exact order.
-              </div>
+              <div class="previewBody" id="previewBody" aria-label="Preview body"></div>
             </div>
 
-            <div class="tiles" id="tiles" aria-label="Tiles you can reorder"></div>
-            <div class="toast" id="gameToast">
-              <b>Tip:</b> This is basically a tiny UI puzzle. Totally playable one-handed on mobile.
-            </div>
-          </div>
-
-          <div style="margin-top:12px">
-            <span class="kbd">No gradients • high contrast • mobile first</span>
+            <div class="footerLine" id="footerLine"></div>
           </div>
         </div>
       </article>
@@ -435,7 +534,7 @@
     // ====== EDIT THESE ======
     const PROFILE = {
       name: "Jackie Foo",
-      email: "your.email@example.com", // replace
+      email: "your.email@example.com",                // replace
       linkedin: "https://www.linkedin.com/in/your-handle/" // replace
     };
 
@@ -444,163 +543,206 @@
       `mailto:${PROFILE.email}?subject=Hello%20from%20your%20site&body=Hi%20Jackie%2C%0A%0A`;
     document.getElementById("btnLinkedin").href = PROFILE.linkedin;
 
-    // Coming soon message toggle
-    const toast = document.getElementById("toast");
-    let comingToggle = false;
+    // Coming soon toggle
+    const note = document.getElementById("note");
+    let noteAlt = false;
     document.getElementById("btnComing").addEventListener("click", () => {
-      comingToggle = !comingToggle;
-      toast.innerHTML = comingToggle
-        ? "<b>Coming soon:</b> cleaner case studies, project write-ups, and a smoother nav. Also tuning typography and performance."
-        : "<b>Status:</b> soft launch. I’m still building the real case studies and polishing the navigation.";
+      noteAlt = !noteAlt;
+      note.innerHTML = noteAlt
+        ? "<b>Coming soon:</b> case studies, research notes, and a nicer project browsing flow. Also I’m tuning mobile spacing and load speed."
+        : "<b>Quick note:</b> pages will shift around while I’m shipping updates. If something looks empty, it’s not you.";
     });
 
-    // ====== GAME: Layout Shuffle ======
-    const tilesWrap = document.getElementById("tiles");
-    const swapsEl = document.getElementById("swaps");
-    const statusEl = document.getElementById("status");
-    const gameToast = document.getElementById("gameToast");
-    const btnNew = document.getElementById("btnNew");
-    const btnHint = document.getElementById("btnHint");
+    // ====== Layout Customizer ======
+    const ITEMS = [
+      { id:"intro",    name:"Intro",    sw:"cyan", hint:"first impression + soft launch" },
+      { id:"projects", name:"Projects", sw:"mag",  hint:"case studies + prototypes" },
+      { id:"about",    name:"About",    sw:"lime", hint:"values + what I’m building toward" },
+      { id:"contact",  name:"Contact",  sw:"amb",  hint:"email + socials" },
+    ];
 
-    const TARGET = ["Intro", "Projects", "About", "Contact"];
-
-    const TILE_META = {
-      Intro:   { swatch: "cyan", hint: "Big headline + soft-launch message" },
-      Projects:{ swatch: "mag",  hint: "Case studies and prototypes" },
-      About:   { swatch: "lime", hint: "Who I am and what I care about" },
-      Contact: { swatch: "amb",  hint: "Email + socials + quick links" }
+    const PREVIEW_COPY = {
+      intro:   { title:"Intro",    body:"Soft launch. Still building. Minimal on purpose." },
+      projects:{ title:"Projects", body:"A few prototypes first, then polished write-ups." },
+      about:   { title:"About",    body:"Data + HCI + accessibility. I like clarity, not noise." },
+      contact: { title:"Contact",  body:"Say hi, collaborate, or send me a duck meme." },
     };
 
-    let order = [];
-    let selectedIndex = null;
-    let swaps = 0;
-    let hintOn = false;
+    const PRESETS = {
+      classic: ["intro","projects","about","contact"],
+      projectsFirst: ["projects","intro","about","contact"],
+      minimal: ["intro","projects","contact","about"],
+    };
 
-    function shuffle(arr) {
-      const a = arr.slice();
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
+    const builder = document.getElementById("builder");
+    const previewBody = document.getElementById("previewBody");
+    const previewNav = document.getElementById("previewNav");
+    const footerLine = document.getElementById("footerLine");
+
+    let order = PRESETS.classic.slice();
+
+    // desktop drag state
+    let dragId = null;
+
+    function byId(id){ return ITEMS.find(x => x.id === id); }
+
+    function setPreset(p) {
+      order = PRESETS[p].slice();
+      renderAll();
     }
 
-    function isSolved() {
-      return order.every((v, i) => v === TARGET[i]);
+    function move(id, dir){
+      const i = order.indexOf(id);
+      if (i < 0) return;
+      const j = i + dir;
+      if (j < 0 || j >= order.length) return;
+      [order[i], order[j]] = [order[j], order[i]];
+      renderAll();
     }
 
-    function setStatus() {
-      if (isSolved()) {
-        statusEl.textContent = "Done";
-        statusEl.style.color = "var(--lime)";
-        gameToast.innerHTML = "<b>Nice.</b> You just fixed the homepage layout. Soft launch energy.";
-      } else {
-        statusEl.textContent = "Editing";
-        statusEl.style.color = "var(--amber)";
-      }
-    }
+    function renderBuilder(){
+      builder.innerHTML = "";
+      order.forEach((id, idx) => {
+        const meta = byId(id);
 
-    function render() {
-      tilesWrap.innerHTML = "";
-      order.forEach((name, idx) => {
-        const meta = TILE_META[name];
-        const btn = document.createElement("button");
-        btn.className = "tile";
-        btn.type = "button";
-        btn.setAttribute("aria-label", `Tile ${idx + 1}: ${name}`);
-        btn.dataset.index = String(idx);
+        const row = document.createElement("div");
+        row.className = "item";
+        row.tabIndex = 0;
+        row.draggable = true;
+        row.dataset.id = id;
+        row.setAttribute("aria-label", `Section ${idx+1}: ${meta.name}`);
+
+        // desktop drag handlers
+        row.addEventListener("dragstart", (e) => {
+          dragId = id;
+          row.classList.add("dragging");
+          e.dataTransfer.effectAllowed = "move";
+          try { e.dataTransfer.setData("text/plain", id); } catch {}
+        });
+        row.addEventListener("dragend", () => {
+          dragId = null;
+          row.classList.remove("dragging");
+        });
+        row.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+        });
+        row.addEventListener("drop", (e) => {
+          e.preventDefault();
+          const from = dragId || (()=>{
+            try { return e.dataTransfer.getData("text/plain"); } catch { return null; }
+          })();
+          const to = id;
+          if (!from || from === to) return;
+
+          const a = order.indexOf(from);
+          const b = order.indexOf(to);
+          if (a < 0 || b < 0) return;
+
+          const next = order.slice();
+          next.splice(a, 1);
+          next.splice(b, 0, from);
+          order = next;
+          renderAll();
+        });
 
         const left = document.createElement("div");
-        left.className = "tileTitle";
+        left.className = "leftSide";
 
         const sw = document.createElement("span");
-        sw.className = "swatch " + (meta.swatch === "mag" ? "mag" : meta.swatch === "lime" ? "lime" : meta.swatch === "amb" ? "amb" : "");
+        sw.className = "swatch " + (meta.sw === "mag" ? "mag" : meta.sw === "lime" ? "lime" : meta.sw === "amb" ? "amb" : "");
         left.appendChild(sw);
 
-        const title = document.createElement("span");
-        title.textContent = name;
-        left.appendChild(title);
+        const labelWrap = document.createElement("div");
+        labelWrap.className = "labelWrap";
 
-        const right = document.createElement("div");
-        right.className = "tileHint";
-        right.textContent = hintOn ? meta.hint : "Tap to select";
+        const label = document.createElement("div");
+        label.className = "label";
+        label.textContent = meta.name;
 
-        btn.appendChild(left);
-        btn.appendChild(right);
+        const hint = document.createElement("div");
+        hint.className = "hint";
+        hint.textContent = meta.hint;
 
-        if (selectedIndex === idx) btn.classList.add("selected");
-        if (isSolved()) btn.classList.add("success");
+        labelWrap.appendChild(label);
+        labelWrap.appendChild(hint);
+        left.appendChild(labelWrap);
 
-        btn.addEventListener("click", () => onTileTap(idx));
-        tilesWrap.appendChild(btn);
+        const controls = document.createElement("div");
+        controls.className = "controls";
+
+        const up = document.createElement("button");
+        up.className = "iconBtn";
+        up.type = "button";
+        up.innerHTML = "▲";
+        up.setAttribute("aria-label", `Move ${meta.name} up`);
+        up.addEventListener("click", (ev) => { ev.stopPropagation(); move(id, -1); });
+
+        const down = document.createElement("button");
+        down.className = "iconBtn";
+        down.type = "button";
+        down.innerHTML = "▼";
+        down.setAttribute("aria-label", `Move ${meta.name} down`);
+        down.addEventListener("click", (ev) => { ev.stopPropagation(); move(id, +1); });
+
+        controls.appendChild(up);
+        controls.appendChild(down);
+
+        row.appendChild(left);
+        row.appendChild(controls);
+
+        // keyboard re-order
+        row.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowUp") { e.preventDefault(); move(id, -1); }
+          if (e.key === "ArrowDown") { e.preventDefault(); move(id, +1); }
+        });
+
+        builder.appendChild(row);
+      });
+    }
+
+    function renderPreview(){
+      previewNav.innerHTML = "";
+      previewBody.innerHTML = "";
+
+      // Nav chips follow current order
+      order.forEach(id => {
+        const meta = byId(id);
+        const a = document.createElement("a");
+        a.className = "miniA";
+        a.href = "#";
+        a.textContent = meta.name.toLowerCase();
+        previewNav.appendChild(a);
       });
 
-      swapsEl.textContent = String(swaps);
-      setStatus();
+      // Blocks follow current order
+      order.forEach(id => {
+        const copy = PREVIEW_COPY[id];
+        const block = document.createElement("div");
+        block.className = "block";
+        block.innerHTML = `<h3>${copy.title}</h3><p>${copy.body}</p>`;
+        previewBody.appendChild(block);
+      });
+
+      footerLine.textContent = `layout: ${order.join(" → ")}   // still developing`;
     }
 
-    function onTileTap(idx) {
-      if (isSolved()) return;
-
-      // first pick
-      if (selectedIndex === null) {
-        selectedIndex = idx;
-        gameToast.innerHTML = "<b>Selected.</b> Tap another tile to swap.";
-        render();
-        return;
-      }
-
-      // same tile = deselect
-      if (selectedIndex === idx) {
-        selectedIndex = null;
-        gameToast.innerHTML = "<b>Cancelled.</b> Pick two tiles to swap.";
-        render();
-        return;
-      }
-
-      // swap
-      const a = selectedIndex;
-      const b = idx;
-      [order[a], order[b]] = [order[b], order[a]];
-      swaps += 1;
-      selectedIndex = null;
-
-      if (isSolved()) {
-        gameToast.innerHTML = `<b>Solved in ${swaps} swaps.</b> You can hit “New shuffle” for another round.`;
-      } else {
-        gameToast.innerHTML = "<b>Swapped.</b> Keep going.";
-      }
-
-      render();
+    function renderAll(){
+      renderBuilder();
+      renderPreview();
     }
 
-    function newGame() {
-      // Ensure it's actually shuffled (not already solved)
-      let next = shuffle(TARGET);
-      while (next.join("|") === TARGET.join("|")) next = shuffle(TARGET);
-
-      order = next;
-      selectedIndex = null;
-      swaps = 0;
-      hintOn = false;
-      btnHint.textContent = "Show hint";
-      gameToast.innerHTML = "<b>New layout.</b> Fix the order to match the target.";
-      render();
-    }
-
-    btnNew.addEventListener("click", newGame);
-
-    btnHint.addEventListener("click", () => {
-      hintOn = !hintOn;
-      btnHint.textContent = hintOn ? "Hide hint" : "Show hint";
-      gameToast.innerHTML = hintOn
-        ? "<b>Hints on.</b> Each tile now tells you what it represents."
-        : "<b>Hints off.</b> Back to pure vibes.";
-      render();
+    // Preset buttons
+    document.querySelectorAll(".seg button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".seg button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        setPreset(btn.dataset.preset);
+      });
     });
 
     // init
-    newGame();
+    renderAll();
   </script>
 </body>
 </html>
