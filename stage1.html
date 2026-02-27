@@ -1136,6 +1136,10 @@
           item.x = clamp(item.x + dx, 6, Math.max(6, maxX-6));
           item.y = clamp(item.y + dy, 6, Math.max(6, maxY-6));
 
+        // 🔹 FORCE integers (this fixes Postgres 22P02)
+           item.x = Math.round(item.x);
+           item.y = Math.round(item.y);
+
           el.style.left = item.x + "px";
           el.style.top  = item.y + "px";
 
@@ -1151,9 +1155,8 @@
 
   btnAddSticky.addEventListener("click", async ()=>{
     const rect = stickyArea.getBoundingClientRect();
-    const x = Math.max(10, Math.min(rect.width - 190, 12 + Math.random()*40));
-    const y = Math.max(10, Math.min(rect.height - 120, 12 + Math.random()*40));
-
+    const x = Math.round(Math.max(10, Math.min(rect.width - 190, 12 + Math.random()*40)));
+    const y = Math.round(Math.max(10, Math.min(rect.height - 120, 12 + Math.random()*40)));
     const payload = {
       session_id: room,
       x, y,
