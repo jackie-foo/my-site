@@ -320,31 +320,47 @@
       return options[Math.floor(Math.random()*options.length)];
     }
 
-    function makePointerDraggable(el, {onStart, onMove, onEnd}){
+    function makePointerDraggable(el, {onMove, onStart, onEnd}){
       let last=null;
+
       el.addEventListener("pointerdown",(e)=>{
-        if(e.target && e.target.tagName==="TEXTAREA") return;
+        // ✅ ignore interactions with textarea / buttons / any clickable controls
+        const t = e.target;
+        if (t && (t.closest("textarea") || t.closest("button"))) return;
+
         el.setPointerCapture(e.pointerId);
         last={x:e.clientX,y:e.clientY};
         onStart?.();
       });
+
       el.addEventListener("pointermove",(e)=>{
         if(!last) return;
         const dx=e.clientX-last.x, dy=e.clientY-last.y;
         last={x:e.clientX,y:e.clientY};
         onMove(dx,dy);
       });
+
       el.addEventListener("pointerup",()=>{
         if(!last) return;
         last=null;
         onEnd?.();
       });
+
       el.addEventListener("pointercancel",()=>{
         if(!last) return;
         last=null;
         onEnd?.();
       });
     }
+    const delBtn = el.querySelector(".tinyBtn");
+      delBtn.addEventListener("pointerdown", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      });
+      delBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        // ... your delete logic here
+      });
 
     // ===== DB update helpers =====
     const pushStickyUpdate = throttle(async (id, patch) => {
