@@ -57,9 +57,7 @@
       transition: left .08s linear, top .08s linear, transform .12s ease, box-shadow .12s ease, opacity .12s ease;
       will-change: left, top;
     }
-    @keyframes popIn{
-      to { opacity:1; transform: translateY(0) scale(1); }
-    }
+    @keyframes popIn{ to { opacity:1; transform: translateY(0) scale(1); } }
     .sticky.dragging{
       cursor:grabbing;
       transform: scale(1.01);
@@ -195,7 +193,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   (() => {
-    // ===== crash overlay (kept from yours) =====
+    // ===== crash overlay =====
     const ERROR_BOX = document.createElement("div");
     ERROR_BOX.style.cssText = "position:fixed;inset:0;padding:16px;background:#0b0d12;color:#e9ecff;font-family:ui-monospace,Menlo,Consolas,monospace;z-index:99999;display:none;overflow:auto";
     document.body.appendChild(ERROR_BOX);
@@ -214,7 +212,7 @@
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const BASE_PATH = "/stage1";
-    const CHIBI3_SRC = "/assets/chibi3.png"; // <- change if needed
+    const CHIBI3_SRC = "/pic/chibi3.png"; // <- change if needed
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
@@ -284,13 +282,10 @@
     }
 
     const state = { stickies: [] };
-
-    // Local map of pending save states (id -> boolean)
     const saving = new Map();
 
     function setSaving(id, isSaving){
       saving.set(id, !!isSaving);
-      // update pill if exists
       const el = stickyArea.querySelector(`[data-id="${CSS.escape(String(id))}"]`);
       if(!el) return;
       const pill = el.querySelector("[data-pill]");
@@ -320,11 +315,11 @@
       return options[Math.floor(Math.random()*options.length)];
     }
 
+    // ✅ FIXED: do not start dragging when clicking textarea OR any button inside sticky
     function makePointerDraggable(el, {onMove, onStart, onEnd}){
       let last=null;
 
       el.addEventListener("pointerdown",(e)=>{
-        // ✅ ignore interactions with textarea / buttons / any clickable controls
         const t = e.target;
         if (t && (t.closest("textarea") || t.closest("button"))) return;
 
@@ -352,17 +347,7 @@
         onEnd?.();
       });
     }
-    const delBtn = el.querySelector(".tinyBtn");
-      delBtn.addEventListener("pointerdown", (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      });
-      delBtn.addEventListener("click", async (e) => {
-        e.stopPropagation();
-        // ... your delete logic here
-      });
 
-    // ===== DB update helpers =====
     const pushStickyUpdate = throttle(async (id, patch) => {
       setSaving(id, true);
       const { error } = await supabase.from("workshop_stickies").update(patch).eq("id", id);
@@ -400,21 +385,37 @@
           <textarea placeholder="Write your goal...">${escapeHtml(s.text)}</textarea>
         `;
 
-        // Delete: optimistic remove first, then DB delete
-        el.querySelector(".tinyBtn").addEventListener("click", async (e)=>{
+        const delBtn = el.querySelector(".tinyBtn");
+
+        // ✅ FIXED: stop pointerdown so drag never captures this interaction
+        delBtn.addEventListener("pointerdown", (e)=>{
+          e.stopPropagation();
+          e.preventDefault();
+        });
+
+        delBtn.addEventListener("click", async (e)=>{
           e.stopPropagation();
 
-          // optimistic UI remove
           const id = s.id;
+
+          // optimistic remove
           state.stickies = state.stickies.filter(x => x.id !== id);
+          saving.delete(id);
           render();
 
-          // actual delete
-          const { error } = await supabase.from("workshop_stickies").delete().eq("id", id);
+          // DB delete + log (keeps debugging easy)
+          const { data, error } = await supabase
+            .from("workshop_stickies")
+            .delete()
+            .eq("id", id)
+            .select();
+
+          console.log("DELETE result", { data, error });
+
           if (error){
             console.error(error);
             showToast("Delete failed (see console)");
-            // rollback: re-add locally if delete failed
+            // rollback
             state.stickies.push(s);
             render();
           }
@@ -478,16 +479,12 @@
       }
     }
 
-    // Helper to safely extract id from DELETE payload
     function getDeletedId(payload){
-      // With REPLICA IDENTITY FULL, payload.old includes full row.
-      // Without it, payload.old might only contain the primary key columns.
       if (!payload) return null;
       if (payload.old && payload.old.id) return payload.old.id;
       if (payload.old && payload.old.ID) return payload.old.ID;
       if (payload.old && payload.old.sticky_id) return payload.old.sticky_id;
       if (payload.old && payload.old.stickyId) return payload.old.stickyId;
-      // Sometimes supabase gives old as just an object with the PK but naming mismatch
       return null;
     }
 
@@ -507,11 +504,9 @@
               const s = payload.new;
               const idx = state.stickies.findIndex(x=>x.id===s.id);
               if(idx>=0){
-                // keep local saving state, but update fields
                 state.stickies[idx] = { id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id };
                 render();
               } else {
-                // if it didn't exist locally, add it
                 state.stickies.push({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id });
                 render();
               }
@@ -523,7 +518,7 @@
                 saving.delete(did);
                 render();
               } else {
-                // If delete payload has no id, fallback: reload (rare, but fixes “won’t remove”)
+                // fallback: reload
                 loadInitial();
               }
             }
@@ -537,60 +532,40 @@
       const x = Math.round(Math.max(10, Math.min(rect.width - 190, 12 + Math.random()*40)));
       const y = Math.round(Math.max(10, Math.min(rect.height - 120, 12 + Math.random()*40)));
 
-      // optimistic placeholder ID (temp)
+      // optimistic temp
       const tempId = "temp_" + crypto.randomUUID();
-      const optimistic = {
-        id: tempId,
-        session_id: room,
-        x, y,
-        color: randomStickyColor(),
-        text: "",
-        participant_id: participantId
-      };
+      const color = randomStickyColor();
 
-      state.stickies.push({ id:optimistic.id, x:optimistic.x, y:optimistic.y, color:optimistic.color, text:"", participant_id:participantId });
+      state.stickies.push({ id:tempId, x, y, color, text:"", participant_id:participantId });
       setSaving(tempId, true);
       render();
 
-      // actual insert
-      const payload = {
-        session_id: room,
-        x, y,
-        color: optimistic.color,
-        text: "",
-        participant_id: participantId
-      };
+      const payload = { session_id: room, x, y, color, text: "", participant_id: participantId };
 
       let res = await supabase.from("workshop_stickies").insert(payload).select().single();
-
-      if (res.error) {
-        // fallback if participant_id column doesn't exist
-        if (String(res.error.message || "").toLowerCase().includes("participant_id")) {
-          delete payload.participant_id;
-          res = await supabase.from("workshop_stickies").insert(payload).select().single();
-        }
+      if (res.error && String(res.error.message || "").toLowerCase().includes("participant_id")) {
+        delete payload.participant_id;
+        res = await supabase.from("workshop_stickies").insert(payload).select().single();
       }
 
       if (res.error) {
         console.error(res.error);
         showToast("Insert failed: " + (res.error.message || "unknown"));
-        // remove optimistic
         state.stickies = state.stickies.filter(s => s.id !== tempId);
         saving.delete(tempId);
         render();
         return;
       }
 
-      // replace temp with real row
       const row = res.data;
       const idx = state.stickies.findIndex(s => s.id === tempId);
+      saving.delete(tempId);
+
       if (idx >= 0){
         state.stickies[idx] = { id:row.id, x:row.x, y:row.y, color:row.color, text:row.text || "", participant_id:row.participant_id };
-        saving.delete(tempId);
         setSaving(row.id, false);
         render();
       } else {
-        // temp disappeared (rare), just add
         state.stickies.push({ id:row.id, x:row.x, y:row.y, color:row.color, text:row.text || "", participant_id:row.participant_id });
         setSaving(row.id, false);
         render();
@@ -604,11 +579,10 @@
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;
       localStorage.removeItem(PID_KEY);
-      localStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(`stage1_authed_${room}`);
       location.reload();
     });
 
-    // Boot
     loadInitial().then(subscribeRealtime);
   })();
   </script>
