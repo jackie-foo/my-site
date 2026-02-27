@@ -119,6 +119,70 @@
       font-size:12px;
       line-height:1.45;
     }
+
+    /* ===== Loading Screen ===== */
+    .loading{
+      position:fixed; inset:0; z-index:120;
+      display:none; align-items:center; justify-content:center;
+      background:radial-gradient(1200px 600px at 30% 20%, rgba(0,229,255,.10), transparent 55%),
+                 radial-gradient(900px 500px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
+                 rgba(0,0,0,.72);
+      backdrop-filter: blur(6px);
+      padding:16px;
+    }
+    .loadingCard{
+      width:min(520px, 100%);
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      text-align:center;
+      padding:18px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+    }
+    .chibi{
+      width:140px; height:140px;
+      object-fit:contain;
+      filter: drop-shadow(0 16px 22px rgba(0,0,0,.45));
+      border-radius:18px;
+    }
+    .loadingTitle{
+      font-weight:1000;
+      letter-spacing:.2px;
+      font-size:16px;
+      margin:0;
+    }
+    .loadingSub{
+      margin:0;
+      color:var(--muted);
+      font-weight:800;
+      font-size:12px;
+      line-height:1.45;
+    }
+    .bar{
+      width:100%;
+      height:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      overflow:hidden;
+    }
+    .bar > div{
+      height:100%;
+      width:40%;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(0,229,255,.85), rgba(255,43,214,.85));
+      animation: glide 1.2s ease-in-out infinite;
+    }
+    @keyframes glide{
+      0%{transform:translateX(-40%)}
+      50%{transform:translateX(120%)}
+      100%{transform:translateX(-40%)}
+    }
   </style>
 </head>
 <body>
@@ -138,7 +202,6 @@
       </div>
     </header>
 
-    <!-- Gate card now just shows status (password is modal) -->
     <section class="card" id="gateCard">
       <div class="cardHead">
         <h2>Passcode</h2>
@@ -182,15 +245,26 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- ===== Password Modal ===== -->
+  <!-- ===== Loading Screen ===== -->
+  <div class="loading" id="loading" aria-hidden="true">
+    <div class="loadingCard">
+      <img id="chibiImg" class="chibi" alt="Loading chibi"/>
+      <p class="loadingTitle" id="loadingTitle">Getting things ready…</p>
+      <p class="loadingSub" id="loadingSub">Syncing your room + saving your identity.</p>
+      <div class="bar" aria-hidden="true"><div></div></div>
+      <div class="kicker">If this takes long, your network might be slow — don’t panic.</div>
+    </div>
+  </div>
+
+  <!-- ===== Password Modal (NO rationale / NO tutorial link) ===== -->
   <div class="overlay" id="pwOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
       <div class="modalHead">
         <div>
           <h3 id="pwTitle">Enter Passcode</h3>
-          <div class="kicker">This room is gated so participants don’t accidentally enter the wrong session.</div>
+          <div class="kicker">This room is gated. Please enter the passcode to proceed.</div>
         </div>
-        <button id="btnClosePw" class="btnGhost">✕</button>
+        <button id="btnClosePw" class="btnGhost" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
         <div class="row">
@@ -198,19 +272,43 @@
           <button id="btnUnlock" class="btnPrimary">Unlock</button>
         </div>
         <div class="callout">
-          Tip: you can share a single link like <span class="mono">.../step1.html?room=demo</span>, then give the passcode separately.
+          You should have received a room link like <span class="mono">?room=demo</span> + a separate passcode.
         </div>
       </div>
       <div class="modalFoot">
-        <div class="kicker">After unlock, you’ll see a quick tutorial.</div>
+        <div class="kicker">After unlocking, you’ll see a quick tutorial.</div>
         <div class="row" style="justify-content:flex-end">
-          <button id="btnPwHelp" class="btnGhost">Why gate this?</button>
+          <button id="btnPwCancel" class="btnGhost">Cancel</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== Tutorial Modal ===== -->
+  <!-- ===== Locked Tutorial Modal (no rationale, just directs to passcode) ===== -->
+  <div class="overlay" id="lockedOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="lockedTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="lockedTitle">Tutorial is locked</h3>
+          <div class="kicker">Please unlock Step 1 first.</div>
+        </div>
+        <button id="btnCloseLocked" class="btnGhost" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="callout">
+          Enter the passcode to access the tutorial and start Step 1.
+        </div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">You’ll see the tutorial right after unlock.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnLockedUnlock" class="btnPrimary">Unlock</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Tutorial Modal (only accessible after unlock) ===== -->
   <div class="overlay" id="tutOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
       <div class="modalHead">
@@ -218,7 +316,7 @@
           <h3 id="tutTitle">Quick Tutorial</h3>
           <div class="kicker" id="tutSub">How to do Step 1, and why we’re doing it.</div>
         </div>
-        <button id="btnCloseTut" class="btnGhost">✕</button>
+        <button id="btnCloseTut" class="btnGhost" aria-label="Close">✕</button>
       </div>
 
       <div class="modalBody">
@@ -250,6 +348,9 @@
     // Passcode (client-side gate)
     const REQUIRED_PASSCODE = "duck123";
 
+    // Chibi image for loading screen (set this!)
+    const CHIBI3_SRC = "/assets/chibi3.png"; // <- change if needed
+
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
     if (!room) {
@@ -267,6 +368,7 @@
 
     // auth flag per room
     const AUTH_KEY = `stage1_authed_${room}`;
+    const TUT_KEY = `stage1_tut_seen_${room}`;
 
     // UI refs
     const $ = (q, el=document) => el.querySelector(q);
@@ -278,17 +380,34 @@
     const btnNext = $("#btnNext");
     const toast = $("#toast");
 
-    // Password modal refs
+    // overlays
     const pwOverlay = $("#pwOverlay");
+    const lockedOverlay = $("#lockedOverlay");
+    const tutOverlay = $("#tutOverlay");
+
+    // loading
+    const loading = $("#loading");
+    const chibiImg = $("#chibiImg");
+    const loadingTitle = $("#loadingTitle");
+    const loadingSub = $("#loadingSub");
+
+    // buttons
+    const btnTutorial = $("#btnTutorial");
+    const btnExit = $("#btnExit");
+    const btnReset = $("#btnReset");
+
+    // password modal controls
     const btnOpenPw = $("#btnOpenPw");
     const btnClosePw = $("#btnClosePw");
+    const btnPwCancel = $("#btnPwCancel");
     const pwInput = $("#pwInput");
     const btnUnlock = $("#btnUnlock");
-    const btnPwHelp = $("#btnPwHelp");
 
-    // Tutorial modal refs
-    const tutOverlay = $("#tutOverlay");
-    const btnTutorial = $("#btnTutorial");
+    // locked tutorial modal
+    const btnCloseLocked = $("#btnCloseLocked");
+    const btnLockedUnlock = $("#btnLockedUnlock");
+
+    // tutorial controls
     const btnCloseTut = $("#btnCloseTut");
     const tutSteps = $("#tutSteps");
     const tutContent = $("#tutContent");
@@ -297,6 +416,9 @@
 
     roomOut.textContent = room;
     meOut.textContent = participantId.slice(0, 8);
+
+    // preload chibi
+    chibiImg.src = CHIBI3_SRC;
 
     function showToast(msg){
       toast.textContent = msg;
@@ -316,16 +438,31 @@
       document.body.style.overflow = "";
     }
 
-    // Close on overlay click (outside modal)
-    [pwOverlay, tutOverlay].forEach(ov => {
+    function showLoading(title="Getting things ready…", sub="Syncing your room + saving your identity."){
+      loadingTitle.textContent = title;
+      loadingSub.textContent = sub;
+      loading.style.display = "flex";
+      loading.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+    function hideLoading(){
+      loading.style.display = "none";
+      loading.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    // Close overlays on outside click
+    [pwOverlay, lockedOverlay, tutOverlay].forEach(ov => {
       ov.addEventListener("mousedown", (e) => {
         if (e.target === ov) closeOverlay(ov);
       });
     });
-    // Esc key closes whichever is open
+
+    // Esc closes whichever is open (NOT loading)
     window.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
       if (tutOverlay.style.display === "flex") closeOverlay(tutOverlay);
+      if (lockedOverlay.style.display === "flex") closeOverlay(lockedOverlay);
       if (pwOverlay.style.display === "flex") closeOverlay(pwOverlay);
     });
 
@@ -366,10 +503,18 @@
           state.persona_title = c.title;
           selPersona.textContent = c.title;
           btnNext.disabled = false;
+
           [...personaGrid.children].forEach(x => x.classList.remove("selected"));
           el.classList.add("selected");
-          await saveParticipant({ persona_id: state.persona_id });
-          showToast("Card saved");
+
+          // light loading during update (optional, but makes it feel responsive)
+          showLoading("Saving your card…", "Hang on a sec — Supabase can be a bit slow sometimes.");
+          try{
+            await saveParticipant({ persona_id: state.persona_id });
+            showToast("Card saved");
+          } finally {
+            hideLoading();
+          }
         });
         personaGrid.appendChild(el);
       });
@@ -380,13 +525,18 @@
     roleSelect.addEventListener("change", async () => {
       state.role = roleSelect.value;
       selRole.textContent = state.role;
-      await saveParticipant({ role: state.role });
-      showToast("Role saved");
+      showLoading("Saving your role…", "Syncing selection to the room.");
+      try{
+        await saveParticipant({ role: state.role });
+        showToast("Role saved");
+      } finally {
+        hideLoading();
+      }
     });
 
     async function ensureSession(){
       const { error } = await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict: "id" });
-      if (error) console.error(error);
+      if (error) throw error;
     }
 
     async function ensureParticipant(){
@@ -396,7 +546,7 @@
         role: state.role,
         persona_id: state.persona_id
       }, { onConflict: "id" });
-      if (error) console.error(error);
+      if (error) throw error;
     }
 
     async function loadParticipant(){
@@ -405,7 +555,8 @@
         .select("*")
         .eq("id", participantId)
         .maybeSingle();
-      if (error) console.error(error);
+      if (error) throw error;
+
       if (data){
         state.role = data.role || state.role;
         state.persona_id = data.persona_id || null;
@@ -418,7 +569,7 @@
 
     async function saveParticipant(patch){
       const { error } = await supabase.from("workshop_participants").update(patch).eq("id", participantId);
-      if (error) console.error(error);
+      if (error) throw error;
     }
 
     function unlockUI(){
@@ -427,7 +578,7 @@
       mainCard.style.display = "block";
     }
 
-    // ===== Tutorial content =====
+    // ===== Tutorial slides (only after unlock) =====
     const tutorialSlides = [
       {
         title: "What you do in Step 1",
@@ -438,8 +589,8 @@
           </div>
           <ul class="list">
             <li>Select your role (Student / Tutor / Observer).</li>
-            <li>Click one personality card that best matches how you prefer feedback to be given.</li>
-            <li>When you’re done, hit <span class="mono">Next → Step 2</span>.</li>
+            <li>Click one personality card that matches how you prefer feedback.</li>
+            <li>Then hit <span class="mono">Next → Step 2</span>.</li>
           </ul>
         `
       },
@@ -447,11 +598,11 @@
         title: "Why we ask for role",
         html: `
           <div class="callout">
-            Different roles see “good feedback” differently.
+            Different roles see “good feedback” differently — this helps us interpret your choices.
           </div>
           <ul class="list">
-            <li><b>Students</b> focus on clarity, actionability, and confidence.</li>
-            <li><b>Tutors</b> focus on feasibility, rubric alignment, and time.</li>
+            <li><b>Students</b> focus on clarity, actionability, confidence.</li>
+            <li><b>Tutors</b> focus on feasibility, rubric alignment, time.</li>
             <li><b>Observers</b> help spot mismatch and bias across both perspectives.</li>
           </ul>
         `
@@ -460,12 +611,12 @@
         title: "Why the personality cards exist",
         html: `
           <div class="callout">
-            The cards help us label feedback needs quickly (without long surveys).
+            Cards create a shared language fast (without long surveys).
           </div>
           <ul class="list">
-            <li>They create a shared language (e.g., “Clarifier” vs “Optimizer”).</li>
-            <li>They reduce vague requests like “make it better” into specific needs.</li>
-            <li>They let us compare patterns across participants in the same room.</li>
+            <li>Turns “make it better” into a clearer need (e.g., “Clarifier”, “Optimizer”).</li>
+            <li>Lets us compare patterns across participants in the same room.</li>
+            <li>Helps tailor later prompts in Step 2 / Step 3.</li>
           </ul>
         `
       },
@@ -473,12 +624,11 @@
         title: "What happens after you pick",
         html: `
           <div class="callout">
-            Your selection is saved to the room (session) and will be used in Step 2 / Step 3 activities.
+            Your selection is saved to this room and used in later activities.
           </div>
           <ul class="list">
-            <li>You’ll see tasks that build on your chosen “mode” of feedback.</li>
-            <li>We use the card to tailor prompts and to interpret your comments.</li>
-            <li>You can change role or card later if you misclicked.</li>
+            <li>You can change your role/card if you misclicked.</li>
+            <li>We use your card to make later discussion more structured.</li>
           </ul>
         `
       }
@@ -528,8 +678,23 @@
       renderTutorial();
     });
 
-    btnTutorial.addEventListener("click", () => openTutorial(0));
     btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
+
+    // ===== Tutorial button behaviour (no bypass) =====
+    btnTutorial.addEventListener("click", () => {
+      if (localStorage.getItem(AUTH_KEY) === "1"){
+        openTutorial(0);
+      } else {
+        openOverlay(lockedOverlay);
+      }
+    });
+
+    $("#btnCloseLocked").addEventListener("click", () => closeOverlay(lockedOverlay));
+    $("#btnLockedUnlock").addEventListener("click", () => {
+      closeOverlay(lockedOverlay);
+      openOverlay(pwOverlay);
+      setTimeout(() => pwInput?.focus(), 0);
+    });
 
     // ===== Password modal behaviour =====
     btnOpenPw.addEventListener("click", () => {
@@ -537,16 +702,33 @@
       setTimeout(() => pwInput?.focus(), 0);
     });
     btnClosePw.addEventListener("click", () => closeOverlay(pwOverlay));
-
-    btnPwHelp.addEventListener("click", () => {
-      // jump tutorial to “Why role/persona exists”
-      closeOverlay(pwOverlay);
-      openTutorial(1);
-    });
+    btnPwCancel.addEventListener("click", () => closeOverlay(pwOverlay));
 
     pwInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") btnUnlock.click();
     });
+
+    async function postUnlockBootstrap({ showTutorial=true } = {}){
+      unlockUI();
+
+      showLoading("Unlocking…", "Creating the room and syncing your participant profile.");
+      try{
+        await ensureSession();
+        showLoading("Almost there…", "Saving your identity to this room.");
+        await ensureParticipant();
+        showLoading("Loading your profile…", "Fetching your saved role/card (if any).");
+        await loadParticipant();
+      } catch (err){
+        console.error(err);
+        showToast("Sync failed — check console");
+      } finally {
+        hideLoading();
+      }
+
+      if (showTutorial){
+        openTutorial(0);
+      }
+    }
 
     btnUnlock.addEventListener("click", async () => {
       const pw = (pwInput.value || "").trim();
@@ -556,30 +738,22 @@
         pwInput.select?.();
         return;
       }
+
       localStorage.setItem(AUTH_KEY, "1");
       closeOverlay(pwOverlay);
 
-      unlockUI();
-      await ensureSession();
-      await ensureParticipant();
-      await loadParticipant();
-
+      await postUnlockBootstrap({ showTutorial:true });
+      localStorage.setItem(TUT_KEY, "1");
       showToast("Unlocked");
-      openTutorial(0); // show tutorial right after password
     });
 
-    // already authed?
+    // ===== Initial state =====
     if (localStorage.getItem(AUTH_KEY) === "1"){
-      unlockUI();
-      ensureSession().then(ensureParticipant).then(loadParticipant);
-      // Optional: show tutorial once per browser per room
-      const TUT_KEY = `stage1_tut_seen_${room}`;
-      if (!localStorage.getItem(TUT_KEY)){
-        localStorage.setItem(TUT_KEY, "1");
-        openTutorial(0);
-      }
+      // already authed, bootstrap quietly
+      postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
+        .then(() => localStorage.setItem(TUT_KEY, "1"));
     } else {
-      // If not authed, open password modal immediately
+      // locked: open password modal immediately
       openOverlay(pwOverlay);
       setTimeout(() => pwInput?.focus(), 0);
     }
@@ -589,14 +763,14 @@
       location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`;
     });
 
-    $("#btnExit").addEventListener("click", () => location.href = "/index.html");
+    btnExit.addEventListener("click", () => location.href = "/index.html");
 
-    $("#btnReset").addEventListener("click", () => {
+    btnReset.addEventListener("click", () => {
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;
       localStorage.removeItem(PID_KEY);
       localStorage.removeItem(AUTH_KEY);
-      localStorage.removeItem(`stage1_tut_seen_${room}`);
+      localStorage.removeItem(TUT_KEY);
       location.reload();
     });
   })();
