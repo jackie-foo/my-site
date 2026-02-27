@@ -14,13 +14,13 @@
   --bg:#07070b;
   --text:#f6f6ff;
   --muted:rgba(246,246,255,.65);
-
   --accent:#7c5cff;
   --accent2:#ff2bd6;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%}
+
 body{
   margin:0;
   font-family:"Space Grotesk", sans-serif;
@@ -30,10 +30,10 @@ body{
   align-items:center;
   justify-content:center;
   padding:24px;
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
-/* soft glow background */
+/* Soft glow */
 body::before{
   content:"";
   position:fixed;
@@ -45,10 +45,40 @@ body::before{
 }
 
 .container{
-  max-width:720px;
+  max-width:900px;
   width:100%;
 }
 
+/* Layout */
+.hero{
+  display:flex;
+  align-items:center;
+  gap:48px;
+}
+
+@media (max-width:768px){
+  .hero{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:32px;
+  }
+}
+
+/* Chibi */
+.chibi{
+  width:clamp(160px, 28vw, 260px);
+  aspect-ratio:1/1;
+  flex-shrink:0;
+}
+
+.chibi img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+/* Typography */
 h1{
   font-size:clamp(48px, 8vw, 90px);
   margin:0;
@@ -80,6 +110,7 @@ p{
   max-width:520px;
 }
 
+/* Links */
 .links{
   margin-top:40px;
   display:flex;
@@ -125,25 +156,35 @@ small{
 <body>
 
 <div class="container">
-  <h1>
-    <span class="highlight">Jackie Foo</span>
-  </h1>
 
-  <p>
-    Soft launch. This site is still developing.
-    I’m building it in public and refining it as I go.
-  </p>
+  <div class="hero">
+    <div class="chibi">
+      <img src="/pic/chibi1.png" alt="Jackie Chibi">
+    </div>
 
-  <div class="links">
-    <a href="#" target="_blank">LinkedIn</a>
-    <a href="#" target="_blank">GitHub</a>
-    <a href="mailto:you@email.com">Email</a>
-    <a href="#" target="_blank">Resume</a>
+    <div>
+      <h1>
+        <span class="highlight">Jackie Foo</span>
+      </h1>
+
+      <p>
+        Soft launch. This site is still developing.
+        I’m building it in public and refining it as I go.
+      </p>
+
+      <div class="links">
+        <a href="#" target="_blank">LinkedIn</a>
+        <a href="#" target="_blank">GitHub</a>
+        <a href="mailto:you@email.com">Email</a>
+        <a href="#" target="_blank">Resume</a>
+      </div>
+    </div>
   </div>
 
   <small>
     © <span id="year"></span>
   </small>
+
 </div>
 
 <script>
