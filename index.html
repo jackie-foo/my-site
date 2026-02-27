@@ -6,28 +6,29 @@
   <title>Jackie Foo</title>
   <style>
     :root{
-      --ink:#0B1220;
-      --muted:#22304A;
-      --soft:#5E6A80;
+      /* High contrast base */
+      --ink:#070B14;
+      --ink2:#111827;
+      --muted:#2B3448;
+      --soft:#5A6478;
+      --white:#FFFFFF;
 
-      /* Pastels */
-      --p1:#BDE0FE; /* blue */
-      --p2:#C7F9CC; /* green */
-      --p3:#FFD6A5; /* peach */
-      --p4:#FFADAD; /* pink */
-      --p5:#E9D5FF; /* lavender */
-      --p6:#FFF1A8; /* yellow */
+      /* Pastels (still vibrant) */
+      --p1:#A7D8FF; /* blue */
+      --p2:#BFF4C7; /* green */
+      --p3:#FFD1A3; /* peach */
+      --p4:#FF9EB1; /* pink */
+      --p5:#D9C2FF; /* purple */
+      --p6:#FFE66B; /* yellow */
 
-      --bg:#FFF7FB;
-      --panel: rgba(255,255,255,0.78);
-      --border: rgba(11,18,32,0.12);
-      --shadow: 0 18px 70px rgba(11,18,32,0.12);
-      --shadow2: 0 12px 30px rgba(11,18,32,0.12);
+      --bg:#FFF5FB;
+      --border: rgba(7,11,20,0.14);
+      --shadow: 0 18px 70px rgba(7,11,20,0.16);
+      --shadow2: 0 12px 26px rgba(7,11,20,0.14);
 
       --r1: 28px;
       --r2: 18px;
-
-      --ring: 0 0 0 4px rgba(11,18,32,0.14);
+      --ring: 0 0 0 4px rgba(7,11,20,0.18);
     }
 
     *{ box-sizing:border-box; }
@@ -37,390 +38,335 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(1100px 700px at 10% 10%, rgba(189,224,254,0.72), transparent 60%),
-        radial-gradient(1100px 700px at 92% 12%, rgba(255,173,173,0.56), transparent 60%),
-        radial-gradient(900px 650px at 80% 94%, rgba(199,249,204,0.62), transparent 60%),
-        radial-gradient(900px 650px at 18% 92%, rgba(233,213,255,0.62), transparent 60%),
+        radial-gradient(1100px 700px at 12% 12%, rgba(167,216,255,0.75), transparent 60%),
+        radial-gradient(1100px 700px at 88% 16%, rgba(255,158,177,0.55), transparent 60%),
+        radial-gradient(900px 650px at 78% 92%, rgba(191,244,199,0.62), transparent 60%),
+        radial-gradient(900px 650px at 18% 90%, rgba(217,194,255,0.62), transparent 60%),
         var(--bg);
       overflow-x:hidden;
     }
 
-    button:focus-visible, a:focus-visible{ outline:none; box-shadow: var(--ring); border-radius: 14px; }
     a{ color: inherit; text-decoration:none; }
-
-    /* Full-page effect layer */
-    .fxFlash{
-      position: fixed;
-      inset: 0;
-      pointer-events:none;
-      opacity: 0;
-      z-index: 900;
-      background: radial-gradient(800px 500px at 50% 45%, rgba(255,255,255,0.85), rgba(255,255,255,0.0) 60%);
-      transition: opacity 220ms ease;
-    }
-    .fxFlash.on{ opacity: 1; }
-
-    .themeWave{
-      position: fixed;
-      inset: -40vh -40vw;
-      pointer-events:none;
-      z-index: 899;
-      opacity: 0;
-      filter: blur(24px);
-      transform: scale(1.0);
-      transition: opacity 260ms ease, transform 480ms ease;
-      background:
-        radial-gradient(700px 500px at 20% 20%, rgba(189,224,254,0.85), transparent 60%),
-        radial-gradient(700px 500px at 80% 20%, rgba(255,173,173,0.75), transparent 60%),
-        radial-gradient(700px 500px at 75% 85%, rgba(199,249,204,0.75), transparent 60%),
-        radial-gradient(700px 500px at 25% 85%, rgba(233,213,255,0.75), transparent 60%);
-    }
-    .themeWave.on{ opacity: 1; transform: scale(1.04); }
-
-    canvas#confetti{
-      position: fixed;
-      inset: 0;
-      pointer-events:none;
-      z-index: 901;
+    button, select, input { font: inherit; }
+    button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible{
+      outline:none; box-shadow: var(--ring); border-radius: 14px;
     }
 
+    /* Top layout */
     .wrap{
-      min-height: 100%;
+      min-height:100%;
       display:flex;
       justify-content:center;
       align-items:center;
-      padding: 22px 14px 52px;
+      padding: 22px 14px 54px;
     }
 
     .shell{
-      width: min(1080px, 100%);
+      width: min(1120px, 100%);
       display:grid;
-      grid-template-columns: 1.08fr 0.92fr;
+      grid-template-columns: 1.1fr 0.9fr;
       gap: 18px;
       align-items: stretch;
     }
-    @media (max-width: 940px){
+    @media (max-width: 980px){
       .shell{ grid-template-columns: 1fr; }
     }
 
     .card{
-      background: var(--panel);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
       border-radius: var(--r1);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(12px);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
 
-    /* -------- Creative intro: "Duck Pond Poster" -------- */
-    .poster{
+    /* HERO (more personality, less boxy) */
+    .hero{
       position: relative;
-      min-height: 420px;
-    }
-    @media (max-width: 480px){
-      .poster{ min-height: 440px; }
-    }
-
-    .posterPad{
-      padding: 22px;
-      height: 100%;
-      display:flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    @media (max-width: 480px){ .posterPad{ padding: 18px; } }
-
-    .pond{
-      position:absolute;
-      inset: 0;
-      pointer-events:none;
-      overflow:hidden;
-    }
-
-    /* layered blobs */
-    .blob{
-      position:absolute;
-      border-radius: 999px;
-      filter: blur(0.2px);
-      opacity: 0.95;
-      transform: rotate(6deg);
-    }
-    .b1{ width: 420px; height: 240px; left: -130px; top: -60px; background: linear-gradient(135deg, var(--p1), rgba(255,255,255,0.0)); }
-    .b2{ width: 380px; height: 260px; right: -140px; top: 40px; background: linear-gradient(135deg, var(--p4), rgba(255,255,255,0.0)); }
-    .b3{ width: 520px; height: 280px; left: 40px; bottom: -140px; background: linear-gradient(135deg, var(--p2), rgba(255,255,255,0.0)); }
-    .b4{ width: 360px; height: 220px; right: 20px; bottom: -120px; background: linear-gradient(135deg, var(--p5), rgba(255,255,255,0.0)); opacity: 0.85; }
-
-    /* subtle waves */
-    .wave{
-      position:absolute;
-      left: -10%;
-      right: -10%;
-      height: 120px;
-      bottom: -40px;
+      min-height: 520px;
       background:
-        radial-gradient(90px 30px at 10% 30%, rgba(255,255,255,0.65), transparent 60%),
-        radial-gradient(120px 40px at 30% 50%, rgba(255,255,255,0.55), transparent 60%),
-        radial-gradient(130px 45px at 55% 35%, rgba(255,255,255,0.55), transparent 60%),
-        radial-gradient(110px 40px at 80% 55%, rgba(255,255,255,0.55), transparent 60%);
-      opacity: 0.8;
-      transform: rotate(-2deg);
+        linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+    }
+    @media (max-width: 520px){
+      .hero{ min-height: 560px; }
     }
 
-    /* duck float */
-    .duckFloat{
+    .heroPad{ padding: 22px; height:100%; display:flex; flex-direction:column; justify-content:space-between; gap: 18px; }
+    @media (max-width: 520px){ .heroPad{ padding: 18px; } }
+
+    .posterBg{
+      position:absolute; inset:0; pointer-events:none; overflow:hidden;
+    }
+    .stripe{
       position:absolute;
-      right: 22px;
-      bottom: 26px;
-      width: 112px;
-      height: 112px;
-      border-radius: 32px;
-      background: linear-gradient(135deg, var(--p6), #FFE47A);
-      border: 1px solid rgba(11,18,32,0.14);
+      left:-12%;
+      right:-12%;
+      height: 84px;
+      transform: rotate(-6deg);
+      opacity: 0.9;
+      filter: saturate(1.05);
+      border-top: 2px solid rgba(7,11,20,0.12);
+      border-bottom: 2px solid rgba(7,11,20,0.12);
+      box-shadow: 0 18px 40px rgba(7,11,20,0.08);
+    }
+    .s1{ top: 48px; background: linear-gradient(90deg, var(--p6), var(--p3)); }
+    .s2{ top: 160px; background: linear-gradient(90deg, var(--p1), var(--p5)); opacity: 0.75; }
+    .s3{ top: 272px; background: linear-gradient(90deg, var(--p2), var(--p4)); opacity: 0.72; }
+
+    .blob{
+      position:absolute; border-radius: 999px;
+      border: 2px solid rgba(7,11,20,0.12);
       box-shadow: var(--shadow2);
-      transform: translateZ(0);
-      animation: bob 2.8s ease-in-out infinite;
+      opacity: 0.92;
     }
-    @keyframes bob{
-      0%,100%{ transform: translateY(0); }
-      50%{ transform: translateY(-7px); }
+    .b1{ width: 260px; height: 260px; right: -70px; bottom: -70px; background: radial-gradient(circle at 35% 30%, #fff, var(--p6)); }
+    .b2{ width: 220px; height: 220px; right: 110px; bottom: 30px; background: radial-gradient(circle at 35% 30%, #fff, var(--p1)); opacity:0.85; }
+    .b3{ width: 180px; height: 180px; left: -60px; bottom: 20px; background: radial-gradient(circle at 35% 30%, #fff, var(--p4)); opacity:0.70; }
+
+    .heroTop{
+      position:relative; z-index: 2;
+      display:flex;
+      justify-content:space-between;
+      gap: 14px;
+      align-items:flex-start;
     }
-    .duckFloat:before{
+
+    .name{
+      margin:0;
+      font-size: clamp(38px, 5.4vw, 64px);
+      letter-spacing: -0.04em;
+      line-height: 0.98;
+    }
+    .tagline{
+      margin-top: 12px;
+      font-size: clamp(16px, 2.1vw, 19px);
+      line-height: 1.65;
+      color: var(--muted);
+      font-weight: 750;
+      max-width: 60ch;
+    }
+    .sub{
+      margin-top: 10px;
+      color: var(--soft);
+      font-weight: 700;
+      font-size: 13.5px;
+      line-height: 1.6;
+      max-width: 64ch;
+    }
+
+    .duckBadge{
+      width: 104px; height: 104px;
+      border-radius: 28px;
+      border: 2px solid rgba(7,11,20,0.14);
+      background: linear-gradient(135deg, var(--p6), #FFD84C);
+      box-shadow: var(--shadow2);
+      position: relative;
+      flex: 0 0 auto;
+      transform: rotate(3deg);
+      animation: bob 2.6s ease-in-out infinite;
+    }
+    @keyframes bob{ 0%,100%{ transform: rotate(3deg) translateY(0); } 50%{ transform: rotate(3deg) translateY(-7px);} }
+    .duckBadge:before{
       content:"";
       position:absolute;
       inset: 18px 20px 26px 20px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.68);
+      background: rgba(255,255,255,0.66);
       transform: rotate(-6deg);
     }
-    .duckFloat .eye{
-      position:absolute;
-      top: 42px;
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      background: var(--ink);
-    }
-    .duckFloat .eye.l{ left: 38px; }
-    .duckFloat .eye.r{ right: 38px; }
-    .duckFloat .beak{
-      position:absolute;
-      left: 50%;
-      top: 62px;
-      transform: translateX(-50%);
-      width: 42px;
-      height: 20px;
-      border-radius: 999px;
+    .eye{ position:absolute; top: 42px; width: 11px; height: 11px; border-radius: 50%; background: var(--ink); }
+    .eye.l{ left: 38px; } .eye.r{ right: 38px; }
+    .beak{
+      position:absolute; left:50%; top: 62px; transform: translateX(-50%);
+      width: 42px; height: 20px; border-radius: 999px;
       background: linear-gradient(180deg, #FFB703, #FFA000);
-      border: 1px solid rgba(11,18,32,0.14);
+      border: 2px solid rgba(7,11,20,0.12);
     }
-    .duckFloat .shine{
-      position:absolute;
-      right: 12px;
-      top: 12px;
-      width: 12px;
-      height: 12px;
-      border-radius: 4px;
-      background: rgba(255,255,255,0.92);
-      transform: rotate(15deg);
-    }
+    .shine{ position:absolute; right: 12px; top: 12px; width: 12px; height: 12px; border-radius: 4px; background: rgba(255,255,255,0.92); transform: rotate(15deg); }
 
-    .heroText{
-      position: relative;
-      z-index: 2;
-    }
-    .heroText h1{
-      margin:0;
-      font-size: clamp(34px, 5vw, 54px);
-      letter-spacing: -0.03em;
-      line-height: 1.02;
-    }
-    .heroText .line2{
-      margin-top: 10px;
-      font-size: clamp(16px, 2.2vw, 18px);
-      line-height: 1.7;
-      color: var(--muted);
-      max-width: 56ch;
-      font-weight: 650;
-    }
-    .heroText .soft{
-      margin-top: 10px;
-      color: var(--soft);
-      font-size: 13.5px;
-      line-height: 1.6;
-      max-width: 60ch;
-      font-weight: 650;
-    }
-
-    .tagRow{
-      position: relative;
-      z-index: 2;
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
+    .ctaRow{
+      position:relative; z-index:2;
+      display:flex; flex-wrap:wrap; gap: 10px;
       align-items:center;
-      justify-content: flex-start;
     }
-    .tag{
-      user-select:none;
-      border: 1px solid rgba(11,18,32,0.14);
-      background: rgba(255,255,255,0.78);
-      padding: 9px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 800;
-      box-shadow: 0 10px 18px rgba(11,18,32,0.06);
-    }
-
-    .links{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .linkBtn{
+    .btn{
       display:inline-flex;
       align-items:center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(11,18,32,0.14);
-      background: rgba(255,255,255,0.85);
-      box-shadow: 0 10px 18px rgba(11,18,32,0.06);
-      font-weight: 850;
-      color: var(--ink);
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 2px solid rgba(7,11,20,0.16);
+      background: rgba(255,255,255,0.92);
+      font-weight: 900;
+      box-shadow: 0 12px 20px rgba(7,11,20,0.10);
       transition: transform 120ms ease, box-shadow 120ms ease;
+      -webkit-tap-highlight-color: transparent;
+      cursor:pointer;
     }
-    .linkBtn:hover{ transform: translateY(-1px); box-shadow: 0 14px 22px rgba(11,18,32,0.10); }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 16px 26px rgba(7,11,20,0.14); }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--p1), var(--p5));
+    }
+    .tinyNote{
+      position:relative; z-index:2;
+      color: var(--soft);
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.6;
+    }
 
-    /* -------- Game panel -------- */
+    /* RIGHT panel (passport wall) */
     .pad{ padding: 22px; }
-    @media (max-width: 480px){ .pad{ padding: 18px; } }
+    @media (max-width: 520px){ .pad{ padding: 18px; } }
 
-    .gameHead{
-      display:flex;
-      justify-content: space-between;
-      align-items:flex-end;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .gameHead h2{
+    .panelTitle{
       margin:0;
       font-size: 18px;
-      letter-spacing:-0.01em;
+      letter-spacing: -0.01em;
     }
-    .gameHead .sub{
+    .panelSub{
       margin-top: 6px;
       color: var(--soft);
       font-size: 13.5px;
-      line-height: 1.5;
-      font-weight: 650;
+      line-height: 1.55;
+      font-weight: 700;
     }
-    .btnRow{ display:flex; gap: 10px; flex-wrap:wrap; justify-content:flex-end; }
 
-    button{
-      border: 1px solid rgba(11,18,32,0.14);
-      background: rgba(255,255,255,0.88);
-      color: var(--ink);
-      font-weight: 900;
-      border-radius: 14px;
-      padding: 10px 12px;
-      cursor:pointer;
-      box-shadow: 0 10px 18px rgba(11,18,32,0.06);
-      transition: transform 120ms ease, box-shadow 120ms ease;
-    }
-    button:hover{ transform: translateY(-1px); box-shadow: 0 14px 22px rgba(11,18,32,0.10); }
-    button:active{ transform: translateY(0px); box-shadow: 0 10px 18px rgba(11,18,32,0.06); }
-
-    .grid{
+    .form{
+      margin-top: 14px;
       display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 12px;
-      margin-top: 16px;
+      grid-template-columns: 1fr 0.8fr;
+      gap: 10px;
+      align-items:end;
     }
     @media (max-width: 520px){
-      .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .form{ grid-template-columns: 1fr; }
     }
 
-    .flip{ perspective: 1000px; height: 132px; }
-    .flipBtn{
-      width:100%; height:100%;
-      border:none; background: transparent; padding:0;
-      cursor:pointer;
-      border-radius: var(--r2);
-      -webkit-tap-highlight-color: transparent;
-    }
-    .inner{
-      width:100%; height:100%;
-      position:relative;
-      transform-style: preserve-3d;
-      transition: transform 520ms cubic-bezier(.2,.8,.2,1);
-      border-radius: var(--r2);
-      box-shadow: 0 12px 22px rgba(11,18,32,0.08);
-    }
-    .flip[data-flipped="true"] .inner{ transform: rotateY(180deg); }
-
-    .face{
-      position:absolute; inset:0;
-      backface-visibility:hidden;
-      border-radius: var(--r2);
-      border: 1px solid rgba(11,18,32,0.14);
-      display:flex; align-items:center; justify-content:center;
-      padding: 12px;
-      text-align:center;
-    }
-    .front{ background: rgba(255,255,255,0.94); }
-    .front .emoji{ font-size: 30px; }
-    .front .hint{
-      margin-top: 8px;
-      font-size: 13px;
-      font-weight: 950;
-      color: var(--muted);
-    }
-    .front .tiny{
-      margin-top: 6px;
-      font-size: 12px;
+    .field label{
+      display:block;
+      font-size: 12.5px;
       color: var(--soft);
-      font-weight: 800;
+      font-weight: 850;
+      margin-bottom: 6px;
+    }
+    select, input{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 2px solid rgba(7,11,20,0.16);
+      background: rgba(255,255,255,0.92);
+      color: var(--ink2);
+      font-weight: 850;
+      box-shadow: 0 10px 18px rgba(7,11,20,0.08);
     }
 
-    .back{
-      transform: rotateY(180deg);
+    .stampBtn{
+      width:100%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 2px solid rgba(7,11,20,0.16);
+      background: linear-gradient(135deg, var(--p6), var(--p3));
+      color: var(--ink);
+      font-weight: 950;
+      box-shadow: 0 12px 20px rgba(7,11,20,0.10);
+    }
+
+    .stats{
+      margin-top: 14px;
       display:flex;
-      flex-direction:column;
       gap: 10px;
-      justify-content:center;
+      flex-wrap: wrap;
+    }
+    .stat{
+      flex: 1;
+      min-width: 160px;
+      border-radius: 18px;
+      border: 2px solid rgba(7,11,20,0.12);
+      background: rgba(255,255,255,0.82);
+      box-shadow: 0 10px 18px rgba(7,11,20,0.08);
+      padding: 12px;
+    }
+    .stat .k{
+      font-size: 12.5px;
+      color: var(--soft);
+      font-weight: 900;
+    }
+    .stat .v{
+      margin-top: 6px;
+      font-size: 20px;
+      font-weight: 1000;
+      letter-spacing: -0.02em;
+    }
+
+    .wall{
+      margin-top: 14px;
+      border-radius: 18px;
+      border: 2px solid rgba(7,11,20,0.12);
+      background: rgba(255,255,255,0.86);
+      box-shadow: 0 12px 22px rgba(7,11,20,0.10);
+      padding: 12px;
+      max-height: 280px;
+      overflow:auto;
+    }
+    .stamp{
+      display:flex;
       align-items:center;
-      padding: 12px 10px;
-      color: rgba(11,18,32,0.92);
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(7,11,20,0.10);
+      background: rgba(255,255,255,0.92);
+      margin-bottom: 10px;
+    }
+    .stamp:last-child{ margin-bottom:0; }
+    .leftStamp{
+      display:flex; align-items:center; gap: 10px;
+      min-width: 0;
+    }
+    .badge{
+      width: 38px; height: 38px;
+      border-radius: 14px;
+      border: 2px solid rgba(7,11,20,0.12);
+      background: linear-gradient(135deg, var(--p2), var(--p1));
+      display:flex; align-items:center; justify-content:center;
+      font-size: 18px;
+      box-shadow: 0 10px 16px rgba(7,11,20,0.10);
+    }
+    .stampTxt{
+      min-width: 0;
+    }
+    .stampTxt .country{
       font-weight: 950;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .back .title{
-      font-size: 13.4px;
-      line-height: 1.25;
-      max-width: 18ch;
+    .stampTxt .note{
+      margin-top: 2px;
+      color: var(--soft);
+      font-size: 12.5px;
+      font-weight: 750;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 42ch;
     }
-    .chip{
+    .time{
+      color: var(--soft);
       font-size: 12px;
-      font-weight: 950;
-      border-radius: 999px;
-      padding: 6px 10px;
-      border: 1px solid rgba(11,18,32,0.14);
-      background: rgba(255,255,255,0.72);
+      font-weight: 850;
+      flex: 0 0 auto;
     }
 
-    .c1 .back{ background: linear-gradient(135deg, var(--p1), #fff); }
-    .c2 .back{ background: linear-gradient(135deg, var(--p2), #fff); }
-    .c3 .back{ background: linear-gradient(135deg, var(--p3), #fff); }
-    .c4 .back{ background: linear-gradient(135deg, var(--p4), #fff); }
-    .c5 .back{ background: linear-gradient(135deg, var(--p5), #fff); }
-    .c6 .back{ background: linear-gradient(135deg, var(--p6), #fff); }
-
-    /* Surprise modal */
+    /* Modal + effects */
     .overlay{
       position: fixed;
       inset: 0;
-      background: rgba(11,18,32,0.60);
+      background: rgba(7,11,20,0.65);
       display:none;
       align-items:center;
       justify-content:center;
@@ -428,61 +374,62 @@
       z-index: 999;
     }
     .overlay[data-open="true"]{ display:flex; }
-
     .modal{
       width: min(640px, 100%);
       border-radius: 24px;
-      border: 1px solid rgba(11,18,32,0.18);
-      background: rgba(255,255,255,0.92);
-      box-shadow: 0 30px 90px rgba(11,18,32,0.30);
+      border: 2px solid rgba(7,11,20,0.18);
+      background: rgba(255,255,255,0.94);
+      box-shadow: 0 34px 110px rgba(7,11,20,0.34);
       overflow:hidden;
     }
     .modalTop{
       padding: 16px 16px 10px;
-      display:flex;
-      justify-content: space-between;
-      align-items:flex-start;
-      gap: 10px;
+      display:flex; justify-content:space-between; gap: 12px; align-items:flex-start;
     }
-    .modalTop h3{ margin:0; font-size: 18px; letter-spacing:-0.01em; }
+    .modalTop h3{ margin:0; font-size: 18px; }
     .modalBody{
       padding: 0 16px 16px;
       color: var(--muted);
-      font-size: 14.8px;
+      font-weight: 750;
       line-height: 1.65;
-      font-weight: 650;
+      font-size: 14.8px;
     }
     .big{
       margin: 10px 0 8px;
-      font-size: clamp(32px, 8vw, 54px);
+      font-size: clamp(34px, 8vw, 56px);
       line-height: 1;
     }
     .bubble{
       margin-top: 12px;
       border-radius: 16px;
-      border: 1px solid rgba(11,18,32,0.12);
-      background: rgba(255,255,255,0.82);
+      border: 2px solid rgba(7,11,20,0.12);
+      background: rgba(255,255,255,0.86);
       padding: 12px;
     }
     .modalFoot{
-      border-top: 1px solid rgba(11,18,32,0.10);
-      background: rgba(255,255,255,0.72);
+      border-top: 1px solid rgba(7,11,20,0.10);
+      background: rgba(255,255,255,0.76);
       padding: 12px 16px 16px;
-      display:flex;
-      justify-content: space-between;
-      align-items:center;
-      gap: 12px;
-      flex-wrap: wrap;
+      display:flex; justify-content:space-between; gap: 12px; align-items:center; flex-wrap:wrap;
     }
     .mini{
       color: var(--soft);
       font-size: 12.8px;
+      font-weight: 750;
       line-height: 1.5;
       max-width: 46ch;
-      font-weight: 650;
     }
 
-    /* Stronger mobile sticker effect */
+    .fxFlash{
+      position: fixed; inset: 0;
+      pointer-events:none;
+      opacity: 0;
+      z-index: 900;
+      background: radial-gradient(800px 500px at 50% 45%, rgba(255,255,255,0.86), rgba(255,255,255,0.0) 60%);
+      transition: opacity 220ms ease;
+    }
+    .fxFlash.on{ opacity: 1; }
+
     .sticker{
       position: fixed;
       left: 50%;
@@ -490,7 +437,7 @@
       transform: translate(-50%, -50%);
       z-index: 902;
       font-size: 54px;
-      filter: drop-shadow(0 18px 22px rgba(11,18,32,0.22));
+      filter: drop-shadow(0 18px 22px rgba(7,11,20,0.24));
       animation: popFloat 900ms cubic-bezier(.15,.9,.2,1) forwards;
       pointer-events:none;
     }
@@ -501,10 +448,7 @@
       100%{ opacity:0; transform: translate(-50%,-110%) scale(1.10) rotate(10deg); }
     }
 
-    /* Stronger shake on mobile */
-    .shake{
-      animation: shake 460ms ease-in-out;
-    }
+    .shake{ animation: shake 480ms ease-in-out; }
     @keyframes shake{
       0%{ transform: translateX(0); }
       18%{ transform: translateX(-10px); }
@@ -514,83 +458,107 @@
       100%{ transform: translateX(0); }
     }
 
-    /* Small helper */
+    canvas#confetti{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      z-index: 901;
+    }
+
     .srOnly{
-      position:absolute;
-      width:1px;height:1px;
-      padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+      position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
     }
   </style>
 </head>
 
 <body>
-  <div class="themeWave" id="themeWave"></div>
   <div class="fxFlash" id="fxFlash"></div>
   <canvas id="confetti"></canvas>
 
   <div class="wrap" id="page">
     <main class="shell">
-      <!-- Creative poster intro -->
-      <section class="card poster">
-        <div class="pond" aria-hidden="true">
+      <!-- HERO -->
+      <section class="card hero">
+        <div class="posterBg" aria-hidden="true">
+          <div class="stripe s1"></div>
+          <div class="stripe s2"></div>
+          <div class="stripe s3"></div>
           <div class="blob b1"></div>
           <div class="blob b2"></div>
           <div class="blob b3"></div>
-          <div class="blob b4"></div>
-          <div class="wave"></div>
-
-          <div class="duckFloat">
-            <div class="shine"></div>
-            <div class="eye l"></div>
-            <div class="eye r"></div>
-            <div class="beak"></div>
-          </div>
         </div>
 
-        <div class="posterPad">
-          <div class="heroText">
-            <h1>Jackie Foo</h1>
-            <div class="line2">
-              Building playful and thoughtful things with pastel energy.
+        <div class="heroPad">
+          <div class="heroTop">
+            <div>
+              <h1 class="name">Jackie Foo</h1>
+              <div class="tagline">
+                I build playful, high-contrast things with pastel energy.
+              </div>
+              <div class="sub">
+                Developing this site still. For now, leave a duck stamp so I can see where people are visiting from.
+              </div>
             </div>
-            <div class="soft">
-              Developing this site still. For now, flip cards and collect surprises.
+
+            <div class="duckBadge" aria-hidden="true">
+              <div class="shine"></div>
+              <div class="eye l"></div>
+              <div class="eye r"></div>
+              <div class="beak"></div>
             </div>
           </div>
 
           <div>
-            <div class="tagRow" aria-label="Quick tags">
-              <div class="tag">Minimal</div>
-              <div class="tag">High contrast</div>
-              <div class="tag">Mobile first</div>
-              <div class="tag">Duck themed</div>
+            <div class="ctaRow">
+              <button class="btn primary" id="duckHorn" type="button">🦆 Duck horn</button>
+              <a class="btn" href="mailto:" role="button">📬 Contact later</a>
+              <button class="btn" id="clearLocal" type="button">🧹 Clear stamps</button>
             </div>
-
-            <div class="tagRow" style="margin-top:12px;">
-              <a class="linkBtn" href="#" id="surpriseNow" role="button" aria-label="Trigger a surprise now">✨ Surprise me</a>
-              <a class="linkBtn" href="mailto:" aria-label="Email placeholder">📬 Contact later</a>
+            <div class="tinyNote">
+              This is a playful soft launch. The stamp wall is stored on your device for now.
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Game -->
+      <!-- PASSPORT WALL -->
       <section class="card">
         <div class="pad">
-          <div class="gameHead">
-            <div>
-              <h2>Flip Card Surprise</h2>
-              <div class="sub">Made for thumbs. Big effects on mobile.</div>
+          <h2 class="panelTitle">Duck Passport Wall</h2>
+          <div class="panelSub">Pick your country and leave a tiny note. It drops a surprise.</div>
+
+          <div class="form" aria-label="Stamp form">
+            <div class="field">
+              <label for="country">Country</label>
+              <select id="country">
+                <option value="">Select a country</option>
+                <option>Malaysia</option><option>Australia</option><option>Singapore</option><option>China</option><option>Taiwan</option>
+                <option>United States</option><option>United Kingdom</option><option>Canada</option><option>Japan</option><option>Korea</option>
+                <option>India</option><option>Indonesia</option><option>Thailand</option><option>Vietnam</option><option>Philippines</option>
+                <option>Other</option>
+              </select>
             </div>
-            <div class="btnRow">
-              <button id="resetBtn" type="button">Reset</button>
-              <button id="shuffleBtn" type="button">Shuffle</button>
-              <button id="soundBtn" type="button" aria-pressed="true">Sound on</button>
+
+            <div class="field">
+              <label for="note">Tiny note</label>
+              <input id="note" maxlength="42" placeholder="Hi Jackie, this is cute" />
+            </div>
+
+            <button class="stampBtn" id="stampBtn" type="button">Stamp 🦆</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="k">Total stamps</div>
+              <div class="v" id="totalStamps">0</div>
+            </div>
+            <div class="stat">
+              <div class="k">Countries counted</div>
+              <div class="v" id="countriesCount">0</div>
             </div>
           </div>
 
-          <div class="grid" id="grid" aria-label="Flip cards"></div>
-
+          <div class="wall" id="wall" aria-label="Recent stamps"></div>
           <div class="srOnly" aria-live="polite" id="ariaLive"></div>
         </div>
       </section>
@@ -601,66 +569,52 @@
   <div class="overlay" id="overlay" data-open="false" role="dialog" aria-modal="true" aria-labelledby="title">
     <div class="modal">
       <div class="modalTop">
-        <h3 id="title">Surprise</h3>
-        <button id="closeBtn" type="button" aria-label="Close">Close</button>
+        <h3 id="title">Stamped</h3>
+        <button class="btn" id="closeBtn" type="button" style="padding:10px 12px;">Close</button>
       </div>
       <div class="modalBody" id="body"></div>
       <div class="modalFoot">
         <div class="mini" id="mini"></div>
-        <button id="againBtn" type="button">Flip another</button>
+        <button class="btn" id="againBtn" type="button" style="padding:10px 12px;">Stamp another</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ---------- Mobile detection ----------
     const isMobile = matchMedia("(max-width: 520px)").matches || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
-    // ---------- Cards ----------
-    const cardFront = [
-      { emoji:"🦆", hint:"Flip me", tiny:"Duck drop 1" },
-      { emoji:"🎁", hint:"Flip me", tiny:"Duck drop 2" },
-      { emoji:"✨", hint:"Flip me", tiny:"Duck drop 3" },
-      { emoji:"🎲", hint:"Flip me", tiny:"Duck drop 4" },
-      { emoji:"🍬", hint:"Flip me", tiny:"Duck drop 5" },
-      { emoji:"🌈", hint:"Flip me", tiny:"Duck drop 6" }
-    ];
-    const backTitles = ["Duck Approved","Secret Found","Lucky Sparkle","Chaos Mode","Sweet Surprise","Pastel Power"];
-    const palette = ["c1","c2","c3","c4","c5","c6"];
-
-    // ---------- Surprise content ----------
-    const surprises = [
-      { title:"Duck says hi", big:"🦆", text:"You unlocked a duck greeting.", mini:"Flip more cards. This site is still growing.", sticker:"🦆", fx:["confetti","flash","wave"] },
-      { title:"Confetti blast", big:"✨", text:"Pastel confetti, full power.", mini:"This is your soft launch celebration.", sticker:"✨", fx:["confetti","shake","flash","wave"] },
-      { title:"Secret message", big:"🔒", text:"Hidden note: Keep it simple, then make it fun.", mini:"You can evolve this site anytime.", sticker:"🔒", fx:["sticker","flash"] },
-      { title:"Duck sticker drop", big:"🏷️", text:"Sticker unlocked: Duck Energy.", mini:"Try Shuffle for different vibes.", sticker:"🏷️", fx:["sticker","confetti","wave"] },
-      { title:"Mini fortune", big:"🥠", text:"Fortune: Your next iteration will be cleaner than you expect.", mini:"Flip again for another fortune.", sticker:"🥠", fx:["sticker","flash"] },
-      { title:"Chaos sparkle", big:"🎲", text:"A little chaos makes the page memorable.", mini:"Still minimal. Just spicy.", sticker:"🎲", fx:["shake","confetti","flash","wave"] }
-    ];
+    // ---------- Storage ----------
+    const KEY = "jackie_duck_stamps_v1";
+    const getStamps = () => {
+      try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
+      catch { return []; }
+    };
+    const setStamps = (arr) => localStorage.setItem(KEY, JSON.stringify(arr));
 
     // ---------- DOM ----------
-    const grid = document.getElementById("grid");
+    const countryEl = document.getElementById("country");
+    const noteEl = document.getElementById("note");
+    const stampBtn = document.getElementById("stampBtn");
+    const wallEl = document.getElementById("wall");
+    const totalEl = document.getElementById("totalStamps");
+    const countriesEl = document.getElementById("countriesCount");
+    const ariaLive = document.getElementById("ariaLive");
+
     const overlay = document.getElementById("overlay");
     const closeBtn = document.getElementById("closeBtn");
     const againBtn = document.getElementById("againBtn");
-    const resetBtn = document.getElementById("resetBtn");
-    const shuffleBtn = document.getElementById("shuffleBtn");
-    const soundBtn = document.getElementById("soundBtn");
-    const surpriseNow = document.getElementById("surpriseNow");
-
     const titleEl = document.getElementById("title");
     const bodyEl = document.getElementById("body");
     const miniEl = document.getElementById("mini");
+
     const page = document.getElementById("page");
-    const ariaLive = document.getElementById("ariaLive");
-
     const fxFlash = document.getElementById("fxFlash");
-    const themeWave = document.getElementById("themeWave");
+    const duckHorn = document.getElementById("duckHorn");
+    const clearLocal = document.getElementById("clearLocal");
 
-    // ---------- Sound (no external files) ----------
+    // ---------- Sound ----------
     let soundOn = true;
     let audioCtx = null;
-
     function beep(mode="quack"){
       if(!soundOn) return;
       try{
@@ -670,40 +624,49 @@
         const now = audioCtx.currentTime;
 
         o.type = "square";
-        const start = mode==="quack" ? 520 : 680;
-        const end = mode==="quack" ? 220 : 420;
+        const start = mode==="quack" ? 540 : 720;
+        const end   = mode==="quack" ? 220 : 420;
         o.frequency.setValueAtTime(start, now);
         o.frequency.exponentialRampToValueAtTime(end, now + 0.10);
 
         g.gain.setValueAtTime(0.0001, now);
-        g.gain.exponentialRampToValueAtTime(0.18, now + 0.012);
-        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+        g.gain.exponentialRampToValueAtTime(0.20, now + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
 
         o.connect(g);
         g.connect(audioCtx.destination);
         o.start(now);
-        o.stop(now + 0.15);
+        o.stop(now + 0.16);
       }catch(e){}
     }
 
-    soundBtn.addEventListener("click", () => {
-      soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "Sound on" : "Sound off";
-      soundBtn.setAttribute("aria-pressed", String(soundOn));
-      beep("pop");
-    });
+    // ---------- Effects ----------
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let pieces = [];
+    let raf = null;
 
-    // ---------- Helpers ----------
-    function shuffle(arr){
-      const a = [...arr];
-      for(let i=a.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i],a[j]] = [a[j],a[i]];
-      }
-      return a;
+    function resize(){
+      canvas.width = innerWidth * devicePixelRatio;
+      canvas.height = innerHeight * devicePixelRatio;
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    }
+    addEventListener("resize", resize);
+    resize();
+
+    function flash(){
+      fxFlash.classList.add("on");
+      setTimeout(()=> fxFlash.classList.remove("on"), isMobile ? 260 : 200);
     }
 
-    function showSticker(emoji){
+    function shake(){
+      page.classList.remove("shake");
+      void page.offsetWidth;
+      page.classList.add("shake");
+      setTimeout(()=> page.classList.remove("shake"), 520);
+    }
+
+    function sticker(emoji){
       const s = document.createElement("div");
       s.className = "sticker";
       s.textContent = emoji;
@@ -711,40 +674,9 @@
       setTimeout(()=> s.remove(), 950);
     }
 
-    function shakePage(){
-      page.classList.remove("shake");
-      void page.offsetWidth;
-      page.classList.add("shake");
-      setTimeout(()=> page.classList.remove("shake"), 520);
-    }
-
-    function flash(){
-      fxFlash.classList.add("on");
-      setTimeout(()=> fxFlash.classList.remove("on"), isMobile ? 260 : 200);
-    }
-
-    function wave(){
-      themeWave.classList.add("on");
-      setTimeout(()=> themeWave.classList.remove("on"), isMobile ? 520 : 420);
-    }
-
-    // ---------- Confetti (stronger on mobile) ----------
-    const canvas = document.getElementById("confetti");
-    const ctx = canvas.getContext("2d");
-    let pieces = [];
-    let raf = null;
-
-    function resize(){
-      canvas.width = window.innerWidth * devicePixelRatio;
-      canvas.height = window.innerHeight * devicePixelRatio;
-      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-    }
-    addEventListener("resize", resize);
-    resize();
-
     function popConfetti(){
-      const colors = ["#BDE0FE","#C7F9CC","#FFD6A5","#FFADAD","#E9D5FF","#FFF1A8"];
-      const count = isMobile ? 200 : 120;
+      const colors = ["#A7D8FF","#BFF4C7","#FFD1A3","#FF9EB1","#D9C2FF","#FFE66B"];
+      const count = isMobile ? 220 : 140;
       pieces = [];
       for(let i=0;i<count;i++){
         pieces.push({
@@ -752,12 +684,12 @@
           y: -30 - Math.random()*innerHeight*0.25,
           w: 4 + Math.random()*6,
           h: 3 + Math.random()*5,
-          vy: (isMobile ? 3.2 : 2.4) + Math.random()*(isMobile ? 6 : 4),
-          vx: -2.0 + Math.random()*4.0,
+          vy: (isMobile ? 3.4 : 2.5) + Math.random()*(isMobile ? 6.2 : 4.2),
+          vx: -2.2 + Math.random()*4.4,
           rot: Math.random()*Math.PI,
           vr: -0.14 + Math.random()*0.28,
           c: colors[Math.floor(Math.random()*colors.length)],
-          life: (isMobile ? 160 : 120) + Math.floor(Math.random()*70)
+          life: (isMobile ? 170 : 130) + Math.floor(Math.random()*70)
         });
       }
       if(raf) cancelAnimationFrame(raf);
@@ -781,36 +713,61 @@
         ctx.restore();
       });
       pieces = pieces.filter(p=> p.y < innerHeight + 50 && p.life > 0);
-      if(pieces.length){
-        raf = requestAnimationFrame(animate);
-      }else{
-        ctx.clearRect(0,0,innerWidth,innerHeight);
-      }
+      if(pieces.length) raf = requestAnimationFrame(animate);
+      else ctx.clearRect(0,0,innerWidth,innerHeight);
     }
 
-    // ---------- Modal ----------
-    function openModal(s){
-      titleEl.textContent = s.title;
+    // ---------- UI ----------
+    function timeAgo(ts){
+      const diff = Date.now() - ts;
+      const s = Math.floor(diff/1000);
+      if(s < 10) return "just now";
+      if(s < 60) return s + "s ago";
+      const m = Math.floor(s/60);
+      if(m < 60) return m + "m ago";
+      const h = Math.floor(m/60);
+      if(h < 24) return h + "h ago";
+      const d = Math.floor(h/24);
+      return d + "d ago";
+    }
+
+    function render(){
+      const stamps = getStamps().slice().reverse();
+      wallEl.innerHTML = stamps.length ? "" : `<div style="color: var(--soft); font-weight:800;">No stamps yet. Be the first duck.</div>`;
+
+      stamps.slice(0, 12).forEach(s=>{
+        const row = document.createElement("div");
+        row.className = "stamp";
+        row.innerHTML = `
+          <div class="leftStamp">
+            <div class="badge">🦆</div>
+            <div class="stampTxt">
+              <div class="country">${escapeHtml(s.country)}</div>
+              <div class="note">${escapeHtml(s.note || "No note, just duck vibes")}</div>
+            </div>
+          </div>
+          <div class="time">${timeAgo(s.ts)}</div>
+        `;
+        wallEl.appendChild(row);
+      });
+
+      const all = getStamps();
+      totalEl.textContent = all.length;
+      const uniqueCountries = new Set(all.map(s => s.country).filter(Boolean));
+      countriesEl.textContent = uniqueCountries.size;
+    }
+
+    function openModal(title, bigEmoji, message, mini){
+      titleEl.textContent = title;
       bodyEl.innerHTML = `
-        <div class="big">${s.big}</div>
-        <div class="bubble"><strong>${escapeHtml(s.text)}</strong></div>
+        <div class="big">${bigEmoji}</div>
+        <div class="bubble"><strong>${escapeHtml(message)}</strong></div>
       `;
-      miniEl.textContent = s.mini;
+      miniEl.textContent = mini;
 
       overlay.setAttribute("data-open","true");
       document.body.style.overflow = "hidden";
       closeBtn.focus();
-
-      ariaLive.textContent = s.title;
-
-      // Stronger effects on mobile
-      beep("quack");
-      if(s.fx.includes("flash")) flash();
-      if(s.fx.includes("wave")) wave();
-      if(s.fx.includes("confetti")) popConfetti();
-      if(s.fx.includes("shake")) shakePage();
-      if(s.fx.includes("sticker")) showSticker(s.sticker);
-      if(isMobile) showSticker("🦆"); // extra punch for mobile
     }
 
     function closeModal(){
@@ -819,95 +776,62 @@
     }
 
     closeBtn.addEventListener("click", closeModal);
-    againBtn.addEventListener("click", closeModal);
+    againBtn.addEventListener("click", () => {
+      closeModal();
+      setTimeout(()=> countryEl.focus(), 80);
+    });
     overlay.addEventListener("click", (e)=> { if(e.target === overlay) closeModal(); });
     document.addEventListener("keydown", (e)=> {
       if(overlay.getAttribute("data-open")==="true" && e.key==="Escape") closeModal();
     });
 
     function escapeHtml(str){
-      return str.replace(/[&<>"']/g, s => ({
+      return String(str).replace(/[&<>"']/g, s => ({
         "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
       }[s]));
     }
 
-    // ---------- Render cards ----------
-    let order = [...Array(6)].map((_,i)=>i);
+    // ---------- Actions ----------
+    stampBtn.addEventListener("click", () => {
+      const country = countryEl.value.trim();
+      const note = noteEl.value.trim();
 
-    function render(){
-      grid.innerHTML = "";
-      order.forEach((_, i) => {
-        const wrap = document.createElement("div");
-        wrap.className = "flip " + palette[i % palette.length];
-        wrap.setAttribute("data-flipped","false");
+      if(!country){
+        flash(); shake(); beep("pop");
+        openModal("Pick a country first", "🧭", "Choose a country so the duck knows where you came from.", "Then stamp again.");
+        return;
+      }
 
-        const btn = document.createElement("button");
-        btn.className = "flipBtn";
-        btn.type = "button";
-        btn.setAttribute("aria-label","Flip card " + (i+1));
+      const stamps = getStamps();
+      stamps.push({ country, note, ts: Date.now() });
+      setStamps(stamps);
 
-        const inner = document.createElement("div");
-        inner.className = "inner";
+      // Strong punchy effects
+      beep("quack");
+      flash();
+      popConfetti();
+      sticker("🦆");
+      if(isMobile) sticker("✨");
 
-        const front = document.createElement("div");
-        front.className = "face front";
-        front.innerHTML = `
-          <div>
-            <div class="emoji">${cardFront[i].emoji}</div>
-            <div class="hint">${cardFront[i].hint}</div>
-            <div class="tiny">${cardFront[i].tiny}</div>
-          </div>
-        `;
-
-        const back = document.createElement("div");
-        back.className = "face back";
-        back.innerHTML = `
-          <div class="title">${backTitles[i]}</div>
-          <div class="chip">Tap for surprise</div>
-        `;
-
-        inner.appendChild(front);
-        inner.appendChild(back);
-        btn.appendChild(inner);
-        wrap.appendChild(btn);
-        grid.appendChild(wrap);
-
-        btn.addEventListener("click", () => flip(wrap));
-        btn.addEventListener("keydown", (e) => {
-          if(e.key === "Enter" || e.key === " "){
-            e.preventDefault();
-            flip(wrap);
-          }
-        });
-      });
-    }
-
-    function flip(wrap){
-      if(wrap.getAttribute("data-flipped")==="true") return;
-      wrap.setAttribute("data-flipped","true");
-
-      const s = surprises[Math.floor(Math.random()*surprises.length)];
-      setTimeout(()=> openModal(s), 220);
-    }
-
-    resetBtn.addEventListener("click", () => {
-      document.querySelectorAll(".flip").forEach(el => el.setAttribute("data-flipped","false"));
-      beep("pop");
-      if(isMobile) flash();
-    });
-
-    shuffleBtn.addEventListener("click", () => {
-      order = shuffle(order);
+      ariaLive.textContent = "Stamped from " + country;
       render();
-      beep("pop");
-      showSticker("🦆");
-      wave();
+
+      openModal("Stamped", "🦆", `Duck received your stamp from ${country}.`, "This wall is local for now. Later I can make it global.");
+      noteEl.value = "";
     });
 
-    surpriseNow.addEventListener("click", (e) => {
-      e.preventDefault();
-      const s = surprises[Math.floor(Math.random()*surprises.length)];
-      openModal(s);
+    duckHorn.addEventListener("click", () => {
+      beep("quack");
+      flash(); popConfetti(); sticker("🦆");
+      if(isMobile) { shake(); sticker("🌈"); }
+      openModal("Duck horn", "🦆", "You pressed the duck horn. This is the correct choice.", "Thank you for supporting duck culture.");
+    });
+
+    clearLocal.addEventListener("click", () => {
+      setStamps([]);
+      render();
+      flash(); beep("pop");
+      openModal("Cleared", "🧹", "Local stamps cleared on this device.", "Your real global map can come later.");
     });
 
     // Init
