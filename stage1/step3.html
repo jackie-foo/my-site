@@ -7,7 +7,7 @@
   <style>
     :root{
       --bg:#0b0d12; --panel:#121625; --panel2:#0f1320; --border:#2a3350;
-      --text:#e9ecff; --muted:#aab0d6; --accent:#00e5ff; --bad:#ff4d4d;
+      --text:#e9ecff; --muted:#aab0d6; --accent:#00e5ff; --accent2:#ff2bd6; --bad:#ff4d4d;
       --constraint:#ff4d4d; --support:#00e5ff; --wish:#47ff87; --neutral:#ffe44d;
       --r:18px; --shadow:0 16px 40px rgba(0,0,0,.38);
     }
@@ -21,8 +21,10 @@
     .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:900;font-size:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);padding:3px 8px;border-radius:999px}
     button{appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:1000;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28)}
     button:hover{border-color:color-mix(in srgb,var(--accent) 60%, var(--border))}
+    button:disabled{opacity:.55;cursor:not-allowed}
     .btnPrimary{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));box-shadow:0 14px 34px rgba(0,229,255,.12)}
     .btnDanger{border-color:color-mix(in srgb,var(--bad) 65%, var(--border))}
+    .btnGhost{background:rgba(255,255,255,.03)}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
     .card{border:1px solid var(--border);background:linear-gradient(0deg,var(--panel2),var(--panel));border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-top:14px}
     .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;align-items:center}
@@ -44,7 +46,7 @@
 
     .timeline{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);padding:12px;overflow:auto}
     .weeks{display:grid;grid-template-columns:repeat(13,minmax(160px,1fr));gap:10px;min-width:1000px}
-    .week{border-radius:16px;border:1px dashed rgba(255,255,255,.20);background:rgba(255,255,255,.02);padding:10px;min-height:210px;display:flex;flex-direction:column;gap:10px}
+    .week{border-radius:16px;border:1px dashed rgba(255,255,255,.20);background:rgba(255,255,255,.02);padding:10px;min-height:210px;display:flex;flex-direction:column;gap:10px; position:relative}
     .weekHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08)}
     .weekHead strong{font-size:12px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
     .weekHead span{font-size:11px;color:var(--muted);font-weight:900;white-space:nowrap}
@@ -65,6 +67,118 @@
 
     .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
       border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);max-width:360px;color:var(--text);font-weight:900;font-size:12px;display:none}
+
+    /* ===== Modals (tutorial) ===== */
+    .overlay{
+      position:fixed; inset:0; z-index:95;
+      background:rgba(0,0,0,.62);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:16px;
+    }
+    .modal{
+      width:min(760px, 100%);
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .modalHead h3{
+      margin:0;
+      font-size:14px;
+      font-weight:1000;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+    }
+    .modalBody{padding:14px; display:flex; flex-direction:column; gap:10px}
+    .modalFoot{
+      padding:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .kicker{color:var(--muted); font-weight:800; font-size:12px; line-height:1.35}
+    .steps{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      color:var(--muted); font-weight:900; font-size:12px;
+    }
+    .pill{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      padding:4px 8px;
+      border-radius:999px;
+    }
+    .pill.active{
+      border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.12));
+      box-shadow:0 12px 28px rgba(0,229,255,.10);
+      color:var(--text);
+    }
+    .list{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+      line-height:1.55;
+    }
+    .callout{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,229,255,.06);
+      border-radius:16px;
+      padding:10px 12px;
+      color:var(--text);
+      font-weight:900;
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    /* ===== Context Menu ===== */
+    .ctx{
+      position:fixed;
+      z-index:110;
+      display:none;
+      width:min(320px, calc(100vw - 24px));
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.96), rgba(15,19,32,.96));
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .ctxHead{
+      padding:12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+    }
+    .ctxHead strong{font-size:12px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
+    .ctxBody{padding:10px;display:flex;flex-direction:column;gap:8px}
+    .ctxBtn{
+      width:100%;
+      text-align:left;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      padding:10px 10px;
+      border-radius:14px;
+      font-weight:1000;
+      cursor:pointer;
+      box-shadow:none;
+    }
+    .ctxBtn:hover{border-color:color-mix(in srgb,var(--accent2) 55%, rgba(255,255,255,.10))}
+    .ctxSelect{
+      width:100%;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 10px;
+      font-weight:1000;
+      outline:none;
+    }
+    .ctxSmall{color:var(--muted);font-weight:800;font-size:12px;line-height:1.35}
   </style>
 </head>
 <body>
@@ -78,6 +192,7 @@
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
+        <button id="btnTutorial" class="btnGhost">Tutorial</button>
         <button id="btnBack">← Step 2</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
       </div>
@@ -98,6 +213,7 @@
               <div class="key"><span class="swatch" style="background:var(--support)"></span> Support</div>
               <div class="key"><span class="swatch" style="background:var(--wish)"></span> Wish</div>
             </div>
+            <div class="subtitle" style="margin:0">Tip: Right-click a week to add cards faster.</div>
             <div id="eventList" style="display:flex;flex-direction:column;gap:10px"></div>
           </aside>
 
@@ -110,6 +226,45 @@
   </div>
 
   <div class="toast" id="toast"></div>
+
+  <!-- Tutorial Modal -->
+  <div class="overlay" id="tutOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="tutTitle">Step 3 Tutorial</h3>
+          <div class="kicker">How to map the journey + what the tags mean.</div>
+        </div>
+        <button id="btnCloseTut" class="btnGhost" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="steps" id="tutSteps"></div>
+        <div id="tutContent"></div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">You can reopen this anytime via “Tutorial”.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnPrev" class="btnGhost">← Back</button>
+          <button id="btnNextStep" class="btnPrimary">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context Menu -->
+  <div class="ctx" id="ctxMenu" role="dialog" aria-modal="false">
+    <div class="ctxHead">
+      <strong id="ctxTitle">Week</strong>
+      <button id="ctxClose" class="btnGhost" style="padding:6px 10px;border-radius:12px;box-shadow:none">✕</button>
+    </div>
+    <div class="ctxBody">
+      <div class="ctxSmall">Add a card directly into this week:</div>
+      <select class="ctxSelect" id="ctxSelect"></select>
+      <button class="ctxBtn" id="ctxAddPreset">＋ Add selected template</button>
+      <button class="ctxBtn" id="ctxAddCustom">＋ Add custom card…</button>
+      <div class="ctxSmall">Tip: On Mac trackpad, use two-finger click.</div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -148,19 +303,21 @@
     }
 
     const baseEvents = [
-      { id:"evt-brief", name:"Assessment brief / rubric arrives", hint:"W1–W2" },
-      { id:"evt-work", name:"Working on assignment", hint:"Any week" },
-      { id:"evt-submit", name:"Submit assignment", hint:"Due week" },
-      { id:"evt-feedback", name:"Feedback released", hint:"Key moment" },
-      { id:"evt-reflect", name:"Reflect & decide next action", hint:"After feedback" },
-      { id:"evt-ask", name:"Ask for clarification", hint:"Support moment" },
-      { id:"evt-peer", name:"Talk to peers", hint:"Support moment" },
-      { id:"evt-revise", name:"Revise approach for next task", hint:"Iteration" }
+      { id:"evt-brief",   name:"Assessment brief / rubric arrives", hint:"W1–W2" },
+      { id:"evt-work",    name:"Working on assignment",             hint:"Any week" },
+      { id:"evt-submit",  name:"Submit assignment",                 hint:"Due week" },
+      { id:"evt-feedback",name:"Feedback released",                 hint:"Key moment" },
+      { id:"evt-reflect", name:"Reflect & decide next action",      hint:"After feedback" },
+      { id:"evt-ask",     name:"Ask for clarification",             hint:"Support moment" },
+      { id:"evt-peer",    name:"Talk to peers",                     hint:"Support moment" },
+      { id:"evt-revise",  name:"Revise approach for next task",     hint:"Iteration" }
     ];
 
+    // ===== state =====
     const state = { placed: [] };
 
-    function safeJson(s){ try { return JSON.parse(s); } catch { return null; } }
+    function safeJson(s){ try { return JSON.parse(s); } catch { return null; }
+    }
     function escapeHtml(str){
       return (str ?? "")
         .replaceAll("&","&amp;")
@@ -187,11 +344,17 @@
       await supabase.from("workshop_participants").upsert({ id: participantId, session_id: room }, { onConflict: "id" });
     }
 
+    // ===== drag helpers =====
     function enableMobileDrag(el, payload){
       let ghost=null;
       el.addEventListener("pointerdown",(e)=>{
+        // ✅ IMPORTANT: ignore buttons (so remove/tag clicks always work)
+        const t=e.target;
+        if(t && t.closest("button")) return;
+
         if(e.pointerType!=="touch") return;
         e.preventDefault();
+
         ghost = el.cloneNode(true);
         ghost.style.position="fixed";
         ghost.style.left=(e.clientX-80)+"px";
@@ -211,6 +374,7 @@
       el.addEventListener("pointerup", async (e)=>{
         if(!ghost) return;
         ghost.remove(); ghost=null;
+
         const under = document.elementFromPoint(e.clientX, e.clientY);
         const weekEl = under ? under.closest(".week") : null;
         if(!weekEl){ showToast("Drop on a Week box"); return; }
@@ -221,6 +385,7 @@
       });
     }
 
+    // ===== render =====
     function renderWeeks(){
       weeksWrap.innerHTML = "";
       for(let w=1; w<=13; w++){
@@ -239,6 +404,25 @@
           if(!obj) return;
           if(obj.kind==="baseEvent") await placeBaseEvent(obj.baseId, w);
           if(obj.kind==="placedEvent") await movePlaced(obj.id, w);
+        });
+
+        // ✅ Right click context menu (desktop)
+        weekEl.addEventListener("contextmenu",(e)=>{
+          e.preventDefault();
+          openContextMenu(w, e.clientX, e.clientY);
+        });
+
+        // ✅ Long-press context menu (mobile)
+        let pressTimer=null;
+        weekEl.addEventListener("pointerdown",(e)=>{
+          if(e.pointerType!=="touch") return;
+          // ignore if they start dragging a card
+          const t=e.target;
+          if(t && (t.closest(".placed") || t.closest(".event"))) return;
+          pressTimer=setTimeout(()=>openContextMenu(w, e.clientX, e.clientY), 520);
+        });
+        ["pointerup","pointercancel","pointermove"].forEach(ev=>{
+          weekEl.addEventListener(ev, ()=>{ clearTimeout(pressTimer); pressTimer=null; });
         });
 
         weeksWrap.appendChild(weekEl);
@@ -267,7 +451,6 @@
     }
 
     function renderPlaced(){
-      // clear all zones
       [...weeksWrap.querySelectorAll(".dropZone")].forEach(z=>z.innerHTML="");
 
       state.placed.forEach(pe=>{
@@ -283,8 +466,8 @@
             <span class="placedMeta">${typeLabel(pe.type)}</span>
           </div>
           <div class="placedTags">
-            <button class="tagBtn type-${pe.type}">${typeLabel(pe.type)} (tap)</button>
-            <button class="miniX">Remove</button>
+            <button class="tagBtn type-${pe.type}" type="button">${typeLabel(pe.type)} (tap)</button>
+            <button class="miniX" type="button">Remove</button>
           </div>
         `;
         el.addEventListener("dragstart",(e)=>{
@@ -292,21 +475,51 @@
         });
         enableMobileDrag(el, {kind:"placedEvent", id:pe.id});
 
-        el.querySelector(".tagBtn").addEventListener("click", async ()=>{
+        // ✅ stop drag from stealing clicks (desktop)
+        const tagBtn = el.querySelector(".tagBtn");
+        const xBtn = el.querySelector(".miniX");
+        [tagBtn, xBtn].forEach(btn=>{
+          btn.addEventListener("pointerdown",(e)=>{ e.stopPropagation(); });
+        });
+
+        tagBtn.addEventListener("click", async (e)=>{
+          e.stopPropagation();
           const next = cycleType(pe.type);
           const { error } = await supabase.from("workshop_journey_items").update({ type: next }).eq("id", pe.id);
           if(error) console.error(error);
         });
 
-        el.querySelector(".miniX").addEventListener("click", async ()=>{
-          const { error } = await supabase.from("workshop_journey_items").delete().eq("id", pe.id);
-          if(error) console.error(error);
+        xBtn.addEventListener("click", async (e)=>{
+          e.stopPropagation();
+
+          // optimistic remove
+          const old = pe;
+          state.placed = state.placed.filter(x=>x.id!==pe.id);
+          renderPlaced();
+
+          // DB delete + log
+          const { data, error } = await supabase
+            .from("workshop_journey_items")
+            .delete()
+            .eq("id", pe.id)
+            .select();
+
+          console.log("DELETE journey item", { data, error });
+
+          if(error){
+            console.error(error);
+            showToast("Remove failed (see console)");
+            // rollback
+            state.placed.push(old);
+            renderPlaced();
+          }
         });
 
         zone.appendChild(el);
       });
     }
 
+    // ===== DB ops =====
     async function placeBaseEvent(baseId, week){
       const base = baseEvents.find(x=>x.id===baseId);
       if(!base) return;
@@ -314,7 +527,31 @@
       const payload = { session_id: room, week, label: base.name, type: "neutral" };
       payload.participant_id = participantId;
 
-      // Optimistic: request row back
+      let res = await supabase.from("workshop_journey_items").insert(payload).select().single();
+      if (res.error) {
+        if (String(res.error.message||"").toLowerCase().includes("participant_id")) {
+          delete payload.participant_id;
+          res = await supabase.from("workshop_journey_items").insert(payload).select().single();
+        }
+      }
+      if (res.error) {
+        console.error(res.error);
+        showToast("Insert failed: " + (res.error.message || "unknown"));
+        return;
+      }
+
+      const row=res.data;
+      state.placed.push({ id:row.id, week:row.week, label:row.label, type:row.type, participant_id:row.participant_id });
+      renderPlaced();
+    }
+
+    async function addCustomAtWeek(week){
+      const txt = prompt("Custom card text (short)");
+      if(!txt) return;
+
+      const payload = { session_id: room, week, label: txt.trim(), type: "wish" };
+      payload.participant_id = participantId;
+
       let res = await supabase.from("workshop_journey_items").insert(payload).select().single();
       if (res.error) {
         if (String(res.error.message||"").toLowerCase().includes("participant_id")) {
@@ -339,29 +576,10 @@
     }
 
     async function addCustom(){
-      const txt = prompt("Custom card text (short)");
-      if(!txt) return;
-      const payload = { session_id: room, week: 1, label: txt.trim(), type: "wish" };
-      payload.participant_id = participantId;
-
-      let res = await supabase.from("workshop_journey_items").insert(payload).select().single();
-      if (res.error) {
-        if (String(res.error.message||"").toLowerCase().includes("participant_id")) {
-          delete payload.participant_id;
-          res = await supabase.from("workshop_journey_items").insert(payload).select().single();
-        }
-      }
-      if (res.error) {
-        console.error(res.error);
-        showToast("Insert failed: " + (res.error.message || "unknown"));
-        return;
-      }
-
-      const row=res.data;
-      state.placed.push({ id:row.id, week:row.week, label:row.label, type:row.type, participant_id:row.participant_id });
-      renderPlaced();
+      await addCustomAtWeek(1);
     }
 
+    // ===== load + realtime =====
     async function loadInitial(){
       await ensureSessionAndParticipant();
       const { data, error } = await supabase
@@ -371,6 +589,13 @@
       if(error) console.error(error);
       state.placed = (data || []).map(it => ({ id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id }));
       renderPlaced();
+    }
+
+    function getDeletedId(payload){
+      if (!payload) return null;
+      if (payload.old && payload.old.id) return payload.old.id;
+      if (payload.old && payload.old.journey_id) return payload.old.journey_id;
+      return null;
     }
 
     function subscribeRealtime(){
@@ -391,17 +616,207 @@
               if(idx>=0){
                 state.placed[idx] = { id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id };
                 renderPlaced();
+              } else {
+                state.placed.push({ id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id });
+                renderPlaced();
               }
             } else if(payload.eventType==="DELETE"){
-              const old = payload.old;
-              state.placed = state.placed.filter(x=>x.id!==old.id);
-              renderPlaced();
+              const did = getDeletedId(payload);
+              if(did){
+                state.placed = state.placed.filter(x=>x.id!==did);
+                renderPlaced();
+              } else {
+                // fallback reload if delete payload lacks PK
+                loadInitial();
+              }
             }
           }
         )
         .subscribe();
     }
 
+    // ===== tutorial =====
+    const tutOverlay = $("#tutOverlay");
+    function openOverlay(el){
+      el.style.display="flex";
+      el.setAttribute("aria-hidden","false");
+      document.body.style.overflow="hidden";
+    }
+    function closeOverlay(el){
+      el.style.display="none";
+      el.setAttribute("aria-hidden","true");
+      document.body.style.overflow="";
+    }
+    tutOverlay.addEventListener("mousedown",(e)=>{ if(e.target===tutOverlay) closeOverlay(tutOverlay); });
+    window.addEventListener("keydown",(e)=>{ if(e.key==="Escape" && tutOverlay.style.display==="flex") closeOverlay(tutOverlay); });
+
+    const TUT_KEY = `stage1_step3_tut_seen_${room}`;
+    const tutorialSlides = [
+      {
+        title:"What to do here",
+        html: `
+          <div class="callout">
+            Build a shared “feedback journey” by placing cards into the weeks.
+          </div>
+          <ul class="list">
+            <li>Drag a template card into a week.</li>
+            <li>Or right-click a week to add a card quickly.</li>
+            <li>Use <span class="mono">＋ Add custom card</span> for missing steps.</li>
+          </ul>
+        `
+      },
+      {
+        title:"What the tags mean",
+        html: `
+          <div class="callout">
+            Tap the tag to classify the moment. This helps compare across groups.
+          </div>
+          <ul class="list">
+            <li><b>Neutral</b>: just a step in the flow.</li>
+            <li><b>Constraint</b>: blocks progress / causes friction.</li>
+            <li><b>Support</b>: helps students move forward.</li>
+            <li><b>Wish</b>: “it would be nice if…” improvement idea.</li>
+          </ul>
+        `
+      },
+      {
+        title:"Why map by week",
+        html: `
+          <div class="callout">
+            Week-by-week makes timing visible — delays and pinch points pop out.
+          </div>
+          <ul class="list">
+            <li>It reveals “too late to act” feedback moments.</li>
+            <li>It makes dependencies clear (brief → work → submit → feedback).</li>
+            <li>It supports planning future intervention points.</li>
+          </ul>
+        `
+      },
+      {
+        title:"Pro tips",
+        html: `
+          <div class="callout">
+            Keep cards short and specific. Duplicate cards if needed.
+          </div>
+          <ul class="list">
+            <li>Use <b>Remove</b> to delete a card.</li>
+            <li>Drag placed cards between weeks to revise the timeline.</li>
+            <li>Everything syncs to others via realtime.</li>
+          </ul>
+        `
+      }
+    ];
+    let tutIndex=0;
+    const tutSteps=$("#tutSteps");
+    const tutContent=$("#tutContent");
+    const btnPrev=$("#btnPrev");
+    const btnNextStep=$("#btnNextStep");
+
+    function renderTutorial(){
+      tutSteps.innerHTML = tutorialSlides.map((_, i) => {
+        const cls = "pill" + (i === tutIndex ? " active" : "");
+        return `<span class="${cls}">${i+1}</span>`;
+      }).join("");
+
+      const slide = tutorialSlides[tutIndex];
+      tutContent.innerHTML = `
+        <div class="row" style="justify-content:space-between; align-items:flex-end">
+          <div>
+            <div class="mono">Step ${tutIndex+1} / ${tutorialSlides.length}</div>
+            <div style="margin-top:6px;font-weight:1000;font-size:16px;letter-spacing:.2px">${escapeHtml(slide.title)}</div>
+          </div>
+        </div>
+        <div style="height:6px"></div>
+        ${slide.html}
+      `;
+
+      btnPrev.disabled = (tutIndex === 0);
+      btnNextStep.textContent = (tutIndex === tutorialSlides.length - 1) ? "Done" : "Next";
+    }
+
+    function openTutorial(startAt=0){
+      tutIndex = Math.max(0, Math.min(startAt, tutorialSlides.length - 1));
+      renderTutorial();
+      openOverlay(tutOverlay);
+    }
+
+    $("#btnTutorial").addEventListener("click", ()=> openTutorial(0));
+    $("#btnCloseTut").addEventListener("click", ()=> closeOverlay(tutOverlay));
+    btnPrev.addEventListener("click", ()=>{ tutIndex = Math.max(0, tutIndex - 1); renderTutorial(); });
+    btnNextStep.addEventListener("click", ()=>{
+      if (tutIndex === tutorialSlides.length - 1){
+        closeOverlay(tutOverlay);
+        return;
+      }
+      tutIndex = Math.min(tutorialSlides.length - 1, tutIndex + 1);
+      renderTutorial();
+    });
+
+    function maybeShowTutorialOnce(){
+      if (!localStorage.getItem(TUT_KEY)){
+        localStorage.setItem(TUT_KEY, "1");
+        openTutorial(0);
+      }
+    }
+
+    // ===== context menu =====
+    const ctxMenu = $("#ctxMenu");
+    const ctxTitle = $("#ctxTitle");
+    const ctxSelect = $("#ctxSelect");
+    const ctxAddPreset = $("#ctxAddPreset");
+    const ctxAddCustom = $("#ctxAddCustom");
+    const ctxClose = $("#ctxClose");
+    let ctxWeek = 1;
+
+    function closeCtx(){
+      ctxMenu.style.display="none";
+    }
+    function openContextMenu(week, x, y){
+      ctxWeek = week;
+      ctxTitle.textContent = `Week ${week}`;
+
+      // fill select
+      ctxSelect.innerHTML = baseEvents.map(e=>`<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)}</option>`).join("");
+
+      // position within viewport
+      const pad = 12;
+      const w = Math.min(320, window.innerWidth - pad*2);
+      ctxMenu.style.width = w + "px";
+      ctxMenu.style.display="block";
+      const rect = ctxMenu.getBoundingClientRect();
+
+      let left = x;
+      let top = y;
+      if(left + rect.width > window.innerWidth - pad) left = window.innerWidth - pad - rect.width;
+      if(top + rect.height > window.innerHeight - pad) top = window.innerHeight - pad - rect.height;
+      if(left < pad) left = pad;
+      if(top < pad) top = pad;
+
+      ctxMenu.style.left = left + "px";
+      ctxMenu.style.top = top + "px";
+    }
+
+    // click outside closes
+    window.addEventListener("mousedown",(e)=>{
+      if(ctxMenu.style.display!=="block") return;
+      if(e.target.closest("#ctxMenu")) return;
+      closeCtx();
+    });
+    window.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeCtx(); });
+
+    ctxClose.addEventListener("click", closeCtx);
+
+    ctxAddPreset.addEventListener("click", async ()=>{
+      const baseId = ctxSelect.value;
+      closeCtx();
+      await placeBaseEvent(baseId, ctxWeek);
+    });
+    ctxAddCustom.addEventListener("click", async ()=>{
+      closeCtx();
+      await addCustomAtWeek(ctxWeek);
+    });
+
+    // ===== buttons =====
     $("#btnAddCustom").addEventListener("click", addCustom);
     $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
 
@@ -410,12 +825,17 @@
       if(!ok) return;
       localStorage.removeItem(PID_KEY);
       localStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(TUT_KEY);
       location.reload();
     });
 
+    // ===== boot =====
     renderWeeks();
     renderPalette();
-    loadInitial().then(subscribeRealtime);
+    loadInitial().then(()=>{
+      subscribeRealtime();
+      maybeShowTutorialOnce();
+    });
   })();
   </script>
 </body>
