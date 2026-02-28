@@ -38,22 +38,27 @@
       overflow-x:hidden;
     }
 
-    /* Animated ambient background */
+    /* Animated ambient background:
+       - bgDrift: obvious rightward drift
+       - hueShift: cycles purple -> green -> yellow -> back (via hue rotate) */
     body::before{
       content:"";
       position:fixed;
-      inset:-25%;
+      inset:-30%;
       z-index:-2;
       background:
-        radial-gradient(700px 500px at 18% 10%, rgba(255,43,214,.16), transparent 62%),
-        radial-gradient(820px 620px at 84% 20%, rgba(124,92,255,.16), transparent 64%),
-        radial-gradient(620px 520px at 45% 85%, rgba(124,92,255,.10), transparent 62%);
-      filter:saturate(1.05);
-      animation:bgFloat 16s ease-in-out infinite;
-      will-change:transform;
+        radial-gradient(720px 520px at 14% 18%, rgba(255,43,214,.18), transparent 62%),
+        radial-gradient(860px 660px at 88% 24%, rgba(124,92,255,.18), transparent 64%),
+        radial-gradient(680px 560px at 50% 92%, rgba(124,92,255,.10), transparent 62%);
+      filter:saturate(1.08) contrast(1.02);
+      will-change:transform, filter;
+      animation:
+        bgDrift 18s linear infinite,
+        hueShift 22s ease-in-out infinite;
+      transform:translate3d(0,0,0);
     }
 
-    /* Subtle film grain/texture */
+    /* Slight texture (optional) */
     body::after{
       content:"";
       position:fixed;
@@ -65,10 +70,19 @@
       mix-blend-mode:overlay;
     }
 
-    @keyframes bgFloat{
-      0%   { transform:translate3d(0,0,0) scale(1); }
-      50%  { transform:translate3d(2.5%, -2%, 0) scale(1.02); }
-      100% { transform:translate3d(0,0,0) scale(1); }
+    /* Moves to the RIGHT continuously, with a tiny up/down to feel organic */
+    @keyframes bgDrift{
+      0%   { transform:translate3d(-4%, 0%, 0) scale(1); }
+      50%  { transform:translate3d(4%, -1.5%, 0) scale(1.02); }
+      100% { transform:translate3d(-4%, 0%, 0) scale(1); }
+    }
+
+    /* Hue rotates the glow so it shifts through purple -> green -> yellow -> back */
+    @keyframes hueShift{
+      0%   { filter:saturate(1.08) contrast(1.02) hue-rotate(0deg); }
+      33%  { filter:saturate(1.08) contrast(1.02) hue-rotate(120deg); } /* greener */
+      66%  { filter:saturate(1.08) contrast(1.02) hue-rotate(210deg); } /* yellow-ish in this palette */
+      100% { filter:saturate(1.08) contrast(1.02) hue-rotate(360deg); }
     }
 
     .container{max-width:980px; width:100%}
@@ -87,7 +101,6 @@
       }
     }
 
-    /* Main chibi */
     .chibi{
       width:clamp(160px, 26vw, 220px);
       aspect-ratio:1/1;
@@ -208,7 +221,6 @@
       color:rgba(246,246,255,.42);
     }
 
-    /* Modal overlay (use [hidden] for semantics) */
     .overlay{
       position:fixed; inset:0;
       background:rgba(10,10,18,.62);
@@ -251,7 +263,6 @@
       align-items:center;
     }
 
-    /* Chibi2 */
     .modalChibi{
       width:100px;
       height:100px;
@@ -269,11 +280,7 @@
 
     .modalContent{flex:1}
 
-    .modal h2{
-      margin:0;
-      font-size:20px;
-    }
-
+    .modal h2{ margin:0; font-size:20px; }
     .modal p{
       margin:10px 0 0;
       font-size:15px;
@@ -281,7 +288,6 @@
       line-height:1.55;
     }
 
-    /* Close button */
     .closeBtn{
       position:absolute;
       top:14px;
@@ -302,7 +308,6 @@
       outline-offset:3px;
     }
 
-    /* White buttons */
     .choices{
       margin-top:24px;
       display:grid;
@@ -376,7 +381,6 @@
     </div>
   </div>
 
-  <!-- Modal (accessible dialog) -->
   <div class="overlay" id="overlay" hidden>
     <div
       class="modal"
@@ -406,10 +410,8 @@
   </div>
 
   <script>
-    // Year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Elements
     const overlay = document.getElementById("overlay");
     const modal = overlay.querySelector(".modal");
     const openBtn = document.getElementById("workshopBtn");
@@ -417,33 +419,23 @@
     const monashBtn = document.getElementById("monashBtn");
     const upngBtn = document.getElementById("upngBtn");
 
-    // Links for the choices
     const LINKS = {
       monash: "https://example.com/monash",
       upng: "https://example.com/upng"
     };
 
-    // Focus management
     let lastFocusedEl = null;
 
     function openModal() {
       lastFocusedEl = document.activeElement;
-
       overlay.hidden = false;
-      // next frame to allow transitions to apply
       requestAnimationFrame(() => overlay.classList.add("open"));
-
-      // move focus to first actionable item
       monashBtn.focus();
-
-      // prevent background scroll (nice-to-have)
       document.body.style.overflow = "hidden";
     }
 
     function closeModal() {
       overlay.classList.remove("open");
-
-      // wait for transition then hide
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const delay = prefersReducedMotion ? 0 : 180;
 
@@ -454,16 +446,13 @@
       }, delay);
     }
 
-    // Open / close events
     openBtn.addEventListener("click", openModal);
     closeBtn.addEventListener("click", closeModal);
 
-    // Close when clicking outside modal
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) closeModal();
     });
 
-    // Esc to close + simple focus trap
     document.addEventListener("keydown", (e) => {
       const isOpen = !overlay.hidden && overlay.classList.contains("open");
       if (!isOpen) return;
@@ -474,7 +463,6 @@
         return;
       }
 
-      // Focus trap inside modal
       if (e.key === "Tab") {
         const focusable = modal.querySelectorAll(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -494,7 +482,6 @@
       }
     });
 
-    // Choice navigation (no inline onclick)
     monashBtn.addEventListener("click", () => {
       window.location.href = LINKS.monash;
     });
