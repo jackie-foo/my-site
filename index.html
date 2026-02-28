@@ -38,29 +38,50 @@
       overflow-x:hidden;
     }
 
-    /* Animated ambient background:
-       - bgDrift: obvious rightward drift
-       - hueShift: cycles purple -> green -> yellow -> back (via hue rotate) */
+    /* =========================
+       Animated ambient background (MORE obvious)
+       - Drifts continuously
+       - Hue-shifts (purple -> green/yellow -> back)
+       ========================= */
+
+    /* Main drifting blob layer */
     body::before{
       content:"";
       position:fixed;
       inset:-30%;
       z-index:-2;
+
+      /* Use big background canvas so background-position movement is visible */
       background:
-        radial-gradient(720px 520px at 14% 18%, rgba(255,43,214,.18), transparent 62%),
-        radial-gradient(860px 660px at 88% 24%, rgba(124,92,255,.18), transparent 64%),
-        radial-gradient(680px 560px at 50% 92%, rgba(124,92,255,.10), transparent 62%);
-      filter:saturate(1.08) contrast(1.02);
-      will-change:transform, filter;
+        radial-gradient(700px 520px at 20% 18%, rgba(255,43,214,.18), transparent 62%),
+        radial-gradient(860px 640px at 82% 22%, rgba(124,92,255,.18), transparent 64%),
+        radial-gradient(720px 560px at 52% 88%, rgba(124,92,255,.12), transparent 62%),
+        radial-gradient(620px 520px at 12% 78%, rgba(255,255,255,.06), transparent 60%);
+      background-size: 200% 200%;
+      background-position: 0% 0%;
+
+      /* Blur makes it feel more “opaque glow” */
+      filter: blur(2px) saturate(1.1);
+
+      /* Two animations at once:
+         1) drift: moves the gradients
+         2) hueShift: cycles color (purple -> green/yellow -> back)
+      */
       animation:
-        bgDrift 18s linear infinite,
-        hueShift 22s ease-in-out infinite;
-      transform:translate3d(0,0,0);
+        bgDrift 18s ease-in-out infinite alternate,
+        hueShift 20s linear infinite;
+      will-change: transform, filter, background-position;
+      transform: translateZ(0);
     }
 
-    /* Slight texture (optional) */
-    body::after{
-      content:"";
+    /* Extra subtle rotating wash (adds constant motion even if drift is hard to see) */
+    body::backdrop{
+      /* no-op (not supported), just here so you don’t accidentally think this exists */
+    }
+
+    /* We’ll use an extra real layer with a fixed div-like pseudo element using body::after already.
+       But we currently used ::after for grain. So: we’ll keep grain in a child overlay instead. */
+    .grain{
       position:fixed;
       inset:0;
       pointer-events:none;
@@ -70,19 +91,55 @@
       mix-blend-mode:overlay;
     }
 
-    /* Moves to the RIGHT continuously, with a tiny up/down to feel organic */
-    @keyframes bgDrift{
-      0%   { transform:translate3d(-4%, 0%, 0) scale(1); }
-      50%  { transform:translate3d(4%, -1.5%, 0) scale(1.02); }
-      100% { transform:translate3d(-4%, 0%, 0) scale(1); }
+    /* Optional second “wash” layer (very soft) */
+    .wash{
+      position:fixed;
+      inset:-25%;
+      z-index:-1;
+      pointer-events:none;
+
+      background:
+        conic-gradient(from 180deg at 50% 50%,
+          rgba(124,92,255,.10),
+          rgba(255,43,214,.10),
+          rgba(255,235,59,.08),
+          rgba(76,175,80,.08),
+          rgba(124,92,255,.10)
+        );
+      filter: blur(60px) saturate(1.2);
+      opacity:.35;
+
+      animation:
+        washRotate 26s linear infinite,
+        hueShift 22s linear infinite;
+      transform-origin:center;
+      will-change: transform, filter;
     }
 
-    /* Hue rotates the glow so it shifts through purple -> green -> yellow -> back */
+    @keyframes bgDrift{
+      0%   { background-position: 0% 0%;   transform: translate3d(0,0,0) scale(1); }
+      50%  { background-position: 60% 30%; transform: translate3d(1.5%, -1.2%, 0) scale(1.02); }
+      100% { background-position: 100% 60%;transform: translate3d(-1.2%, 1.4%, 0) scale(1.03); }
+    }
+
+    /* This is the “swap colour” effect */
     @keyframes hueShift{
-      0%   { filter:saturate(1.08) contrast(1.02) hue-rotate(0deg); }
-      33%  { filter:saturate(1.08) contrast(1.02) hue-rotate(120deg); } /* greener */
-      66%  { filter:saturate(1.08) contrast(1.02) hue-rotate(210deg); } /* yellow-ish in this palette */
-      100% { filter:saturate(1.08) contrast(1.02) hue-rotate(360deg); }
+      0%   { filter: blur(2px) saturate(1.1) hue-rotate(0deg); }
+      33%  { filter: blur(2px) saturate(1.15) hue-rotate(90deg); }   /* green-ish */
+      66%  { filter: blur(2px) saturate(1.2) hue-rotate(160deg); }   /* yellow-ish */
+      100% { filter: blur(2px) saturate(1.1) hue-rotate(360deg); }   /* back */
+    }
+
+    @keyframes washRotate{
+      0%   { transform: rotate(0deg) scale(1.05); }
+      100% { transform: rotate(360deg) scale(1.05); }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce){
+      body::before{ animation:none; }
+      .wash{ animation:none; }
+      *{ scroll-behavior:auto !important; }
     }
 
     .container{max-width:980px; width:100%}
@@ -101,6 +158,7 @@
       }
     }
 
+    /* Main chibi */
     .chibi{
       width:clamp(160px, 26vw, 220px);
       aspect-ratio:1/1;
@@ -221,6 +279,7 @@
       color:rgba(246,246,255,.42);
     }
 
+    /* Modal overlay (use [hidden] for semantics) */
     .overlay{
       position:fixed; inset:0;
       background:rgba(10,10,18,.62);
@@ -280,7 +339,11 @@
 
     .modalContent{flex:1}
 
-    .modal h2{ margin:0; font-size:20px; }
+    .modal h2{
+      margin:0;
+      font-size:20px;
+    }
+
     .modal p{
       margin:10px 0 0;
       font-size:15px;
@@ -335,9 +398,7 @@
       outline-offset:3px;
     }
 
-    /* Reduced motion support */
     @media (prefers-reduced-motion: reduce){
-      body::before{animation:none}
       .overlay, .modal, button.primary, .choice, .closeBtn, a.link::after{
         transition:none !important;
       }
@@ -348,6 +409,10 @@
 </head>
 
 <body>
+  <!-- extra animated wash layer + grain -->
+  <div class="wash" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
   <div class="container">
     <div class="hero">
       <div class="chibi" aria-hidden="true">
@@ -381,6 +446,7 @@
     </div>
   </div>
 
+  <!-- Modal (accessible dialog) -->
   <div class="overlay" id="overlay" hidden>
     <div
       class="modal"
