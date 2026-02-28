@@ -42,6 +42,19 @@
         linear-gradient(170deg, rgba(0,229,255,.08), rgba(255,255,255,.02) 35%),
         rgba(255,255,255,.03);
     }
+    .week.special[data-milestone-level="release"]{
+      border-color:rgba(53,216,255,.6);
+      background:
+        linear-gradient(170deg, rgba(53,216,255,.14), rgba(255,255,255,.02) 36%),
+        rgba(255,255,255,.03);
+    }
+    .week.special[data-milestone-level="critical"]{
+      border-color:rgba(255,107,119,.62);
+      background:
+        linear-gradient(170deg, rgba(255,107,119,.14), rgba(255,255,255,.02) 36%),
+        rgba(255,255,255,.03);
+      box-shadow: inset 0 0 0 1px rgba(255,107,119,.12);
+    }
     .weekHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08)}
     .weekHead strong{font-size:12px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
     .weekHead span{font-size:11px;color:var(--muted);font-weight:900;white-space:nowrap}
@@ -62,6 +75,16 @@
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
+    }
+    .milestone.critical{
+      border-color:rgba(255,107,119,.5);
+      background:rgba(255,107,119,.18);
+      color:#ffe2e6;
+    }
+    .milestone.release{
+      border-color:rgba(53,216,255,.55);
+      background:rgba(53,216,255,.18);
+      color:#daf6ff;
     }
     .dropZone{display:flex;flex-direction:column;gap:8px}
 
@@ -200,7 +223,7 @@
         <button id="btnTutorial" class="btnGhost">Tutorial</button>
         <button id="btnDashboard" class="btnGhost">Dashboard</button>
         <button id="btnBack">← Step 2</button>
-        <button id="btnToStep4" class="btnPrimary">Next → Step 4</button>
+        <button id="btnFinish" class="btnPrimary">Finish → Dashboard</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
       </div>
     </header>
@@ -215,7 +238,7 @@
           <div class="weeks" id="weeks"></div>
         </section>
         <div class="subtitle" style="margin:0">
-          Tip: Long-press a week on phone to add. Weeks 7–9 include milestone prompts to steer discussion.
+          Tip: Long-press a week on phone to add. Milestone weeks are highlighted for release / due / feedback / reaction.
         </div>
       </div>
     </section>
@@ -425,12 +448,36 @@
     function closeOverlay(el){ el.style.display="none"; el.setAttribute("aria-hidden","true"); document.body.style.overflow=""; }
 
     const weekMilestones = {
-      7: "Assignment 1 due",
-      8: "Assignment 2 due + Feedback 1",
-      9: "React + Instructions 2/3"
+      2: { label:"Assignment 1 brief released", level:"release" },
+      4: { label:"Assignment 2 brief released", level:"release" },
+      7: { label:"Assignment 1 due", level:"critical" },
+      8: { label:"Assignment 2 due + Feedback 1 returns", level:"critical" },
+      9: { label:"Reaction week + Instructions 2/3", level:"critical" }
     };
 
     const presetLibrary = [
+      {
+        id:"a1_release_interpretation",
+        name:"A1 brief interpretation gap",
+        defaultType:"constraint",
+        weeks:[2],
+        prompts:[
+          "What did you initially think Assignment 1 expected?",
+          "Which instruction felt ambiguous at release?",
+          "What example would have prevented confusion?"
+        ]
+      },
+      {
+        id:"a2_release_transfer",
+        name:"A2 brief release transfer issue",
+        defaultType:"constraint",
+        weeks:[4],
+        prompts:[
+          "What from Assignment 1 did you fail to transfer to Assignment 2?",
+          "Which new requirement changed your strategy?",
+          "What early support would improve this transition?"
+        ]
+      },
       {
         id:"a1_due_pressure",
         name:"A1 due pressure point",
@@ -522,6 +569,7 @@
     ];
 
     const state = { placed: [] };
+    let itemsPollTimer = null;
 
     function safeJson(s){ try { return JSON.parse(s); } catch { return null; } }
     const escapeHtml = shared.escapeHtml;
@@ -552,12 +600,15 @@
       weeksWrap.innerHTML = "";
       for(let w=1; w<=13; w++){
         const weekEl=document.createElement("div");
-        const milestone = weekMilestones[w] || "";
+        const milestone = weekMilestones[w] || null;
         weekEl.className = milestone ? "week special" : "week";
+        if (milestone?.level){
+          weekEl.dataset.milestoneLevel = milestone.level;
+        }
         weekEl.dataset.week=String(w);
         weekEl.innerHTML = `
           <div class="weekHead"><strong>Week ${w}</strong><span>Hold / right-click</span></div>
-          ${milestone ? `<div class="milestone">${escapeHtml(milestone)}</div>` : ""}
+          ${milestone ? `<div class="milestone ${escapeHtml(milestone.level)}">${escapeHtml(milestone.label)}</div>` : ""}
           <div class="dropZone" data-week="${w}"></div>
         `;
 
@@ -718,19 +769,28 @@
     }
 
     async function loadOrCreateNotesRow(){
-      // shared => one row per session (participant_id null)
-      // private => one row per participant per session
-      let q = supabase.from("workshop_journey_notes").select("*").eq("session_id", room);
+      // shared => allow existing duplicates and select latest to avoid runtime errors
+      // private => pick latest row for this participant in this session
+      let q = supabase
+        .from("workshop_journey_notes")
+        .select("*")
+        .eq("session_id", room)
+        .order("updated_at", { ascending:false })
+        .limit(5);
       if (NOTES_SHARED) q = q.is("participant_id", null);
       else q = q.eq("participant_id", participantId);
 
-      const { data, error } = await q.maybeSingle();
+      const { data, error } = await q;
       if(error) throw error;
 
-      if(data){
-        notesRowId = data.id;
+      if(data && data.length){
+        if (data.length > 1){
+          console.warn("Multiple notes rows detected; using latest row", data.map(x => x.id));
+        }
+        const chosen = data[0];
+        notesRowId = chosen.id;
         notesSuppress = true;
-        notesBox.value = data.body || "";
+        notesBox.value = chosen.body || "";
         notesSuppress = false;
         notesStatus.textContent = "Saved";
         return;
@@ -775,19 +835,15 @@
     });
 
     function subscribeNotesRealtime(){
-      // filter should match the row(s) we care about
-      const filter = NOTES_SHARED
-        ? `session_id=eq.${room}`
-        : `session_id=eq.${room},participant_id=eq.${participantId}`;
-
       supabase
         .channel("step3notes:" + room + ":" + (NOTES_SHARED ? "shared" : participantId))
         .on("postgres_changes",
-          { event:"UPDATE", schema:"public", table:"workshop_journey_notes", filter },
+          { event:"UPDATE", schema:"public", table:"workshop_journey_notes", filter:`session_id=eq.${room}` },
           (payload)=>{
             // shared notes: accept updates from others too
             const row = payload.new;
             if(!row || !row.id) return;
+            if(!NOTES_SHARED && row.participant_id !== participantId) return;
             if(notesRowId && row.id !== notesRowId) return;
             if(document.activeElement === notesBox) return; // don't fight while typing
             notesSuppress = true;
@@ -796,7 +852,16 @@
             notesStatus.textContent = "Saved";
           }
         )
-        .subscribe();
+        .subscribe((status) => {
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED"){
+            console.warn("Step3 notes realtime unavailable, using polling fallback");
+            if (!itemsPollTimer){
+              itemsPollTimer = setInterval(() => {
+                loadInitial().catch(err => console.error("step3 polling refresh failed", err));
+              }, 5000);
+            }
+          }
+        });
     }
 
     // ===== Add modal =====
@@ -914,7 +979,7 @@
         title:"Add cards (desktop + phone)",
         html: `
           <div class="callout">
-            Desktop: right-click a week. Phone: long-press a week (~0.5s). Weeks 7–9 contain special milestone prompts.
+            Desktop: right-click a week. Phone: long-press a week (~0.5s). Weeks 2, 4, 7, 8, 9 contain milestone prompts.
           </div>
           <ul class="list">
             <li>Choose a preset (dropdown).</li>
@@ -1049,13 +1114,22 @@
             }
           }
         )
-        .subscribe();
+        .subscribe((status) => {
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED"){
+            console.warn("Step3 journey realtime unavailable, using polling fallback");
+            if (!itemsPollTimer){
+              itemsPollTimer = setInterval(() => {
+                loadInitial().catch(err => console.error("step3 polling refresh failed", err));
+              }, 5000);
+            }
+          }
+        });
     }
 
     // ===== nav/reset =====
     $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
     $("#btnDashboard").addEventListener("click", ()=> location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}`);
-    $("#btnToStep4").addEventListener("click", ()=> location.href = `${BASE_PATH}/step4.html?room=${encodeURIComponent(room)}`);
+    $("#btnFinish").addEventListener("click", ()=> location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}`);
     $("#btnReset").addEventListener("click", ()=>{
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;

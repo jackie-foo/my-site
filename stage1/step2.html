@@ -238,7 +238,7 @@
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
           Role: <span class="mono" id="roleOut">student</span> • Card: <span class="mono" id="personaOut">None</span><br/>
-          Add sticky goals. It should appear instantly, and sync to others via realtime.
+          Surface friction around feedback and define minimum next action. These stickies feed Step 3.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
@@ -256,8 +256,12 @@
         <button id="btnAdd" class="btnPrimary">＋ Add sticky</button>
       </div>
       <div class="cardBody">
+        <div class="callout">
+          Sticky formula: <span class="mono">Friction</span> + <span class="mono">Minimum Action</span> + <span class="mono">Evidence Needed</span>.
+          In Step 3, you will place these across milestone weeks (release, due, feedback return, reaction).
+        </div>
         <div class="stickyArea" id="stickyArea"></div>
-        <div class="subtitle">Tip: One sticky = one goal. Keep it short.</div>
+        <div class="subtitle">Tip: One sticky = one friction story. Keep it specific and actionable.</div>
       </div>
     </section>
   </div>
@@ -452,6 +456,7 @@
     }
 
     const state = { stickies: [] };
+    let stickyPollTimer = null;
     const saving = new Map();
 
     function setSaving(id, isSaving){
@@ -689,7 +694,28 @@
             }
           }
         )
-        .subscribe();
+        .subscribe((status) => {
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED"){
+            console.warn("Step2 realtime unavailable, using polling fallback");
+            if (!stickyPollTimer){
+              stickyPollTimer = setInterval(async () => {
+                try{
+                  const { data, error } = await supabase
+                    .from("workshop_stickies")
+                    .select("*")
+                    .eq("session_id", room);
+                  if (error) throw error;
+                  state.stickies = (data || []).map(s => ({
+                    id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id
+                  }));
+                  render();
+                } catch (err){
+                  console.error("step2 polling refresh failed", err);
+                }
+              }, 5000);
+            }
+          }
+        });
     }
 
     $("#btnAdd").addEventListener("click", async ()=>{
@@ -701,11 +727,12 @@
       const tempId = "temp_" + crypto.randomUUID();
       const color = randomStickyColor();
 
-      state.stickies.push({ id:tempId, x, y, color, text:"", participant_id:participantId });
+      const seedText = "Friction: \nMinimum action: \nEvidence needed: ";
+      state.stickies.push({ id:tempId, x, y, color, text:seedText, participant_id:participantId });
       setSaving(tempId, true);
       render();
 
-      const payload = { session_id: room, x, y, color, text: "", participant_id: participantId };
+      const payload = { session_id: room, x, y, color, text: seedText, participant_id: participantId };
 
       let res = await supabase.from("workshop_stickies").insert(payload).select().single();
       if (res.error && String(res.error.message || "").toLowerCase().includes("participant_id")) {
@@ -744,26 +771,26 @@
         title: "What to do here",
         html: `
           <div class="callout">
-            Add your goals as stickies. One sticky = one goal. Keep it short.
+            Add feedback friction stories as stickies. One sticky = one concrete friction + minimum action.
           </div>
           <ul class="list">
             <li>Click <span class="mono">＋ Add sticky</span> to create one.</li>
-            <li>Type inside the sticky to edit.</li>
+            <li>Fill: <span class="mono">Friction</span>, <span class="mono">Minimum action</span>, <span class="mono">Evidence needed</span>.</li>
             <li>Drag the sticky to organize.</li>
             <li>Delete with <span class="mono">X</span> if needed.</li>
           </ul>
         `
       },
       {
-        title: "Why sticky notes",
+        title: "Why this format matters",
         html: `
           <div class="callout">
-            Stickies make goals visible and negotiable — everyone can quickly see the shared direction.
+            A plain “goal list” is too vague. This format captures what blocked understanding and what minimum change is realistic.
           </div>
           <ul class="list">
-            <li>It reduces “hidden assumptions” in group work.</li>
-            <li>It’s faster than a form, but still structured.</li>
-            <li>It helps the facilitator spot clusters and conflicts.</li>
+            <li>It surfaces concrete friction about interpreting feedback.</li>
+            <li>It turns frustration into next-step behavior.</li>
+            <li>It makes Step 3 timeline mapping evidence-based.</li>
           </ul>
         `
       },
@@ -784,7 +811,7 @@
         title: "Before going to Step 3",
         html: `
           <div class="callout">
-            Make sure your main goals are on the board.
+            Bring your strongest friction cards forward to milestone weeks (release, due, feedback return, reaction).
           </div>
           <ul class="list">
             <li>If you’re done, click <span class="mono">Next → Step 3</span>.</li>

@@ -232,9 +232,37 @@
       font-weight:800;
       text-align:center;
     }
+    .overlay{
+      position:fixed; inset:0; z-index:200;
+      background:rgba(0,0,0,.72);
+      display:flex; align-items:center; justify-content:center; padding:14px;
+    }
+    .modal{
+      width:min(520px,100%);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:20px;
+      background:linear-gradient(0deg, rgba(12,18,34,.95), rgba(17,24,45,.95));
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .modal h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.3px}
+    .kicker{font-size:12px;color:var(--muted);font-weight:800;line-height:1.4}
+    .modalRow{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
   </style>
 </head>
 <body>
+  <div class="overlay" id="pwOverlay" aria-hidden="false">
+    <div class="modal">
+      <h3>Dashboard Access</h3>
+      <div class="kicker">Enter facilitator password to open live monitoring.</div>
+      <div class="modalRow">
+        <input id="pwInput" class="field" type="password" placeholder="Dashboard password" autocomplete="one-time-code"/>
+        <button id="btnUnlock" class="btnPrimary">Unlock</button>
+      </div>
+      <div class="kicker" style="margin-top:10px">This gate is client-side and intended for lightweight workshop control.</div>
+    </div>
+  </div>
+
   <div class="wrap">
     <div class="top">
       <div>
@@ -245,8 +273,6 @@
         </div>
       </div>
       <div class="toolbar">
-        <input id="roomInput" class="field" placeholder="Room id (e.g. demo)"/>
-        <button id="btnApply" class="btnPrimary">Open Room</button>
         <button id="btnRefresh">Refresh</button>
         <button id="btnStep1">Step 1</button>
         <button id="btnStep2">Step 2</button>
@@ -350,6 +376,8 @@
   (() => {
     const shared = window.Stage1Shared;
     const supabase = window.supabase.createClient(shared.SUPABASE_URL, shared.SUPABASE_ANON_KEY);
+    const DASHBOARD_PASS = "jackiefoo.me";
+    const DASH_AUTH_KEY = "stage1_dashboard_authed";
 
     const $ = (q, el=document) => el.querySelector(q);
     const params = new URLSearchParams(location.search);
@@ -358,7 +386,9 @@
     let feedItems = [];
 
     const roomOut = $("#roomOut");
-    const roomInput = $("#roomInput");
+    const pwOverlay = $("#pwOverlay");
+    const pwInput = $("#pwInput");
+    const btnUnlock = $("#btnUnlock");
     const lastUpdated = $("#lastUpdated");
     const totalParticipants = $("#totalParticipants");
     const step1Ready = $("#step1Ready");
@@ -425,9 +455,11 @@
         q2.push("What sticky should be carried into Week 9 reaction planning?");
       }
 
-      q3.push("In Week 7, what made Assignment 1 hardest at submission time?");
-      q3.push("In Week 8, which first feedback comment changed behavior most?");
-      q3.push("In Week 9, what concrete action follows instructions 2/3?");
+      q3.push("In Week 2 release, what was misunderstood in Assignment 1 brief?");
+      q3.push("In Week 4 release, what changed in Assignment 2 expectations?");
+      q3.push("In Week 7 due week, what friction peaked before submission?");
+      q3.push("In Week 8 return week, which first feedback point changed behavior?");
+      q3.push("In Week 9 reaction week, what minimum action follows instructions 2/3?");
       if (activeStep3 < Math.max(1, Math.floor(total * 0.6))){
         q3.push("Who needs help turning story details into week-specific cards?");
       }
@@ -507,13 +539,7 @@
     }
 
     function wireNav(){
-      roomInput.value = room;
       roomOut.textContent = room;
-      $("#btnApply").addEventListener("click", () => {
-        const nextRoom = (roomInput.value || "").trim();
-        if (!nextRoom) return;
-        location.search = `?room=${encodeURIComponent(nextRoom)}`;
-      });
       $("#btnRefresh").addEventListener("click", () => loadData().catch(err => addFeed("error", err.message || String(err))));
       $("#btnStep1").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`);
       $("#btnStep2").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
@@ -546,12 +572,39 @@
       subs = [];
     }
 
+    function openDashboard(){
+      pwOverlay.style.display = "none";
+      pwOverlay.setAttribute("aria-hidden", "true");
+      loadData()
+        .then(() => addFeed("system", `Dashboard ready for room "${room}"`))
+        .catch(err => addFeed("error", err.message || String(err)));
+      subscribeRealtime();
+      setInterval(() => loadData().catch(()=>{}), 15000);
+    }
+
     wireNav();
-    loadData()
-      .then(() => addFeed("system", `Dashboard ready for room "${room}"`))
-      .catch(err => addFeed("error", err.message || String(err)));
-    subscribeRealtime();
-    setInterval(() => loadData().catch(()=>{}), 15000);
+    if (localStorage.getItem(DASH_AUTH_KEY) === "1"){
+      openDashboard();
+    } else {
+      pwOverlay.style.display = "flex";
+      pwOverlay.setAttribute("aria-hidden", "false");
+      setTimeout(() => pwInput.focus(), 0);
+    }
+    btnUnlock.addEventListener("click", () => {
+      const pass = (pwInput.value || "").trim();
+      if (pass !== DASHBOARD_PASS){
+        pwInput.value = "";
+        pwInput.placeholder = "Wrong password";
+        pwInput.focus();
+        pwInput.select?.();
+        return;
+      }
+      localStorage.setItem(DASH_AUTH_KEY, "1");
+      openDashboard();
+    });
+    pwInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") btnUnlock.click();
+    });
     window.addEventListener("beforeunload", clearSubs);
   })();
   </script>
