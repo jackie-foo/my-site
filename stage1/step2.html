@@ -40,6 +40,75 @@
       position:relative;
       overflow:hidden;
     }
+    .boardSplit{
+      display:grid;
+      grid-template-columns:1.35fr .95fr;
+      gap:12px;
+      align-items:stretch;
+    }
+    @media (max-width:980px){ .boardSplit{grid-template-columns:1fr;} }
+    .sidePanel{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-height:320px;
+    }
+    .panelHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .panelTitle{
+      margin:0;
+      font-size:11px;
+      font-weight:1000;
+      letter-spacing:.25px;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .sharedList{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      overflow:auto;
+      max-height:360px;
+      padding-right:4px;
+    }
+    .sharedCard{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:12px;
+      background:rgba(255,255,255,.03);
+      padding:9px;
+      font-size:12px;
+      line-height:1.35;
+      font-weight:850;
+      color:var(--text);
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .sharedMeta{
+      font-size:10px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:5px;
+    }
+    .emptyPanel{
+      border:1px dashed rgba(255,255,255,.2);
+      border-radius:12px;
+      padding:10px;
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted);
+      text-align:center;
+    }
     .sticky{
       position:absolute;
       width: 170px;
@@ -85,6 +154,9 @@
       color: rgba(0,0,0,.8);
       font-weight: 1000;border-radius: 10px;padding: 6px 8px;cursor:pointer;
       box-shadow:none;
+    }
+    .tinyBtn.pub{
+      background:rgba(255,255,255,.28);
     }
     .statusPill{
       border-radius:999px;
@@ -252,16 +324,34 @@
 
     <section class="card">
       <div class="cardHead">
-        <h2>Goals as Sticky Notes</h2>
-        <button id="btnAdd" class="btnPrimary">＋ Add sticky</button>
+        <h2>Hybrid Board: Draft → Publish</h2>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnPublishAll" class="btnGhost">Publish All Drafts</button>
+          <button id="btnAdd" class="btnPrimary">＋ Add draft sticky</button>
+        </div>
       </div>
       <div class="cardBody">
         <div class="callout">
+          Workflow: Draft privately first, then publish only the strongest prompts to shared board.
           Sticky formula: <span class="mono">Friction</span> + <span class="mono">Minimum Action</span> + <span class="mono">Evidence Needed</span>.
-          In Step 3, you will place these across milestone weeks (release, due, feedback return, reaction).
         </div>
-        <div class="stickyArea" id="stickyArea"></div>
-        <div class="subtitle">Tip: One sticky = one friction story. Keep it specific and actionable.</div>
+        <div class="boardSplit">
+          <div class="sidePanel">
+            <div class="panelHead">
+              <p class="panelTitle">My Draft Stickies (Private)</p>
+              <span class="mono" id="draftCount">0</span>
+            </div>
+            <div class="stickyArea" id="stickyArea"></div>
+          </div>
+          <div class="sidePanel">
+            <div class="panelHead">
+              <p class="panelTitle">Published Shared Prompts</p>
+              <span class="mono" id="sharedCount">0</span>
+            </div>
+            <div class="sharedList" id="sharedList"></div>
+          </div>
+        </div>
+        <div class="subtitle">Tip: Draft is only yours. Published prompts are shared for group discussion and Step 3 mapping.</div>
       </div>
     </section>
   </div>
@@ -371,11 +461,16 @@
     const roomOut = $("#roomOut"), meOut = $("#meOut");
     const roleOut = $("#roleOut"), personaOut = $("#personaOut");
     const stickyArea = $("#stickyArea"), toast = $("#toast");
+    const sharedList = $("#sharedList");
+    const draftCount = $("#draftCount");
+    const sharedCount = $("#sharedCount");
+    const btnPublishAll = $("#btnPublishAll");
 
     const loading = $("#loading");
     const chibiImg = $("#chibiImg");
     const loadingTitle = $("#loadingTitle");
     const loadingSub = $("#loadingSub");
+    const SHARED_PREFIX = "[SHARED]";
 
     chibiImg.src = CHIBI3_SRC;
 
@@ -455,7 +550,7 @@
       };
     }
 
-    const state = { stickies: [] };
+    const state = { stickies: [], shared: [] };
     let stickyPollTimer = null;
     let lastStickySnapshot = "";
     const saving = new Map();
@@ -482,6 +577,48 @@
     }
 
     const escapeHtml = shared.escapeHtml;
+    function isSharedSticky(row){
+      return String(row?.text || "").startsWith(`${SHARED_PREFIX} `);
+    }
+    function parseSharedSticky(row){
+      const raw = String(row?.text || "");
+      const withoutPrefix = raw.startsWith(`${SHARED_PREFIX} `) ? raw.slice(`${SHARED_PREFIX} `.length) : raw;
+      const firstBreak = withoutPrefix.indexOf("\n");
+      if (firstBreak === -1){
+        return { author: "unknown", body: withoutPrefix.trim() };
+      }
+      const author = withoutPrefix.slice(0, firstBreak).trim() || "unknown";
+      const body = withoutPrefix.slice(firstBreak + 1).trim();
+      return { author, body };
+    }
+    function buildSnapshot(rows){
+      return JSON.stringify(
+        rows
+          .map(s => [s.id, s.x, s.y, s.color, s.text || "", s.participant_id || ""])
+          .sort((a,b) => String(a[0]).localeCompare(String(b[0])))
+      );
+    }
+    function applyRows(rows){
+      const drafts = [];
+      const sharedRows = [];
+      (rows || []).forEach((s) => {
+        if (isSharedSticky(s)){
+          sharedRows.push(s);
+          return;
+        }
+        if (s.participant_id && s.participant_id !== participantId){
+          return;
+        }
+        drafts.push(s);
+      });
+      state.stickies = drafts.map(s => ({
+        id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id
+      }));
+      state.shared = sharedRows.map(s => ({
+        id:s.id, color:s.color, text:s.text || "", participant_id:s.participant_id, updated_at:s.updated_at
+      }));
+      render();
+    }
 
     function randomStickyColor(){
       const options = ["#47ff87","#00e5ff","#ffe44d","#ff2bd6","#ff884d"];
@@ -537,6 +674,23 @@
 
     function render(){
       stickyArea.innerHTML = "";
+      draftCount.textContent = String(state.stickies.length);
+      sharedCount.textContent = String(state.shared.length);
+
+      if (!state.shared.length){
+        sharedList.innerHTML = `<div class="emptyPanel">No published prompts yet. Publish draft stickies to share with everyone.</div>`;
+      } else {
+        sharedList.innerHTML = state.shared.map((s) => {
+          const parsed = parseSharedSticky(s);
+          return `
+            <article class="sharedCard" style="border-left:4px solid ${escapeHtml(s.color || "#47ff87")}">
+              <div class="sharedMeta">Published by ${escapeHtml(parsed.author)}</div>
+              <div>${escapeHtml(parsed.body || "(no content)")}</div>
+            </article>
+          `;
+        }).join("");
+      }
+
       state.stickies.forEach(s=>{
         const el = document.createElement("div");
         el.className = "sticky";
@@ -552,18 +706,53 @@
             <span style="font-weight:1000;color:rgba(0,0,0,.82);font-size:11px;letter-spacing:.2px;text-transform:uppercase">Goal</span>
             <div style="display:flex;gap:8px;align-items:center">
               <span class="statusPill ${isSaving ? "saving" : ""}" data-pill>${isSaving ? "saving" : "saved"}</span>
-              <button class="tinyBtn" title="Delete" aria-label="Delete">X</button>
+              <button class="tinyBtn pub" title="Publish to shared board" aria-label="Publish">Share</button>
+              <button class="tinyBtn del" title="Delete" aria-label="Delete">X</button>
             </div>
           </div>
           <textarea placeholder="Write your goal...">${escapeHtml(s.text)}</textarea>
         `;
 
-        const delBtn = el.querySelector(".tinyBtn");
+        const delBtn = el.querySelector(".tinyBtn.del");
+        const pubBtn = el.querySelector(".tinyBtn.pub");
 
         // stop pointerdown so drag never captures this interaction
-        delBtn.addEventListener("pointerdown", (e)=>{
+        [delBtn, pubBtn].forEach((btn) => {
+          btn.addEventListener("pointerdown", (e)=>{
+            e.stopPropagation();
+            e.preventDefault();
+          });
+        });
+
+        pubBtn.addEventListener("click", async (e) => {
           e.stopPropagation();
-          e.preventDefault();
+          const raw = (s.text || "").trim();
+          if (!raw){
+            showToast("Write something before publishing");
+            return;
+          }
+          const author = (localStorage.getItem(NAME_KEY) || participantId.slice(0, 8)).trim();
+          const publishedText = `${SHARED_PREFIX} ${author}\n${raw}`;
+          const payload = {
+            session_id: room,
+            x: Math.max(8, Math.round(s.x || 16)),
+            y: Math.max(8, Math.round(s.y || 16)),
+            color: s.color || randomStickyColor(),
+            text: publishedText,
+            participant_id: participantId
+          };
+          let res = await supabase.from("workshop_stickies").insert(payload).select().single();
+          if (res.error && String(res.error.message || "").toLowerCase().includes("participant_id")) {
+            delete payload.participant_id;
+            res = await supabase.from("workshop_stickies").insert(payload).select().single();
+          }
+          if (res.error){
+            console.error(res.error);
+            showToast("Publish failed");
+            return;
+          }
+          showToast("Published to shared board");
+          await refreshStickiesFromDb({ silent:true });
         });
 
         delBtn.addEventListener("click", async (e)=>{
@@ -641,41 +830,27 @@
           .eq("session_id", room);
 
         if (error) throw error;
-
-        state.stickies = (data || []).map(s => ({
-          id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "",
-          participant_id:s.participant_id
-        }));
-        lastStickySnapshot = JSON.stringify(
-          state.stickies
-            .map(s => [s.id, s.x, s.y, s.color, s.text || "", s.participant_id || ""])
-            .sort((a,b) => String(a[0]).localeCompare(String(b[0])))
-        );
-
-        render();
+        lastStickySnapshot = buildSnapshot(data || []);
+        applyRows(data || []);
       } finally {
         hideLoading();
       }
     }
     async function refreshStickiesFromDb({ silent=false } = {}){
       try{
+        const active = document.activeElement;
+        if (active && active.tagName === "TEXTAREA" && active.closest(".sticky")){
+          return;
+        }
         const { data, error } = await supabase
           .from("workshop_stickies")
           .select("*")
           .eq("session_id", room);
         if (error) throw error;
-        const next = (data || []).map(s => ({
-          id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id
-        }));
-        const snapshot = JSON.stringify(
-          next
-            .map(s => [s.id, s.x, s.y, s.color, s.text || "", s.participant_id || ""])
-            .sort((a,b) => String(a[0]).localeCompare(String(b[0])))
-        );
+        const snapshot = buildSnapshot(data || []);
         if (snapshot !== lastStickySnapshot){
           lastStickySnapshot = snapshot;
-          state.stickies = next;
-          render();
+          applyRows(data || []);
         }
       } catch (err){
         if (!silent) console.error("step2 refresh failed", err);
@@ -698,34 +873,13 @@
         .channel("step2:" + room)
         .on("postgres_changes",
           { event:"*", schema:"public", table:"workshop_stickies", filter:`session_id=eq.${room}` },
-          (payload)=>{
-            if(payload.eventType==="INSERT"){
-              const s = payload.new;
-              if(!state.stickies.some(x=>x.id===s.id)){
-                state.stickies.push({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id });
-                render();
-              }
-            } else if(payload.eventType==="UPDATE"){
-              const s = payload.new;
-              const idx = state.stickies.findIndex(x=>x.id===s.id);
-              if(idx>=0){
-                state.stickies[idx] = { id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id };
-                render();
-              } else {
-                state.stickies.push({ id:s.id, x:s.x, y:s.y, color:s.color, text:s.text || "", participant_id:s.participant_id });
-                render();
-              }
-              setSaving(s.id, false);
-            } else if(payload.eventType==="DELETE"){
-              const did = getDeletedId(payload);
-              if(did){
-                state.stickies = state.stickies.filter(x=>x.id!==did);
-                saving.delete(did);
-                render();
-              } else {
-                loadInitial(); // fallback
-              }
+          async (payload)=>{
+            if(payload.eventType==="UPDATE" && payload.new?.id){
+              setSaving(payload.new.id, false);
             }
+            const did = getDeletedId(payload);
+            if (did) saving.delete(did);
+            await refreshStickiesFromDb({ silent:true });
           }
         )
         .subscribe((status) => {
@@ -782,6 +936,38 @@
       }
     });
 
+    btnPublishAll.addEventListener("click", async () => {
+      const drafts = state.stickies.filter(s => (s.text || "").trim());
+      if (!drafts.length){
+        showToast("No non-empty drafts to publish");
+        return;
+      }
+      const author = (localStorage.getItem(NAME_KEY) || participantId.slice(0, 8)).trim();
+      let okCount = 0;
+      for (const s of drafts){
+        const payload = {
+          session_id: room,
+          x: Math.max(8, Math.round(s.x || 16)),
+          y: Math.max(8, Math.round(s.y || 16)),
+          color: s.color || randomStickyColor(),
+          text: `${SHARED_PREFIX} ${author}\n${(s.text || "").trim()}`,
+          participant_id: participantId
+        };
+        let res = await supabase.from("workshop_stickies").insert(payload).select().single();
+        if (res.error && String(res.error.message || "").toLowerCase().includes("participant_id")) {
+          delete payload.participant_id;
+          res = await supabase.from("workshop_stickies").insert(payload).select().single();
+        }
+        if (!res.error) okCount += 1;
+      }
+      if (okCount > 0){
+        showToast(`Published ${okCount} draft${okCount > 1 ? "s" : ""}`);
+        await refreshStickiesFromDb({ silent:true });
+      } else {
+        showToast("Publish failed");
+      }
+    });
+
     // ===== Tutorial =====
     const TUT_KEY = STEP2_TUT_KEY;
     const tutorialSlides = [
@@ -789,13 +975,13 @@
         title: "What to do here",
         html: `
           <div class="callout">
-            Add feedback friction stories as stickies. One sticky = one concrete friction + minimum action.
+            Draft privately first, then publish your strongest friction prompts to the shared board.
           </div>
           <ul class="list">
-            <li>Click <span class="mono">＋ Add sticky</span> to create one.</li>
+            <li>Click <span class="mono">＋ Add draft sticky</span> to create a private draft.</li>
             <li>Fill: <span class="mono">Friction</span>, <span class="mono">Minimum action</span>, <span class="mono">Evidence needed</span>.</li>
-            <li>Drag the sticky to organize.</li>
-            <li>Delete with <span class="mono">X</span> if needed.</li>
+            <li>Use <span class="mono">Share</span> on a draft to publish to group board.</li>
+            <li>Use <span class="mono">Publish All Drafts</span> when ready.</li>
           </ul>
         `
       },
@@ -816,7 +1002,7 @@
         title: "Realtime + saving behaviour",
         html: `
           <div class="callout">
-            You’ll see updates from others automatically (realtime).
+            Shared prompts update across participants. Draft board remains yours.
           </div>
           <ul class="list">
             <li><span class="mono">saving</span> shows while changes sync.</li>

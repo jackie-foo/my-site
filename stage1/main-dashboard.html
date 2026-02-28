@@ -183,6 +183,32 @@
       flex-direction:column;
       gap:8px;
     }
+    .laneList{
+      max-height:420px;
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .laneCard{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:12px;
+      padding:9px;
+      background:rgba(255,255,255,.03);
+      font-size:12px;
+      line-height:1.4;
+      font-weight:850;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .laneMeta{
+      margin-bottom:5px;
+      font-size:10px;
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.2px;
+      color:var(--muted);
+    }
     .feedItem{
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.03);
@@ -334,34 +360,45 @@
     <div class="grid2">
       <section class="card">
         <div class="cardHead">
-          <h2>Participants</h2>
-          <span class="mono" id="participantSummary">0 rows</span>
+          <h2>Shared Sticky Prompts (Step 2)</h2>
+          <span class="mono" id="sharedPromptCount">0 prompts</span>
         </div>
-        <div class="cardBody" style="padding-top:8px">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Role</th>
-                <th>Card</th>
-                <th>Step Status</th>
-              </tr>
-            </thead>
-            <tbody id="participantRows"></tbody>
-          </table>
+        <div class="cardBody">
+          <div id="sharedPromptsList" class="laneList"></div>
         </div>
       </section>
 
       <section class="card">
         <div class="cardHead">
-          <h2>Realtime Activity</h2>
-          <span class="mono" id="eventCount">0 events</span>
+          <h2>Constraint Map By Week (Step 3)</h2>
+          <span class="mono" id="constraintCount">0 constraints</span>
         </div>
         <div class="cardBody">
-          <div id="feed" class="feed"></div>
+          <div id="constraintWeekList" class="laneList"></div>
         </div>
       </section>
     </div>
+
+    <section class="card">
+      <div class="cardHead">
+        <h2>Parking Lot Notes</h2>
+        <span class="mono" id="notesCountPill">0 notes</span>
+      </div>
+      <div class="cardBody">
+        <div id="parkingNotesList" class="laneList"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="cardHead">
+        <h2>Realtime Activity</h2>
+        <span class="mono" id="eventCount">0 events</span>
+      </div>
+      <div class="cardBody">
+        <div id="feed" class="feed"></div>
+      </div>
+    </section>
+
 
     <section class="card">
       <div class="cardHead">
@@ -414,8 +451,12 @@
     const journeyCount = $("#journeyCount");
     const p1 = $("#p1"), p2 = $("#p2"), p3 = $("#p3");
     const p1Text = $("#p1Text"), p2Text = $("#p2Text"), p3Text = $("#p3Text");
-    const participantRows = $("#participantRows");
-    const participantSummary = $("#participantSummary");
+    const sharedPromptCount = $("#sharedPromptCount");
+    const sharedPromptsList = $("#sharedPromptsList");
+    const constraintCount = $("#constraintCount");
+    const constraintWeekList = $("#constraintWeekList");
+    const notesCountPill = $("#notesCountPill");
+    const parkingNotesList = $("#parkingNotesList");
     const feed = $("#feed");
     const eventCount = $("#eventCount");
     const diagBox = $("#diagBox");
@@ -491,31 +532,76 @@
       qStep3.innerHTML = q3.map(x => `<li>${shared.escapeHtml(x)}</li>`).join("");
     }
 
-    function renderParticipants(participants, stickyAuthors, journeyAuthors){
-      participantSummary.textContent = `${participants.length} rows`;
-      if (!participants.length){
-        participantRows.innerHTML = `<tr><td colspan="4"><div class="empty">No participants found for this room yet.</div></td></tr>`;
+    function parseSharedPrompt(row){
+      const raw = String(row?.text || "");
+      const marker = "[SHARED] ";
+      const content = raw.startsWith(marker) ? raw.slice(marker.length) : raw;
+      const idx = content.indexOf("\n");
+      if (idx === -1){
+        return { author: "unknown", body: content.trim() };
+      }
+      return {
+        author: content.slice(0, idx).trim() || "unknown",
+        body: content.slice(idx + 1).trim()
+      };
+    }
+    function renderSharedPrompts(stickies){
+      const sharedOnly = (stickies || []).filter(s => String(s.text || "").startsWith("[SHARED] "));
+      sharedPromptCount.textContent = `${sharedOnly.length} prompts`;
+      if (!sharedOnly.length){
+        sharedPromptsList.innerHTML = `<div class="empty">No shared prompts yet. Ask participants to publish from Step 2 drafts.</div>`;
         return;
       }
-      participantRows.innerHTML = participants.map(p => {
-        const name = shared.cleanDisplayName(p.display_name) || p.id.slice(0, 8);
-        const role = p.role === "tutor" ? "Tutor" : "Student";
-        const card = shared.personaTitle(p.persona_id);
-        const s1Done = !!(shared.cleanDisplayName(p.display_name) && p.persona_id);
-        const s2Done = stickyAuthors.has(p.id);
-        const s3Done = journeyAuthors.has(p.id);
-        const stage = [
-          s1Done ? statusPill("S1 Ready", "ok") : statusPill("S1 Pending", "warn"),
-          s2Done ? statusPill("S2 Active", "ok") : statusPill("S2 Idle", "warn"),
-          s3Done ? statusPill("S3 Active", "ok") : statusPill("S3 Idle", "bad")
-        ].join(" ");
+      sharedPromptsList.innerHTML = sharedOnly.map(s => {
+        const parsed = parseSharedPrompt(s);
         return `
-          <tr>
-            <td>${shared.escapeHtml(name)}</td>
-            <td>${shared.escapeHtml(role)}</td>
-            <td>${shared.escapeHtml(card)}</td>
-            <td>${stage}</td>
-          </tr>
+          <article class="laneCard" style="border-left:4px solid ${shared.escapeHtml(s.color || "#47ff87")}">
+            <div class="laneMeta">Shared by ${shared.escapeHtml(parsed.author)}</div>
+            <div>${shared.escapeHtml(parsed.body || "(empty)")}</div>
+          </article>
+        `;
+      }).join("");
+    }
+    function renderConstraintsByWeek(journey){
+      const constraints = (journey || []).filter(j => j.type === "constraint");
+      constraintCount.textContent = `${constraints.length} constraints`;
+      if (!constraints.length){
+        constraintWeekList.innerHTML = `<div class="empty">No constraints mapped yet in Step 3.</div>`;
+        return;
+      }
+      const byWeek = new Map();
+      constraints.forEach(c => {
+        const w = Number(c.week) || 0;
+        if (!byWeek.has(w)) byWeek.set(w, []);
+        byWeek.get(w).push(c);
+      });
+      const weeks = [...byWeek.keys()].sort((a,b)=>a-b);
+      constraintWeekList.innerHTML = weeks.map(w => {
+        const cards = byWeek.get(w) || [];
+        return `
+          <article class="laneCard">
+            <div class="laneMeta">Week ${w} • ${cards.length} constraint${cards.length > 1 ? "s" : ""}</div>
+            <div>${cards.map(x => `• ${shared.escapeHtml(x.label || "(no label)")}`).join("<br/>")}</div>
+          </article>
+        `;
+      }).join("");
+    }
+    function renderParkingNotes(notes){
+      const rows = (notes || []).slice().sort((a,b) => String(b.updated_at || "").localeCompare(String(a.updated_at || "")));
+      notesCountPill.textContent = `${rows.length} notes`;
+      if (!rows.length){
+        parkingNotesList.innerHTML = `<div class="empty">No parking-lot notes saved yet.</div>`;
+        return;
+      }
+      parkingNotesList.innerHTML = rows.map(n => {
+        const snippet = String(n.body || "").trim();
+        const preview = snippet.length > 260 ? `${snippet.slice(0, 260)}...` : snippet;
+        const author = n.participant_id ? n.participant_id.slice(0,8) : "shared";
+        return `
+          <article class="laneCard">
+            <div class="laneMeta">Author ${shared.escapeHtml(author)} • ${shared.escapeHtml(fmtTime(n.updated_at || Date.now()))}</div>
+            <div>${shared.escapeHtml(preview || "(empty note)")}</div>
+          </article>
         `;
       }).join("");
     }
@@ -525,7 +611,7 @@
         participants: supabase.from("workshop_participants").select("id,display_name,role,persona_id,created_at,updated_at").eq("session_id", room),
         stickies: supabase.from("workshop_stickies").select("id,participant_id,text,created_at,updated_at").eq("session_id", room),
         journey: supabase.from("workshop_journey_items").select("id,participant_id,week,label,type,created_at,updated_at").eq("session_id", room),
-        notes: supabase.from("workshop_journey_notes").select("id,participant_id,updated_at").eq("session_id", room)
+        notes: supabase.from("workshop_journey_notes").select("id,participant_id,body,updated_at").eq("session_id", room)
       };
       const settled = await Promise.allSettled([
         queries.participants,
@@ -575,7 +661,9 @@
       p1Text.textContent = `${p1v}%`; p2Text.textContent = `${p2v}%`; p3Text.textContent = `${p3v}%`;
 
       lastUpdated.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
-      renderParticipants(participants, stickyAuthors, journeyAuthors);
+      renderSharedPrompts(stickies);
+      renderConstraintsByWeek(journey);
+      renderParkingNotes(notes);
       computePrompts({ total: participants.length, readyStep1: step1ReadyCount, activeStep2: step2Count, activeStep3: step3Count, notesCount: notes.length });
 
       if (errors.length){

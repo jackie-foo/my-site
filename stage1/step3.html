@@ -52,16 +52,38 @@
     .cardBody{padding:14px;display:flex;flex-direction:column;gap:12px}
 
     .timeline{
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:18px;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:20px;
       background:
+        radial-gradient(1200px 320px at 0% 0%, rgba(0,229,255,.06), transparent 58%),
         linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
         rgba(255,255,255,.02);
-      padding:12px;
-      overflow:auto
+      padding:14px;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scroll-snap-type:x mandatory;
     }
-    .weeks{display:grid;grid-template-columns:repeat(13,minmax(170px,1fr));gap:10px;min-width:1120px}
-    .week{border-radius:16px;border:1px dashed rgba(255,255,255,.20);background:rgba(255,255,255,.02);padding:10px;min-height:230px;display:flex;flex-direction:column;gap:10px; position:relative}
+    .weeks{
+      display:grid;
+      grid-template-columns:repeat(13,minmax(250px,1fr));
+      gap:12px;
+      min-width:3380px;
+      align-items:stretch;
+    }
+    .week{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.22);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+        rgba(255,255,255,.02);
+      padding:12px;
+      min-height:320px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      position:relative;
+      scroll-snap-align:start;
+    }
     .week.special{
       border-color:color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,.18));
       background:
@@ -81,26 +103,46 @@
         rgba(255,255,255,.03);
       box-shadow: inset 0 0 0 1px rgba(255,107,119,.12);
     }
-    .weekHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08)}
-    .weekHead strong{font-size:12px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
-    .weekHead span{font-size:11px;color:var(--muted);font-weight:900;white-space:nowrap}
-    .milestone{
-      display:inline-flex;
-      align-items:center;
-      margin-top:4px;
-      font-size:10px;
+    .weekHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding-bottom:8px;
+      border-bottom:1px solid rgba(255,255,255,.11)
+    }
+    .weekHead strong{
+      font-size:13px;
       font-weight:1000;
-      letter-spacing:.25px;
-      border-radius:999px;
-      padding:4px 8px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(0,0,0,.22);
+      letter-spacing:.35px;
+      text-transform:uppercase;
+      line-height:1.2;
+    }
+    .weekHead span{
+      font-size:10px;
+      color:var(--muted);
+      font-weight:1000;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+      line-height:1.25;
+      text-align:right;
+      max-width:110px;
+    }
+    .milestone{
+      display:flex;
+      align-items:flex-start;
+      margin-top:4px;
+      font-size:11px;
+      font-weight:1000;
+      letter-spacing:.18px;
+      border-radius:12px;
+      padding:7px 9px;
+      border:1px solid rgba(255,255,255,.24);
+      background:rgba(0,0,0,.28);
       color:var(--text);
       text-transform:uppercase;
-      max-width:100%;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      line-height:1.3;
+      word-break:break-word;
     }
     .milestone.critical{
       border-color:rgba(255,107,119,.5);
@@ -112,13 +154,27 @@
       background:rgba(53,216,255,.18);
       color:#daf6ff;
     }
-    .dropZone{display:flex;flex-direction:column;gap:8px}
+    .dropZone{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      flex:1;
+      min-height:170px;
+      border-radius:12px;
+      padding:4px;
+      background:rgba(0,0,0,.12);
+      border:1px dashed rgba(255,255,255,.12);
+    }
 
     .placed{
-      border-radius:14px;border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.06);padding:10px;
-      box-shadow:0 14px 30px rgba(0,0,0,.26);
-      cursor:grab;user-select:none;touch-action:none;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.2);
+      background:rgba(255,255,255,.07);
+      padding:11px;
+      box-shadow:0 14px 30px rgba(0,0,0,.24);
+      cursor:grab;
+      user-select:none;
+      touch-action:none;
       transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
     }
     .placed:hover{
@@ -128,7 +184,15 @@
     }
     .placed:active{cursor:grabbing}
     .placedTop{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:6px}
-    .placedTitle{margin:0;font-weight:1000;font-size:12px;text-transform:uppercase;letter-spacing:.2px}
+    .placedTitle{
+      margin:0;
+      font-weight:1000;
+      font-size:12px;
+      letter-spacing:.12px;
+      line-height:1.3;
+      text-transform:none;
+      word-break:break-word;
+    }
     .placedMeta{font-size:11px;font-weight:1000;color:var(--muted);white-space:nowrap}
     .placedTags{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
     .tagBtn{border:none;border-radius:12px;padding:7px 9px;font-weight:1000;font-size:11px;cursor:pointer;color:#0b0d12;box-shadow:none}
@@ -326,7 +390,7 @@
       <div class="cardBody">
         <div class="notesGrid">
           <div class="panel">
-            <h3>Things I didn’t get time to say</h3>
+            <h3>My notes to elaborate later</h3>
             <textarea id="notesBox" class="notesBox" placeholder="Write anything you want to elaborate later…"></textarea>
             <div class="row" style="justify-content:space-between">
               <span class="mono" id="notesStatus">Saved</span>
@@ -347,7 +411,7 @@
               <li>Any example of “good feedback” vs “bad feedback”?</li>
             </ul>
             <div class="callout">
-              This note space helps us capture details even if the workshop is rushed.
+              Use this space throughout the workshop to capture details you want to share later.
             </div>
           </div>
         </div>
@@ -683,7 +747,7 @@
         }
         weekEl.dataset.week=String(w);
         weekEl.innerHTML = `
-          <div class="weekHead"><strong>Week ${w}</strong><span>Hold / right-click</span></div>
+          <div class="weekHead"><strong>Week ${w}</strong><span>Right-click<br/>or long-press</span></div>
           ${milestone ? `<div class="milestone ${escapeHtml(milestone.level)}">${escapeHtml(milestone.label)}</div>` : ""}
           <div class="dropZone" data-week="${w}"></div>
         `;
@@ -1076,7 +1140,7 @@
       {
         title:"Parking lot notes",
         html: `
-          <div class="callout">If time is short, write details below so we can analyse later.</div>
+          <div class="callout">Use notes continuously to elaborate your thinking before sharing to the group.</div>
           <ul class="list">
             <li>Examples you didn’t get to explain</li>
             <li>Why something felt unfair / unclear</li>
