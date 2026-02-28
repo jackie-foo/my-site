@@ -13,7 +13,15 @@ window.Stage1Shared = (() => {
     independent: "Independent",
     storybuilder: "Story Builder",
     perfectionist: "Perfectionist",
-    strategist: "Strategist"
+    strategist: "Strategist",
+    mentor_architect: "Mentor Architect",
+    rubric_guardian: "Rubric Guardian",
+    workload_balancer: "Workload Balancer",
+    empathy_coach: "Empathy Coach",
+    evidence_hunter: "Evidence Hunter",
+    systems_planner: "Systems Planner",
+    deadline_pacer: "Deadline Pacer",
+    clarity_editor: "Clarity Editor"
   };
 
   function getKeys(room){

@@ -1,0 +1,1157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Stage 1 • Step 1 Tutor</title>
+  <style>
+    :root{
+      --bg:#070a14;
+      --panel:#11172a;
+      --panel2:#0c1120;
+      --border:#2f3a60;
+      --text:#e9ecff;
+      --muted:#aab0d6;
+
+      --accent:#00e5ff;
+      --accent2:#ff2bd6;
+      --bad:#ff4d4d;
+
+      --r:18px;
+      --shadow:0 20px 44px rgba(2,8,22,.46);
+      --focus: 0 0 0 4px rgba(0,229,255,.18);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    /* subtle background (static, no moving placeholder) */
+    .bg{
+      position:fixed; inset:0; z-index:-1;
+      background:
+        radial-gradient(900px 520px at 15% 18%, rgba(0,229,255,.12), transparent 58%),
+        radial-gradient(820px 480px at 85% 72%, rgba(255,43,214,.12), transparent 58%),
+        radial-gradient(600px 360px at 62% 22%, rgba(71,255,135,.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
+        var(--bg);
+      filter:saturate(1.05);
+    }
+
+    .wrap{max-width:1180px;margin:0 auto;padding:20px 14px 92px}
+    header{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .leftHead{min-width:min(520px,100%); flex:1}
+    .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:7px 11px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      background:rgba(18,22,37,.78);
+      box-shadow:0 10px 30px rgba(0,0,0,.28);
+      font-weight:1000;
+      font-size:12px;
+      letter-spacing:.25px;
+      backdrop-filter: blur(8px);
+    }
+    .dot{
+      width:10px;height:10px;border-radius:3px;
+      background:var(--accent);
+      box-shadow:0 0 0 3px rgba(0,229,255,.14);
+    }
+    .subtitle{
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+      line-height:1.4;
+      margin-top:9px;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+      min-width:260px;
+    }
+
+    .card{
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(118deg, rgba(0,229,255,.07), transparent 36%),
+        linear-gradient(0deg, rgba(15,19,32,.90), rgba(18,22,37,.90));
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-top:16px;
+      backdrop-filter: blur(10px);
+    }
+    .cardHead{
+      padding:14px 14px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .cardHead h2{
+      margin:0;
+      font-size:14px;
+      font-weight:1000;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+    }
+    .cardBody{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .metaRow{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-start;
+      padding-top:2px;
+    }
+
+    .mono{
+      font-family:ui-monospace,Menlo,Consolas,monospace;
+      font-weight:900;
+      font-size:12px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      padding:3px 8px;
+      border-radius:999px;
+    }
+
+    /* Inputs */
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:min(360px, 100%);
+      flex:1;
+    }
+    .label{
+      font-size:12px;
+      font-weight:1000;
+      letter-spacing:.25px;
+      color:var(--muted);
+      text-transform:uppercase;
+    }
+    .hint{
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted);
+      line-height:1.4;
+    }
+
+    .select,input{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:14px;
+      padding:11px 12px;
+      font-weight:900;
+      outline:none;
+      min-width:240px;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    input::placeholder{color:rgba(170,176,214,.75)}
+    input:focus, .select:focus{
+      border-color:color-mix(in srgb, var(--accent) 70%, rgba(255,255,255,.10));
+      box-shadow:var(--focus);
+    }
+
+    /* Buttons */
+    button{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(18,22,37,.78);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:1000;
+      cursor:pointer;
+      box-shadow:0 10px 26px rgba(0,0,0,.26);
+      transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease;
+      backdrop-filter: blur(8px);
+      will-change: transform;
+    }
+    button:hover{
+      transform: translateY(-1px);
+      border-color:color-mix(in srgb,var(--accent) 60%, rgba(255,255,255,.10));
+      box-shadow:0 14px 30px rgba(0,0,0,.32);
+    }
+    button:active{transform: translateY(0px) scale(.99)}
+    button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+    .btnPrimary{
+      border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.10));
+      box-shadow:0 14px 34px rgba(0,229,255,.12);
+      background:linear-gradient(180deg, rgba(0,229,255,.10), rgba(18,22,37,.78));
+    }
+    .btnDanger{
+      border-color:color-mix(in srgb,var(--bad) 65%, rgba(255,255,255,.10));
+      background:linear-gradient(180deg, rgba(255,77,77,.10), rgba(18,22,37,.78));
+    }
+    .btnGhost{background:rgba(255,255,255,.03)}
+
+    /* Persona grid */
+    .personaGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    @media (max-width:1040px){.personaGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:520px){.personaGrid{grid-template-columns:repeat(1,minmax(0,1fr))}}
+
+    .persona{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      background:
+        linear-gradient(165deg, color-mix(in srgb, var(--persona-accent, var(--accent2)) 14%, rgba(255,255,255,.02)), rgba(255,255,255,.02) 35%),
+        rgba(255,255,255,.02);
+      padding:12px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:268px;
+      position:relative;
+      transition: transform .14s ease, border-color .14s ease, background .14s ease, box-shadow .14s ease;
+    }
+    .persona:hover{
+      transform: translateY(-1px);
+      border-color:color-mix(in srgb,var(--persona-accent, var(--accent2)) 60%, rgba(255,255,255,.10));
+      box-shadow:0 12px 26px rgba(0,0,0,.24);
+    }
+    .persona.selected{
+      border-color:color-mix(in srgb,var(--persona-accent, var(--accent2)) 78%, rgba(255,255,255,.10));
+      background:
+        linear-gradient(160deg, color-mix(in srgb, var(--persona-accent, var(--accent2)) 20%, rgba(255,255,255,.04)), rgba(255,255,255,.03) 42%),
+        rgba(255,255,255,.03);
+    }
+    .persona.selected::after{
+      content:"SELECTED";
+      position:absolute;top:10px;right:10px;
+      font-size:10px;font-weight:1000;
+      letter-spacing:.4px;
+      padding:6px 8px;
+      border-radius:999px;
+      color:#0b0d12;background:var(--persona-accent, var(--accent2));
+      box-shadow:0 12px 22px color-mix(in srgb, var(--persona-accent, var(--accent2)) 45%, transparent);
+    }
+
+    .pTop{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .pTitle{margin:0;font-size:12px;font-weight:1000;letter-spacing:.2px;text-transform:uppercase}
+    .pText{margin:0;color:var(--muted);font-weight:780;font-size:12px;line-height:1.48}
+
+    /* static chibi thumbnail on each card */
+    .thumbWrap{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      background:
+        radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--persona-accent, var(--accent2)) 22%, transparent), transparent 70%),
+        rgba(255,255,255,.02);
+      padding:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      width:100%;
+      aspect-ratio:16/11;
+    }
+    .thumb{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:center center;
+      transform:scale(1.1);
+      filter: drop-shadow(0 14px 18px rgba(0,0,0,.40));
+      border-radius:0;
+    }
+
+    .toast{
+      position:fixed;right:14px;bottom:14px;z-index:80;
+      background:rgba(18,22,37,.92);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:10px 12px;
+      box-shadow:var(--shadow);
+      max-width:360px;
+      color:var(--text);
+      font-weight:900;
+      font-size:12px;
+      display:none;
+      backdrop-filter: blur(10px);
+    }
+
+    /* ===== Modal ===== */
+    .overlay{
+      position:fixed; inset:0; z-index:90;
+      background:rgba(0,0,0,.62);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:16px;
+    }
+    .modal{
+      width:min(720px, 100%);
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+    .modalHead{
+      padding:14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .modalHead h3{
+      margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase;
+    }
+    .modalBody{padding:14px; display:flex; flex-direction:column; gap:10px}
+    .modalFoot{
+      padding:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .kicker{color:var(--muted); font-weight:800; font-size:12px; line-height:1.4}
+    .steps{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      color:var(--muted); font-weight:900; font-size:12px;
+    }
+    .pill{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      padding:4px 8px;
+      border-radius:999px;
+    }
+    .pill.active{
+      border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.12));
+      box-shadow:0 12px 28px rgba(0,229,255,.10);
+      color:var(--text);
+    }
+    .list{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+      line-height:1.55;
+    }
+    .callout{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,229,255,.06);
+      border-radius:16px;
+      padding:10px 12px;
+      color:var(--text);
+      font-weight:900;
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    /* ===== Loading Screen ===== */
+    .loading{
+      position:fixed; inset:0; z-index:120;
+      display:none; align-items:center; justify-content:center;
+      background:radial-gradient(1200px 600px at 30% 20%, rgba(0,229,255,.10), transparent 55%),
+                 radial-gradient(900px 500px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
+                 rgba(0,0,0,.72);
+      backdrop-filter: blur(8px);
+      padding:16px;
+    }
+    .loadingCard{
+      width:min(520px, 100%);
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      text-align:center;
+      padding:18px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+    }
+    .chibiBig{
+      width:140px; height:140px;
+      object-fit:contain;
+      filter: drop-shadow(0 16px 22px rgba(0,0,0,.45));
+      border-radius:18px;
+    }
+    .loadingTitle{
+      font-weight:1000;
+      letter-spacing:.2px;
+      font-size:16px;
+      margin:0;
+    }
+    .loadingSub{
+      margin:0;
+      color:var(--muted);
+      font-weight:800;
+      font-size:12px;
+      line-height:1.45;
+    }
+    .bar{
+      width:100%;
+      height:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      overflow:hidden;
+    }
+    .bar > div{
+      height:100%;
+      width:40%;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(0,229,255,.85), rgba(255,43,214,.85));
+      animation: glide 1.2s ease-in-out infinite;
+    }
+    @keyframes glide{
+      0%{transform:translateX(-40%)}
+      50%{transform:translateX(120%)}
+      100%{transform:translateX(-40%)}
+    }
+
+    .divider{
+      height:1px;
+      background:rgba(255,255,255,.08);
+      margin:2px 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="leftHead">
+        <div class="badge"><span class="dot"></span> Stage 1 • Step 1 Tutor</div>
+        <div class="subtitle">
+          Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
+          Tutor path. After unlock, set your name and choose your teaching lens card.
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btnTutorial" class="btnGhost">Tutorial</button>
+        <button id="btnDashboard" class="btnGhost">Dashboard</button>
+        <button id="btnExit">← Back</button>
+        <button id="btnReset" class="btnDanger">Reset Local</button>
+      </div>
+    </header>
+
+    <section class="card" id="gateCard">
+      <div class="cardHead">
+        <h2>Passcode</h2>
+        <span class="mono" id="gateStatus">Locked</span>
+      </div>
+      <div class="cardBody">
+        <div class="row">
+          <div class="subtitle" style="margin:0">
+            This step is locked. Click <span class="mono">Unlock</span> to enter the passcode.
+          </div>
+          <button id="btnOpenPw" class="btnPrimary">Unlock</button>
+        </div>
+        <div class="hint">Client-side gate for now. Later we can enforce properly with RLS / session secret.</div>
+      </div>
+    </section>
+
+    <section class="card" id="mainCard" style="display:none">
+      <div class="cardHead">
+        <h2>Role + Personality Card</h2>
+        <button id="btnNext" class="btnPrimary" disabled>Next → Step 2</button>
+      </div>
+
+      <div class="cardBody">
+
+        <!-- Name + Role -->
+        <div class="row" style="align-items:flex-end">
+          <div class="field">
+            <label class="label" for="nameInput">Your name</label>
+            <input id="nameInput" type="text" placeholder="e.g., Jackie" maxlength="32" autocomplete="name"/>
+            <div class="hint">This is what others will see in the room.</div>
+          </div>
+
+          <div class="field" style="max-width:360px">
+            <label class="label" for="roleSelect">Role</label>
+            <select id="roleSelect" class="select" aria-label="Role" disabled>
+              <option value="tutor">Tutor</option>
+            </select>
+            <div class="hint">Tutor role is fixed on this page.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="personaGrid" id="personaGrid"></div>
+
+        <div class="metaRow">
+          <span class="mono">Selected: <span id="selPersona">None</span></span>
+          <span class="mono">Role: <span id="selRole">student</span></span>
+          <span class="mono">Name: <span id="selName">—</span></span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== Loading Screen ===== -->
+  <div class="loading" id="loading" aria-hidden="true">
+    <div class="loadingCard">
+      <img id="chibiImg" class="chibiBig" alt="Loading chibi"/>
+      <p class="loadingTitle" id="loadingTitle">Getting things ready…</p>
+      <p class="loadingSub" id="loadingSub">Syncing your room + saving your identity.</p>
+      <div class="bar" aria-hidden="true"><div></div></div>
+      <div class="kicker">If this takes long, your network might be slow — don’t panic.</div>
+    </div>
+  </div>
+
+  <!-- ===== Password Modal ===== -->
+  <div class="overlay" id="pwOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="pwTitle">Enter Passcode</h3>
+          <div class="kicker">This room is gated. Please enter the passcode to proceed.</div>
+        </div>
+        <button id="btnClosePw" class="btnGhost" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="row" style="justify-content:flex-start">
+          <input id="pwInput" type="password" placeholder="Passcode" autocomplete="one-time-code"/>
+          <button id="btnUnlock" class="btnPrimary">Unlock</button>
+        </div>
+        <div class="callout">
+          You should have received a room link like <span class="mono">?room=demo</span> + a separate passcode.
+        </div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">After unlocking, you’ll see a quick tutorial.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnPwCancel" class="btnGhost">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Locked Tutorial Modal ===== -->
+  <div class="overlay" id="lockedOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="lockedTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="lockedTitle">Tutorial is locked</h3>
+          <div class="kicker">Please unlock Step 1 first.</div>
+        </div>
+        <button id="btnCloseLocked" class="btnGhost" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="callout">Enter the passcode to access the tutorial and start Step 1.</div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">You’ll see the tutorial right after unlock.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnLockedUnlock" class="btnPrimary">Unlock</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Tutorial Modal ===== -->
+  <div class="overlay" id="tutOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="tutTitle">Quick Tutorial</h3>
+          <div class="kicker" id="tutSub">How to do Step 1, and why we’re doing it.</div>
+        </div>
+        <button id="btnCloseTut" class="btnGhost" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="steps" id="tutSteps"></div>
+        <div id="tutContent"></div>
+      </div>
+
+      <div class="modalFoot">
+        <div class="kicker" id="tutHint">You can reopen this anytime via the “Tutorial” button.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnPrev" class="btnGhost">← Back</button>
+          <button id="btnNextStep" class="btnPrimary">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/stage1/shared.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (() => {
+    // ====== CONFIG ======
+    const shared = window.Stage1Shared;
+    const supabase = window.supabase.createClient(shared.SUPABASE_URL, shared.SUPABASE_ANON_KEY);
+    const BASE_PATH = shared.BASE_PATH;
+    const REQUIRED_PASSCODE = "duck123";
+
+    // Loading screen image
+    const CHIBI3_SRC = "/pic/chibi3.png";
+
+    // ✅ Card thumbnail placeholders:
+    // Each card has its own line so you can change them later.
+    const CARD_IMG_CLARIFIER     = "/pic/chibi1.png";
+    const CARD_IMG_OPTIMIZER     = "/pic/chibi2.png";
+    const CARD_IMG_VALIDATOR     = "/pic/chibi3.png";
+    const CARD_IMG_OVERWHELMED   = "/pic/chibi2.png";
+    const CARD_IMG_INDEPENDENT   = "/pic/chibi1.png";
+    const CARD_IMG_STORYBUILDER  = "/pic/chibi3.png";
+    const CARD_IMG_PERFECTIONIST = "/pic/chibi2.png";
+    const CARD_IMG_STRATEGIST    = "/pic/chibi1.png";
+
+    const params = new URLSearchParams(location.search);
+    const room = (params.get("room") || "").trim();
+    if (!room) {
+      document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room. Use <b>?room=demo</b></div>";
+      throw new Error("Missing room");
+    }
+
+    // participant id per browser + keys per room
+    const keys = shared.getKeys(room);
+    const participantId = shared.getOrCreateParticipantId(keys.PID_KEY);
+    const { PID_KEY, AUTH_KEY, TUT_KEY, NAME_KEY, ROLE_KEY, PERSONA_KEY } = keys;
+
+    // UI refs
+    const $ = (q, el=document) => el.querySelector(q);
+
+    const roomOut = $("#roomOut"), meOut = $("#meOut");
+    const gateCard = $("#gateCard"), mainCard = $("#mainCard");
+    const gateStatus = $("#gateStatus");
+
+    const roleSelect = $("#roleSelect");
+    const personaGrid = $("#personaGrid");
+    const selPersona = $("#selPersona"), selRole = $("#selRole");
+    const selName = $("#selName");
+    const nameInput = $("#nameInput");
+    const btnNext = $("#btnNext");
+    const toast = $("#toast");
+
+    // overlays
+    const pwOverlay = $("#pwOverlay");
+    const lockedOverlay = $("#lockedOverlay");
+    const tutOverlay = $("#tutOverlay");
+
+    // loading
+    const loading = $("#loading");
+    const chibiImg = $("#chibiImg");
+    const loadingTitle = $("#loadingTitle");
+    const loadingSub = $("#loadingSub");
+
+    // buttons
+    const btnTutorial = $("#btnTutorial");
+    const btnDashboard = $("#btnDashboard");
+    const btnExit = $("#btnExit");
+    const btnReset = $("#btnReset");
+
+    // password modal controls
+    const btnOpenPw = $("#btnOpenPw");
+    const btnClosePw = $("#btnClosePw");
+    const btnPwCancel = $("#btnPwCancel");
+    const pwInput = $("#pwInput");
+    const btnUnlock = $("#btnUnlock");
+
+    // locked tutorial modal
+    const btnCloseLocked = $("#btnCloseLocked");
+    const btnLockedUnlock = $("#btnLockedUnlock");
+
+    // tutorial controls
+    const btnCloseTut = $("#btnCloseTut");
+    const tutSteps = $("#tutSteps");
+    const tutContent = $("#tutContent");
+    const btnPrev = $("#btnPrev");
+    const btnNextStep = $("#btnNextStep");
+
+    roomOut.textContent = room;
+    chibiImg.src = CHIBI3_SRC;
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.style.display = "block";
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.style.display = "none", 2400);
+    }
+
+    function openOverlay(el){
+      el.style.display = "flex";
+      el.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+    function closeOverlay(el){
+      el.style.display = "none";
+      el.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    function showLoading(title="Getting things ready…", sub="Syncing your room + saving your identity."){
+      loadingTitle.textContent = title;
+      loadingSub.textContent = sub;
+      loading.style.display = "flex";
+      loading.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+    function hideLoading(){
+      loading.style.display = "none";
+      loading.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    // Close overlays on outside click
+    [pwOverlay, lockedOverlay, tutOverlay].forEach(ov => {
+      ov.addEventListener("mousedown", (e) => {
+        if (e.target === ov) closeOverlay(ov);
+      });
+    });
+
+    // Esc closes whichever is open (NOT loading)
+    window.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      if (tutOverlay.style.display === "flex") closeOverlay(tutOverlay);
+      if (lockedOverlay.style.display === "flex") closeOverlay(lockedOverlay);
+      if (pwOverlay.style.display === "flex") closeOverlay(pwOverlay);
+    });
+
+    // ✅ persona cards now include an imgSrc per card
+    const personaCards = [
+      { id:"mentor_architect", title:"Mentor Architect", text:"I structure feedback so students can act in sequence.", imgSrc: CARD_IMG_CLARIFIER, accent:"#00e5ff" },
+      { id:"rubric_guardian", title:"Rubric Guardian", text:"I anchor comments to criteria and learning outcomes.", imgSrc: CARD_IMG_VALIDATOR, accent:"#ffd36a" },
+      { id:"workload_balancer", title:"Workload Balancer", text:"I calibrate effort so revisions stay realistic.", imgSrc: CARD_IMG_OPTIMIZER, accent:"#47ff87" },
+      { id:"empathy_coach", title:"Empathy Coach", text:"I protect motivation and confidence while being honest.", imgSrc: CARD_IMG_STORYBUILDER, accent:"#ff9ae9" },
+      { id:"evidence_hunter", title:"Evidence Hunter", text:"I ask for proof, examples, and observable improvements.", imgSrc: CARD_IMG_PERFECTIONIST, accent:"#ff9a6f" },
+      { id:"systems_planner", title:"Systems Planner", text:"I map checkpoints, dependencies, and handoff moments.", imgSrc: CARD_IMG_STRATEGIST, accent:"#9ab2ff" },
+      { id:"deadline_pacer", title:"Deadline Pacer", text:"I pace milestones around due dates and release windows.", imgSrc: CARD_IMG_INDEPENDENT, accent:"#7ee6ff" },
+      { id:"clarity_editor", title:"Clarity Editor", text:"I rewrite vague comments into precise instructions.", imgSrc: CARD_IMG_OVERWHELMED, accent:"#ff7a7a" }
+    ];
+
+    const state = {
+      role: "tutor",
+      persona_id: null,
+      persona_title: null,
+      display_name: null
+    };
+
+    const cleanName = shared.cleanDisplayName;
+
+    function refreshMeOut(){
+      const shown = state.display_name ? state.display_name : participantId.slice(0, 8);
+      meOut.textContent = shown;
+      selName.textContent = state.display_name ? state.display_name : "—";
+    }
+    function titleFromPersonaId(id){
+      return personaCards.find(p => p.id === id)?.title || null;
+    }
+
+    const escapeHtml = shared.escapeHtml;
+
+    function updateNextEnabled(){
+      btnNext.disabled = !state.persona_id || !state.display_name;
+    }
+
+    // local name first
+    state.display_name = cleanName(localStorage.getItem(NAME_KEY));
+    if (nameInput) nameInput.value = state.display_name || "";
+    refreshMeOut();
+
+    async function saveParticipant(patch){
+      const { error } = await supabase.from("workshop_participants").update(patch).eq("id", participantId);
+      if (error) throw error;
+    }
+
+    async function saveName(name){
+      const cleaned = cleanName(name);
+      if (!cleaned){
+        showToast("Name must be at least 2 characters");
+        return false;
+      }
+      state.display_name = cleaned;
+      localStorage.setItem(NAME_KEY, cleaned);
+      if (nameInput) nameInput.value = cleaned;
+      refreshMeOut();
+      updateNextEnabled();
+
+      showLoading("Saving your name…", "Syncing it to the room.");
+      try{
+        await saveParticipant({ display_name: cleaned });
+        showToast("Name saved");
+        return true;
+      } catch (err){
+        console.error(err);
+        showToast("Couldn’t save name (network?)");
+        return false;
+      } finally {
+        hideLoading();
+      }
+    }
+
+    if (nameInput){
+      nameInput.addEventListener("keydown", async (e) => {
+        if (e.key === "Enter"){
+          e.preventDefault();
+          await saveName(nameInput.value);
+          nameInput.blur();
+        }
+      });
+      nameInput.addEventListener("blur", async () => {
+        const cleaned = cleanName(nameInput.value);
+        if (!cleaned){
+          state.display_name = null;
+          localStorage.removeItem(NAME_KEY);
+          refreshMeOut();
+          updateNextEnabled();
+          showToast("Name cleared");
+          return;
+        }
+        if (cleaned !== state.display_name){
+          await saveName(cleaned);
+        }
+      });
+    }
+
+    function renderPersonas(){
+      personaGrid.innerHTML = "";
+      personaCards.forEach(c => {
+        const el = document.createElement("div");
+        el.className = "persona" + (state.persona_id === c.id ? " selected" : "");
+        el.style.setProperty("--persona-accent", c.accent);
+
+        // ✅ Static chibi thumbnail (no shimmer / no placeholder animation)
+        el.innerHTML = `
+          <div class="pTop">
+            <p class="pTitle">${escapeHtml(c.title)}</p>
+            <span class="mono">Card</span>
+          </div>
+          <div class="thumbWrap">
+            <img class="thumb" src="${escapeHtml(c.imgSrc)}" alt="${escapeHtml(c.title)} preview"/>
+          </div>
+          <p class="pText">${escapeHtml(c.text)}</p>
+        `;
+
+        el.addEventListener("click", async () => {
+          state.persona_id = c.id;
+          state.persona_title = c.title;
+          localStorage.setItem(PERSONA_KEY, c.id);
+          selPersona.textContent = c.title;
+
+          [...personaGrid.children].forEach(x => x.classList.remove("selected"));
+          el.classList.add("selected");
+
+          updateNextEnabled();
+
+          showLoading("Saving your card…", "Syncing your selection.");
+          try{
+            await saveParticipant({ persona_id: state.persona_id });
+            showToast("Card saved");
+          } catch (err){
+            console.error(err);
+            showToast("Couldn’t save card (network?)");
+          } finally {
+            hideLoading();
+          }
+        });
+
+        personaGrid.appendChild(el);
+      });
+
+      selPersona.textContent = state.persona_title || "None";
+      updateNextEnabled();
+    }
+
+    roleSelect.addEventListener("change", async () => {
+      state.role = "tutor";
+      roleSelect.value = "tutor";
+      localStorage.setItem(ROLE_KEY, state.role);
+      selRole.textContent = state.role;
+
+      showLoading("Saving your role…", "Syncing selection to the room.");
+      try{
+        await saveParticipant({ role: state.role });
+        showToast("Role saved");
+      } catch (err){
+        console.error(err);
+        showToast("Couldn’t save role (network?)");
+      } finally {
+        hideLoading();
+      }
+    });
+
+    async function ensureSession(){
+      const { error } = await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict: "id" });
+      if (error) throw error;
+    }
+
+    async function ensureParticipant(){
+      const { error } = await supabase.from("workshop_participants").upsert({
+        id: participantId,
+        session_id: room,
+        role: state.role,
+        persona_id: state.persona_id,
+        display_name: state.display_name
+      }, { onConflict: "id" });
+      if (error) throw error;
+    }
+
+    async function loadParticipant(){
+      const { data, error } = await supabase
+        .from("workshop_participants")
+        .select("*")
+        .eq("id", participantId)
+        .maybeSingle();
+      if (error) throw error;
+
+      if (data){
+        state.role = "tutor";
+
+        state.persona_id = data.persona_id || null;
+        state.persona_title = state.persona_id ? titleFromPersonaId(state.persona_id) : null;
+        if (state.persona_id) localStorage.setItem(PERSONA_KEY, state.persona_id);
+
+        const dbName = cleanName(data.display_name);
+        if (dbName){
+          state.display_name = dbName;
+          localStorage.setItem(NAME_KEY, dbName);
+        }
+        localStorage.setItem(ROLE_KEY, state.role);
+      } else {
+        state.persona_id = localStorage.getItem(PERSONA_KEY) || null;
+        state.persona_title = state.persona_id ? titleFromPersonaId(state.persona_id) : null;
+        state.role = "tutor";
+      }
+
+      localStorage.setItem(ROLE_KEY, "tutor");
+      roleSelect.value = state.role;
+      selRole.textContent = state.role;
+
+      if (nameInput) nameInput.value = state.display_name || "";
+      refreshMeOut();
+
+      renderPersonas();
+    }
+
+    function unlockUI(){
+      gateStatus.textContent = "Unlocked";
+      gateCard.style.display = "none";
+      mainCard.style.display = "block";
+    }
+
+    // ===== Tutorial slides =====
+    const tutorialSlides = [
+      {
+        title: "What you do in Step 1",
+        html: `
+          <div class="callout">
+            Step 1 is quick: type your <span class="mono">name</span>, choose your <span class="mono">role</span>,
+            then pick a <span class="mono">personality card</span>. Your choices save automatically.
+          </div>
+          <ul class="list">
+            <li>Type your name (this is what others see).</li>
+            <li>Role is fixed as Tutor on this page.</li>
+            <li>Click one personality card.</li>
+            <li>Then hit <span class="mono">Next → Step 2</span>.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Why we ask for role",
+        html: `
+          <div class="callout">
+            This tutor track captures teaching workflow preferences and decision style.
+          </div>
+          <ul class="list">
+            <li>Role is fixed as <b>Tutor</b> for this page.</li>
+            <li>Cards represent your facilitation and feedback workflow lens.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Why the personality cards exist",
+        html: `
+          <div class="callout">
+            Cards create a shared language fast (without long surveys).
+          </div>
+          <ul class="list">
+            <li>Turns “make it better” into a clearer need (e.g., “Clarifier”, “Optimizer”).</li>
+            <li>Helps structure later prompts in Step 2 / Step 3.</li>
+          </ul>
+        `
+      }
+    ];
+
+    let tutIndex = 0;
+
+    function renderTutorial(){
+      tutSteps.innerHTML = tutorialSlides.map((_, i) => {
+        const cls = "pill" + (i === tutIndex ? " active" : "");
+        return `<span class="${cls}">${i+1}</span>`;
+      }).join("");
+
+      const slide = tutorialSlides[tutIndex];
+      tutContent.innerHTML = `
+        <div class="row" style="justify-content:space-between; align-items:flex-end">
+          <div>
+            <div class="mono">Step ${tutIndex+1} / ${tutorialSlides.length}</div>
+            <div style="margin-top:6px;font-weight:1000;font-size:16px;letter-spacing:.2px">${escapeHtml(slide.title)}</div>
+          </div>
+        </div>
+        <div style="height:6px"></div>
+        ${slide.html}
+      `;
+
+      btnPrev.disabled = (tutIndex === 0);
+      btnNextStep.textContent = (tutIndex === tutorialSlides.length - 1) ? "Done" : "Next";
+    }
+
+    function openTutorial(startAt = 0){
+      tutIndex = Math.max(0, Math.min(startAt, tutorialSlides.length - 1));
+      renderTutorial();
+      openOverlay(tutOverlay);
+    }
+
+    btnPrev.addEventListener("click", () => {
+      tutIndex = Math.max(0, tutIndex - 1);
+      renderTutorial();
+    });
+
+    btnNextStep.addEventListener("click", () => {
+      if (tutIndex === tutorialSlides.length - 1){
+        closeOverlay(tutOverlay);
+        return;
+      }
+      tutIndex = Math.min(tutorialSlides.length - 1, tutIndex + 1);
+      renderTutorial();
+    });
+
+    btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
+
+    // Tutorial button behaviour
+    btnTutorial.addEventListener("click", () => {
+      if (localStorage.getItem(AUTH_KEY) === "1"){
+        openTutorial(0);
+      } else {
+        openOverlay(lockedOverlay);
+      }
+    });
+
+    btnCloseLocked.addEventListener("click", () => closeOverlay(lockedOverlay));
+    btnLockedUnlock.addEventListener("click", () => {
+      closeOverlay(lockedOverlay);
+      openOverlay(pwOverlay);
+      setTimeout(() => pwInput?.focus(), 0);
+    });
+
+    // Password modal behaviour
+    btnOpenPw.addEventListener("click", () => {
+      openOverlay(pwOverlay);
+      setTimeout(() => pwInput?.focus(), 0);
+    });
+    btnClosePw.addEventListener("click", () => closeOverlay(pwOverlay));
+    btnPwCancel.addEventListener("click", () => closeOverlay(pwOverlay));
+
+    pwInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") btnUnlock.click();
+    });
+
+    async function postUnlockBootstrap({ showTutorial=true } = {}){
+      unlockUI();
+
+      showLoading("Unlocking…", "Creating the room and syncing your participant profile.");
+      try{
+        await ensureSession();
+        showLoading("Almost there…", "Saving your identity to this room.");
+        await ensureParticipant();
+        showLoading("Loading your profile…", "Fetching your saved role/name/card (if any).");
+        await loadParticipant();
+      } catch (err){
+        console.error(err);
+        showToast("Sync failed — check console");
+      } finally {
+        hideLoading();
+      }
+
+      if (showTutorial){
+        openTutorial(0);
+      }
+    }
+
+    btnUnlock.addEventListener("click", async () => {
+      const pw = (pwInput.value || "").trim();
+      if (pw !== REQUIRED_PASSCODE){
+        showToast("Wrong passcode");
+        pwInput.focus();
+        pwInput.select?.();
+        return;
+      }
+
+      localStorage.setItem(AUTH_KEY, "1");
+      closeOverlay(pwOverlay);
+
+      await postUnlockBootstrap({ showTutorial:true });
+      localStorage.setItem(TUT_KEY, "1");
+      showToast("Unlocked");
+    });
+
+    // Initial state
+    if (localStorage.getItem(AUTH_KEY) === "1"){
+      postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
+        .then(() => localStorage.setItem(TUT_KEY, "1"));
+    } else {
+      openOverlay(pwOverlay);
+      setTimeout(() => pwInput?.focus(), 0);
+    }
+
+    btnNext.addEventListener("click", () => {
+      if (!state.persona_id || !state.display_name) {
+        showToast("Please enter your name and pick a card");
+        return;
+      }
+      location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&track=tutor`;
+    });
+
+    btnExit.addEventListener("click", () => location.href = "/index.html");
+    btnDashboard.addEventListener("click", () => location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}`);
+
+    btnReset.addEventListener("click", () => {
+      const ok = confirm("Clear local workshop storage and reload?");
+      if(!ok) return;
+      localStorage.removeItem(PID_KEY);
+      localStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(TUT_KEY);
+      localStorage.removeItem(NAME_KEY);
+      localStorage.removeItem(ROLE_KEY);
+      localStorage.removeItem(PERSONA_KEY);
+      location.reload();
+    });
+
+    // initial UI
+    selRole.textContent = state.role;
+    renderPersonas();
+    updateNextEnabled();
+  })();
+  </script>
+</body>
+</html>

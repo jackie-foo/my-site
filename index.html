@@ -495,7 +495,7 @@
     <main class="shell">
       <div class="topbar">
         <div class="brand">Portfolio Landing</div>
-        <div class="pulse"><i></i>Live workshop space</div>
+        <div class="pulse"><i></i>Soft launch</div>
       </div>
 
       <section class="hero" aria-label="Intro">
@@ -508,12 +508,12 @@
         <div>
           <h1><span class="titleAccent">Jackie Foo</span></h1>
           <p class="lead">
-            I design workshop experiences that turn reflection into concrete implementation choices. Use this page to enter the game flow and move through each stage intentionally.
+            Soft launch version of my site. This is a clean entry point while the full experience is still being shaped.
           </p>
 
           <div class="actions">
-            <button class="btn btnPrimary" id="workshopBtn" type="button">Enter Workshop 1</button>
-            <a class="btn btnGhost" href="/stage1/main-dashboard.html">Open Main Dashboard</a>
+            <button class="btn btnPrimary" id="workshopBtn" type="button">Enter Stage 1</button>
+            <a class="btn btnGhost" href="/stage1/main-dashboard.html">Facilitator Dashboard</a>
           </div>
 
           <nav class="links" aria-label="Jackie links">
@@ -523,18 +523,18 @@
             <a class="link" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
           </nav>
 
-          <div class="timeline" aria-label="Workshop stages preview">
+          <div class="timeline" aria-label="Stage preview">
             <article class="stageCard">
               <div class="stageLabel">Stage 1</div>
-              <div class="stageText">Player mapping and intent setup before decisions.</div>
+              <div class="stageText">Identity setup and persona selection.</div>
             </article>
             <article class="stageCard">
               <div class="stageLabel">Stage 2</div>
-              <div class="stageText">Constraint mapping using shared sticky-note prompts.</div>
+              <div class="stageText">Shared prompts and friction mapping.</div>
             </article>
             <article class="stageCard">
               <div class="stageLabel">Stage 3</div>
-              <div class="stageText">Timeline response and implementation design reaction.</div>
+              <div class="stageText">Journey board and workflow synthesis.</div>
             </article>
           </div>
 
@@ -553,14 +553,14 @@
           <img src="/pic/chibi2.png" alt="" />
         </div>
         <div>
-          <h2 id="modalTitle">Workshop 1</h2>
-          <p id="modalDesc">Select your university below.</p>
+          <h2 id="modalTitle">Choose Stage 1 Path</h2>
+          <p id="modalDesc">Pick your access route.</p>
         </div>
       </div>
 
-      <div class="choices" role="group" aria-label="University choices">
-        <button class="choice" id="monashBtn" type="button">Monash University</button>
-        <button class="choice" id="upngBtn" type="button">UPNG</button>
+      <div class="choices" role="group" aria-label="Stage track choices">
+        <button class="choice" id="studentBtn" type="button">Student Track</button>
+        <button class="choice" id="tutorBtn" type="button">Tutor Track</button>
       </div>
     </div>
   </div>
@@ -573,12 +573,12 @@
     const modal = overlay.querySelector(".modal");
     const openBtn = document.getElementById("workshopBtn");
     const closeBtn = document.getElementById("closeBtn");
-    const monashBtn = document.getElementById("monashBtn");
-    const upngBtn = document.getElementById("upngBtn");
+    const studentBtn = document.getElementById("studentBtn");
+    const tutorBtn = document.getElementById("tutorBtn");
 
     const LINKS = {
-      monash: "https://www.jackiefoo.me/stage1/step1.html?room=demo",
-      upng: "https://www.jackiefoo.me/stage1/step1.html?room=demo"
+      student: "https://www.jackiefoo.me/stage1/step1.html?room=demo",
+      tutor: "https://www.jackiefoo.me/stage1/step1-tutor.html?room=demo"
     };
 
     let lastFocusedEl = null;
@@ -587,7 +587,7 @@
       lastFocusedEl = document.activeElement;
       overlay.hidden = false;
       requestAnimationFrame(() => overlay.classList.add("open"));
-      monashBtn.focus();
+      studentBtn.focus();
       document.body.style.overflow = "hidden";
     }
 
@@ -641,12 +641,12 @@
       }
     });
 
-    monashBtn.addEventListener("click", () => {
-      window.location.href = LINKS.monash;
+    studentBtn.addEventListener("click", () => {
+      window.location.href = LINKS.student;
     });
 
-    upngBtn.addEventListener("click", () => {
-      window.location.href = LINKS.upng;
+    tutorBtn.addEventListener("click", () => {
+      window.location.href = LINKS.tutor;
     });
 
     window.addEventListener("pointermove", (event) => {

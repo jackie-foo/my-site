@@ -357,7 +357,8 @@
         <button id="btnRefresh">Refresh</button>
         <button id="btnStep1">Step 1</button>
         <button id="btnStep2">Step 2</button>
-        <button id="btnStep3">Step 3</button>
+        <button id="btnStep3">Step 3 Student</button>
+        <button id="btnStep3Tutor">Step 3 Tutor</button>
         <button id="btnIndex" class="btnAccent">Home</button>
       </div>
     </div>
@@ -373,7 +374,7 @@
           <div class="stat"><h3>Step 1 Ready</h3><p id="step1Ready">0</p></div>
           <div class="stat"><h3>Step 2 Active</h3><p id="step2Active">0</p></div>
           <div class="stat"><h3>Step 3 Active</h3><p id="step3Active">0</p></div>
-          <div class="stat"><h3>Journey Cards</h3><p id="journeyCount">0</p></div>
+          <div class="stat"><h3>Journey + Workflow</h3><p id="journeyCount">0</p></div>
         </div>
         <div class="progressWrap">
           <div class="progRow">
@@ -428,6 +429,18 @@
           <div id="constraintWeekList" class="laneList"></div>
         </div>
       </section>
+      <section class="card">
+        <div class="cardHead">
+          <h2>Tutor Workflow By Week</h2>
+          <span class="mono" id="workflowCount">0 workflow nodes</span>
+        </div>
+        <div class="cardBody">
+          <div id="workflowWeekList" class="laneList"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid2">
       <section class="card">
         <div class="cardHead">
           <h2>Parking Lot Notes</h2>
@@ -507,6 +520,8 @@
     const sharedPromptsList = $("#sharedPromptsList");
     const constraintCount = $("#constraintCount");
     const constraintWeekList = $("#constraintWeekList");
+    const workflowCount = $("#workflowCount");
+    const workflowWeekList = $("#workflowWeekList");
     const notesCountPill = $("#notesCountPill");
     const parkingNotesList = $("#parkingNotesList");
     const feed = $("#feed");
@@ -549,7 +564,7 @@
     }
 
     function computePrompts(summary){
-      const { total, readyStep1, activeStep2, activeStep3 } = summary;
+      const { total, readyStep1, activeStep2, activeStep3, workflowNodes } = summary;
       const q1 = [];
       const q2 = [];
       const q3 = [];
@@ -575,8 +590,12 @@
       q3.push("In Week 7 due week, what friction peaked before submission?");
       q3.push("In Week 8 return week, which first feedback point changed behavior?");
       q3.push("In Week 9 reaction week, what minimum action follows instructions 2/3?");
+      q3.push("Which tutor workflow node is missing between Week 4 due and Week 8 feedback return?");
       if (activeStep3 < Math.max(1, Math.floor(total * 0.6))){
         q3.push("Who needs help turning story details into week-specific cards?");
+      }
+      if (!workflowNodes){
+        q3.push("Ask tutors to map at least 3 workflow nodes (release, feedback, reaction).");
       }
 
       qStep1.innerHTML = q1.map(x => `<li>${shared.escapeHtml(x)}</li>`).join("");
@@ -670,6 +689,30 @@
         `;
       }).join("");
     }
+    function renderWorkflowByWeek(journey){
+      const flows = (journey || []).filter(j => String(j.type || "").startsWith("workflow_"));
+      workflowCount.textContent = `${flows.length} workflow nodes`;
+      if (!flows.length){
+        workflowWeekList.innerHTML = `<div class="empty">No tutor workflow nodes mapped yet.</div>`;
+        return;
+      }
+      const byWeek = new Map();
+      flows.forEach(f => {
+        const w = Number(f.week) || 0;
+        if (!byWeek.has(w)) byWeek.set(w, []);
+        byWeek.get(w).push(f);
+      });
+      const weeks = [...byWeek.keys()].sort((a,b)=>a-b);
+      workflowWeekList.innerHTML = weeks.map(w => {
+        const cards = byWeek.get(w) || [];
+        return `
+          <article class="laneCard">
+            <div class="laneMeta">Week ${w} • ${cards.length} workflow node${cards.length > 1 ? "s" : ""}</div>
+            <div>${cards.map(x => `• ${shared.escapeHtml(x.label || "(no label)")}`).join("<br/>")}</div>
+          </article>
+        `;
+      }).join("");
+    }
     function renderParkingNotes(notes){
       const rows = (notes || []).slice().sort((a,b) => String(b.updated_at || "").localeCompare(String(a.updated_at || "")));
       notesCountPill.textContent = `${rows.length} notes`;
@@ -728,6 +771,7 @@
 
       const stickyAuthors = new Set(stickies.map(s => s.participant_id).filter(Boolean));
       const journeyAuthors = new Set(journey.map(j => j.participant_id).filter(Boolean));
+      const workflowNodes = journey.filter(j => String(j.type || "").startsWith("workflow_")).length;
       const step1ReadyCount = participants.filter(p => shared.cleanDisplayName(p.display_name) && p.persona_id).length;
       const step2Count = stickyAuthors.size;
       const step3Count = journeyAuthors.size;
@@ -748,8 +792,9 @@
       renderPlayerMap(participants, stickyAuthors, journeyAuthors);
       renderSharedPrompts(stickies);
       renderConstraintsByWeek(journey);
+      renderWorkflowByWeek(journey);
       renderParkingNotes(notes);
-      computePrompts({ total: participants.length, readyStep1: step1ReadyCount, activeStep2: step2Count, activeStep3: step3Count, notesCount: notes.length });
+      computePrompts({ total: participants.length, readyStep1: step1ReadyCount, activeStep2: step2Count, activeStep3: step3Count, workflowNodes, notesCount: notes.length });
 
       if (errors.length){
         const hint = "Supabase checks: RLS SELECT policy for anon role, tables in realtime publication, correct session_id column.";
@@ -769,6 +814,7 @@
       $("#btnStep1").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`);
       $("#btnStep2").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
       $("#btnStep3").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step3.html?room=${encodeURIComponent(room)}`);
+      $("#btnStep3Tutor").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step3-tutor.html?room=${encodeURIComponent(room)}`);
       $("#btnIndex").addEventListener("click", () => location.href = "/index.html");
       sharedPromptsList.addEventListener("click", async (e) => {
         const btn = e.target.closest("[data-remove-sticky]");

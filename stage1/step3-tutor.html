@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Stage 1 • Step 3 Tutor Workflow</title>
+  <style>
+    :root{
+      --bg:#071126;
+      --panel:#0f1e42;
+      --panel2:#0b1732;
+      --border:#38548e;
+      --text:#eff6ff;
+      --muted:#b2c3e9;
+      --accent:#6cd6ff;
+      --accent2:#4ff2c3;
+      --warn:#ffd56a;
+      --bad:#ff7a86;
+      --r:18px;
+      --shadow:0 18px 44px rgba(0,0,0,.38);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(780px 420px at 14% 12%, rgba(108,214,255,.12), transparent 58%),
+        radial-gradient(940px 500px at 82% 76%, rgba(79,242,195,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
+        var(--bg);
+    }
+    .wrap{max-width:1360px;margin:0 auto;padding:16px 14px 84px}
+    header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(15,30,66,.86);font-size:12px;font-weight:1000}
+    .dot{width:10px;height:10px;border-radius:3px;background:var(--accent2)}
+    .subtitle{margin-top:8px;font-size:13px;font-weight:850;line-height:1.45;color:var(--muted)}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;font-weight:900;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    button,input,select{font:inherit}
+    button{appearance:none;cursor:pointer;border-radius:14px;border:1px solid rgba(255,255,255,.16);color:var(--text);background:rgba(15,30,66,.84);padding:10px 12px;font-weight:1000;box-shadow:0 10px 26px rgba(0,0,0,.24)}
+    button:hover{border-color:color-mix(in srgb,var(--accent) 62%, rgba(255,255,255,.16))}
+    .btnPrimary{border-color:color-mix(in srgb,var(--accent2) 70%, rgba(255,255,255,.16));background:linear-gradient(180deg, rgba(79,242,195,.16), rgba(15,30,66,.86))}
+    .btnDanger{border-color:rgba(255,122,134,.48)}
+    .card{margin-top:14px;border:1px solid rgba(255,255,255,.14);border-radius:var(--r);background:linear-gradient(0deg,var(--panel2),var(--panel));box-shadow:var(--shadow);overflow:hidden}
+    .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .cardHead h2{margin:0;font-size:14px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
+    .cardBody{padding:14px}
+    .layout{display:grid;grid-template-columns:320px 1fr;gap:12px}
+    @media (max-width:980px){.layout{grid-template-columns:1fr}}
+
+    .templateList{display:flex;flex-direction:column;gap:10px}
+    .tpl{border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.05);padding:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:grab}
+    .tpl:active{cursor:grabbing}
+    .tpl strong{font-size:13px}
+    .tpl small{display:block;color:var(--muted);font-size:11px;font-weight:800;line-height:1.35}
+    .tag{display:inline-flex;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:1000;border:1px solid rgba(255,255,255,.22);text-transform:uppercase;letter-spacing:.2px}
+    .t-start{background:rgba(108,214,255,.18)}
+    .t-release{background:rgba(255,213,106,.18)}
+    .t-feedback{background:rgba(79,242,195,.18)}
+    .t-action{background:rgba(255,122,134,.18)}
+
+    .create{margin-top:10px;display:grid;gap:8px}
+    .row{display:flex;gap:8px;flex-wrap:wrap}
+    input,select{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--text);border-radius:12px;padding:10px 11px;font-weight:900;outline:none}
+    input::placeholder{color:rgba(239,246,255,.58)}
+
+    .canvasWrap{overflow:auto;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(0,0,0,.16)}
+    .weeks{display:grid;grid-template-columns:repeat(12,minmax(230px,1fr));gap:10px;min-width:2920px;padding:10px}
+    .week{border:1px solid rgba(255,255,255,.2);border-radius:14px;background:rgba(255,255,255,.05);padding:10px;min-height:320px;display:flex;flex-direction:column;gap:8px}
+    .week.special{border-color:rgba(255,213,106,.58);box-shadow:inset 0 0 0 1px rgba(255,213,106,.16)}
+    .weekHead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.12)}
+    .weekHead strong{font-size:12px;text-transform:uppercase;letter-spacing:.24px}
+    .weekHead span{font-size:10px;font-weight:900;color:var(--muted);text-transform:uppercase;line-height:1.3;text-align:right}
+    .dropZone{display:flex;flex-direction:column;gap:8px;min-height:220px;flex:1;border:1px dashed rgba(255,255,255,.2);border-radius:10px;padding:6px;background:rgba(0,0,0,.14)}
+    .dropZone.over{border-color:rgba(79,242,195,.7);background:rgba(79,242,195,.12)}
+
+    .node{border:1px solid rgba(255,255,255,.24);border-radius:12px;padding:9px;background:rgba(255,255,255,.07);cursor:grab;box-shadow:0 10px 20px rgba(0,0,0,.22)}
+    .node:active{cursor:grabbing}
+    .nodeTop{display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .node h4{margin:0;font-size:12px;line-height:1.35}
+    .node .meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px}
+    .mini{border:none;border-radius:10px;padding:6px 8px;font-size:11px;font-weight:1000;cursor:pointer;background:rgba(255,255,255,.14);color:var(--text);box-shadow:none}
+    .miniDanger{border:1px solid rgba(255,122,134,.5);background:rgba(255,122,134,.16)}
+
+    .diag{margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;font-size:12px;font-weight:850;color:var(--muted);background:rgba(255,255,255,.04)}
+    .diag.bad{border-color:rgba(255,122,134,.5);background:rgba(255,122,134,.12);color:#ffd2d8}
+
+    .toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:80;background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.2);padding:9px 12px;border-radius:999px;font-size:12px;font-weight:900;display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="badge"><span class="dot"></span> Stage 1 • Step 3 Tutor Workflow</div>
+        <div class="subtitle">
+          Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
+          Role: <span class="mono" id="roleOut">tutor</span> • Card: <span class="mono" id="personaOut">None</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="btnBack">← Back</button>
+        <button id="btnDashboard">Dashboard</button>
+        <button id="btnRefresh">Refresh</button>
+        <button id="btnFinish" class="btnPrimary">Finish</button>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="cardHead">
+        <h2>Workflow Journey Board (Drag + Drop)</h2>
+        <span class="mono" id="countOut">0 nodes</span>
+      </div>
+      <div class="cardBody layout">
+        <aside>
+          <div class="templateList" id="templateList"></div>
+
+          <div class="create">
+            <input id="customLabel" maxlength="80" placeholder="Custom workflow step label"/>
+            <div class="row">
+              <select id="customType">
+                <option value="workflow_action">Action</option>
+                <option value="workflow_feedback">Feedback</option>
+                <option value="workflow_release">Release / Due</option>
+                <option value="workflow_start">Start / Setup</option>
+              </select>
+              <select id="customWeek">
+                <option value="1">Week 1</option><option value="2">Week 2</option><option value="3">Week 3</option>
+                <option value="4">Week 4</option><option value="5">Week 5</option><option value="6">Week 6</option>
+                <option value="7">Week 7</option><option value="8">Week 8</option><option value="9">Week 9</option>
+                <option value="10">Week 10</option><option value="11">Week 11</option><option value="12">Week 12</option>
+              </select>
+              <button id="btnAddCustom" class="btnPrimary">Add Node</button>
+            </div>
+          </div>
+
+          <div class="diag" id="diag">Connecting...</div>
+        </aside>
+
+        <div class="canvasWrap">
+          <div class="weeks" id="weeks"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="/stage1/shared.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (() => {
+    const shared = window.Stage1Shared;
+    const supabase = window.supabase.createClient(shared.SUPABASE_URL, shared.SUPABASE_ANON_KEY);
+    const BASE_PATH = shared.BASE_PATH;
+
+    const params = new URLSearchParams(location.search);
+    const room = (params.get("room") || "").trim();
+    if (!room){
+      document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room. Use <b>?room=demo</b></div>";
+      throw new Error("Missing room");
+    }
+
+    const keys = shared.getKeys(room);
+    const participantId = shared.getOrCreateParticipantId(keys.PID_KEY);
+    const { NAME_KEY, ROLE_KEY, PERSONA_KEY } = keys;
+    localStorage.setItem(ROLE_KEY, "tutor");
+
+    const $ = (q, el=document) => el.querySelector(q);
+
+    const roomOut = $("#roomOut");
+    const meOut = $("#meOut");
+    const roleOut = $("#roleOut");
+    const personaOut = $("#personaOut");
+    const countOut = $("#countOut");
+    const diag = $("#diag");
+    const toast = $("#toast");
+    const templateList = $("#templateList");
+    const weeksEl = $("#weeks");
+    const customLabel = $("#customLabel");
+    const customType = $("#customType");
+    const customWeek = $("#customWeek");
+
+    const WEEK_MARKS = {
+      2: "Brief Release",
+      4: "Assignment 1 Due",
+      7: "Assignment 2 Due",
+      8: "Feedback Return",
+      9: "Instruction 2 + 3"
+    };
+
+    const TYPE_META = {
+      workflow_start: { label: "Start", cls: "t-start" },
+      workflow_release: { label: "Release", cls: "t-release" },
+      workflow_feedback: { label: "Feedback", cls: "t-feedback" },
+      workflow_action: { label: "Action", cls: "t-action" }
+    };
+
+    const TEMPLATES = [
+      { label: "Kickoff framing", type: "workflow_start", hint: "Set expectations + rubric orientation" },
+      { label: "Brief release", type: "workflow_release", week: 2, hint: "Assignment brief published" },
+      { label: "Assignment 1 due", type: "workflow_release", week: 4, hint: "Collect first major submission" },
+      { label: "Assignment 2 due", type: "workflow_release", week: 7, hint: "Second major milestone" },
+      { label: "Feedback return", type: "workflow_feedback", week: 8, hint: "Return marked feedback" },
+      { label: "Reaction checkpoint", type: "workflow_action", week: 9, hint: "Capture student response plan" },
+      { label: "Office-hour intervention", type: "workflow_feedback", hint: "Target friction before final revision" }
+    ];
+
+    const state = {
+      nodes: [],
+      drag: null
+    };
+
+    function escapeHtml(s){ return shared.escapeHtml(String(s || "")); }
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.style.display = "block";
+      clearTimeout(showToast.t);
+      showToast.t = setTimeout(() => toast.style.display = "none", 2200);
+    }
+
+    function setDiag(msg, bad=false){
+      diag.textContent = msg;
+      diag.classList.toggle("bad", !!bad);
+    }
+
+    function renderIdentity(){
+      const displayName = shared.cleanDisplayName(localStorage.getItem(NAME_KEY));
+      const personaId = localStorage.getItem(PERSONA_KEY);
+      meOut.textContent = displayName || participantId.slice(0, 8);
+      roleOut.textContent = "tutor";
+      personaOut.textContent = shared.personaTitle(personaId);
+    }
+
+    function nodeTypeInfo(type){
+      return TYPE_META[type] || TYPE_META.workflow_action;
+    }
+
+    function cycleType(type){
+      const order = ["workflow_start", "workflow_release", "workflow_feedback", "workflow_action"];
+      const idx = order.indexOf(type);
+      return order[(idx + 1) % order.length];
+    }
+
+    function renderTemplates(){
+      templateList.innerHTML = TEMPLATES.map((t, i) => {
+        const info = nodeTypeInfo(t.type);
+        const wk = t.week ? ` • Week ${t.week}` : "";
+        return `
+          <div class="tpl" draggable="true" data-template-index="${i}">
+            <div>
+              <strong>${escapeHtml(t.label)}</strong>
+              <small>${escapeHtml(t.hint)}${escapeHtml(wk)}</small>
+            </div>
+            <span class="tag ${info.cls}">${escapeHtml(info.label)}</span>
+          </div>
+        `;
+      }).join("");
+
+      templateList.querySelectorAll("[data-template-index]").forEach(el => {
+        el.addEventListener("dragstart", (e) => {
+          const idx = Number(el.getAttribute("data-template-index"));
+          const t = TEMPLATES[idx];
+          if (!t) return;
+          const payload = { mode: "template", label: t.label, type: t.type, week: t.week || null };
+          e.dataTransfer.setData("text/plain", JSON.stringify(payload));
+        });
+      });
+    }
+
+    function renderWeeks(){
+      const weeks = Array.from({ length: 12 }, (_, i) => i + 1);
+      weeksEl.innerHTML = weeks.map(w => {
+        const mark = WEEK_MARKS[w] || "Workflow slot";
+        const special = WEEK_MARKS[w] ? " special" : "";
+        return `
+          <section class="week${special}" data-week="${w}">
+            <div class="weekHead">
+              <strong>Week ${w}</strong>
+              <span>${escapeHtml(mark)}</span>
+            </div>
+            <div class="dropZone" data-week="${w}"></div>
+          </section>
+        `;
+      }).join("");
+
+      weeksEl.querySelectorAll(".dropZone").forEach(zone => {
+        zone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          zone.classList.add("over");
+        });
+        zone.addEventListener("dragleave", () => zone.classList.remove("over"));
+        zone.addEventListener("drop", async (e) => {
+          e.preventDefault();
+          zone.classList.remove("over");
+          const data = e.dataTransfer.getData("text/plain");
+          if (!data) return;
+          const week = Number(zone.getAttribute("data-week")) || 1;
+          try{
+            const payload = JSON.parse(data);
+            if (payload.mode === "template"){
+              await insertNode({ week: payload.week || week, label: payload.label, type: payload.type });
+            } else if (payload.mode === "node"){
+              await moveNode(payload.id, week);
+            }
+          } catch {
+            // ignore invalid drag payload
+          }
+        });
+      });
+
+      renderNodes();
+    }
+
+    function renderNodes(){
+      weeksEl.querySelectorAll(".dropZone").forEach(z => { z.innerHTML = ""; });
+
+      const onlyWorkflow = state.nodes.filter(n => String(n.type || "").startsWith("workflow_"));
+      const sorted = onlyWorkflow.slice().sort((a, b) => {
+        const wa = Number(a.week) || 1;
+        const wb = Number(b.week) || 1;
+        if (wa !== wb) return wa - wb;
+        return String(a.label || "").localeCompare(String(b.label || ""));
+      });
+
+      sorted.forEach(n => {
+        const zone = weeksEl.querySelector(`.dropZone[data-week="${Number(n.week) || 1}"]`);
+        if (!zone) return;
+        const info = nodeTypeInfo(n.type);
+        const card = document.createElement("article");
+        card.className = "node";
+        card.draggable = true;
+        card.dataset.id = n.id;
+        card.innerHTML = `
+          <div class="nodeTop">
+            <h4>${escapeHtml(n.label || "(untitled)")}</h4>
+            <span class="tag ${info.cls}">${escapeHtml(info.label)}</span>
+          </div>
+          <div class="meta">
+            <button class="mini" data-cycle="${escapeHtml(n.id)}">Cycle Type</button>
+            <button class="mini miniDanger" data-del="${escapeHtml(n.id)}">Delete</button>
+          </div>
+        `;
+
+        card.addEventListener("dragstart", (e) => {
+          const payload = { mode: "node", id: n.id };
+          e.dataTransfer.setData("text/plain", JSON.stringify(payload));
+        });
+
+        zone.appendChild(card);
+      });
+
+      countOut.textContent = `${onlyWorkflow.length} nodes`;
+    }
+
+    async function insertNode({ week, label, type }){
+      const clean = String(label || "").trim();
+      if (!clean) return;
+      const payload = {
+        session_id: room,
+        participant_id: participantId,
+        week: Number(week) || 1,
+        label: clean,
+        type: String(type || "workflow_action")
+      };
+
+      let ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
+      if (ins.error){
+        const relaxed = { ...payload };
+        delete relaxed.participant_id;
+        ins = await supabase.from("workshop_journey_items").insert(relaxed).select().single();
+      }
+      if (ins.error) throw ins.error;
+
+      state.nodes.push(ins.data);
+      renderNodes();
+      showToast("Workflow node added");
+    }
+
+    async function moveNode(id, week){
+      const w = Number(week) || 1;
+      const { error } = await supabase.from("workshop_journey_items").update({ week: w }).eq("id", id);
+      if (error) throw error;
+      const idx = state.nodes.findIndex(n => n.id === id);
+      if (idx >= 0) state.nodes[idx].week = w;
+      renderNodes();
+    }
+
+    async function updateNodeType(id, next){
+      const { error } = await supabase.from("workshop_journey_items").update({ type: next }).eq("id", id);
+      if (error) throw error;
+      const idx = state.nodes.findIndex(n => n.id === id);
+      if (idx >= 0) state.nodes[idx].type = next;
+      renderNodes();
+    }
+
+    async function deleteNode(id){
+      const { error } = await supabase.from("workshop_journey_items").delete().eq("id", id);
+      if (error) throw error;
+      state.nodes = state.nodes.filter(n => n.id !== id);
+      renderNodes();
+      showToast("Node removed");
+    }
+
+    async function loadNodes(){
+      const { data, error } = await supabase
+        .from("workshop_journey_items")
+        .select("*")
+        .eq("session_id", room);
+      if (error) throw error;
+      state.nodes = (data || []).filter(n => String(n.type || "").startsWith("workflow_"));
+      renderNodes();
+    }
+
+    function wireEvents(){
+      document.addEventListener("click", async (e) => {
+        const del = e.target.closest("[data-del]");
+        if (del){
+          const id = del.getAttribute("data-del");
+          if (!id) return;
+          const ok = confirm("Delete this workflow node?");
+          if (!ok) return;
+          try{ await deleteNode(id); } catch(err){ showToast(err.message || "Delete failed"); }
+          return;
+        }
+
+        const cyc = e.target.closest("[data-cycle]");
+        if (cyc){
+          const id = cyc.getAttribute("data-cycle");
+          const row = state.nodes.find(n => n.id === id);
+          if (!row) return;
+          const next = cycleType(row.type);
+          try{ await updateNodeType(id, next); } catch(err){ showToast(err.message || "Update failed"); }
+        }
+      });
+
+      $("#btnAddCustom").addEventListener("click", async () => {
+        const label = customLabel.value.trim();
+        if (!label){ showToast("Type a label first"); return; }
+        try{
+          await insertNode({ label, type: customType.value, week: Number(customWeek.value) || 1 });
+          customLabel.value = "";
+        } catch (err){
+          showToast(err.message || "Insert failed");
+        }
+      });
+
+      customLabel.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") $("#btnAddCustom").click();
+      });
+
+      $("#btnBack").addEventListener("click", () => {
+        location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&track=tutor`;
+      });
+      $("#btnDashboard").addEventListener("click", () => {
+        location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}`;
+      });
+      $("#btnFinish").addEventListener("click", () => {
+        location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}`;
+      });
+      $("#btnRefresh").addEventListener("click", () => {
+        loadNodes().then(() => showToast("Refreshed")).catch(err => showToast(err.message || "Refresh failed"));
+      });
+    }
+
+    function subscribe(){
+      supabase
+        .channel("step3tutor:" + room)
+        .on("postgres_changes", { event: "*", schema: "public", table: "workshop_journey_items", filter: `session_id=eq.${room}` }, (payload) => {
+          const row = payload.new || payload.old;
+          if (!row || !String(row.type || "").startsWith("workflow_")) return;
+
+          if (payload.eventType === "INSERT"){
+            if (!state.nodes.some(n => n.id === payload.new.id)) state.nodes.push(payload.new);
+          } else if (payload.eventType === "UPDATE"){
+            const idx = state.nodes.findIndex(n => n.id === payload.new.id);
+            if (idx >= 0){ state.nodes[idx] = payload.new; }
+            else { state.nodes.push(payload.new); }
+          } else if (payload.eventType === "DELETE"){
+            state.nodes = state.nodes.filter(n => n.id !== payload.old.id);
+          }
+          renderNodes();
+        })
+        .subscribe((status) => {
+          if (status === "SUBSCRIBED") setDiag("Connected. Live updates are active.", false);
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT"){
+            setDiag("Realtime degraded. Refresh still works.", true);
+          }
+        });
+    }
+
+    roomOut.textContent = room;
+    renderIdentity();
+    renderTemplates();
+    renderWeeks();
+    wireEvents();
+
+    loadNodes()
+      .then(() => setDiag("Connected. Drag templates into week columns.", false))
+      .catch((err) => setDiag(err.message || "Load failed", true));
+    subscribe();
+  })();
+  </script>
+</body>
+</html>

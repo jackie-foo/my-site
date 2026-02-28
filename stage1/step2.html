@@ -1215,8 +1215,20 @@
       setTimeout(()=>gateInput.focus(), 0);
     }
 
+    function nextStep3Path(){
+      const role = identity.role === "tutor" ? "tutor" : "student";
+      const page = role === "tutor" ? "step3-tutor.html" : "step3.html";
+      return `${BASE_PATH}/${page}?room=${encodeURIComponent(room)}`;
+    }
+
+    function backStep1Path(){
+      const role = identity.role === "tutor" ? "tutor" : "student";
+      const page = role === "tutor" ? "step1-tutor.html" : "step1.html";
+      return `${BASE_PATH}/${page}?room=${encodeURIComponent(room)}`;
+    }
+
     function proceedToStep3(){
-      location.href = `${BASE_PATH}/step3.html?room=${encodeURIComponent(room)}`;
+      location.href = nextStep3Path();
     }
 
     $("#btnCloseGate").addEventListener("click", ()=> closeOverlay(gateOverlay));
@@ -1238,7 +1250,7 @@
       proceedToStep3();
     });
 
-    $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`);
+    $("#btnBack").addEventListener("click", ()=> location.href = backStep1Path());
     $("#btnDashboard").addEventListener("click", ()=> location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}`);
 
     // Next button requires Step 3 passcode
