@@ -513,7 +513,6 @@
 
           <div class="actions">
             <button class="btn btnPrimary" id="workshopBtn" type="button">Enter Stage 1</button>
-            <a class="btn btnGhost" href="/stage1/main-dashboard.html">Facilitator Dashboard</a>
           </div>
 
           <nav class="links" aria-label="Jackie links">
@@ -523,130 +522,18 @@
             <a class="link" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
           </nav>
 
-          <div class="timeline" aria-label="Stage preview">
-            <article class="stageCard">
-              <div class="stageLabel">Stage 1</div>
-              <div class="stageText">Identity setup and persona selection.</div>
-            </article>
-            <article class="stageCard">
-              <div class="stageLabel">Stage 2</div>
-              <div class="stageText">Shared prompts and friction mapping.</div>
-            </article>
-            <article class="stageCard">
-              <div class="stageLabel">Stage 3</div>
-              <div class="stageText">Journey board and workflow synthesis.</div>
-            </article>
-          </div>
-
           <footer>© <span id="year"></span> Jackie Foo</footer>
         </div>
       </section>
     </main>
   </div>
 
-  <div class="overlay" id="overlay" hidden>
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
-      <button class="closeBtn" id="closeBtn" type="button" aria-label="Close dialog">Close</button>
-
-      <div class="modalRow">
-        <div class="modalChibi" aria-hidden="true">
-          <img src="/pic/chibi2.png" alt="" />
-        </div>
-        <div>
-          <h2 id="modalTitle">Choose Stage 1 Path</h2>
-          <p id="modalDesc">Pick your access route.</p>
-        </div>
-      </div>
-
-      <div class="choices" role="group" aria-label="Stage track choices">
-        <button class="choice" id="studentBtn" type="button">Student Track</button>
-        <button class="choice" id="tutorBtn" type="button">Tutor Track</button>
-      </div>
-    </div>
-  </div>
-
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
-
     const spotlight = document.getElementById("spotlight");
-    const overlay = document.getElementById("overlay");
-    const modal = overlay.querySelector(".modal");
     const openBtn = document.getElementById("workshopBtn");
-    const closeBtn = document.getElementById("closeBtn");
-    const studentBtn = document.getElementById("studentBtn");
-    const tutorBtn = document.getElementById("tutorBtn");
-
-    const LINKS = {
-      student: "https://www.jackiefoo.me/stage1/step1.html?room=demo",
-      tutor: "https://www.jackiefoo.me/stage1/step1-tutor.html?room=demo"
-    };
-
-    let lastFocusedEl = null;
-
-    function openModal() {
-      lastFocusedEl = document.activeElement;
-      overlay.hidden = false;
-      requestAnimationFrame(() => overlay.classList.add("open"));
-      studentBtn.focus();
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeModal() {
-      overlay.classList.remove("open");
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const delay = reducedMotion ? 0 : 180;
-
-      window.setTimeout(() => {
-        overlay.hidden = true;
-        document.body.style.overflow = "";
-        if (lastFocusedEl && typeof lastFocusedEl.focus === "function") {
-          lastFocusedEl.focus();
-        }
-      }, delay);
-    }
-
-    openBtn.addEventListener("click", openModal);
-    closeBtn.addEventListener("click", closeModal);
-
-    overlay.addEventListener("click", (event) => {
-      if (event.target === overlay) closeModal();
-    });
-
-    document.addEventListener("keydown", (event) => {
-      const isOpen = !overlay.hidden && overlay.classList.contains("open");
-      if (!isOpen) return;
-
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeModal();
-        return;
-      }
-
-      if (event.key === "Tab") {
-        const focusable = modal.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        if (!focusable.length) return;
-
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
-      }
-    });
-
-    studentBtn.addEventListener("click", () => {
-      window.location.href = LINKS.student;
-    });
-
-    tutorBtn.addEventListener("click", () => {
-      window.location.href = LINKS.tutor;
+    openBtn.addEventListener("click", () => {
+      window.location.href = "/stage1/landing.html?room=demo&campus=upng";
     });
 
     window.addEventListener("pointermove", (event) => {

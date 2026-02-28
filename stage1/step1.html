@@ -629,6 +629,7 @@
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
+    const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     if (!room) {
       document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room. Use <b>?room=demo</b></div>";
       throw new Error("Missing room");
@@ -1133,11 +1134,11 @@
         showToast("Please enter your name and pick a card");
         return;
       }
-      location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`;
+      location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
     });
 
     btnExit.addEventListener("click", () => location.href = "/index.html");
-    btnDashboard.addEventListener("click", () => location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}`);
+    btnDashboard.addEventListener("click", () => location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`);
 
     btnReset.addEventListener("click", () => {
       const ok = confirm("Clear local workshop storage and reload?");
