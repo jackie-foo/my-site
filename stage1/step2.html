@@ -237,6 +237,7 @@
         <div class="badge"><span class="dot"></span> Stage 1 • Step 2</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
+          Role: <span class="mono" id="roleOut">student</span> • Card: <span class="mono" id="personaOut">None</span><br/>
           Add sticky goals. It should appear instantly, and sync to others via realtime.
         </div>
       </div>
@@ -365,9 +366,13 @@
 
     // Remember Step3 unlock per room (optional)
     const STEP3_KEY = `stage1_step3_authed_${room}`;
+    const NAME_KEY = `stage1_name_${room}`;
+    const ROLE_KEY = `stage1_role_${room}`;
+    const PERSONA_KEY = `stage1_persona_${room}`;
 
     const $ = (q, el=document) => el.querySelector(q);
     const roomOut = $("#roomOut"), meOut = $("#meOut");
+    const roleOut = $("#roleOut"), personaOut = $("#personaOut");
     const stickyArea = $("#stickyArea"), toast = $("#toast");
 
     const loading = $("#loading");
@@ -378,7 +383,29 @@
     chibiImg.src = CHIBI3_SRC;
 
     roomOut.textContent = room;
-    meOut.textContent = participantId.slice(0,8);
+    function personaIdToTitle(id){
+      const map = {
+        clarifier: "Clarifier",
+        optimizer: "Optimizer",
+        validator: "Validator",
+        overwhelmed: "Overwhelmed",
+        independent: "Independent",
+        storybuilder: "Story Builder",
+        perfectionist: "Perfectionist",
+        strategist: "Strategist"
+      };
+      return map[id] || "None";
+    }
+    function refreshIdentityUI({ displayName=null, role="student", personaId=null } = {}){
+      meOut.textContent = displayName || participantId.slice(0,8);
+      roleOut.textContent = role === "tutor" ? "tutor" : "student";
+      personaOut.textContent = personaIdToTitle(personaId);
+    }
+    refreshIdentityUI({
+      displayName: (localStorage.getItem(NAME_KEY) || "").trim() || null,
+      role: localStorage.getItem(ROLE_KEY) || "student",
+      personaId: localStorage.getItem(PERSONA_KEY)
+    });
 
     function showToast(msg){
       toast.textContent = msg;
@@ -462,6 +489,33 @@
       if (a.error) throw a.error;
       const b = await supabase.from("workshop_participants").upsert({ id: participantId, session_id: room }, { onConflict: "id" });
       if (b.error) throw b.error;
+    }
+    async function hydrateIdentity(){
+      try{
+        const { data, error } = await supabase
+          .from("workshop_participants")
+          .select("display_name, role, persona_id")
+          .eq("id", participantId)
+          .maybeSingle();
+        if (error) throw error;
+        if (!data){
+          refreshIdentityUI({
+            displayName: (localStorage.getItem(NAME_KEY) || "").trim() || null,
+            role: localStorage.getItem(ROLE_KEY) || "student",
+            personaId: localStorage.getItem(PERSONA_KEY)
+          });
+          return;
+        }
+        const displayName = (data.display_name || "").trim() || null;
+        const role = data.role === "tutor" ? "tutor" : "student";
+        const personaId = data.persona_id || null;
+        if (displayName) localStorage.setItem(NAME_KEY, displayName);
+        localStorage.setItem(ROLE_KEY, role);
+        if (personaId) localStorage.setItem(PERSONA_KEY, personaId);
+        refreshIdentityUI({ displayName, role, personaId });
+      } catch (err){
+        console.error("identity load failed", err);
+      }
     }
 
     function escapeHtml(str){
@@ -623,6 +677,7 @@
       showLoading("Loading stickies…", "Syncing your room + fetching the board.");
       try{
         await ensureSessionAndParticipant();
+        await hydrateIdentity();
 
         const { data, error } = await supabase
           .from("workshop_stickies")
@@ -894,6 +949,9 @@
       localStorage.removeItem(AUTH_KEY);
       localStorage.removeItem(STEP3_KEY);
       localStorage.removeItem(TUT_KEY);
+      localStorage.removeItem(NAME_KEY);
+      localStorage.removeItem(ROLE_KEY);
+      localStorage.removeItem(PERSONA_KEY);
       location.reload();
     });
 

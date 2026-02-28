@@ -6,10 +6,10 @@
   <title>Stage 1 • Step 1</title>
   <style>
     :root{
-      --bg:#0b0d12;
-      --panel:#121625;
-      --panel2:#0f1320;
-      --border:#2a3350;
+      --bg:#070a14;
+      --panel:#11172a;
+      --panel2:#0c1120;
+      --border:#2f3a60;
       --text:#e9ecff;
       --muted:#aab0d6;
 
@@ -18,7 +18,7 @@
       --bad:#ff4d4d;
 
       --r:18px;
-      --shadow:0 18px 44px rgba(0,0,0,.42);
+      --shadow:0 20px 44px rgba(2,8,22,.46);
       --focus: 0 0 0 4px rgba(0,229,255,.18);
     }
 
@@ -44,7 +44,7 @@
       filter:saturate(1.05);
     }
 
-    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 92px}
+    .wrap{max-width:1040px;margin:0 auto;padding:20px 14px 92px}
     header{
       display:flex;
       justify-content:space-between;
@@ -90,11 +90,13 @@
 
     .card{
       border:1px solid rgba(255,255,255,.10);
-      background:linear-gradient(0deg, rgba(15,19,32,.88), rgba(18,22,37,.88));
+      background:
+        linear-gradient(110deg, rgba(0,229,255,.04), transparent 35%),
+        linear-gradient(0deg, rgba(15,19,32,.90), rgba(18,22,37,.90));
       border-radius:var(--r);
       box-shadow:var(--shadow);
       overflow:hidden;
-      margin-top:14px;
+      margin-top:16px;
       backdrop-filter: blur(10px);
     }
     .cardHead{
@@ -209,30 +211,35 @@
     .btnGhost{background:rgba(255,255,255,.03)}
 
     /* Persona grid */
-    .personaGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .personaGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
     @media (max-width:860px){.personaGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media (max-width:520px){.personaGrid{grid-template-columns:repeat(1,minmax(0,1fr))}}
 
     .persona{
       border:1px solid rgba(255,255,255,.10);
       border-radius:16px;
-      background:rgba(255,255,255,.03);
+      background:
+        linear-gradient(165deg, color-mix(in srgb, var(--persona-accent, var(--accent2)) 14%, rgba(255,255,255,.02)), rgba(255,255,255,.02) 35%),
+        rgba(255,255,255,.02);
       padding:12px;
       cursor:pointer;
       display:flex;
       flex-direction:column;
       gap:10px;
-      min-height:150px;
+      min-height:248px;
       position:relative;
-      transition: transform .14s ease, border-color .14s ease, background .14s ease;
+      transition: transform .14s ease, border-color .14s ease, background .14s ease, box-shadow .14s ease;
     }
     .persona:hover{
       transform: translateY(-1px);
-      border-color:color-mix(in srgb,var(--accent2) 55%, rgba(255,255,255,.10));
+      border-color:color-mix(in srgb,var(--persona-accent, var(--accent2)) 60%, rgba(255,255,255,.10));
+      box-shadow:0 12px 26px rgba(0,0,0,.24);
     }
     .persona.selected{
-      border-color:color-mix(in srgb,var(--accent2) 75%, rgba(255,255,255,.10));
-      background:rgba(255,43,214,.07);
+      border-color:color-mix(in srgb,var(--persona-accent, var(--accent2)) 78%, rgba(255,255,255,.10));
+      background:
+        linear-gradient(160deg, color-mix(in srgb, var(--persona-accent, var(--accent2)) 20%, rgba(255,255,255,.04)), rgba(255,255,255,.03) 42%),
+        rgba(255,255,255,.03);
     }
     .persona.selected::after{
       content:"SELECTED";
@@ -241,8 +248,8 @@
       letter-spacing:.4px;
       padding:6px 8px;
       border-radius:999px;
-      color:#0b0d12;background:var(--accent2);
-      box-shadow:0 12px 22px rgba(255,43,214,.14);
+      color:#0b0d12;background:var(--persona-accent, var(--accent2));
+      box-shadow:0 12px 22px color-mix(in srgb, var(--persona-accent, var(--accent2)) 45%, transparent);
     }
 
     .pTop{
@@ -258,19 +265,25 @@
     .thumbWrap{
       border:1px solid rgba(255,255,255,.10);
       border-radius:14px;
-      background:rgba(255,255,255,.02);
-      padding:10px;
+      background:
+        radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--persona-accent, var(--accent2)) 22%, transparent), transparent 70%),
+        rgba(255,255,255,.02);
+      padding:0;
       display:flex;
       align-items:center;
       justify-content:center;
-      min-height:78px;
+      overflow:hidden;
+      width:100%;
+      aspect-ratio:4/3;
     }
     .thumb{
-      width:72px;
-      height:72px;
+      width:100%;
+      height:100%;
       object-fit:contain;
+      object-position:center center;
+      transform:scale(1.1);
       filter: drop-shadow(0 14px 18px rgba(0,0,0,.40));
-      border-radius:12px;
+      border-radius:0;
     }
 
     .toast{
@@ -472,13 +485,13 @@
         <!-- Name + Role -->
         <div class="row" style="align-items:flex-end">
           <div class="field">
-            <div class="label">Your name</div>
+            <label class="label" for="nameInput">Your name</label>
             <input id="nameInput" type="text" placeholder="e.g., Jackie" maxlength="32" autocomplete="name"/>
             <div class="hint">This is what others will see in the room.</div>
           </div>
 
           <div class="field" style="max-width:360px">
-            <div class="label">Role</div>
+            <label class="label" for="roleSelect">Role</label>
             <select id="roleSelect" class="select" aria-label="Role">
               <option value="student">Student</option>
               <option value="tutor">Tutor</option>
@@ -606,12 +619,12 @@
     // ✅ Card thumbnail placeholders:
     // Each card has its own line so you can change them later.
     const CARD_IMG_CLARIFIER     = "/pic/chibi1.png";
-    const CARD_IMG_OPTIMIZER     = "/pic/chibi1.png";
-    const CARD_IMG_VALIDATOR     = "/pic/chibi1.png";
-    const CARD_IMG_OVERWHELMED   = "/pic/chibi1.png";
+    const CARD_IMG_OPTIMIZER     = "/pic/chibi2.png";
+    const CARD_IMG_VALIDATOR     = "/pic/chibi3.png";
+    const CARD_IMG_OVERWHELMED   = "/pic/chibi2.png";
     const CARD_IMG_INDEPENDENT   = "/pic/chibi1.png";
-    const CARD_IMG_STORYBUILDER  = "/pic/chibi1.png";
-    const CARD_IMG_PERFECTIONIST = "/pic/chibi1.png";
+    const CARD_IMG_STORYBUILDER  = "/pic/chibi3.png";
+    const CARD_IMG_PERFECTIONIST = "/pic/chibi2.png";
     const CARD_IMG_STRATEGIST    = "/pic/chibi1.png";
 
     const params = new URLSearchParams(location.search);
@@ -633,6 +646,8 @@
     const AUTH_KEY = `stage1_authed_${room}`;
     const TUT_KEY = `stage1_tut_seen_${room}`;
     const NAME_KEY = `stage1_name_${room}`;
+    const ROLE_KEY = `stage1_role_${room}`;
+    const PERSONA_KEY = `stage1_persona_${room}`;
 
     // UI refs
     const $ = (q, el=document) => el.querySelector(q);
@@ -734,14 +749,14 @@
 
     // ✅ persona cards now include an imgSrc per card
     const personaCards = [
-      { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want examples.", imgSrc: CARD_IMG_CLARIFIER },
-      { id:"optimizer", title:"Optimizer", text:"Give me actions. I iterate. I care about efficiency.", imgSrc: CARD_IMG_OPTIMIZER },
-      { id:"validator", title:"Validator", text:"I check fairness and rubric alignment.", imgSrc: CARD_IMG_VALIDATOR },
-      { id:"overwhelmed", title:"Overwhelmed", text:"Too vague or too much makes me shut down.", imgSrc: CARD_IMG_OVERWHELMED },
-      { id:"independent", title:"Independent", text:"I’ll figure it out, but I need a direction.", imgSrc: CARD_IMG_INDEPENDENT },
-      { id:"storybuilder", title:"Story Builder", text:"I want the ‘why’ to connect the picture.", imgSrc: CARD_IMG_STORYBUILDER },
-      { id:"perfectionist", title:"Perfectionist", text:"I fix everything. Tell me what matters most.", imgSrc: CARD_IMG_PERFECTIONIST },
-      { id:"strategist", title:"Strategist", text:"I plan ahead with checkpoints and timelines.", imgSrc: CARD_IMG_STRATEGIST }
+      { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want examples.", imgSrc: CARD_IMG_CLARIFIER, accent:"#00e5ff" },
+      { id:"optimizer", title:"Optimizer", text:"Give me actions. I iterate. I care about efficiency.", imgSrc: CARD_IMG_OPTIMIZER, accent:"#47ff87" },
+      { id:"validator", title:"Validator", text:"I check fairness and rubric alignment.", imgSrc: CARD_IMG_VALIDATOR, accent:"#ffce4f" },
+      { id:"overwhelmed", title:"Overwhelmed", text:"Too vague or too much makes me shut down.", imgSrc: CARD_IMG_OVERWHELMED, accent:"#ff7a7a" },
+      { id:"independent", title:"Independent", text:"I’ll figure it out, but I need a direction.", imgSrc: CARD_IMG_INDEPENDENT, accent:"#7ee6ff" },
+      { id:"storybuilder", title:"Story Builder", text:"I want the ‘why’ to connect the picture.", imgSrc: CARD_IMG_STORYBUILDER, accent:"#ff9ae9" },
+      { id:"perfectionist", title:"Perfectionist", text:"I fix everything. Tell me what matters most.", imgSrc: CARD_IMG_PERFECTIONIST, accent:"#ff9a6f" },
+      { id:"strategist", title:"Strategist", text:"I plan ahead with checkpoints and timelines.", imgSrc: CARD_IMG_STRATEGIST, accent:"#9ab2ff" }
     ];
 
     const state = {
@@ -763,6 +778,9 @@
       const shown = state.display_name ? state.display_name : participantId.slice(0, 8);
       meOut.textContent = shown;
       selName.textContent = state.display_name ? state.display_name : "—";
+    }
+    function titleFromPersonaId(id){
+      return personaCards.find(p => p.id === id)?.title || null;
     }
 
     function escapeHtml(str){
@@ -843,6 +861,7 @@
       personaCards.forEach(c => {
         const el = document.createElement("div");
         el.className = "persona" + (state.persona_id === c.id ? " selected" : "");
+        el.style.setProperty("--persona-accent", c.accent);
 
         // ✅ Static chibi thumbnail (no shimmer / no placeholder animation)
         el.innerHTML = `
@@ -859,6 +878,7 @@
         el.addEventListener("click", async () => {
           state.persona_id = c.id;
           state.persona_title = c.title;
+          localStorage.setItem(PERSONA_KEY, c.id);
           selPersona.textContent = c.title;
 
           [...personaGrid.children].forEach(x => x.classList.remove("selected"));
@@ -888,6 +908,7 @@
     roleSelect.addEventListener("change", async () => {
       const v = roleSelect.value;
       state.role = (v === "tutor") ? "tutor" : "student";
+      localStorage.setItem(ROLE_KEY, state.role);
       selRole.textContent = state.role;
 
       showLoading("Saving your role…", "Syncing selection to the room.");
@@ -931,14 +952,21 @@
         state.role = (r === "tutor") ? "tutor" : "student";
 
         state.persona_id = data.persona_id || null;
-        state.persona_title = state.persona_id
-          ? (personaCards.find(p => p.id === state.persona_id)?.title || null)
-          : null;
+        state.persona_title = state.persona_id ? titleFromPersonaId(state.persona_id) : null;
+        if (state.persona_id) localStorage.setItem(PERSONA_KEY, state.persona_id);
 
         const dbName = cleanName(data.display_name);
         if (dbName){
           state.display_name = dbName;
           localStorage.setItem(NAME_KEY, dbName);
+        }
+        localStorage.setItem(ROLE_KEY, state.role);
+      } else {
+        state.persona_id = localStorage.getItem(PERSONA_KEY) || null;
+        state.persona_title = state.persona_id ? titleFromPersonaId(state.persona_id) : null;
+        const savedRole = localStorage.getItem(ROLE_KEY);
+        if (savedRole === "student" || savedRole === "tutor"){
+          state.role = savedRole;
         }
       }
 
@@ -1139,6 +1167,8 @@
       localStorage.removeItem(AUTH_KEY);
       localStorage.removeItem(TUT_KEY);
       localStorage.removeItem(NAME_KEY);
+      localStorage.removeItem(ROLE_KEY);
+      localStorage.removeItem(PERSONA_KEY);
       location.reload();
     });
 

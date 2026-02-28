@@ -146,6 +146,7 @@
         <div class="badge"><span class="dot"></span> Stage 1 • Step 3</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
+          Role: <span class="mono" id="roleOut">student</span> • Card: <span class="mono" id="personaOut">None</span><br/>
           Desktop: right-click a week. Phone: long-press a week. Tap tag to cycle: Neutral → Constraint → Support → Wish.
         </div>
       </div>
@@ -316,6 +317,9 @@
     if (!participantId) { participantId = crypto.randomUUID(); localStorage.setItem(PID_KEY, participantId); }
 
     const AUTH_KEY = `stage1_authed_${room}`;
+    const NAME_KEY = `stage1_name_${room}`;
+    const ROLE_KEY = `stage1_role_${room}`;
+    const PERSONA_KEY = `stage1_persona_${room}`;
     if (localStorage.getItem(AUTH_KEY) !== "1") {
       location.href = `${BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`;
       return;
@@ -323,6 +327,7 @@
 
     const $ = (q, el=document) => el.querySelector(q);
     const roomOut = $("#roomOut"), meOut = $("#meOut");
+    const roleOut = $("#roleOut"), personaOut = $("#personaOut");
     const weeksWrap = $("#weeks");
     const toast = $("#toast");
 
@@ -340,7 +345,29 @@
     notesScopePill.textContent = NOTES_SHARED ? "Notes: Shared" : "Notes: Private";
 
     roomOut.textContent = room;
-    meOut.textContent = participantId.slice(0,8);
+    function personaIdToTitle(id){
+      const map = {
+        clarifier: "Clarifier",
+        optimizer: "Optimizer",
+        validator: "Validator",
+        overwhelmed: "Overwhelmed",
+        independent: "Independent",
+        storybuilder: "Story Builder",
+        perfectionist: "Perfectionist",
+        strategist: "Strategist"
+      };
+      return map[id] || "None";
+    }
+    function refreshIdentityUI({ displayName=null, role="student", personaId=null } = {}){
+      meOut.textContent = displayName || participantId.slice(0,8);
+      roleOut.textContent = role === "tutor" ? "tutor" : "student";
+      personaOut.textContent = personaIdToTitle(personaId);
+    }
+    refreshIdentityUI({
+      displayName: (localStorage.getItem(NAME_KEY) || "").trim() || null,
+      role: localStorage.getItem(ROLE_KEY) || "student",
+      personaId: localStorage.getItem(PERSONA_KEY)
+    });
 
     function showToast(msg){
       toast.textContent = msg;
@@ -405,6 +432,33 @@
       const b = await supabase.from("workshop_participants").upsert({ id: participantId, session_id: room }, { onConflict: "id" });
       if(b.error) throw b.error;
     }
+    async function hydrateIdentity(){
+      try{
+        const { data, error } = await supabase
+          .from("workshop_participants")
+          .select("display_name, role, persona_id")
+          .eq("id", participantId)
+          .maybeSingle();
+        if (error) throw error;
+        if (!data){
+          refreshIdentityUI({
+            displayName: (localStorage.getItem(NAME_KEY) || "").trim() || null,
+            role: localStorage.getItem(ROLE_KEY) || "student",
+            personaId: localStorage.getItem(PERSONA_KEY)
+          });
+          return;
+        }
+        const displayName = (data.display_name || "").trim() || null;
+        const role = data.role === "tutor" ? "tutor" : "student";
+        const personaId = data.persona_id || null;
+        if (displayName) localStorage.setItem(NAME_KEY, displayName);
+        localStorage.setItem(ROLE_KEY, role);
+        if (personaId) localStorage.setItem(PERSONA_KEY, personaId);
+        refreshIdentityUI({ displayName, role, personaId });
+      } catch (err){
+        console.error("identity load failed", err);
+      }
+    }
 
     function renderWeeks(){
       weeksWrap.innerHTML = "";
@@ -423,10 +477,6 @@
           const obj = safeJson(e.dataTransfer.getData("text/plain"));
           if(!obj) return;
           if(obj.kind==="placedEvent") await movePlaced(obj.id, w);
-        });
-
-        $("#btnToStep4").addEventListener("click", () => {
-          location.href = `${BASE_PATH}/step4.html?room=${encodeURIComponent(room)}`;
         });
 
         weekEl.addEventListener("contextmenu",(e)=>{
@@ -824,6 +874,7 @@
       showLoading("Loading journey…", "Syncing your room + fetching items.");
       try{
         await ensureSessionAndParticipant();
+        await hydrateIdentity();
 
         const { data, error } = await supabase
           .from("workshop_journey_items")
@@ -875,12 +926,16 @@
 
     // ===== nav/reset =====
     $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
+    $("#btnToStep4").addEventListener("click", ()=> location.href = `${BASE_PATH}/step4.html?room=${encodeURIComponent(room)}`);
     $("#btnReset").addEventListener("click", ()=>{
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;
       localStorage.removeItem(PID_KEY);
       localStorage.removeItem(AUTH_KEY);
       localStorage.removeItem(TUT_KEY);
+      localStorage.removeItem(NAME_KEY);
+      localStorage.removeItem(ROLE_KEY);
+      localStorage.removeItem(PERSONA_KEY);
       location.reload();
     });
 
