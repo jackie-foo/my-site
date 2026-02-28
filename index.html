@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Jackie Foo</title>
 
-  <meta name="description" content="Jackie Foo — portfolio landing page." />
-  <meta name="theme-color" content="#08122d" />
+  <meta name="description" content="Jackie Foo — soft launch landing page." />
+  <meta name="theme-color" content="#ffc9e6" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,17 +14,20 @@
 
   <style>
     :root {
-      --bg-1: #071022;
-      --bg-2: #0f2047;
-      --bg-3: #2f6f96;
-      --text: #f6fbff;
-      --muted: rgba(246, 251, 255, 0.75);
-      --panel: rgba(8, 17, 40, 0.72);
-      --panel-border: rgba(170, 214, 255, 0.3);
-      --accent: #6cd6ff;
-      --accent-2: #4ff2c3;
-      --shadow: 0 26px 80px rgba(0, 0, 0, 0.45);
-      --radius-xl: 26px;
+      --pink-1: #ffd9ee;
+      --pink-2: #ffc7e7;
+      --lavender: #d9d8ff;
+      --sky: #c9ebff;
+      --mint: #c9ffe8;
+      --text: #4a2e4c;
+      --muted: rgba(74, 46, 76, 0.72);
+      --card: rgba(255, 255, 255, 0.72);
+      --card-border: rgba(255, 255, 255, 0.82);
+      --btn: #ff94c9;
+      --btn-text: #4d1f3f;
+      --link-bg: rgba(255, 255, 255, 0.72);
+      --shadow: 0 24px 60px rgba(164, 96, 141, 0.26);
+      --radius-xl: 30px;
       --radius-lg: 18px;
       --radius-pill: 999px;
     }
@@ -36,154 +39,169 @@
       margin: 0;
       font-family: "Space Grotesk", sans-serif;
       color: var(--text);
-      background: radial-gradient(circle at 20% 20%, #1e5d84 0%, #0f2047 38%, #071022 72%);
+      background:
+        radial-gradient(circle at 16% 20%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 44%),
+        radial-gradient(circle at 82% 74%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 40%),
+        linear-gradient(140deg, var(--pink-1) 0%, var(--lavender) 36%, var(--sky) 68%, var(--mint) 100%);
       overflow-x: hidden;
     }
 
-    .bg {
+    .sky {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -4;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: 0.34;
+      animation: drift 16s ease-in-out infinite;
+    }
+
+    .shape.one {
+      width: 42vmax;
+      height: 42vmax;
+      left: -12vmax;
+      top: -10vmax;
+      background: radial-gradient(circle at 35% 30%, rgba(255, 170, 215, 0.95), rgba(255, 170, 215, 0.12) 58%, transparent 76%);
+      animation-delay: -3s;
+    }
+
+    .shape.two {
+      width: 46vmax;
+      height: 46vmax;
+      right: -14vmax;
+      top: -8vmax;
+      background: radial-gradient(circle at 62% 32%, rgba(170, 199, 255, 0.9), rgba(170, 199, 255, 0.1) 58%, transparent 76%);
+      animation-delay: -8s;
+      animation-duration: 21s;
+    }
+
+    .shape.three {
+      width: 52vmax;
+      height: 52vmax;
+      left: 16vmax;
+      bottom: -28vmax;
+      background: radial-gradient(circle at 44% 26%, rgba(172, 255, 225, 0.82), rgba(172, 255, 225, 0.08) 58%, transparent 76%);
+      animation-delay: -5s;
+      animation-duration: 25s;
+    }
+
+    .sparkles {
+      position: absolute;
+      inset: 0;
+      opacity: 0.42;
+      background-image:
+        radial-gradient(rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+        radial-gradient(rgba(255, 255, 255, 0.7) 1px, transparent 1px);
+      background-size: 34px 34px, 48px 48px;
+      background-position: 0 0, 16px 12px;
+      animation: twinkle 6s ease-in-out infinite;
+    }
+
+    #chibiCloud {
       position: fixed;
       inset: 0;
       z-index: -3;
       pointer-events: none;
       overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
     }
 
-    .blob {
+    .chibiFloat {
       position: absolute;
-      border-radius: 50%;
-      filter: blur(1px);
-      opacity: 0.48;
-      mix-blend-mode: screen;
-      animation: drift 16s ease-in-out infinite;
+      bottom: -110px;
+      will-change: transform, opacity;
+      animation-name: floatUp;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      opacity: 0.22;
+      filter: drop-shadow(0 8px 12px rgba(159, 86, 138, 0.22));
     }
 
-    .blob.one {
-      width: 42vmax;
-      height: 42vmax;
-      left: -10vmax;
-      top: -9vmax;
-      background: radial-gradient(circle at 35% 35%, rgba(108, 214, 255, 0.95) 0%, rgba(108, 214, 255, 0.08) 68%, transparent 78%);
-      animation-delay: -3s;
-    }
-
-    .blob.two {
-      width: 48vmax;
-      height: 48vmax;
-      right: -14vmax;
-      top: -6vmax;
-      background: radial-gradient(circle at 66% 28%, rgba(79, 242, 195, 0.86) 0%, rgba(79, 242, 195, 0.12) 62%, transparent 78%);
-      animation-delay: -8s;
-      animation-duration: 22s;
-    }
-
-    .blob.three {
-      width: 52vmax;
-      height: 52vmax;
-      left: 10vmax;
-      bottom: -30vmax;
-      background: radial-gradient(circle at 52% 25%, rgba(80, 160, 255, 0.65) 0%, rgba(80, 160, 255, 0.08) 68%, transparent 78%);
-      animation-delay: -4s;
-      animation-duration: 26s;
-    }
-
-    .grain {
-      position: absolute;
-      inset: 0;
-      opacity: 0.11;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.5) 0.5px, transparent 0.5px);
-      background-size: 4px 4px;
-      mix-blend-mode: soft-light;
-    }
-
-    .spotlight {
-      position: fixed;
-      width: 580px;
-      height: 580px;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: -2;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.07) 22%, rgba(255, 255, 255, 0.02) 45%, transparent 72%);
-      transition: left 0.18s linear, top 0.18s linear;
-      mix-blend-mode: soft-light;
+    .chibiFloat img {
+      display: block;
+      width: 100%;
+      height: auto;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     .page {
       min-height: 100%;
-      padding: clamp(24px, 5vw, 56px);
       display: grid;
       place-items: center;
+      padding: clamp(20px, 4vw, 52px);
     }
 
     .shell {
-      width: min(1080px, 100%);
-      border: 1px solid rgba(193, 231, 255, 0.35);
+      width: min(1020px, 100%);
       border-radius: var(--radius-xl);
-      background: linear-gradient(135deg, rgba(11, 23, 50, 0.84), rgba(6, 15, 34, 0.74));
+      border: 1px solid var(--card-border);
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.62));
       box-shadow: var(--shadow);
-      backdrop-filter: blur(7px);
-      padding: clamp(22px, 3vw, 38px);
+      backdrop-filter: blur(8px);
+      padding: clamp(20px, 3vw, 38px);
     }
 
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      margin-bottom: clamp(18px, 2vw, 30px);
+      gap: 10px;
+      margin-bottom: 18px;
     }
 
     .brand {
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
+      font-size: 0.86rem;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
-      color: rgba(246, 251, 255, 0.72);
+      color: rgba(74, 46, 76, 0.72);
+      font-weight: 700;
     }
 
-    .pulse {
+    .pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      color: rgba(246, 251, 255, 0.75);
-      font-size: 0.85rem;
+      border: 1px solid rgba(255, 148, 201, 0.46);
+      background: rgba(255, 255, 255, 0.64);
+      border-radius: var(--radius-pill);
+      padding: 5px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #7b3a63;
     }
 
-    .pulse i {
+    .pill i {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--accent-2);
-      box-shadow: 0 0 0 0 rgba(79, 242, 195, 0.9);
+      background: #ff7dbd;
+      box-shadow: 0 0 0 0 rgba(255, 125, 189, 0.7);
       animation: ping 2s infinite;
     }
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(190px, 230px) 1fr;
-      gap: clamp(20px, 3vw, 44px);
+      grid-template-columns: minmax(160px, 220px) 1fr;
+      gap: clamp(16px, 3vw, 36px);
       align-items: center;
     }
 
     .avatarWrap {
       justify-self: center;
-      width: min(230px, 42vw);
+      width: min(220px, 42vw);
       aspect-ratio: 1 / 1;
       border-radius: var(--radius-pill);
-      position: relative;
       padding: 8px;
-      background: linear-gradient(145deg, rgba(108, 214, 255, 0.8), rgba(79, 242, 195, 0.4));
-      box-shadow: 0 16px 46px rgba(0, 0, 0, 0.45);
-    }
-
-    .avatarWrap::before {
-      content: "";
-      position: absolute;
-      inset: -5px;
-      border-radius: inherit;
-      border: 1px solid rgba(255, 255, 255, 0.36);
-      opacity: 0.42;
+      background: linear-gradient(145deg, rgba(255, 148, 201, 0.58), rgba(169, 210, 255, 0.66));
+      box-shadow: 0 12px 36px rgba(149, 77, 124, 0.26);
     }
 
     .avatar {
@@ -191,7 +209,8 @@
       height: 100%;
       border-radius: inherit;
       overflow: hidden;
-      background: #091229;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      background: #fff;
     }
 
     .avatar img {
@@ -199,39 +218,38 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
+      transform: scale(1.05);
       display: block;
-      transform: scale(1.06);
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(2.8rem, 7.4vw, 5.6rem);
-      line-height: 0.92;
+      font-size: clamp(2.8rem, 7.5vw, 5.4rem);
+      line-height: 0.94;
       letter-spacing: -0.04em;
-      text-wrap: balance;
     }
 
     .titleAccent {
-      background: linear-gradient(90deg, #ebf8ff 0%, #a5edff 36%, #7ef7d6 100%);
+      background: linear-gradient(92deg, #ff82be 0%, #9f8cff 52%, #5ecfff 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
 
     .lead {
-      margin: 16px 0 0;
-      max-width: 60ch;
+      margin: 14px 0 0;
+      max-width: 58ch;
       color: var(--muted);
-      font-size: clamp(1rem, 2.2vw, 1.08rem);
-      line-height: 1.75;
+      font-size: clamp(1rem, 2.1vw, 1.06rem);
+      line-height: 1.72;
+      font-weight: 500;
     }
 
     .actions {
       margin-top: 22px;
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
-      align-items: center;
     }
 
     .btn {
@@ -241,204 +259,57 @@
       font-weight: 700;
       padding: 12px 16px;
       cursor: pointer;
-      transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
 
     .btnPrimary {
-      color: #061227;
-      background: linear-gradient(130deg, #9ce7ff, #6cd6ff 54%, #4ff2c3);
-      box-shadow: 0 12px 30px rgba(73, 200, 255, 0.35);
-    }
-
-    .btnGhost {
-      color: var(--text);
-      border-color: rgba(204, 234, 255, 0.44);
-      background: rgba(255, 255, 255, 0.06);
+      background: linear-gradient(130deg, #ffb6dc, #ff94c9 58%, #ffd0e8);
+      color: var(--btn-text);
+      border-color: rgba(255, 136, 192, 0.5);
+      box-shadow: 0 10px 24px rgba(200, 95, 150, 0.28);
     }
 
     .btn:hover { transform: translateY(-1px); }
     .btn:active { transform: translateY(0); }
     .btn:focus-visible {
-      outline: 3px solid rgba(163, 234, 255, 0.55);
+      outline: 3px solid rgba(255, 140, 194, 0.5);
       outline-offset: 3px;
     }
 
     .links {
-      margin-top: 28px;
+      margin-top: 24px;
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
     }
 
     .link {
       text-decoration: none;
-      color: var(--text);
-      border: 1px solid rgba(173, 223, 255, 0.3);
-      background: rgba(12, 30, 62, 0.55);
+      color: #6b3a5f;
+      background: var(--link-bg);
+      border: 1px solid rgba(255, 255, 255, 0.84);
       border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 0.95rem;
-      transition: background 0.2s ease, border-color 0.2s ease;
+      padding: 9px 12px;
+      font-size: 0.94rem;
+      font-weight: 600;
+      transition: transform 0.15s ease, background 0.2s ease;
     }
 
-    .link:hover { background: rgba(17, 42, 83, 0.72); }
-    .link:focus-visible {
-      outline: 3px solid rgba(163, 234, 255, 0.55);
-      outline-offset: 3px;
-    }
-
-    .timeline {
-      margin-top: 26px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .stageCard {
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(171, 219, 255, 0.23);
-      background: linear-gradient(140deg, rgba(13, 29, 58, 0.66), rgba(10, 23, 47, 0.46));
-      padding: 12px;
-    }
-
-    .stageLabel {
-      font-size: 0.74rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(179, 225, 255, 0.68);
-      margin-bottom: 6px;
-    }
-
-    .stageText {
-      font-size: 0.95rem;
-      line-height: 1.45;
-      color: rgba(246, 251, 255, 0.9);
-    }
-
-    footer {
-      margin-top: 26px;
-      font-size: 0.8rem;
-      color: rgba(246, 251, 255, 0.52);
-    }
-
-    .overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 40;
-      background: rgba(5, 12, 24, 0.74);
-      backdrop-filter: blur(8px);
-      display: grid;
-      place-items: center;
-      padding: 16px;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: opacity 0.18s ease, visibility 0.18s ease;
-    }
-
-    .overlay.open {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    .modal {
-      width: min(580px, 100%);
-      background: linear-gradient(155deg, rgba(8, 20, 45, 0.96), rgba(8, 17, 40, 0.92));
-      border: 1px solid var(--panel-border);
-      border-radius: 22px;
-      padding: 22px;
-      box-shadow: var(--shadow);
-      position: relative;
-      transform: translateY(8px) scale(0.985);
-      transition: transform 0.18s ease;
-    }
-
-    .overlay.open .modal { transform: translateY(0) scale(1); }
-
-    .closeBtn {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(200, 233, 255, 0.34);
-      background: rgba(255, 255, 255, 0.07);
-      color: var(--text);
-      font: inherit;
-      font-weight: 700;
-      padding: 8px 11px;
-      cursor: pointer;
-    }
-
-    .closeBtn:focus-visible {
-      outline: 3px solid rgba(163, 234, 255, 0.55);
-      outline-offset: 2px;
-    }
-
-    .modalRow {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding-right: 72px;
-    }
-
-    .modalChibi {
-      width: 90px;
-      height: 90px;
-      flex: 0 0 auto;
-      border-radius: var(--radius-pill);
-      overflow: hidden;
-      border: 1px solid rgba(213, 239, 255, 0.28);
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .modalChibi img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-    }
-
-    .modal h2 {
-      margin: 0;
-      font-size: 1.3rem;
-    }
-
-    .modal p {
-      margin: 8px 0 0;
-      color: rgba(246, 251, 255, 0.75);
-      line-height: 1.5;
-    }
-
-    .choices {
-      margin-top: 18px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .choice {
-      width: 100%;
-      text-align: left;
-      padding: 13px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(179, 225, 255, 0.38);
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
-      font: inherit;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s ease, transform 0.16s ease;
-    }
-
-    .choice:hover {
-      background: rgba(149, 218, 255, 0.15);
+    .link:hover {
+      background: #fff;
       transform: translateY(-1px);
     }
 
-    .choice:focus-visible {
-      outline: 3px solid rgba(163, 234, 255, 0.55);
+    .link:focus-visible {
+      outline: 3px solid rgba(255, 140, 194, 0.5);
       outline-offset: 3px;
+    }
+
+    footer {
+      margin-top: 24px;
+      color: rgba(74, 46, 76, 0.58);
+      font-size: 0.82rem;
+      font-weight: 600;
     }
 
     @keyframes drift {
@@ -447,55 +318,65 @@
       100% { transform: translate(0, 0) scale(1); }
     }
 
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.28; }
+      50% { opacity: 0.5; }
+    }
+
     @keyframes ping {
-      0% { box-shadow: 0 0 0 0 rgba(79, 242, 195, 0.82); }
-      70% { box-shadow: 0 0 0 10px rgba(79, 242, 195, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(79, 242, 195, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(255, 125, 189, 0.7); }
+      70% { box-shadow: 0 0 0 9px rgba(255, 125, 189, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 125, 189, 0); }
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: var(--o, 0.25); }
+      50% {
+        transform: translate3d(var(--drift, 18px), -56vh, 0) rotate(var(--rot, 6deg));
+      }
+      100% {
+        transform: translate3d(calc(var(--drift, 18px) * -1), -124vh, 0) rotate(calc(var(--rot, 6deg) * -1));
+        opacity: 0;
+      }
     }
 
     @media (max-width: 900px) {
-      .hero {
-        grid-template-columns: 1fr;
-        text-align: left;
-      }
-
-      .avatarWrap {
-        justify-self: start;
-      }
-
-      .timeline {
-        grid-template-columns: 1fr;
-      }
+      .hero { grid-template-columns: 1fr; }
+      .avatarWrap { justify-self: start; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .blob,
-      .pulse i,
+      .shape,
+      .sparkles,
+      .pill i,
+      .chibiFloat,
       .btn,
-      .choice,
-      .overlay,
-      .modal,
-      .spotlight {
+      .link {
         animation: none !important;
         transition: none !important;
       }
+      #chibiCloud { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="bg" aria-hidden="true">
-    <div class="blob one"></div>
-    <div class="blob two"></div>
-    <div class="blob three"></div>
-    <div class="grain"></div>
+  <div class="sky" aria-hidden="true">
+    <div class="shape one"></div>
+    <div class="shape two"></div>
+    <div class="shape three"></div>
+    <div class="sparkles"></div>
   </div>
-  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+  <div id="chibiCloud" aria-hidden="true"></div>
 
   <div class="page">
     <main class="shell">
       <div class="topbar">
-        <div class="brand">Portfolio Landing</div>
-        <div class="pulse"><i></i>Soft launch</div>
+        <div class="brand">Jackie Foo</div>
+        <div class="pill"><i></i>Soft launch</div>
       </div>
 
       <section class="hero" aria-label="Intro">
@@ -508,7 +389,7 @@
         <div>
           <h1><span class="titleAccent">Jackie Foo</span></h1>
           <p class="lead">
-            Soft launch version of my site. This is a clean entry point while the full experience is still being shaped.
+            Cute soft-launch page for now. More things are coming soon, but you can enter Stage 1 from here.
           </p>
 
           <div class="actions">
@@ -530,16 +411,43 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
-    const spotlight = document.getElementById("spotlight");
-    const openBtn = document.getElementById("workshopBtn");
-    openBtn.addEventListener("click", () => {
+
+    document.getElementById("workshopBtn").addEventListener("click", () => {
       window.location.href = "/stage1/landing.html?room=demo&campus=upng";
     });
 
-    window.addEventListener("pointermove", (event) => {
-      spotlight.style.left = `${event.clientX}px`;
-      spotlight.style.top = `${event.clientY}px`;
-    });
+    const cloud = document.getElementById("chibiCloud");
+    const count = Math.min(120, Math.max(48, Math.floor(window.innerWidth / 12)));
+
+    for (let i = 0; i < count; i += 1) {
+      const sprite = document.createElement("div");
+      sprite.className = "chibiFloat";
+
+      const size = 24 + Math.random() * 56;
+      const left = Math.random() * 100;
+      const duration = 18 + Math.random() * 20;
+      const delay = Math.random() * -duration;
+      const opacity = 0.08 + Math.random() * 0.25;
+      const drift = -30 + Math.random() * 60;
+      const rot = -10 + Math.random() * 20;
+      const flip = Math.random() > 0.5 ? -1 : 1;
+
+      sprite.style.width = `${size}px`;
+      sprite.style.left = `${left}%`;
+      sprite.style.animationDuration = `${duration}s`;
+      sprite.style.animationDelay = `${delay}s`;
+      sprite.style.setProperty("--o", opacity.toFixed(2));
+      sprite.style.setProperty("--drift", `${drift.toFixed(0)}px`);
+      sprite.style.setProperty("--rot", `${rot.toFixed(0)}deg`);
+
+      const img = document.createElement("img");
+      img.src = "/pic/chibi3.png";
+      img.alt = "";
+      img.style.transform = `scaleX(${flip})`;
+
+      sprite.appendChild(img);
+      cloud.appendChild(sprite);
+    }
   </script>
 </body>
 </html>
