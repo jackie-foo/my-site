@@ -4,6 +4,9 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Stage 1 • Main Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#060b16;
@@ -23,7 +26,7 @@
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
       background:
         radial-gradient(900px 520px at 18% 14%, rgba(53,216,255,.11), transparent 56%),
@@ -375,6 +378,7 @@
             <option value="upng">UPNG</option>
             <option value="monash">Monash</option>
           </select>
+          <input id="groupInput" class="field" type="text" placeholder="tutor group (e.g. g1)" style="min-width:170px" />
           <button id="btnOpenRoom" class="btnPrimary">Open Room</button>
         </div>
         <div class="diag" style="margin-top:10px">
@@ -532,6 +536,7 @@
     const params = new URLSearchParams(location.search);
     let room = (params.get("room") || "demo").trim() || "demo";
     let campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
+    let group = (params.get("group") || "core").trim() || "core";
     let subs = [];
     let feedItems = [];
 
@@ -564,16 +569,20 @@
     const qStep1 = $("#qStep1"), qStep2 = $("#qStep2"), qStep3 = $("#qStep3");
     const roomInput = $("#roomInput");
     const campusSelect = $("#campusSelect");
+    const groupInput = $("#groupInput");
     const studentLinkOut = $("#studentLinkOut");
     const tutorLinkOut = $("#tutorLinkOut");
 
     function withCampus(path){
       return `${path}?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
     }
+    function flowSessionId(){
+      return `${room}::tutor:${group}`;
+    }
     function buildShareLinks(){
       const origin = location.origin || "https://www.jackiefoo.me";
       const student = `${origin}${withCampus(`${shared.BASE_PATH}/step1.html`)}`;
-      const tutor = `${origin}${withCampus(`${shared.BASE_PATH}/step1-tutor.html`)}`;
+      const tutor = `${origin}${withCampus(`${shared.BASE_PATH}/step1-tutor.html`)}&group=${encodeURIComponent(group)}`;
       studentLinkOut.textContent = student;
       tutorLinkOut.textContent = tutor;
       return { student, tutor };
@@ -583,6 +592,7 @@
       campusOut.textContent = campus === "monash" ? "Monash" : "UPNG";
       roomInput.value = room;
       campusSelect.value = campus;
+      groupInput.value = group;
       buildShareLinks();
     }
     async function copyText(text){
@@ -761,8 +771,17 @@
         `;
       }).join("");
     }
+    function workflowLabel(row){
+      const raw = String(row?.label || "");
+      if (String(row?.type || "") === "workflow_edge") return "(edge)";
+      try{
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object" && parsed.text) return String(parsed.text);
+      } catch {}
+      return raw || "(no label)";
+    }
     function renderWorkflowByWeek(journey){
-      const flows = (journey || []).filter(j => String(j.type || "").startsWith("workflow_"));
+      const flows = (journey || []).filter(j => String(j.type || "").startsWith("workflow_") && String(j.type || "") !== "workflow_edge");
       workflowCount.textContent = `${flows.length} workflow nodes`;
       if (!flows.length){
         workflowWeekList.innerHTML = `<div class="empty">No tutor workflow nodes mapped yet.</div>`;
@@ -780,7 +799,7 @@
         return `
           <article class="laneCard">
             <div class="laneMeta">Week ${w} • ${cards.length} workflow node${cards.length > 1 ? "s" : ""}</div>
-            <div>${cards.map(x => `• ${shared.escapeHtml(x.label || "(no label)")}`).join("<br/>")}</div>
+            <div>${cards.map(x => `• ${shared.escapeHtml(workflowLabel(x))}`).join("<br/>")}</div>
           </article>
         `;
       }).join("");
@@ -810,17 +829,19 @@
         participants: supabase.from("workshop_participants").select("*").eq("session_id", room),
         stickies: supabase.from("workshop_stickies").select("*").eq("session_id", room),
         journey: supabase.from("workshop_journey_items").select("*").eq("session_id", room),
-        notes: supabase.from("workshop_journey_notes").select("*").eq("session_id", room)
+        notes: supabase.from("workshop_journey_notes").select("*").eq("session_id", room),
+        workflow: supabase.from("workshop_journey_items").select("*").eq("session_id", flowSessionId())
       };
       const settled = await Promise.allSettled([
         queries.participants,
         queries.stickies,
         queries.journey,
-        queries.notes
+        queries.notes,
+        queries.workflow
       ]);
-      const keys = ["participants","stickies","journey","notes"];
+      const keys = ["participants","stickies","journey","notes","workflow"];
       const errors = [];
-      const payload = { participants:[], stickies:[], journey:[], notes:[] };
+      const payload = { participants:[], stickies:[], journey:[], notes:[], workflow:[] };
 
       settled.forEach((res, idx) => {
         const k = keys[idx];
@@ -840,10 +861,11 @@
       const stickies = payload.stickies;
       const journey = payload.journey;
       const notes = payload.notes;
+      const workflowJourney = payload.workflow;
 
       const stickyAuthors = new Set(stickies.map(s => s.participant_id).filter(Boolean));
       const journeyAuthors = new Set(journey.map(j => j.participant_id).filter(Boolean));
-      const workflowNodes = journey.filter(j => String(j.type || "").startsWith("workflow_")).length;
+      const workflowNodes = workflowJourney.filter(j => String(j.type || "").startsWith("workflow_") && String(j.type || "") !== "workflow_edge").length;
       const step1ReadyCount = participants.filter(p => shared.cleanDisplayName(p.display_name) && p.persona_id).length;
       const step2Count = stickyAuthors.size;
       const step3Count = journeyAuthors.size;
@@ -864,7 +886,7 @@
       renderPlayerMap(participants, stickyAuthors, journeyAuthors);
       renderSharedPrompts(stickies);
       renderConstraintsByWeek(journey);
-      renderWorkflowByWeek(journey);
+      renderWorkflowByWeek(workflowJourney);
       renderParkingNotes(notes);
       computePrompts({ total: participants.length, readyStep1: step1ReadyCount, activeStep2: step2Count, activeStep3: step3Count, workflowNodes, notesCount: notes.length });
 
@@ -886,12 +908,13 @@
       $("#btnStep1").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step1.html`));
       $("#btnStep2").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step2.html`));
       $("#btnStep3").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step3.html`));
-      $("#btnStep3Tutor").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step3-tutor.html`));
+      $("#btnStep3Tutor").addEventListener("click", () => location.href = `${withCampus(`${shared.BASE_PATH}/step3-tutor.html`)}&group=${encodeURIComponent(group)}`);
       $("#btnIndex").addEventListener("click", () => location.href = "/index.html");
       $("#btnOpenRoom").addEventListener("click", () => {
         const nextRoom = (roomInput.value || "").trim() || "demo";
         const nextCampus = (campusSelect.value || "upng").trim().toLowerCase() === "monash" ? "monash" : "upng";
-        location.href = `${shared.BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(nextRoom)}&campus=${encodeURIComponent(nextCampus)}`;
+        const nextGroup = (groupInput.value || "core").trim() || "core";
+        location.href = `${shared.BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(nextRoom)}&campus=${encodeURIComponent(nextCampus)}&group=${encodeURIComponent(nextGroup)}`;
       });
       $("#btnCopyStudent").addEventListener("click", () => {
         const links = buildShareLinks();
@@ -944,12 +967,16 @@
         { table:"workshop_participants", label:"participant" },
         { table:"workshop_stickies", label:"sticky" },
         { table:"workshop_journey_items", label:"journey" },
+        { table:"workshop_journey_items", label:"workflow" },
         { table:"workshop_journey_notes", label:"notes" }
       ];
       defs.forEach(def => {
+        const filterSession = def.table === "workshop_journey_items" && def.label === "workflow"
+          ? flowSessionId()
+          : room;
         const ch = supabase
-          .channel(`dash:${room}:${def.table}`)
-          .on("postgres_changes", { event:"*", schema:"public", table:def.table, filter:`session_id=eq.${room}` }, (payload) => {
+          .channel(`dash:${room}:${def.table}:${def.label}`)
+          .on("postgres_changes", { event:"*", schema:"public", table:def.table, filter:`session_id=eq.${filterSession}` }, (payload) => {
             const id = payload.new?.id || payload.old?.id || "unknown";
             addFeed(def.label, `${payload.eventType} • id=${id}`);
             loadData().catch(err => addFeed("error", err.message || String(err)));

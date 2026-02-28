@@ -4,6 +4,9 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Stage 1 Entry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#071126;
@@ -17,7 +20,7 @@
       --r:20px;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:radial-gradient(760px 420px at 16% 18%, rgba(108,214,255,.16), transparent 58%),radial-gradient(860px 460px at 84% 82%, rgba(79,242,195,.14), transparent 60%),var(--bg);min-height:100vh}
+    body{margin:0;font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:radial-gradient(760px 420px at 16% 18%, rgba(108,214,255,.16), transparent 58%),radial-gradient(860px 460px at 84% 82%, rgba(79,242,195,.14), transparent 60%),var(--bg);min-height:100vh}
     .wrap{max-width:980px;margin:0 auto;padding:26px 14px 70px}
     .card{border:1px solid rgba(255,255,255,.16);border-radius:var(--r);background:linear-gradient(0deg,var(--panel2),var(--panel));box-shadow:0 20px 48px rgba(0,0,0,.36);overflow:hidden}
     .head{padding:16px;border-bottom:1px solid rgba(255,255,255,.1)}
@@ -52,6 +55,7 @@
             <option value="upng">UPNG</option>
             <option value="monash">Monash</option>
           </select>
+          <input id="groupInput" class="field" type="text" placeholder="tutor group (e.g. g1)" value="core"/>
           <button id="btnDashboard" class="btn">Open Dashboard</button>
         </div>
 
@@ -88,27 +92,31 @@
   (() => {
     const roomInput = document.getElementById("roomInput");
     const campusSelect = document.getElementById("campusSelect");
+    const groupInput = document.getElementById("groupInput");
     const studentLink = document.getElementById("studentLink");
     const tutorLink = document.getElementById("tutorLink");
 
     const params = new URLSearchParams(location.search);
     const initialRoom = (params.get("room") || "demo").trim() || "demo";
     const initialCampus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
+    const initialGroup = (params.get("group") || "core").trim() || "core";
     roomInput.value = initialRoom;
     campusSelect.value = initialCampus;
+    groupInput.value = initialGroup;
 
     function values(){
       const room = (roomInput.value || "").trim() || "demo";
       const campus = (campusSelect.value || "upng").trim().toLowerCase() === "monash" ? "monash" : "upng";
-      return { room, campus };
+      const group = (groupInput.value || "core").trim() || "core";
+      return { room, campus, group };
     }
 
     function links(){
-      const { room, campus } = values();
+      const { room, campus, group } = values();
       const q = `room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
       const student = `/stage1/step1.html?${q}`;
-      const tutor = `/stage1/step1-tutor.html?${q}`;
-      const dashboard = `/stage1/main-dashboard.html?${q}`;
+      const tutor = `/stage1/step1-tutor.html?${q}&group=${encodeURIComponent(group)}`;
+      const dashboard = `/stage1/main-dashboard.html?${q}&group=${encodeURIComponent(group)}`;
       return { student, tutor, dashboard };
     }
 
@@ -124,6 +132,7 @@
 
     roomInput.addEventListener("input", render);
     campusSelect.addEventListener("change", render);
+    groupInput.addEventListener("input", render);
 
     document.getElementById("btnStudent").addEventListener("click", () => { location.href = links().student; });
     document.getElementById("btnTutor").addEventListener("click", () => { location.href = links().tutor; });

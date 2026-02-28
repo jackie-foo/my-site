@@ -3,103 +3,95 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Stage 1 • Step 3 Tutor Workflow</title>
+  <title>Stage 1 • Tutor Workflow Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#071126;
       --panel:#0f1e42;
-      --panel2:#0b1732;
-      --border:#38548e;
-      --text:#eff6ff;
-      --muted:#b2c3e9;
+      --panel2:#0a1630;
+      --border:#35538f;
+      --text:#f2f8ff;
+      --muted:#b9c9eb;
       --accent:#6cd6ff;
       --accent2:#4ff2c3;
       --warn:#ffd56a;
-      --bad:#ff7a86;
+      --bad:#ff8190;
       --r:18px;
-      --shadow:0 18px 44px rgba(0,0,0,.38);
+      --shadow:0 16px 38px rgba(0,0,0,.36);
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      font-family:"Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(780px 420px at 14% 12%, rgba(108,214,255,.12), transparent 58%),
-        radial-gradient(940px 500px at 82% 76%, rgba(79,242,195,.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
+        radial-gradient(760px 420px at 14% 12%, rgba(108,214,255,.14), transparent 58%),
+        radial-gradient(920px 500px at 84% 78%, rgba(79,242,195,.12), transparent 60%),
         var(--bg);
     }
-    .wrap{max-width:1360px;margin:0 auto;padding:16px 14px 84px}
-    header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
-    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(15,30,66,.86);font-size:12px;font-weight:1000}
+    .wrap{max-width:1380px;margin:0 auto;padding:16px 14px 86px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(15,30,66,.86);padding:6px 10px;font-size:12px;font-weight:700}
     .dot{width:10px;height:10px;border-radius:3px;background:var(--accent2)}
-    .subtitle{margin-top:8px;font-size:13px;font-weight:850;line-height:1.45;color:var(--muted)}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;font-weight:900;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06)}
-    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .subtitle{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.45;font-weight:500}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:3px 8px;background:rgba(255,255,255,.06);font-size:12px;font-weight:700}
     button,input,select{font:inherit}
-    button{appearance:none;cursor:pointer;border-radius:14px;border:1px solid rgba(255,255,255,.16);color:var(--text);background:rgba(15,30,66,.84);padding:10px 12px;font-weight:1000;box-shadow:0 10px 26px rgba(0,0,0,.24)}
+    button{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(15,30,66,.84);color:var(--text);padding:9px 12px;border-radius:14px;font-weight:700;cursor:pointer;box-shadow:0 10px 20px rgba(0,0,0,.22)}
     button:hover{border-color:color-mix(in srgb,var(--accent) 62%, rgba(255,255,255,.16))}
-    .btnPrimary{border-color:color-mix(in srgb,var(--accent2) 70%, rgba(255,255,255,.16));background:linear-gradient(180deg, rgba(79,242,195,.16), rgba(15,30,66,.86))}
-    .btnDanger{border-color:rgba(255,122,134,.48)}
+    .btnPrimary{border-color:color-mix(in srgb,var(--accent2) 70%, rgba(255,255,255,.16));background:linear-gradient(180deg, rgba(79,242,195,.18), rgba(15,30,66,.84))}
     .card{margin-top:14px;border:1px solid rgba(255,255,255,.14);border-radius:var(--r);background:linear-gradient(0deg,var(--panel2),var(--panel));box-shadow:var(--shadow);overflow:hidden}
-    .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-    .cardHead h2{margin:0;font-size:14px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
+    .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.1)}
+    .cardHead h2{margin:0;font-size:14px;letter-spacing:.3px;text-transform:uppercase}
     .cardBody{padding:14px}
-    .layout{display:grid;grid-template-columns:320px 1fr;gap:12px}
+    .layout{display:grid;grid-template-columns:310px 1fr;gap:12px}
     @media (max-width:980px){.layout{grid-template-columns:1fr}}
+    .panel{border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.04);padding:10px;display:grid;gap:10px}
+    .panel h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.25px}
+    .field{width:100%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--text);border-radius:12px;padding:10px 11px;font-weight:600;outline:none}
+    .field::placeholder{color:rgba(242,248,255,.56)}
+    .hint{font-size:12px;color:var(--muted);line-height:1.45}
 
-    .templateList{display:flex;flex-direction:column;gap:10px}
-    .tpl{border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.05);padding:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:grab}
-    .tpl:active{cursor:grabbing}
-    .tpl strong{font-size:13px}
-    .tpl small{display:block;color:var(--muted);font-size:11px;font-weight:800;line-height:1.35}
-    .tag{display:inline-flex;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:1000;border:1px solid rgba(255,255,255,.22);text-transform:uppercase;letter-spacing:.2px}
-    .t-start{background:rgba(108,214,255,.18)}
-    .t-release{background:rgba(255,213,106,.18)}
-    .t-feedback{background:rgba(79,242,195,.18)}
-    .t-action{background:rgba(255,122,134,.18)}
+    .boardWrap{position:relative;border:1px solid rgba(255,255,255,.16);border-radius:14px;min-height:640px;background:
+      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / 24px 24px,
+      rgba(0,0,0,.16);
+      overflow:hidden;
+    }
+    .boardSvg{position:absolute;inset:0;pointer-events:none}
+    .laneMarks{position:absolute;inset:0;pointer-events:none}
+    .lane{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.08)}
+    .laneLabel{position:absolute;top:8px;transform:translateX(-50%);font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.35);padding:2px 6px;border-radius:999px;border:1px solid rgba(255,255,255,.14)}
 
-    .create{margin-top:10px;display:grid;gap:8px}
-    .row{display:flex;gap:8px;flex-wrap:wrap}
-    input,select{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--text);border-radius:12px;padding:10px 11px;font-weight:900;outline:none}
-    input::placeholder{color:rgba(239,246,255,.58)}
-
-    .canvasWrap{overflow:auto;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(0,0,0,.16)}
-    .weeks{display:grid;grid-template-columns:repeat(12,minmax(230px,1fr));gap:10px;min-width:2920px;padding:10px}
-    .week{border:1px solid rgba(255,255,255,.2);border-radius:14px;background:rgba(255,255,255,.05);padding:10px;min-height:320px;display:flex;flex-direction:column;gap:8px}
-    .week.special{border-color:rgba(255,213,106,.58);box-shadow:inset 0 0 0 1px rgba(255,213,106,.16)}
-    .weekHead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.12)}
-    .weekHead strong{font-size:12px;text-transform:uppercase;letter-spacing:.24px}
-    .weekHead span{font-size:10px;font-weight:900;color:var(--muted);text-transform:uppercase;line-height:1.3;text-align:right}
-    .dropZone{display:flex;flex-direction:column;gap:8px;min-height:220px;flex:1;border:1px dashed rgba(255,255,255,.2);border-radius:10px;padding:6px;background:rgba(0,0,0,.14)}
-    .dropZone.over{border-color:rgba(79,242,195,.7);background:rgba(79,242,195,.12)}
-
-    .node{border:1px solid rgba(255,255,255,.24);border-radius:12px;padding:9px;background:rgba(255,255,255,.07);cursor:grab;box-shadow:0 10px 20px rgba(0,0,0,.22)}
-    .node:active{cursor:grabbing}
-    .nodeTop{display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .node{position:absolute;width:210px;min-height:102px;border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:9px;background:rgba(255,255,255,.08);box-shadow:0 10px 24px rgba(0,0,0,.24);cursor:grab;user-select:none}
+    .node.drag{cursor:grabbing;opacity:.95}
     .node h4{margin:0;font-size:12px;line-height:1.35}
-    .node .meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px}
-    .mini{border:none;border-radius:10px;padding:6px 8px;font-size:11px;font-weight:1000;cursor:pointer;background:rgba(255,255,255,.14);color:var(--text);box-shadow:none}
-    .miniDanger{border:1px solid rgba(255,122,134,.5);background:rgba(255,122,134,.16)}
+    .meta{margin-top:7px;display:flex;gap:6px;flex-wrap:wrap}
+    .chip{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.2);font-size:10px;font-weight:700;text-transform:uppercase}
+    .c-constraint{background:rgba(255,129,144,.2)}
+    .c-support{background:rgba(79,242,195,.22)}
+    .c-action{background:rgba(108,214,255,.22)}
+    .c-decision{background:rgba(255,213,106,.22)}
+    .tiny{border:none;border-radius:10px;padding:6px 8px;font-size:11px;font-weight:700;background:rgba(255,255,255,.14);cursor:pointer;color:var(--text);box-shadow:none}
 
-    .diag{margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;font-size:12px;font-weight:850;color:var(--muted);background:rgba(255,255,255,.04)}
-    .diag.bad{border-color:rgba(255,122,134,.5);background:rgba(255,122,134,.12);color:#ffd2d8}
-
-    .toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:80;background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.2);padding:9px 12px;border-radius:999px;font-size:12px;font-weight:900;display:none}
+    .diag{margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);font-weight:500}
+    .diag.bad{border-color:rgba(255,129,144,.5);background:rgba(255,129,144,.12);color:#ffd5db}
+    .toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:80;background:rgba(0,0,0,.76);border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;display:none}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header>
+    <header class="row">
       <div>
-        <div class="badge"><span class="dot"></span> Stage 1 • Step 3 Tutor Workflow</div>
+        <div class="badge"><span class="dot"></span> Stage 1 • Tutor Workflow Map</div>
         <div class="subtitle">
-          Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
-          Role: <span class="mono" id="roleOut">tutor</span> • Card: <span class="mono" id="personaOut">None</span>
+          Room: <span class="mono" id="roomOut"></span> • Group: <span class="mono" id="groupOut"></span> • Campus: <span class="mono" id="campusOut"></span><br/>
+          Draw facilitation logic as a flowchart: constraints -> decisions -> actions -> feedback loops.
         </div>
       </div>
-      <div class="actions">
+      <div class="row" style="justify-content:flex-end">
         <button id="btnBack">← Back</button>
         <button id="btnDashboard">Dashboard</button>
         <button id="btnRefresh">Refresh</button>
@@ -108,38 +100,33 @@
     </header>
 
     <section class="card">
-      <div class="cardHead">
-        <h2>Workflow Journey Board (Drag + Drop)</h2>
-        <span class="mono" id="countOut">0 nodes</span>
-      </div>
+      <div class="cardHead"><h2>Group Workflow Board</h2></div>
       <div class="cardBody layout">
-        <aside>
-          <div class="templateList" id="templateList"></div>
+        <aside class="panel">
+          <h3>Add Node</h3>
+          <input id="nodeLabel" class="field" maxlength="80" placeholder="e.g. Marking rubric interpretation mismatch"/>
+          <select id="nodeType" class="field">
+            <option value="workflow_constraint">Constraint</option>
+            <option value="workflow_decision">Decision</option>
+            <option value="workflow_action">Action</option>
+            <option value="workflow_support">Support</option>
+          </select>
+          <button id="btnAdd" class="btnPrimary">Add Node</button>
+          <div class="hint">Drag nodes to position. Click <b>Link</b> on one node, then click <b>Link</b> on another to draw an arrow.</div>
 
-          <div class="create">
-            <input id="customLabel" maxlength="80" placeholder="Custom workflow step label"/>
-            <div class="row">
-              <select id="customType">
-                <option value="workflow_action">Action</option>
-                <option value="workflow_feedback">Feedback</option>
-                <option value="workflow_release">Release / Due</option>
-                <option value="workflow_start">Start / Setup</option>
-              </select>
-              <select id="customWeek">
-                <option value="1">Week 1</option><option value="2">Week 2</option><option value="3">Week 3</option>
-                <option value="4">Week 4</option><option value="5">Week 5</option><option value="6">Week 6</option>
-                <option value="7">Week 7</option><option value="8">Week 8</option><option value="9">Week 9</option>
-                <option value="10">Week 10</option><option value="11">Week 11</option><option value="12">Week 12</option>
-              </select>
-              <button id="btnAddCustom" class="btnPrimary">Add Node</button>
-            </div>
-          </div>
+          <h3>Quick Templates</h3>
+          <button class="tiny" data-template="Constraint: rubric is interpreted differently by markers">Rubric mismatch</button>
+          <button class="tiny" data-template="Constraint: feedback turnaround is too slow">Slow turnaround</button>
+          <button class="tiny" data-template="Decision: prioritise high-impact feedback first">Prioritise impact</button>
+          <button class="tiny" data-template="Action: schedule intervention checkpoint">Intervention checkpoint</button>
 
-          <div class="diag" id="diag">Connecting...</div>
+          <div class="diag" id="diag">Connecting…</div>
         </aside>
 
-        <div class="canvasWrap">
-          <div class="weeks" id="weeks"></div>
+        <div id="board" class="boardWrap">
+          <svg id="boardSvg" class="boardSvg"></svg>
+          <div class="laneMarks" id="laneMarks"></div>
+          <div id="nodes"></div>
         </div>
       </div>
     </section>
@@ -157,6 +144,7 @@
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
+    const group = (params.get("group") || "core").trim() || "core";
     const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     if (!room){
       document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room. Use <b>?room=demo</b></div>";
@@ -165,225 +153,195 @@
 
     const keys = shared.getKeys(room);
     const participantId = shared.getOrCreateParticipantId(keys.PID_KEY);
-    const { NAME_KEY, ROLE_KEY, PERSONA_KEY } = keys;
-    localStorage.setItem(ROLE_KEY, "tutor");
+    localStorage.setItem(keys.ROLE_KEY, "tutor");
+
+    const flowSession = `${room}::tutor:${group}`;
 
     const $ = (q, el=document) => el.querySelector(q);
-
-    const roomOut = $("#roomOut");
-    const meOut = $("#meOut");
-    const roleOut = $("#roleOut");
-    const personaOut = $("#personaOut");
-    const countOut = $("#countOut");
+    const roomOut = $("#roomOut"), groupOut = $("#groupOut"), campusOut = $("#campusOut");
+    const board = $("#board");
+    const nodesEl = $("#nodes");
+    const svg = $("#boardSvg");
+    const laneMarks = $("#laneMarks");
     const diag = $("#diag");
     const toast = $("#toast");
-    const templateList = $("#templateList");
-    const weeksEl = $("#weeks");
-    const customLabel = $("#customLabel");
-    const customType = $("#customType");
-    const customWeek = $("#customWeek");
+    const nodeLabel = $("#nodeLabel");
+    const nodeType = $("#nodeType");
 
-    const WEEK_MARKS = campus === "monash"
-      ? {
-          4: "Assessment 1 Due",
-          6: "Assessment 2A Due",
-          11: "Assessment 2B + Task 3 Due",
-          12: "Feedback Reflection"
-        }
-      : {
-          2: "Brief Release",
-          4: "Assignment 1 Due",
-          7: "Assignment 2 Due",
-          8: "Feedback Return",
-          9: "Instruction 2 + 3"
-        };
+    roomOut.textContent = room;
+    groupOut.textContent = group;
+    campusOut.textContent = campus === "monash" ? "Monash" : "UPNG";
 
     const TYPE_META = {
-      workflow_start: { label: "Start", cls: "t-start" },
-      workflow_release: { label: "Release", cls: "t-release" },
-      workflow_feedback: { label: "Feedback", cls: "t-feedback" },
-      workflow_action: { label: "Action", cls: "t-action" }
+      workflow_constraint: { label:"Constraint", cls:"c-constraint" },
+      workflow_decision: { label:"Decision", cls:"c-decision" },
+      workflow_action: { label:"Action", cls:"c-action" },
+      workflow_support: { label:"Support", cls:"c-support" }
     };
 
-    const TEMPLATES = campus === "monash"
+    const LANE_META = campus === "monash"
       ? [
-          { label: "Kickoff framing", type: "workflow_start", hint: "Set expectations + rubric orientation" },
-          { label: "Assessment 1 prep", type: "workflow_release", week: 3, hint: "Scaffold annotated bibliography planning" },
-          { label: "Assessment 1 due", type: "workflow_release", week: 4, hint: "Collect first submission" },
-          { label: "Assessment 2A due", type: "workflow_release", week: 6, hint: "Oral presentation milestone" },
-          { label: "Assessment 2B + Task 3 due", type: "workflow_release", week: 11, hint: "Critical essay + participation outputs" },
-          { label: "Feedback reflection checkpoint", type: "workflow_feedback", week: 12, hint: "Prompt response to returned feedback" },
-          { label: "Office-hour intervention", type: "workflow_feedback", hint: "Target friction before final revision" }
+          { x: 110, label: "Assessment 1" },
+          { x: 360, label: "Assessment 2A" },
+          { x: 620, label: "Assessment 2B" },
+          { x: 880, label: "Task 3" },
+          { x: 1140, label: "Feedback Loop" }
         ]
       : [
-          { label: "Kickoff framing", type: "workflow_start", hint: "Set expectations + rubric orientation" },
-          { label: "Brief release", type: "workflow_release", week: 2, hint: "Assignment brief published" },
-          { label: "Assignment 1 due", type: "workflow_release", week: 4, hint: "Collect first major submission" },
-          { label: "Assignment 2 due", type: "workflow_release", week: 7, hint: "Second major milestone" },
-          { label: "Feedback return", type: "workflow_feedback", week: 8, hint: "Return marked feedback" },
-          { label: "Reaction checkpoint", type: "workflow_action", week: 9, hint: "Capture student response plan" },
-          { label: "Office-hour intervention", type: "workflow_feedback", hint: "Target friction before final revision" }
+          { x: 120, label: "Brief Release" },
+          { x: 360, label: "Due Week" },
+          { x: 600, label: "Feedback Return" },
+          { x: 840, label: "Reaction" },
+          { x: 1080, label: "Intervention" }
         ];
 
     const state = {
       nodes: [],
+      edges: [],
+      linkFrom: null,
       drag: null
     };
-
-    function escapeHtml(s){ return shared.escapeHtml(String(s || "")); }
 
     function showToast(msg){
       toast.textContent = msg;
       toast.style.display = "block";
       clearTimeout(showToast.t);
-      showToast.t = setTimeout(() => toast.style.display = "none", 2200);
+      showToast.t = setTimeout(() => toast.style.display = "none", 2000);
     }
-
     function setDiag(msg, bad=false){
       diag.textContent = msg;
       diag.classList.toggle("bad", !!bad);
     }
 
-    function renderIdentity(){
-      const displayName = shared.cleanDisplayName(localStorage.getItem(NAME_KEY));
-      const personaId = localStorage.getItem(PERSONA_KEY);
-      meOut.textContent = displayName || participantId.slice(0, 8);
-      roleOut.textContent = "tutor";
-      personaOut.textContent = shared.personaTitle(personaId);
+    function parseNode(row){
+      const fallback = { text: String(row.label || "(untitled)"), x: 180, y: 120 };
+      try {
+        const obj = JSON.parse(String(row.label || ""));
+        if (obj && typeof obj === "object"){
+          return {
+            text: String(obj.text || fallback.text),
+            x: Number(obj.x) || fallback.x,
+            y: Number(obj.y) || fallback.y
+          };
+        }
+      } catch {}
+      return fallback;
     }
 
-    function nodeTypeInfo(type){
-      return TYPE_META[type] || TYPE_META.workflow_action;
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+    function typeMeta(type){ return TYPE_META[type] || TYPE_META.workflow_action; }
+
+    async function ensureScopeSession(){
+      const a = await supabase.from("workshop_sessions").upsert({ id: flowSession }, { onConflict:"id" });
+      if (a.error) throw a.error;
+      const b = await supabase.from("workshop_participants").upsert({ id: participantId, session_id: flowSession, role:"tutor" }, { onConflict:"id" });
+      if (b.error) throw b.error;
     }
 
-    function cycleType(type){
-      const order = ["workflow_start", "workflow_release", "workflow_feedback", "workflow_action"];
-      const idx = order.indexOf(type);
-      return order[(idx + 1) % order.length];
+    function renderLanes(){
+      laneMarks.innerHTML = LANE_META.map(m => `
+        <div class="lane" style="left:${m.x}px"></div>
+        <div class="laneLabel" style="left:${m.x}px">${shared.escapeHtml(m.label)}</div>
+      `).join("");
     }
 
-    function renderTemplates(){
-      templateList.innerHTML = TEMPLATES.map((t, i) => {
-        const info = nodeTypeInfo(t.type);
-        const wk = t.week ? ` • Week ${t.week}` : "";
-        return `
-          <div class="tpl" draggable="true" data-template-index="${i}">
-            <div>
-              <strong>${escapeHtml(t.label)}</strong>
-              <small>${escapeHtml(t.hint)}${escapeHtml(wk)}</small>
-            </div>
-            <span class="tag ${info.cls}">${escapeHtml(info.label)}</span>
-          </div>
-        `;
-      }).join("");
+    function nodeCenter(n){
+      const p = parseNode(n);
+      return { x: p.x + 105, y: p.y + 50 };
+    }
 
-      templateList.querySelectorAll("[data-template-index]").forEach(el => {
-        el.addEventListener("dragstart", (e) => {
-          const idx = Number(el.getAttribute("data-template-index"));
-          const t = TEMPLATES[idx];
-          if (!t) return;
-          const payload = { mode: "template", label: t.label, type: t.type, week: t.week || null };
-          e.dataTransfer.setData("text/plain", JSON.stringify(payload));
-        });
+    function renderEdges(){
+      const w = board.clientWidth;
+      const h = board.clientHeight;
+      svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+      svg.innerHTML = `
+        <defs>
+          <marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+            <polygon points="0 0, 9 3.5, 0 7" fill="rgba(108,214,255,.9)"></polygon>
+          </marker>
+        </defs>
+      `;
+
+      state.edges.forEach(e => {
+        const from = state.nodes.find(n => n.id === e.from);
+        const to = state.nodes.find(n => n.id === e.to);
+        if (!from || !to) return;
+        const a = nodeCenter(from);
+        const b = nodeCenter(to);
+        const midX = (a.x + b.x) / 2;
+        const d = `M ${a.x} ${a.y} C ${midX} ${a.y}, ${midX} ${b.y}, ${b.x} ${b.y}`;
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", "rgba(108,214,255,.85)");
+        path.setAttribute("stroke-width", "2.2");
+        path.setAttribute("marker-end", "url(#arrow)");
+        svg.appendChild(path);
       });
-    }
-
-    function renderWeeks(){
-      const weeks = Array.from({ length: 12 }, (_, i) => i + 1);
-      weeksEl.innerHTML = weeks.map(w => {
-        const mark = WEEK_MARKS[w] || "Workflow slot";
-        const special = WEEK_MARKS[w] ? " special" : "";
-        return `
-          <section class="week${special}" data-week="${w}">
-            <div class="weekHead">
-              <strong>Week ${w}</strong>
-              <span>${escapeHtml(mark)}</span>
-            </div>
-            <div class="dropZone" data-week="${w}"></div>
-          </section>
-        `;
-      }).join("");
-
-      weeksEl.querySelectorAll(".dropZone").forEach(zone => {
-        zone.addEventListener("dragover", (e) => {
-          e.preventDefault();
-          zone.classList.add("over");
-        });
-        zone.addEventListener("dragleave", () => zone.classList.remove("over"));
-        zone.addEventListener("drop", async (e) => {
-          e.preventDefault();
-          zone.classList.remove("over");
-          const data = e.dataTransfer.getData("text/plain");
-          if (!data) return;
-          const week = Number(zone.getAttribute("data-week")) || 1;
-          try{
-            const payload = JSON.parse(data);
-            if (payload.mode === "template"){
-              await insertNode({ week: payload.week || week, label: payload.label, type: payload.type });
-            } else if (payload.mode === "node"){
-              await moveNode(payload.id, week);
-            }
-          } catch {
-            // ignore invalid drag payload
-          }
-        });
-      });
-
-      renderNodes();
     }
 
     function renderNodes(){
-      weeksEl.querySelectorAll(".dropZone").forEach(z => { z.innerHTML = ""; });
-
-      const onlyWorkflow = state.nodes.filter(n => String(n.type || "").startsWith("workflow_"));
-      const sorted = onlyWorkflow.slice().sort((a, b) => {
-        const wa = Number(a.week) || 1;
-        const wb = Number(b.week) || 1;
-        if (wa !== wb) return wa - wb;
-        return String(a.label || "").localeCompare(String(b.label || ""));
-      });
-
-      sorted.forEach(n => {
-        const zone = weeksEl.querySelector(`.dropZone[data-week="${Number(n.week) || 1}"]`);
-        if (!zone) return;
-        const info = nodeTypeInfo(n.type);
-        const card = document.createElement("article");
-        card.className = "node";
-        card.draggable = true;
-        card.dataset.id = n.id;
-        card.innerHTML = `
-          <div class="nodeTop">
-            <h4>${escapeHtml(n.label || "(untitled)")}</h4>
-            <span class="tag ${info.cls}">${escapeHtml(info.label)}</span>
-          </div>
+      nodesEl.innerHTML = "";
+      state.nodes.forEach(n => {
+        const p = parseNode(n);
+        const meta = typeMeta(n.type);
+        const el = document.createElement("article");
+        el.className = "node";
+        el.style.left = `${p.x}px`;
+        el.style.top = `${p.y}px`;
+        el.dataset.id = n.id;
+        el.innerHTML = `
+          <h4>${shared.escapeHtml(p.text)}</h4>
           <div class="meta">
-            <button class="mini" data-cycle="${escapeHtml(n.id)}">Cycle Type</button>
-            <button class="mini miniDanger" data-del="${escapeHtml(n.id)}">Delete</button>
+            <span class="chip ${meta.cls}">${shared.escapeHtml(meta.label)}</span>
+            <button class="tiny" data-link="${shared.escapeHtml(n.id)}">Link</button>
+            <button class="tiny" data-type="${shared.escapeHtml(n.id)}">Cycle</button>
+            <button class="tiny" data-del="${shared.escapeHtml(n.id)}">Delete</button>
           </div>
         `;
 
-        card.addEventListener("dragstart", (e) => {
-          const payload = { mode: "node", id: n.id };
-          e.dataTransfer.setData("text/plain", JSON.stringify(payload));
+        el.addEventListener("pointerdown", (e) => {
+          if (e.target.closest("button")) return;
+          el.setPointerCapture(e.pointerId);
+          state.drag = { id: n.id, startX: e.clientX, startY: e.clientY, x: p.x, y: p.y, el };
+          el.classList.add("drag");
+        });
+        el.addEventListener("pointermove", (e) => {
+          if (!state.drag || state.drag.id !== n.id) return;
+          const dx = e.clientX - state.drag.startX;
+          const dy = e.clientY - state.drag.startY;
+          const nx = clamp(state.drag.x + dx, 6, board.clientWidth - 216);
+          const ny = clamp(state.drag.y + dy, 34, board.clientHeight - 122);
+          el.style.left = `${nx}px`;
+          el.style.top = `${ny}px`;
+          renderEdges();
+        });
+        el.addEventListener("pointerup", async () => {
+          if (!state.drag || state.drag.id !== n.id) return;
+          el.classList.remove("drag");
+          const nx = parseFloat(el.style.left);
+          const ny = parseFloat(el.style.top);
+          state.drag = null;
+          const parsed = parseNode(n);
+          const next = JSON.stringify({ ...parsed, x: nx, y: ny });
+          try{
+            const { error } = await supabase.from("workshop_journey_items").update({ label: next }).eq("id", n.id);
+            if (error) throw error;
+            n.label = next;
+            renderEdges();
+          } catch (err){ showToast(err.message || "Move save failed"); }
         });
 
-        zone.appendChild(card);
+        nodesEl.appendChild(el);
       });
-
-      countOut.textContent = `${onlyWorkflow.length} nodes`;
+      renderEdges();
     }
 
-    async function insertNode({ week, label, type }){
-      const clean = String(label || "").trim();
-      if (!clean) return;
-      const payload = {
-        session_id: room,
-        participant_id: participantId,
-        week: Number(week) || 1,
-        label: clean,
-        type: String(type || "workflow_action")
-      };
-
+    async function addNode(label, type){
+      const text = String(label || "").trim();
+      if (!text) return;
+      const payloadLabel = JSON.stringify({ text, x: 220 + Math.floor(Math.random()*180), y: 90 + Math.floor(Math.random()*280) });
+      const payload = { session_id: flowSession, participant_id: participantId, week: 1, type, label: payloadLabel };
       let ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
       if (ins.error){
         const relaxed = { ...payload };
@@ -391,134 +349,179 @@
         ins = await supabase.from("workshop_journey_items").insert(relaxed).select().single();
       }
       if (ins.error) throw ins.error;
-
       state.nodes.push(ins.data);
       renderNodes();
-      showToast("Workflow node added");
+      showToast("Node added");
     }
 
-    async function moveNode(id, week){
-      const w = Number(week) || 1;
-      const { error } = await supabase.from("workshop_journey_items").update({ week: w }).eq("id", id);
-      if (error) throw error;
-      const idx = state.nodes.findIndex(n => n.id === id);
-      if (idx >= 0) state.nodes[idx].week = w;
-      renderNodes();
+    function edgePayload(from, to){
+      return JSON.stringify({ from, to });
+    }
+    function parseEdge(row){
+      try{
+        const obj = JSON.parse(String(row.label || "{}"));
+        return { from: String(obj.from || ""), to: String(obj.to || "") };
+      } catch {
+        return { from: "", to: "" };
+      }
     }
 
-    async function updateNodeType(id, next){
-      const { error } = await supabase.from("workshop_journey_items").update({ type: next }).eq("id", id);
-      if (error) throw error;
-      const idx = state.nodes.findIndex(n => n.id === id);
-      if (idx >= 0) state.nodes[idx].type = next;
-      renderNodes();
+    async function addEdge(from, to){
+      if (!from || !to || from === to) return;
+      if (state.edges.some(e => e.from === from && e.to === to)){
+        showToast("Edge already exists");
+        return;
+      }
+      const payload = {
+        session_id: flowSession,
+        participant_id: participantId,
+        week: 0,
+        type: "workflow_edge",
+        label: edgePayload(from, to)
+      };
+      let ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
+      if (ins.error){
+        const relaxed = { ...payload };
+        delete relaxed.participant_id;
+        ins = await supabase.from("workshop_journey_items").insert(relaxed).select().single();
+      }
+      if (ins.error) throw ins.error;
+      state.edges.push({ id: ins.data.id, from, to });
+      renderEdges();
     }
 
     async function deleteNode(id){
+      const edgeIds = state.edges.filter(e => e.from === id || e.to === id).map(e => e.id);
+      if (edgeIds.length){
+        const { error: e1 } = await supabase.from("workshop_journey_items").delete().in("id", edgeIds);
+        if (e1) throw e1;
+      }
       const { error } = await supabase.from("workshop_journey_items").delete().eq("id", id);
       if (error) throw error;
       state.nodes = state.nodes.filter(n => n.id !== id);
+      state.edges = state.edges.filter(e => e.from !== id && e.to !== id);
       renderNodes();
-      showToast("Node removed");
     }
 
-    async function loadNodes(){
-      const { data, error } = await supabase
-        .from("workshop_journey_items")
-        .select("*")
-        .eq("session_id", room);
+    async function cycleNodeType(id){
+      const order = ["workflow_constraint", "workflow_decision", "workflow_action", "workflow_support"];
+      const row = state.nodes.find(n => n.id === id);
+      if (!row) return;
+      const idx = order.indexOf(row.type);
+      const next = order[(idx + 1) % order.length];
+      const { error } = await supabase.from("workshop_journey_items").update({ type: next }).eq("id", id);
       if (error) throw error;
-      state.nodes = (data || []).filter(n => String(n.type || "").startsWith("workflow_"));
+      row.type = next;
       renderNodes();
     }
 
-    function wireEvents(){
-      document.addEventListener("click", async (e) => {
-        const del = e.target.closest("[data-del]");
-        if (del){
-          const id = del.getAttribute("data-del");
+    function hydrateRows(rows){
+      const nodeRows = [];
+      const edges = [];
+      (rows || []).forEach(r => {
+        if (String(r.type || "") === "workflow_edge"){
+          const p = parseEdge(r);
+          if (p.from && p.to) edges.push({ id: r.id, from: p.from, to: p.to });
+        } else if (String(r.type || "").startsWith("workflow_")){
+          nodeRows.push(r);
+        }
+      });
+      state.nodes = nodeRows;
+      state.edges = edges;
+      renderNodes();
+    }
+
+    async function loadAll(){
+      const { data, error } = await supabase.from("workshop_journey_items").select("*").eq("session_id", flowSession);
+      if (error) throw error;
+      hydrateRows(data || []);
+    }
+
+    function wireActions(){
+      $("#btnAdd").addEventListener("click", async () => {
+        try{
+          await addNode(nodeLabel.value, nodeType.value);
+          nodeLabel.value = "";
+        } catch (err){ showToast(err.message || "Add failed"); }
+      });
+      nodeLabel.addEventListener("keydown", (e) => { if (e.key === "Enter") $("#btnAdd").click(); });
+
+      document.querySelectorAll("[data-template]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          nodeLabel.value = btn.getAttribute("data-template") || "";
+          nodeType.value = "workflow_constraint";
+        });
+      });
+
+      nodesEl.addEventListener("click", async (e) => {
+        const linkBtn = e.target.closest("[data-link]");
+        if (linkBtn){
+          const id = linkBtn.getAttribute("data-link");
           if (!id) return;
-          const ok = confirm("Delete this workflow node?");
-          if (!ok) return;
-          try{ await deleteNode(id); } catch(err){ showToast(err.message || "Delete failed"); }
+          if (!state.linkFrom){
+            state.linkFrom = id;
+            setDiag("Link mode: choose target node and click Link.", false);
+          } else {
+            const from = state.linkFrom;
+            state.linkFrom = null;
+            try{
+              await addEdge(from, id);
+              setDiag("Connected.", false);
+            } catch (err){
+              setDiag(err.message || "Edge create failed", true);
+            }
+          }
           return;
         }
 
-        const cyc = e.target.closest("[data-cycle]");
-        if (cyc){
-          const id = cyc.getAttribute("data-cycle");
-          const row = state.nodes.find(n => n.id === id);
-          if (!row) return;
-          const next = cycleType(row.type);
-          try{ await updateNodeType(id, next); } catch(err){ showToast(err.message || "Update failed"); }
+        const typeBtn = e.target.closest("[data-type]");
+        if (typeBtn){
+          try { await cycleNodeType(typeBtn.getAttribute("data-type")); }
+          catch (err){ showToast(err.message || "Update failed"); }
+          return;
+        }
+
+        const delBtn = e.target.closest("[data-del]");
+        if (delBtn){
+          const id = delBtn.getAttribute("data-del");
+          const ok = confirm("Delete this node and connected arrows?");
+          if (!ok) return;
+          try { await deleteNode(id); } catch (err){ showToast(err.message || "Delete failed"); }
         }
       });
 
-      $("#btnAddCustom").addEventListener("click", async () => {
-        const label = customLabel.value.trim();
-        if (!label){ showToast("Type a label first"); return; }
-        try{
-          await insertNode({ label, type: customType.value, week: Number(customWeek.value) || 1 });
-          customLabel.value = "";
-        } catch (err){
-          showToast(err.message || "Insert failed");
-        }
-      });
-
-      customLabel.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") $("#btnAddCustom").click();
-      });
-
+      $("#btnRefresh").addEventListener("click", () => loadAll().then(() => showToast("Refreshed")).catch(err => showToast(err.message || "Refresh failed")));
       $("#btnBack").addEventListener("click", () => {
-        location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&track=tutor&campus=${encodeURIComponent(campus)}`;
+        location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&track=tutor&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
       });
       $("#btnDashboard").addEventListener("click", () => {
-        location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
+        location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
       });
       $("#btnFinish").addEventListener("click", () => {
-        location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
-      });
-      $("#btnRefresh").addEventListener("click", () => {
-        loadNodes().then(() => showToast("Refreshed")).catch(err => showToast(err.message || "Refresh failed"));
+        location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
       });
     }
 
     function subscribe(){
       supabase
-        .channel("step3tutor:" + room)
-        .on("postgres_changes", { event: "*", schema: "public", table: "workshop_journey_items", filter: `session_id=eq.${room}` }, (payload) => {
-          const row = payload.new || payload.old;
-          if (!row || !String(row.type || "").startsWith("workflow_")) return;
-
-          if (payload.eventType === "INSERT"){
-            if (!state.nodes.some(n => n.id === payload.new.id)) state.nodes.push(payload.new);
-          } else if (payload.eventType === "UPDATE"){
-            const idx = state.nodes.findIndex(n => n.id === payload.new.id);
-            if (idx >= 0){ state.nodes[idx] = payload.new; }
-            else { state.nodes.push(payload.new); }
-          } else if (payload.eventType === "DELETE"){
-            state.nodes = state.nodes.filter(n => n.id !== payload.old.id);
-          }
-          renderNodes();
+        .channel("step3tutorflow:" + flowSession)
+        .on("postgres_changes", { event:"*", schema:"public", table:"workshop_journey_items", filter:`session_id=eq.${flowSession}` }, () => {
+          loadAll().catch(() => {});
         })
         .subscribe((status) => {
-          if (status === "SUBSCRIBED") setDiag("Connected. Live updates are active.", false);
-          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT"){
-            setDiag("Realtime degraded. Refresh still works.", true);
-          }
+          if (status === "SUBSCRIBED") setDiag("Connected. Group workflow realtime active.", false);
+          if (status === "TIMED_OUT" || status === "CHANNEL_ERROR") setDiag("Realtime degraded. Manual refresh still works.", true);
         });
     }
 
-    roomOut.textContent = room;
-    renderIdentity();
-    renderTemplates();
-    renderWeeks();
-    wireEvents();
-
-    loadNodes()
-      .then(() => setDiag("Connected. Drag templates into week columns.", false))
+    renderLanes();
+    wireActions();
+    ensureScopeSession()
+      .then(() => loadAll())
+      .then(() => setDiag("Connected. Build your tutor flowchart.", false))
       .catch((err) => setDiag(err.message || "Load failed", true));
     subscribe();
+    window.addEventListener("resize", renderEdges);
   })();
   </script>
 </body>

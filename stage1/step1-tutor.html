@@ -4,6 +4,9 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Stage 1 • Step 1 Tutor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#070a14;
@@ -26,7 +29,7 @@
     html,body{height:100%}
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       background:var(--bg);
       color:var(--text);
       overflow-x:hidden;
@@ -629,6 +632,7 @@
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
     const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
+    const group = (params.get("group") || "core").trim() || "core";
     if (!room) {
       document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room. Use <b>?room=demo</b></div>";
       throw new Error("Missing room");
@@ -1130,11 +1134,11 @@
         showToast("Please enter your name and pick a card");
         return;
       }
-      location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&track=tutor&campus=${encodeURIComponent(campus)}`;
+      location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&track=tutor&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
     });
 
     btnExit.addEventListener("click", () => location.href = "/index.html");
-    btnDashboard.addEventListener("click", () => location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`);
+    btnDashboard.addEventListener("click", () => location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`);
 
     btnReset.addEventListener("click", () => {
       const ok = confirm("Clear local workshop storage and reload?");
