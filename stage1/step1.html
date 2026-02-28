@@ -20,7 +20,6 @@
 
       --r:18px;
       --shadow:0 18px 44px rgba(0,0,0,.42);
-
       --focus: 0 0 0 4px rgba(0,229,255,.18);
     }
 
@@ -52,7 +51,6 @@
     }
     @media (prefers-reduced-motion:reduce){
       .bg{animation:none}
-      *{scroll-behavior:auto}
     }
 
     .wrap{max-width:980px;margin:0 auto;padding:18px 14px 92px}
@@ -132,7 +130,10 @@
     }
 
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .rowLeft{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .metaRow{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-start;
+      padding-top:2px;
+    }
 
     .mono{
       font-family:ui-monospace,Menlo,Consolas,monospace;
@@ -175,7 +176,7 @@
       font-weight:900;
       outline:none;
       min-width:240px;
-      transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+      transition: border-color .15s ease, box-shadow .15s ease;
     }
     input::placeholder{color:rgba(170,176,214,.75)}
     input:focus, .select:focus{
@@ -194,7 +195,7 @@
       font-weight:1000;
       cursor:pointer;
       box-shadow:0 10px 26px rgba(0,0,0,.26);
-      transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease, background .14s ease;
+      transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease;
       backdrop-filter: blur(8px);
       will-change: transform;
     }
@@ -214,9 +215,7 @@
       border-color:color-mix(in srgb,var(--bad) 65%, rgba(255,255,255,.10));
       background:linear-gradient(180deg, rgba(255,77,77,.10), rgba(18,22,37,.78));
     }
-    .btnGhost{
-      background:rgba(255,255,255,.03);
-    }
+    .btnGhost{background:rgba(255,255,255,.03)}
 
     /* Persona grid */
     .personaGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
@@ -231,8 +230,8 @@
       cursor:pointer;
       display:flex;
       flex-direction:column;
-      gap:8px;
-      min-height:108px;
+      gap:10px;
+      min-height:138px;
       position:relative;
       transition: transform .14s ease, border-color .14s ease, background .14s ease;
     }
@@ -254,12 +253,52 @@
       color:#0b0d12;background:var(--accent2);
       box-shadow:0 12px 22px rgba(255,43,214,.14);
     }
+
+    .pTop{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
     .pTitle{margin:0;font-size:12px;font-weight:1000;letter-spacing:.2px;text-transform:uppercase}
     .pText{margin:0;color:var(--muted);font-weight:750;font-size:12px;line-height:1.4}
 
-    .metaRow{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-start;
-      padding-top:2px;
+    /* Placeholder mini card (visual only) */
+    .mini{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      background:
+        radial-gradient(320px 180px at 20% 20%, rgba(0,229,255,.10), transparent 55%),
+        radial-gradient(260px 160px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
+        rgba(255,255,255,.02);
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-height:74px;
+    }
+    .miniLine{
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      overflow:hidden;
+      position:relative;
+    }
+    .miniLine::after{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      transform:translateX(-60%);
+      animation: shimmer 1.5s ease-in-out infinite;
+    }
+    .miniLine:nth-child(2){opacity:.75}
+    .miniLine:nth-child(3){opacity:.55; width:72%}
+    @keyframes shimmer{
+      0%{transform:translateX(-60%)}
+      100%{transform:translateX(60%)}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .miniLine::after{animation:none}
     }
 
     .toast{
@@ -407,7 +446,6 @@
       100%{transform:translateX(-40%)}
     }
 
-    /* Small polish */
     .divider{
       height:1px;
       background:rgba(255,255,255,.08);
@@ -424,7 +462,7 @@
         <div class="badge"><span class="dot"></span> Stage 1 • Step 1</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
-          Step 1 is passcode-gated. After unlock, you can go to Step 2 and Step 3.
+          Step 1 is passcode-gated. After unlock, choose your role and pick a card.
         </div>
       </div>
 
@@ -469,10 +507,10 @@
 
           <div class="field" style="max-width:360px">
             <div class="label">Role</div>
+            <!-- ✅ ONLY Student + Tutor -->
             <select id="roleSelect" class="select" aria-label="Role">
               <option value="student">Student</option>
               <option value="tutor">Tutor</option>
-              <option value="observer">Observer</option>
             </select>
             <div class="hint">Pick your role, then choose a card.</div>
           </div>
@@ -588,14 +626,9 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcXd6dG9hdnRrcXNweHB2bHVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMDU3MDEsImV4cCI6MjA4Nzc4MTcwMX0.ZVcMU8DeHxHMw3WWegz88BmCei9z4UX3tZR7n1XFRj0";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // If your files are in /stage1/, keep this. If in root, set "".
     const BASE_PATH = "/stage1";
-
-    // Passcode (client-side gate)
     const REQUIRED_PASSCODE = "duck123";
-
-    // Chibi image for loading screen
-    const CHIBI3_SRC = "/pic/chibi3.png"; // change if needed
+    const CHIBI3_SRC = "/pic/chibi3.png";
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
@@ -667,8 +700,6 @@
     const btnNextStep = $("#btnNextStep");
 
     roomOut.textContent = room;
-
-    // preload chibi
     chibiImg.src = CHIBI3_SRC;
 
     function showToast(msg){
@@ -749,11 +780,6 @@
       selName.textContent = state.display_name ? state.display_name : "—";
     }
 
-    // load local name first (fast UI)
-    state.display_name = cleanName(localStorage.getItem(NAME_KEY));
-    if (nameInput) nameInput.value = state.display_name || "";
-    refreshMeOut();
-
     function escapeHtml(str){
       return (str ?? "")
         .replaceAll("&","&amp;")
@@ -766,6 +792,11 @@
     function updateNextEnabled(){
       btnNext.disabled = !state.persona_id || !state.display_name;
     }
+
+    // local name first
+    state.display_name = cleanName(localStorage.getItem(NAME_KEY));
+    if (nameInput) nameInput.value = state.display_name || "";
+    refreshMeOut();
 
     async function saveParticipant(patch){
       const { error } = await supabase.from("workshop_participants").update(patch).eq("id", participantId);
@@ -816,7 +847,6 @@
           showToast("Name cleared");
           return;
         }
-        // only write if changed
         if (cleaned !== state.display_name){
           await saveName(cleaned);
         }
@@ -828,7 +858,21 @@
       personaCards.forEach(c => {
         const el = document.createElement("div");
         el.className = "persona" + (state.persona_id === c.id ? " selected" : "");
-        el.innerHTML = `<p class="pTitle">${escapeHtml(c.title)}</p><p class="pText">${escapeHtml(c.text)}</p>`;
+
+        // ✅ Add a visual placeholder of what the card could look like
+        el.innerHTML = `
+          <div class="pTop">
+            <p class="pTitle">${escapeHtml(c.title)}</p>
+            <span class="mono">Preview</span>
+          </div>
+          <div class="mini" aria-hidden="true">
+            <div class="miniLine" style="width:92%"></div>
+            <div class="miniLine" style="width:84%"></div>
+            <div class="miniLine"></div>
+          </div>
+          <p class="pText">${escapeHtml(c.text)}</p>
+        `;
+
         el.addEventListener("click", async () => {
           state.persona_id = c.id;
           state.persona_title = c.title;
@@ -850,6 +894,7 @@
             hideLoading();
           }
         });
+
         personaGrid.appendChild(el);
       });
 
@@ -898,7 +943,9 @@
       if (error) throw error;
 
       if (data){
-        state.role = data.role || state.role;
+        // role: only allow student/tutor
+        const r = (data.role || state.role);
+        state.role = (r === "tutor" ? "tutor" : "student");
 
         state.persona_id = data.persona_id || null;
         state.persona_title = state.persona_id
@@ -927,20 +974,19 @@
       mainCard.style.display = "block";
     }
 
-    // ===== Tutorial slides (only after unlock) =====
+    // ===== Tutorial slides =====
     const tutorialSlides = [
       {
         title: "What you do in Step 1",
         html: `
           <div class="callout">
-            Step 1 is quick: choose your <span class="mono">role</span> and set your <span class="mono">name</span>, then pick a
-            <span class="mono">personality card</span>.
-            Your choices save automatically.
+            Step 1 is quick: type your <span class="mono">name</span>, choose your <span class="mono">role</span>,
+            then pick a <span class="mono">personality card</span>. Your choices save automatically.
           </div>
           <ul class="list">
             <li>Type your name (this is what others see).</li>
-            <li>Select your role (Student / Tutor / Observer).</li>
-            <li>Click one personality card that matches how you prefer feedback.</li>
+            <li>Select Student or Tutor.</li>
+            <li>Click one personality card.</li>
             <li>Then hit <span class="mono">Next → Step 2</span>.</li>
           </ul>
         `
@@ -949,12 +995,11 @@
         title: "Why we ask for role",
         html: `
           <div class="callout">
-            Different roles see “good feedback” differently — this helps us interpret your choices.
+            Students and tutors interpret “good feedback” differently — role helps us compare patterns.
           </div>
           <ul class="list">
             <li><b>Students</b> focus on clarity, actionability, confidence.</li>
             <li><b>Tutors</b> focus on feasibility, rubric alignment, time.</li>
-            <li><b>Observers</b> help spot mismatch and bias across both perspectives.</li>
           </ul>
         `
       },
@@ -1031,7 +1076,7 @@
 
     btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
 
-    // ===== Tutorial button behaviour (no bypass) =====
+    // ===== Tutorial button behaviour =====
     btnTutorial.addEventListener("click", () => {
       if (localStorage.getItem(AUTH_KEY) === "1"){
         openTutorial(0);
@@ -1100,11 +1145,9 @@
 
     // ===== Initial state =====
     if (localStorage.getItem(AUTH_KEY) === "1"){
-      // already authed, bootstrap quietly
       postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
         .then(() => localStorage.setItem(TUT_KEY, "1"));
     } else {
-      // locked: open password modal immediately
       openOverlay(pwOverlay);
       setTimeout(() => pwInput?.focus(), 0);
     }
