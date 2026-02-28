@@ -608,10 +608,10 @@
 
     async function loadData(){
       const queries = {
-        participants: supabase.from("workshop_participants").select("id,display_name,role,persona_id,created_at,updated_at").eq("session_id", room),
-        stickies: supabase.from("workshop_stickies").select("id,participant_id,text,created_at,updated_at").eq("session_id", room),
-        journey: supabase.from("workshop_journey_items").select("id,participant_id,week,label,type,created_at,updated_at").eq("session_id", room),
-        notes: supabase.from("workshop_journey_notes").select("id,participant_id,body,updated_at").eq("session_id", room)
+        participants: supabase.from("workshop_participants").select("*").eq("session_id", room),
+        stickies: supabase.from("workshop_stickies").select("*").eq("session_id", room),
+        journey: supabase.from("workshop_journey_items").select("*").eq("session_id", room),
+        notes: supabase.from("workshop_journey_notes").select("*").eq("session_id", room)
       };
       const settled = await Promise.allSettled([
         queries.participants,

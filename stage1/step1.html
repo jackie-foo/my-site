@@ -44,7 +44,7 @@
       filter:saturate(1.05);
     }
 
-    .wrap{max-width:1040px;margin:0 auto;padding:20px 14px 92px}
+    .wrap{max-width:1180px;margin:0 auto;padding:20px 14px 92px}
     header{
       display:flex;
       justify-content:space-between;
@@ -91,7 +91,7 @@
     .card{
       border:1px solid rgba(255,255,255,.10);
       background:
-        linear-gradient(110deg, rgba(0,229,255,.04), transparent 35%),
+        linear-gradient(118deg, rgba(0,229,255,.07), transparent 36%),
         linear-gradient(0deg, rgba(15,19,32,.90), rgba(18,22,37,.90));
       border-radius:var(--r);
       box-shadow:var(--shadow);
@@ -211,8 +211,8 @@
     .btnGhost{background:rgba(255,255,255,.03)}
 
     /* Persona grid */
-    .personaGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-    @media (max-width:860px){.personaGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .personaGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    @media (max-width:1040px){.personaGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media (max-width:520px){.personaGrid{grid-template-columns:repeat(1,minmax(0,1fr))}}
 
     .persona{
@@ -226,7 +226,7 @@
       display:flex;
       flex-direction:column;
       gap:10px;
-      min-height:248px;
+      min-height:268px;
       position:relative;
       transition: transform .14s ease, border-color .14s ease, background .14s ease, box-shadow .14s ease;
     }
@@ -259,7 +259,7 @@
       justify-content:space-between;
     }
     .pTitle{margin:0;font-size:12px;font-weight:1000;letter-spacing:.2px;text-transform:uppercase}
-    .pText{margin:0;color:var(--muted);font-weight:750;font-size:12px;line-height:1.4}
+    .pText{margin:0;color:var(--muted);font-weight:780;font-size:12px;line-height:1.48}
 
     /* static chibi thumbnail on each card */
     .thumbWrap{
@@ -274,7 +274,7 @@
       justify-content:center;
       overflow:hidden;
       width:100%;
-      aspect-ratio:4/3;
+      aspect-ratio:16/11;
     }
     .thumb{
       width:100%;
