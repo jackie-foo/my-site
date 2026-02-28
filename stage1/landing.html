@@ -126,10 +126,7 @@
       letter-spacing:.2px;
       text-transform:uppercase;
     }
-    .fac{
-      border-color:rgba(255,255,255,.18);
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-    }
+    .purposeList{margin:0;padding-left:18px;color:var(--muted);font-size:12px;line-height:1.5;font-weight:800}
   </style>
 </head>
 <body>
@@ -139,21 +136,17 @@
     <section class="hero">
       <article class="card">
         <div class="head">
-          <h1>Launch Your Workshop Room</h1>
-          <div class="sub">Generate clean participant links instantly. Student and tutor tracks are separated from facilitator controls.</div>
+          <h1>Launch By Campus + Role</h1>
+          <div class="sub">Generate a room once, then open the exact participant route directly.</div>
         </div>
         <div class="body">
           <div class="row">
             <input id="roomInput" class="field" type="text" placeholder="room id (e.g. demo)" value="demo"/>
-            <select id="campusSelect" class="field">
-              <option value="upng">UPNG</option>
-              <option value="monash">Monash</option>
-            </select>
             <input id="groupInput" class="field" type="text" placeholder="tutor group (e.g. g1)" value="core"/>
           </div>
           <div class="pillRow">
-            <span class="pill">No participant passcode</span>
             <span class="pill">Link-based entry</span>
+            <span class="pill">No participant passcode</span>
             <span class="pill">Room-scoped tracking</span>
           </div>
         </div>
@@ -162,13 +155,19 @@
       <article class="card">
         <div class="head">
           <h1 style="font-size:22px">Quick Launch</h1>
-          <div class="sub">Use these links on projector/chat.</div>
+          <div class="sub">Open directly without extra clicks.</div>
         </div>
         <div class="body">
-          <button id="btnStudent" class="btnPrimary">Open Student Step 1</button>
-          <button id="btnTutor" class="btnTutor">Open Tutor Step 1</button>
-          <button id="btnDashboard">Open Facilitator Dashboard</button>
-          <button id="btnHome">Back to Home</button>
+          <div class="grid">
+            <button id="btnUpngStudent" class="btnPrimary">UPNG Student</button>
+            <button id="btnMonashStudent" class="btnPrimary">Monash Student</button>
+            <button id="btnUpngTutor" class="btnTutor">UPNG Tutor</button>
+            <button id="btnMonashTutor" class="btnTutor">Monash Tutor</button>
+          </div>
+          <div class="row">
+            <button id="btnDashboard">Open Facilitator Dashboard</button>
+            <button id="btnHome">Back to Home</button>
+          </div>
         </div>
       </article>
     </section>
@@ -177,27 +176,37 @@
       <div class="body">
         <div class="grid">
           <article class="panel">
-            <h2>Student Track Link</h2>
-            <div class="kicker">Share this with participants joining as students.</div>
-            <div id="studentLink" class="mono"></div>
-            <div class="row">
-              <button id="btnCopyStudent">Copy Link</button>
-            </div>
+            <h2>UPNG Student Link</h2>
+            <div id="upngStudentLink" class="mono"></div>
+            <button id="btnCopyUpngStudent">Copy UPNG Student Link</button>
           </article>
 
           <article class="panel">
-            <h2>Tutor Track Link</h2>
-            <div class="kicker">Share this with participants joining as tutors.</div>
-            <div id="tutorLink" class="mono"></div>
-            <div class="row">
-              <button id="btnCopyTutor">Copy Link</button>
-            </div>
+            <h2>Monash Student Link</h2>
+            <div id="monashStudentLink" class="mono"></div>
+            <button id="btnCopyMonashStudent">Copy Monash Student Link</button>
+          </article>
+
+          <article class="panel">
+            <h2>UPNG Tutor Link</h2>
+            <div id="upngTutorLink" class="mono"></div>
+            <button id="btnCopyUpngTutor">Copy UPNG Tutor Link</button>
+          </article>
+
+          <article class="panel">
+            <h2>Monash Tutor Link</h2>
+            <div id="monashTutorLink" class="mono"></div>
+            <button id="btnCopyMonashTutor">Copy Monash Tutor Link</button>
           </article>
         </div>
 
-        <article class="panel fac">
-          <h2>Facilitator Note</h2>
-          <div class="kicker">Dashboard is facilitator-facing. Participants should only receive student/tutor links above.</div>
+        <article class="panel">
+          <h2>Purpose</h2>
+          <ul class="purposeList">
+            <li>Participants should only use Student or Tutor links above.</li>
+            <li>Facilitator dashboard is for monitoring stage progress, friction notes, and workflow snapshots.</li>
+            <li>Use one room id per workshop run so your data stays clean and comparable.</li>
+          </ul>
         </article>
       </div>
     </section>
@@ -206,55 +215,60 @@
   <script>
   (() => {
     const roomInput = document.getElementById("roomInput");
-    const campusSelect = document.getElementById("campusSelect");
     const groupInput = document.getElementById("groupInput");
-    const studentLink = document.getElementById("studentLink");
-    const tutorLink = document.getElementById("tutorLink");
+
+    const upngStudentLink = document.getElementById("upngStudentLink");
+    const monashStudentLink = document.getElementById("monashStudentLink");
+    const upngTutorLink = document.getElementById("upngTutorLink");
+    const monashTutorLink = document.getElementById("monashTutorLink");
 
     const params = new URLSearchParams(location.search);
-    const initialRoom = (params.get("room") || "demo").trim() || "demo";
-    const initialCampus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
-    const initialGroup = (params.get("group") || "core").trim() || "core";
-
-    roomInput.value = initialRoom;
-    campusSelect.value = initialCampus;
-    groupInput.value = initialGroup;
+    roomInput.value = (params.get("room") || "demo").trim() || "demo";
+    groupInput.value = (params.get("group") || "core").trim() || "core";
 
     function values(){
       const room = (roomInput.value || "").trim() || "demo";
-      const campus = (campusSelect.value || "upng").trim().toLowerCase() === "monash" ? "monash" : "upng";
       const group = (groupInput.value || "core").trim() || "core";
-      return { room, campus, group };
+      return { room, group };
     }
 
-    function links(){
-      const { room, campus, group } = values();
+    function build(campus, track){
+      const { room, group } = values();
       const q = `room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
-      const student = `/stage1/step1.html?${q}`;
-      const tutor = `/stage1/step1-tutor.html?${q}&group=${encodeURIComponent(group)}`;
-      const dashboard = `/stage1/main-dashboard.html?${q}&group=${encodeURIComponent(group)}`;
-      return { student, tutor, dashboard };
+      if (track === "student") return `/stage1/step1.html?${q}`;
+      return `/stage1/step1-tutor.html?${q}&group=${encodeURIComponent(group)}`;
+    }
+
+    function dashboardPath(campus){
+      const { room, group } = values();
+      return `/stage1/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
     }
 
     function render(){
-      const x = links();
-      studentLink.textContent = `${location.origin}${x.student}`;
-      tutorLink.textContent = `${location.origin}${x.tutor}`;
+      upngStudentLink.textContent = `${location.origin}${build("upng", "student")}`;
+      monashStudentLink.textContent = `${location.origin}${build("monash", "student")}`;
+      upngTutorLink.textContent = `${location.origin}${build("upng", "tutor")}`;
+      monashTutorLink.textContent = `${location.origin}${build("monash", "tutor")}`;
     }
 
-    async function copy(txt){
-      try{ await navigator.clipboard.writeText(txt); } catch {}
+    async function copy(text){
+      try{ await navigator.clipboard.writeText(text); } catch {}
     }
 
     roomInput.addEventListener("input", render);
-    campusSelect.addEventListener("change", render);
     groupInput.addEventListener("input", render);
 
-    document.getElementById("btnStudent").addEventListener("click", () => { location.href = links().student; });
-    document.getElementById("btnTutor").addEventListener("click", () => { location.href = links().tutor; });
-    document.getElementById("btnDashboard").addEventListener("click", () => { location.href = links().dashboard; });
-    document.getElementById("btnCopyStudent").addEventListener("click", () => copy(`${location.origin}${links().student}`));
-    document.getElementById("btnCopyTutor").addEventListener("click", () => copy(`${location.origin}${links().tutor}`));
+    document.getElementById("btnUpngStudent").addEventListener("click", () => { location.href = build("upng", "student"); });
+    document.getElementById("btnMonashStudent").addEventListener("click", () => { location.href = build("monash", "student"); });
+    document.getElementById("btnUpngTutor").addEventListener("click", () => { location.href = build("upng", "tutor"); });
+    document.getElementById("btnMonashTutor").addEventListener("click", () => { location.href = build("monash", "tutor"); });
+    document.getElementById("btnDashboard").addEventListener("click", () => { location.href = dashboardPath("upng"); });
+
+    document.getElementById("btnCopyUpngStudent").addEventListener("click", () => copy(`${location.origin}${build("upng", "student")}`));
+    document.getElementById("btnCopyMonashStudent").addEventListener("click", () => copy(`${location.origin}${build("monash", "student")}`));
+    document.getElementById("btnCopyUpngTutor").addEventListener("click", () => copy(`${location.origin}${build("upng", "tutor")}`));
+    document.getElementById("btnCopyMonashTutor").addEventListener("click", () => copy(`${location.origin}${build("monash", "tutor")}`));
+
     document.getElementById("btnHome").addEventListener("click", () => { location.href = "/index.html"; });
 
     render();
