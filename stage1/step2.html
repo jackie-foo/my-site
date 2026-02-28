@@ -632,6 +632,22 @@
       const body = withoutPrefix.slice(firstBreak + 1).trim();
       return { author, body };
     }
+    function sharedSig(author, body){
+      return `${String(author || "").trim().toLowerCase()}::${String(body || "").trim().toLowerCase()}`;
+    }
+    function currentSharedSigSet(){
+      const set = new Set();
+      state.shared.forEach((s) => {
+        const p = parseSharedSticky(s);
+        set.add(sharedSig(p.author, p.body));
+      });
+      return set;
+    }
+    async function removeDraftRowById(id){
+      if (!id || String(id).startsWith("temp_")) return;
+      const { error } = await supabase.from("workshop_stickies").delete().eq("id", id);
+      if (error) throw error;
+    }
     function buildSnapshot(rows){
       return JSON.stringify(
         rows
@@ -777,6 +793,19 @@
           }
           const author = (localStorage.getItem(NAME_KEY) || participantId.slice(0, 8)).trim();
           const publishedText = `${SHARED_PREFIX} ${author}\n${raw}`;
+          const sig = sharedSig(author, raw);
+          if (currentSharedSigSet().has(sig)){
+            try{
+              await removeDraftRowById(s.id);
+            } catch (err){
+              console.error(err);
+            }
+            state.stickies = state.stickies.filter(x => x.id !== s.id);
+            render();
+            showToast("Already published. Draft removed.");
+            await refreshStickiesFromDb({ silent:true });
+            return;
+          }
           const payload = {
             session_id: room,
             x: Math.max(8, Math.round(s.x || 16)),
@@ -795,7 +824,14 @@
             showToast("Publish failed");
             return;
           }
-          showToast("Published to shared board");
+          try{
+            await removeDraftRowById(s.id);
+          } catch (err){
+            console.error(err);
+          }
+          state.stickies = state.stickies.filter(x => x.id !== s.id);
+          render();
+          showToast("Published and moved to shared board");
           await refreshStickiesFromDb({ silent:true });
         });
 
@@ -970,11 +1006,11 @@
       saving.delete(tempId);
 
       if (idx >= 0){
-        state.stickies[idx] = { id:row.id, x:row.x, y:row.y, color:row.color, text:row.text || "", participant_id:row.participant_id };
+        state.stickies[idx] = { id:row.id, x:row.x, y:row.y, color:row.color, text:stripDraftPrefix(row.text || ""), participant_id:row.participant_id };
         setSaving(row.id, false);
         render();
       } else {
-        state.stickies.push({ id:row.id, x:row.x, y:row.y, color:row.color, text:row.text || "", participant_id:row.participant_id });
+        state.stickies.push({ id:row.id, x:row.x, y:row.y, color:row.color, text:stripDraftPrefix(row.text || ""), participant_id:row.participant_id });
         setSaving(row.id, false);
         render();
       }
@@ -987,14 +1023,30 @@
         return;
       }
       const author = (localStorage.getItem(NAME_KEY) || participantId.slice(0, 8)).trim();
+      const seen = currentSharedSigSet();
       let okCount = 0;
+      let skipCount = 0;
       for (const s of drafts){
+        const body = (s.text || "").trim();
+        const sig = sharedSig(author, body);
+        if (!body){
+          continue;
+        }
+        if (seen.has(sig)){
+          skipCount += 1;
+          try{
+            await removeDraftRowById(s.id);
+          } catch (err){
+            console.error(err);
+          }
+          continue;
+        }
         const payload = {
           session_id: room,
           x: Math.max(8, Math.round(s.x || 16)),
           y: Math.max(8, Math.round(s.y || 16)),
           color: s.color || randomStickyColor(),
-          text: `${SHARED_PREFIX} ${author}\n${(s.text || "").trim()}`,
+          text: `${SHARED_PREFIX} ${author}\n${body}`,
           participant_id: participantId
         };
         let res = await supabase.from("workshop_stickies").insert(payload).select().single();
@@ -1002,10 +1054,25 @@
           delete payload.participant_id;
           res = await supabase.from("workshop_stickies").insert(payload).select().single();
         }
-        if (!res.error) okCount += 1;
+        if (!res.error){
+          okCount += 1;
+          seen.add(sig);
+          try{
+            await removeDraftRowById(s.id);
+          } catch (err){
+            console.error(err);
+          }
+        }
       }
       if (okCount > 0){
-        showToast(`Published ${okCount} draft${okCount > 1 ? "s" : ""}`);
+        showToast(`Published ${okCount} draft${okCount > 1 ? "s" : ""}${skipCount ? `, skipped ${skipCount} duplicate${skipCount > 1 ? "s" : ""}` : ""}`);
+        state.stickies = state.stickies.filter(s => !drafts.some(d => d.id === s.id));
+        render();
+        await refreshStickiesFromDb({ silent:true });
+      } else if (skipCount > 0){
+        showToast(`Skipped ${skipCount} duplicate draft${skipCount > 1 ? "s" : ""}`);
+        state.stickies = state.stickies.filter(s => !drafts.some(d => d.id === s.id));
+        render();
         await refreshStickiesFromDb({ silent:true });
       } else {
         showToast("Publish failed");
