@@ -9,18 +9,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#071126;
-      --panel:#0f1e42;
-      --panel2:#0a1630;
-      --border:#35538f;
-      --text:#f2f8ff;
-      --muted:#b9c9eb;
-      --accent:#6cd6ff;
-      --accent2:#4ff2c3;
-      --warn:#ffd56a;
-      --bad:#ff8190;
+      --bg:#081126;
+      --panel:#102044;
+      --panel2:#0b1733;
+      --border:#37558f;
+      --text:#eef6ff;
+      --muted:#b7c8ec;
+      --accent:#66d2ff;
+      --accent2:#59f0c5;
+      --warn:#ffd46e;
+      --bad:#ff8390;
       --r:18px;
-      --shadow:0 16px 38px rgba(0,0,0,.36);
+      --shadow:0 18px 40px rgba(0,0,0,.35);
     }
     *{box-sizing:border-box}
     body{
@@ -28,33 +28,35 @@
       font-family:"Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(760px 420px at 14% 12%, rgba(108,214,255,.14), transparent 58%),
-        radial-gradient(920px 500px at 84% 78%, rgba(79,242,195,.12), transparent 60%),
+        radial-gradient(760px 420px at 14% 12%, rgba(102,210,255,.14), transparent 58%),
+        radial-gradient(920px 500px at 84% 78%, rgba(89,240,197,.12), transparent 60%),
         var(--bg);
     }
-    .wrap{max-width:1380px;margin:0 auto;padding:16px 14px 86px}
+    .wrap{max-width:1480px;margin:0 auto;padding:16px 14px 90px}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(15,30,66,.86);padding:6px 10px;font-size:12px;font-weight:700}
+    .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(16,32,68,.86);padding:6px 10px;font-size:12px;font-weight:700}
     .dot{width:10px;height:10px;border-radius:3px;background:var(--accent2)}
     .subtitle{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.45;font-weight:500}
     .mono{font-family:ui-monospace,Menlo,Consolas,monospace;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:3px 8px;background:rgba(255,255,255,.06);font-size:12px;font-weight:700}
-    button,input,select{font:inherit}
-    button{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(15,30,66,.84);color:var(--text);padding:9px 12px;border-radius:14px;font-weight:700;cursor:pointer;box-shadow:0 10px 20px rgba(0,0,0,.22)}
+    button,input,select,textarea{font:inherit}
+    button{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(16,32,68,.84);color:var(--text);padding:9px 12px;border-radius:14px;font-weight:700;cursor:pointer;box-shadow:0 10px 20px rgba(0,0,0,.22)}
     button:hover{border-color:color-mix(in srgb,var(--accent) 62%, rgba(255,255,255,.16))}
-    .btnPrimary{border-color:color-mix(in srgb,var(--accent2) 70%, rgba(255,255,255,.16));background:linear-gradient(180deg, rgba(79,242,195,.18), rgba(15,30,66,.84))}
+    .btnPrimary{border-color:color-mix(in srgb,var(--accent2) 70%, rgba(255,255,255,.16));background:linear-gradient(180deg, rgba(89,240,197,.18), rgba(16,32,68,.84))}
+    .tiny{border:none;border-radius:10px;padding:6px 8px;font-size:11px;font-weight:700;background:rgba(255,255,255,.14);cursor:pointer;color:var(--text);box-shadow:none}
     .card{margin-top:14px;border:1px solid rgba(255,255,255,.14);border-radius:var(--r);background:linear-gradient(0deg,var(--panel2),var(--panel));box-shadow:var(--shadow);overflow:hidden}
     .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.1)}
     .cardHead h2{margin:0;font-size:14px;letter-spacing:.3px;text-transform:uppercase}
     .cardBody{padding:14px}
-    .layout{display:grid;grid-template-columns:310px 1fr;gap:12px}
-    @media (max-width:980px){.layout{grid-template-columns:1fr}}
-    .panel{border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.04);padding:10px;display:grid;gap:10px}
+    .layout{display:grid;grid-template-columns:320px 1fr 320px;gap:12px}
+    @media (max-width:1260px){.layout{grid-template-columns:1fr}}
+    .panel{border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.04);padding:10px;display:grid;gap:10px;align-content:start}
     .panel h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.25px}
     .field{width:100%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--text);border-radius:12px;padding:10px 11px;font-weight:600;outline:none}
-    .field::placeholder{color:rgba(242,248,255,.56)}
+    .field::placeholder{color:rgba(238,246,255,.56)}
+    textarea.field{min-height:86px;resize:vertical}
     .hint{font-size:12px;color:var(--muted);line-height:1.45}
 
-    .boardWrap{position:relative;border:1px solid rgba(255,255,255,.16);border-radius:14px;min-height:640px;background:
+    .boardWrap{position:relative;border:1px solid rgba(255,255,255,.16);border-radius:14px;min-height:700px;background:
       linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / 24px 24px,
       linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / 24px 24px,
       rgba(0,0,0,.16);
@@ -65,19 +67,22 @@
     .lane{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.08)}
     .laneLabel{position:absolute;top:8px;transform:translateX(-50%);font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.35);padding:2px 6px;border-radius:999px;border:1px solid rgba(255,255,255,.14)}
 
-    .node{position:absolute;width:210px;min-height:102px;border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:9px;background:rgba(255,255,255,.08);box-shadow:0 10px 24px rgba(0,0,0,.24);cursor:grab;user-select:none}
-    .node.drag{cursor:grabbing;opacity:.95}
+    .node{position:absolute;width:240px;min-height:130px;border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px;background:rgba(255,255,255,.09);box-shadow:0 10px 24px rgba(0,0,0,.24);cursor:grab;user-select:none}
+    .node.drag,.node.resize{cursor:grabbing;opacity:.96}
+    .node.selected{outline:2px solid rgba(89,240,197,.75)}
     .node h4{margin:0;font-size:12px;line-height:1.35}
-    .meta{margin-top:7px;display:flex;gap:6px;flex-wrap:wrap}
+    .node p{margin:6px 0 0;font-size:11px;line-height:1.4;color:var(--muted)}
+    .meta{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
     .chip{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.2);font-size:10px;font-weight:700;text-transform:uppercase}
-    .c-constraint{background:rgba(255,129,144,.2)}
-    .c-support{background:rgba(79,242,195,.22)}
-    .c-action{background:rgba(108,214,255,.22)}
-    .c-decision{background:rgba(255,213,106,.22)}
-    .tiny{border:none;border-radius:10px;padding:6px 8px;font-size:11px;font-weight:700;background:rgba(255,255,255,.14);cursor:pointer;color:var(--text);box-shadow:none}
+    .c-constraint{background:rgba(255,131,144,.2)}
+    .c-support{background:rgba(89,240,197,.22)}
+    .c-action{background:rgba(102,210,255,.22)}
+    .c-decision{background:rgba(255,212,110,.22)}
+    .resizeHandle{position:absolute;right:4px;bottom:4px;width:14px;height:14px;border-radius:4px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.65);cursor:nwse-resize}
 
+    .summary{border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);line-height:1.45}
     .diag{margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);font-weight:500}
-    .diag.bad{border-color:rgba(255,129,144,.5);background:rgba(255,129,144,.12);color:#ffd5db}
+    .diag.bad{border-color:rgba(255,131,144,.5);background:rgba(255,131,144,.12);color:#ffd5db}
     .toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:80;background:rgba(0,0,0,.76);border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;display:none}
   </style>
 </head>
@@ -88,7 +93,7 @@
         <div class="badge"><span class="dot"></span> Stage 1 • Tutor Workflow Map</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • Group: <span class="mono" id="groupOut"></span> • Campus: <span class="mono" id="campusOut"></span><br/>
-          Draw facilitation logic as a flowchart: constraints -> decisions -> actions -> feedback loops.
+          Map the full marking workflow: assignment release -> spec clarification -> distribution -> marking -> moderation -> feedback release.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
@@ -100,26 +105,31 @@
     </header>
 
     <section class="card">
-      <div class="cardHead"><h2>Group Workflow Board</h2></div>
+      <div class="cardHead"><h2>Group Flowchart Board</h2></div>
       <div class="cardBody layout">
         <aside class="panel">
           <h3>Add Node</h3>
-          <input id="nodeLabel" class="field" maxlength="80" placeholder="e.g. Marking rubric interpretation mismatch"/>
+          <input id="nodeLabel" class="field" maxlength="90" placeholder="e.g. Clarify assignment specification"/>
           <select id="nodeType" class="field">
             <option value="workflow_constraint">Constraint</option>
             <option value="workflow_decision">Decision</option>
             <option value="workflow_action">Action</option>
             <option value="workflow_support">Support</option>
           </select>
-          <button id="btnAdd" class="btnPrimary">Add Node</button>
-          <div class="hint">Drag nodes to position. Click <b>Link</b> on one node, then click <b>Link</b> on another to draw an arrow.</div>
+          <input id="nodeMarkers" class="field" type="number" min="0" step="1" placeholder="Markers involved (e.g. 6)"/>
+          <input id="nodeOwner" class="field" maxlength="60" placeholder="Owner / team (e.g. Unit coordinator)"/>
+          <textarea id="nodeSpec" class="field" placeholder="Specification clarification question or instruction"></textarea>
+          <button id="btnAdd" class="btnPrimary">Add Workflow Node</button>
+          <div class="hint">Drag nodes. Use <b>Link</b> on node A then node B to draw arrows.</div>
 
-          <h3>Quick Templates</h3>
-          <button class="tiny" data-template="Constraint: rubric is interpreted differently by markers">Rubric mismatch</button>
-          <button class="tiny" data-template="Constraint: feedback turnaround is too slow">Slow turnaround</button>
-          <button class="tiny" data-template="Decision: prioritise high-impact feedback first">Prioritise impact</button>
-          <button class="tiny" data-template="Action: schedule intervention checkpoint">Intervention checkpoint</button>
+          <h3>Lifecycle Templates</h3>
+          <button class="tiny" data-tpl-text="Release assignment brief to students" data-tpl-type="workflow_action">Brief release</button>
+          <button class="tiny" data-tpl-text="Clarify ambiguous specification before marking" data-tpl-type="workflow_decision">Spec clarification</button>
+          <button class="tiny" data-tpl-text="Distribute scripts across markers" data-tpl-type="workflow_action">Script distribution</button>
+          <button class="tiny" data-tpl-text="Moderation detects rubric inconsistency" data-tpl-type="workflow_constraint">Moderation issue</button>
+          <button class="tiny" data-tpl-text="Final feedback released to students" data-tpl-type="workflow_support">Feedback release</button>
 
+          <div class="summary" id="summaryBox">Markers allocated across visible nodes: 0</div>
           <div class="diag" id="diag">Connecting…</div>
         </aside>
 
@@ -128,6 +138,27 @@
           <div class="laneMarks" id="laneMarks"></div>
           <div id="nodes"></div>
         </div>
+
+        <aside class="panel">
+          <h3>Selected Node Editor</h3>
+          <div class="hint" id="editHint">Select a node on the board to edit square size, workload, and specification notes.</div>
+          <input id="editLabel" class="field" maxlength="90" placeholder="Node label"/>
+          <select id="editType" class="field">
+            <option value="workflow_constraint">Constraint</option>
+            <option value="workflow_decision">Decision</option>
+            <option value="workflow_action">Action</option>
+            <option value="workflow_support">Support</option>
+          </select>
+          <input id="editMarkers" class="field" type="number" min="0" step="1" placeholder="Markers involved"/>
+          <input id="editOwner" class="field" maxlength="60" placeholder="Owner / team"/>
+          <textarea id="editSpec" class="field" placeholder="Specification clarification notes"></textarea>
+          <textarea id="editNotes" class="field" placeholder="Other notes"></textarea>
+          <div class="row" style="justify-content:flex-start">
+            <button id="btnSaveNode" class="btnPrimary">Save Node</button>
+            <button id="btnDuplicateNode">Duplicate</button>
+          </div>
+          <div class="hint">Resize square: drag bottom-right corner handle on each node.</div>
+        </aside>
       </div>
     </section>
   </div>
@@ -154,19 +185,33 @@
     const keys = shared.getKeys(room);
     const participantId = shared.getOrCreateParticipantId(keys.PID_KEY);
     localStorage.setItem(keys.ROLE_KEY, "tutor");
-
     const flowSession = `${room}::tutor:${group}`;
 
     const $ = (q, el=document) => el.querySelector(q);
-    const roomOut = $("#roomOut"), groupOut = $("#groupOut"), campusOut = $("#campusOut");
+    const roomOut = $("#roomOut");
+    const groupOut = $("#groupOut");
+    const campusOut = $("#campusOut");
     const board = $("#board");
     const nodesEl = $("#nodes");
     const svg = $("#boardSvg");
     const laneMarks = $("#laneMarks");
     const diag = $("#diag");
+    const summaryBox = $("#summaryBox");
     const toast = $("#toast");
+
     const nodeLabel = $("#nodeLabel");
     const nodeType = $("#nodeType");
+    const nodeMarkers = $("#nodeMarkers");
+    const nodeOwner = $("#nodeOwner");
+    const nodeSpec = $("#nodeSpec");
+
+    const editHint = $("#editHint");
+    const editLabel = $("#editLabel");
+    const editType = $("#editType");
+    const editMarkers = $("#editMarkers");
+    const editOwner = $("#editOwner");
+    const editSpec = $("#editSpec");
+    const editNotes = $("#editNotes");
 
     roomOut.textContent = room;
     groupOut.textContent = group;
@@ -181,25 +226,27 @@
 
     const LANE_META = campus === "monash"
       ? [
-          { x: 110, label: "Assessment 1" },
-          { x: 360, label: "Assessment 2A" },
-          { x: 620, label: "Assessment 2B" },
-          { x: 880, label: "Task 3" },
-          { x: 1140, label: "Feedback Loop" }
+          { x: 120, label: "Brief" },
+          { x: 360, label: "Clarify" },
+          { x: 600, label: "Distribute" },
+          { x: 840, label: "Mark / Moderate" },
+          { x: 1080, label: "Release" }
         ]
       : [
-          { x: 120, label: "Brief Release" },
-          { x: 360, label: "Due Week" },
-          { x: 600, label: "Feedback Return" },
-          { x: 840, label: "Reaction" },
-          { x: 1080, label: "Intervention" }
+          { x: 120, label: "Release" },
+          { x: 360, label: "Clarify" },
+          { x: 600, label: "Distribute" },
+          { x: 840, label: "Mark / Moderate" },
+          { x: 1080, label: "Feedback" }
         ];
 
     const state = {
       nodes: [],
       edges: [],
+      selectedId: null,
       linkFrom: null,
-      drag: null
+      drag: null,
+      resize: null
     };
 
     function showToast(msg){
@@ -213,22 +260,46 @@
       diag.classList.toggle("bad", !!bad);
     }
 
-    function parseNode(row){
-      const fallback = { text: String(row.label || "(untitled)"), x: 180, y: 120 };
-      try {
-        const obj = JSON.parse(String(row.label || ""));
-        if (obj && typeof obj === "object"){
-          return {
-            text: String(obj.text || fallback.text),
-            x: Number(obj.x) || fallback.x,
-            y: Number(obj.y) || fallback.y
-          };
-        }
-      } catch {}
-      return fallback;
+    function defaultNodeText(row){
+      return String(row?.label || "(untitled)");
     }
 
-    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+    function parseNode(row){
+      const fallback = { text: defaultNodeText(row), x: 180, y: 120, w: 240, h: 130, markers: 0, owner: "", spec: "", notes: "" };
+      try {
+        const obj = JSON.parse(String(row?.label || ""));
+        if (!obj || typeof obj !== "object") return fallback;
+        return {
+          text: String(obj.text || fallback.text),
+          x: Number(obj.x) || fallback.x,
+          y: Number(obj.y) || fallback.y,
+          w: Math.max(180, Number(obj.w) || fallback.w),
+          h: Math.max(110, Number(obj.h) || fallback.h),
+          markers: Math.max(0, Number(obj.markers) || 0),
+          owner: String(obj.owner || ""),
+          spec: String(obj.spec || ""),
+          notes: String(obj.notes || "")
+        };
+      } catch {
+        return fallback;
+      }
+    }
+
+    function stringifyNode(n){
+      return JSON.stringify({
+        text: n.text,
+        x: Math.round(n.x),
+        y: Math.round(n.y),
+        w: Math.round(n.w),
+        h: Math.round(n.h),
+        markers: Math.max(0, Number(n.markers) || 0),
+        owner: n.owner || "",
+        spec: n.spec || "",
+        notes: n.notes || ""
+      });
+    }
+
+    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
     function typeMeta(type){ return TYPE_META[type] || TYPE_META.workflow_action; }
 
     async function ensureScopeSession(){
@@ -245,9 +316,26 @@
       `).join("");
     }
 
-    function nodeCenter(n){
-      const p = parseNode(n);
-      return { x: p.x + 105, y: p.y + 50 };
+    function getNodeById(id){
+      return state.nodes.find(n => n.id === id) || null;
+    }
+
+    function nodeCenter(row){
+      const n = parseNode(row);
+      return { x: n.x + n.w / 2, y: n.y + n.h / 2 };
+    }
+
+    function parseEdge(row){
+      try {
+        const obj = JSON.parse(String(row.label || "{}"));
+        return { from: String(obj.from || ""), to: String(obj.to || "") };
+      } catch {
+        return { from: "", to: "" };
+      }
+    }
+
+    function edgePayload(from, to){
+      return JSON.stringify({ from, to });
     }
 
     function renderEdges(){
@@ -257,91 +345,213 @@
       svg.innerHTML = `
         <defs>
           <marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
-            <polygon points="0 0, 9 3.5, 0 7" fill="rgba(108,214,255,.9)"></polygon>
+            <polygon points="0 0, 9 3.5, 0 7" fill="rgba(102,210,255,.9)"></polygon>
           </marker>
         </defs>
       `;
 
       state.edges.forEach(e => {
-        const from = state.nodes.find(n => n.id === e.from);
-        const to = state.nodes.find(n => n.id === e.to);
+        const from = getNodeById(e.from);
+        const to = getNodeById(e.to);
         if (!from || !to) return;
         const a = nodeCenter(from);
         const b = nodeCenter(to);
         const midX = (a.x + b.x) / 2;
         const d = `M ${a.x} ${a.y} C ${midX} ${a.y}, ${midX} ${b.y}, ${b.x} ${b.y}`;
+
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", d);
         path.setAttribute("fill", "none");
-        path.setAttribute("stroke", "rgba(108,214,255,.85)");
+        path.setAttribute("stroke", "rgba(102,210,255,.88)");
         path.setAttribute("stroke-width", "2.2");
         path.setAttribute("marker-end", "url(#arrow)");
         svg.appendChild(path);
       });
     }
 
+    function updateSummary(){
+      const total = state.nodes.reduce((acc, row) => acc + (parseNode(row).markers || 0), 0);
+      summaryBox.textContent = `Markers allocated across visible nodes: ${total}`;
+    }
+
+    function selectNode(id){
+      state.selectedId = id;
+      const row = getNodeById(id);
+      if (!row){
+        editHint.textContent = "Select a node on the board to edit square size, workload, and specification notes.";
+        editLabel.value = "";
+        editMarkers.value = "";
+        editOwner.value = "";
+        editSpec.value = "";
+        editNotes.value = "";
+        return;
+      }
+      const n = parseNode(row);
+      editHint.textContent = `Editing node: ${n.text}`;
+      editLabel.value = n.text;
+      editType.value = row.type;
+      editMarkers.value = String(n.markers || 0);
+      editOwner.value = n.owner;
+      editSpec.value = n.spec;
+      editNotes.value = n.notes;
+    }
+
     function renderNodes(){
       nodesEl.innerHTML = "";
-      state.nodes.forEach(n => {
-        const p = parseNode(n);
-        const meta = typeMeta(n.type);
+      state.nodes.forEach(row => {
+        const n = parseNode(row);
+        const meta = typeMeta(row.type);
+
         const el = document.createElement("article");
-        el.className = "node";
-        el.style.left = `${p.x}px`;
-        el.style.top = `${p.y}px`;
-        el.dataset.id = n.id;
+        el.className = `node${state.selectedId === row.id ? " selected" : ""}`;
+        el.style.left = `${n.x}px`;
+        el.style.top = `${n.y}px`;
+        el.style.width = `${n.w}px`;
+        el.style.minHeight = `${n.h}px`;
+        el.dataset.id = row.id;
         el.innerHTML = `
-          <h4>${shared.escapeHtml(p.text)}</h4>
+          <h4>${shared.escapeHtml(n.text)}</h4>
+          <p>${n.spec ? shared.escapeHtml(n.spec) : "No spec clarification note"}</p>
           <div class="meta">
             <span class="chip ${meta.cls}">${shared.escapeHtml(meta.label)}</span>
-            <button class="tiny" data-link="${shared.escapeHtml(n.id)}">Link</button>
-            <button class="tiny" data-type="${shared.escapeHtml(n.id)}">Cycle</button>
-            <button class="tiny" data-del="${shared.escapeHtml(n.id)}">Delete</button>
+            <span class="chip">Markers: ${shared.escapeHtml(String(n.markers || 0))}</span>
+            ${n.owner ? `<span class="chip">${shared.escapeHtml(n.owner)}</span>` : ""}
+            <button class="tiny" data-link="${shared.escapeHtml(row.id)}">Link</button>
+            <button class="tiny" data-type="${shared.escapeHtml(row.id)}">Cycle</button>
+            <button class="tiny" data-del="${shared.escapeHtml(row.id)}">Delete</button>
           </div>
+          <div class="resizeHandle" data-resize="${shared.escapeHtml(row.id)}"></div>
         `;
+
+        el.addEventListener("click", (e) => {
+          if (e.target.closest("button") || e.target.closest("[data-resize]")) return;
+          selectNode(row.id);
+          renderNodes();
+        });
 
         el.addEventListener("pointerdown", (e) => {
           if (e.target.closest("button")) return;
+          const isResize = !!e.target.closest("[data-resize]");
           el.setPointerCapture(e.pointerId);
-          state.drag = { id: n.id, startX: e.clientX, startY: e.clientY, x: p.x, y: p.y, el };
+          if (isResize){
+            state.resize = {
+              id: row.id,
+              startX: e.clientX,
+              startY: e.clientY,
+              w: n.w,
+              h: n.h,
+              el
+            };
+            el.classList.add("resize");
+            return;
+          }
+          state.drag = {
+            id: row.id,
+            startX: e.clientX,
+            startY: e.clientY,
+            x: n.x,
+            y: n.y,
+            w: n.w,
+            h: n.h,
+            el
+          };
           el.classList.add("drag");
         });
+
         el.addEventListener("pointermove", (e) => {
-          if (!state.drag || state.drag.id !== n.id) return;
-          const dx = e.clientX - state.drag.startX;
-          const dy = e.clientY - state.drag.startY;
-          const nx = clamp(state.drag.x + dx, 6, board.clientWidth - 216);
-          const ny = clamp(state.drag.y + dy, 34, board.clientHeight - 122);
-          el.style.left = `${nx}px`;
-          el.style.top = `${ny}px`;
-          renderEdges();
-        });
-        el.addEventListener("pointerup", async () => {
-          if (!state.drag || state.drag.id !== n.id) return;
-          el.classList.remove("drag");
-          const nx = parseFloat(el.style.left);
-          const ny = parseFloat(el.style.top);
-          state.drag = null;
-          const parsed = parseNode(n);
-          const next = JSON.stringify({ ...parsed, x: nx, y: ny });
-          try{
-            const { error } = await supabase.from("workshop_journey_items").update({ label: next }).eq("id", n.id);
-            if (error) throw error;
-            n.label = next;
+          if (state.resize && state.resize.id === row.id){
+            const dw = e.clientX - state.resize.startX;
+            const dh = e.clientY - state.resize.startY;
+            const nw = clamp(state.resize.w + dw, 180, 420);
+            const nh = clamp(state.resize.h + dh, 110, 320);
+            el.style.width = `${nw}px`;
+            el.style.minHeight = `${nh}px`;
             renderEdges();
-          } catch (err){ showToast(err.message || "Move save failed"); }
+            return;
+          }
+
+          if (state.drag && state.drag.id === row.id){
+            const dx = e.clientX - state.drag.startX;
+            const dy = e.clientY - state.drag.startY;
+            const nx = clamp(state.drag.x + dx, 6, board.clientWidth - state.drag.w - 6);
+            const ny = clamp(state.drag.y + dy, 34, board.clientHeight - state.drag.h - 6);
+            el.style.left = `${nx}px`;
+            el.style.top = `${ny}px`;
+            renderEdges();
+          }
+        });
+
+        el.addEventListener("pointerup", async () => {
+          const rowRef = getNodeById(row.id);
+          if (!rowRef) return;
+          const parsed = parseNode(rowRef);
+
+          if (state.resize && state.resize.id === row.id){
+            el.classList.remove("resize");
+            const next = {
+              ...parsed,
+              w: parseFloat(el.style.width) || parsed.w,
+              h: parseFloat(el.style.minHeight) || parsed.h
+            };
+            state.resize = null;
+            try {
+              const label = stringifyNode(next);
+              const { error } = await supabase.from("workshop_journey_items").update({ label }).eq("id", row.id);
+              if (error) throw error;
+              rowRef.label = label;
+              if (state.selectedId === row.id) selectNode(row.id);
+              renderEdges();
+            } catch (err){ showToast(err.message || "Resize save failed"); }
+            return;
+          }
+
+          if (state.drag && state.drag.id === row.id){
+            el.classList.remove("drag");
+            const next = {
+              ...parsed,
+              x: parseFloat(el.style.left) || parsed.x,
+              y: parseFloat(el.style.top) || parsed.y
+            };
+            state.drag = null;
+            try {
+              const label = stringifyNode(next);
+              const { error } = await supabase.from("workshop_journey_items").update({ label }).eq("id", row.id);
+              if (error) throw error;
+              rowRef.label = label;
+              renderEdges();
+            } catch (err){ showToast(err.message || "Move save failed"); }
+          }
         });
 
         nodesEl.appendChild(el);
       });
+      updateSummary();
       renderEdges();
     }
 
-    async function addNode(label, type){
-      const text = String(label || "").trim();
-      if (!text) return;
-      const payloadLabel = JSON.stringify({ text, x: 220 + Math.floor(Math.random()*180), y: 90 + Math.floor(Math.random()*280) });
-      const payload = { session_id: flowSession, participant_id: participantId, week: 1, type, label: payloadLabel };
+    async function addNode({ text, type, markers=0, owner="", spec="", notes="" }){
+      const clean = String(text || "").trim();
+      if (!clean) return;
+      const label = stringifyNode({
+        text: clean,
+        x: 200 + Math.floor(Math.random() * 220),
+        y: 90 + Math.floor(Math.random() * 280),
+        w: 240,
+        h: 130,
+        markers: Math.max(0, Number(markers) || 0),
+        owner: String(owner || ""),
+        spec: String(spec || ""),
+        notes: String(notes || "")
+      });
+
+      const payload = {
+        session_id: flowSession,
+        participant_id: participantId,
+        week: 1,
+        type,
+        label
+      };
+
       let ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
       if (ins.error){
         const relaxed = { ...payload };
@@ -349,21 +559,55 @@
         ins = await supabase.from("workshop_journey_items").insert(relaxed).select().single();
       }
       if (ins.error) throw ins.error;
+
       state.nodes.push(ins.data);
+      selectNode(ins.data.id);
       renderNodes();
       showToast("Node added");
     }
 
-    function edgePayload(from, to){
-      return JSON.stringify({ from, to });
-    }
-    function parseEdge(row){
-      try{
-        const obj = JSON.parse(String(row.label || "{}"));
-        return { from: String(obj.from || ""), to: String(obj.to || "") };
-      } catch {
-        return { from: "", to: "" };
+    async function saveSelected(){
+      const row = getNodeById(state.selectedId);
+      if (!row){ showToast("Select a node first"); return; }
+      const n = parseNode(row);
+      const next = {
+        ...n,
+        text: (editLabel.value || "").trim() || n.text,
+        markers: Math.max(0, Number(editMarkers.value) || 0),
+        owner: (editOwner.value || "").trim(),
+        spec: (editSpec.value || "").trim(),
+        notes: (editNotes.value || "").trim()
+      };
+      const nextType = editType.value;
+      try {
+        const label = stringifyNode(next);
+        const { error } = await supabase
+          .from("workshop_journey_items")
+          .update({ label, type: nextType })
+          .eq("id", row.id);
+        if (error) throw error;
+        row.label = label;
+        row.type = nextType;
+        renderNodes();
+        selectNode(row.id);
+        showToast("Node saved");
+      } catch (err){
+        showToast(err.message || "Save failed");
       }
+    }
+
+    async function duplicateSelected(){
+      const row = getNodeById(state.selectedId);
+      if (!row){ showToast("Select a node first"); return; }
+      const n = parseNode(row);
+      await addNode({
+        text: `${n.text} (copy)`,
+        type: row.type,
+        markers: n.markers,
+        owner: n.owner,
+        spec: n.spec,
+        notes: n.notes
+      });
     }
 
     async function addEdge(from, to){
@@ -400,12 +644,13 @@
       if (error) throw error;
       state.nodes = state.nodes.filter(n => n.id !== id);
       state.edges = state.edges.filter(e => e.from !== id && e.to !== id);
+      if (state.selectedId === id) selectNode(null);
       renderNodes();
     }
 
     async function cycleNodeType(id){
       const order = ["workflow_constraint", "workflow_decision", "workflow_action", "workflow_support"];
-      const row = state.nodes.find(n => n.id === id);
+      const row = getNodeById(id);
       if (!row) return;
       const idx = order.indexOf(row.type);
       const next = order[(idx + 1) % order.length];
@@ -413,44 +658,69 @@
       if (error) throw error;
       row.type = next;
       renderNodes();
+      if (state.selectedId === id) selectNode(id);
     }
 
     function hydrateRows(rows){
-      const nodeRows = [];
+      const nodes = [];
       const edges = [];
       (rows || []).forEach(r => {
         if (String(r.type || "") === "workflow_edge"){
           const p = parseEdge(r);
           if (p.from && p.to) edges.push({ id: r.id, from: p.from, to: p.to });
         } else if (String(r.type || "").startsWith("workflow_")){
-          nodeRows.push(r);
+          nodes.push(r);
         }
       });
-      state.nodes = nodeRows;
+      state.nodes = nodes;
       state.edges = edges;
+      if (state.selectedId && !getNodeById(state.selectedId)) state.selectedId = null;
       renderNodes();
+      if (state.selectedId) selectNode(state.selectedId);
     }
 
     async function loadAll(){
-      const { data, error } = await supabase.from("workshop_journey_items").select("*").eq("session_id", flowSession);
+      const { data, error } = await supabase
+        .from("workshop_journey_items")
+        .select("*")
+        .eq("session_id", flowSession);
       if (error) throw error;
       hydrateRows(data || []);
     }
 
     function wireActions(){
       $("#btnAdd").addEventListener("click", async () => {
-        try{
-          await addNode(nodeLabel.value, nodeType.value);
+        try {
+          await addNode({
+            text: nodeLabel.value,
+            type: nodeType.value,
+            markers: nodeMarkers.value,
+            owner: nodeOwner.value,
+            spec: nodeSpec.value,
+            notes: ""
+          });
           nodeLabel.value = "";
+          nodeMarkers.value = "";
+          nodeOwner.value = "";
+          nodeSpec.value = "";
         } catch (err){ showToast(err.message || "Add failed"); }
       });
-      nodeLabel.addEventListener("keydown", (e) => { if (e.key === "Enter") $("#btnAdd").click(); });
 
-      document.querySelectorAll("[data-template]").forEach(btn => {
+      nodeLabel.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") $("#btnAdd").click();
+      });
+
+      document.querySelectorAll("[data-tpl-text]").forEach(btn => {
         btn.addEventListener("click", () => {
-          nodeLabel.value = btn.getAttribute("data-template") || "";
-          nodeType.value = "workflow_constraint";
+          nodeLabel.value = btn.getAttribute("data-tpl-text") || "";
+          nodeType.value = btn.getAttribute("data-tpl-type") || "workflow_action";
+          nodeSpec.value = "";
         });
+      });
+
+      $("#btnSaveNode").addEventListener("click", saveSelected);
+      $("#btnDuplicateNode").addEventListener("click", () => {
+        duplicateSelected().catch(err => showToast(err.message || "Duplicate failed"));
       });
 
       nodesEl.addEventListener("click", async (e) => {
@@ -464,7 +734,7 @@
           } else {
             const from = state.linkFrom;
             state.linkFrom = null;
-            try{
+            try {
               await addEdge(from, id);
               setDiag("Connected.", false);
             } catch (err){
@@ -477,7 +747,7 @@
         const typeBtn = e.target.closest("[data-type]");
         if (typeBtn){
           try { await cycleNodeType(typeBtn.getAttribute("data-type")); }
-          catch (err){ showToast(err.message || "Update failed"); }
+          catch (err){ showToast(err.message || "Type update failed"); }
           return;
         }
 
@@ -490,7 +760,10 @@
         }
       });
 
-      $("#btnRefresh").addEventListener("click", () => loadAll().then(() => showToast("Refreshed")).catch(err => showToast(err.message || "Refresh failed")));
+      $("#btnRefresh").addEventListener("click", () => {
+        loadAll().then(() => showToast("Refreshed")).catch(err => showToast(err.message || "Refresh failed"));
+      });
+
       $("#btnBack").addEventListener("click", () => {
         location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&track=tutor&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
       });
@@ -518,7 +791,7 @@
     wireActions();
     ensureScopeSession()
       .then(() => loadAll())
-      .then(() => setDiag("Connected. Build your tutor flowchart.", false))
+      .then(() => setDiag("Connected. Build the tutor flowchart with workload and spec checkpoints.", false))
       .catch((err) => setDiag(err.message || "Load failed", true));
     subscribe();
     window.addEventListener("resize", renderEdges);
