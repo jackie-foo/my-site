@@ -231,7 +231,7 @@
       display:flex;
       flex-direction:column;
       gap:10px;
-      min-height:138px;
+      min-height:154px;
       position:relative;
       transition: transform .14s ease, border-color .14s ease, background .14s ease;
     }
@@ -263,42 +263,60 @@
     .pTitle{margin:0;font-size:12px;font-weight:1000;letter-spacing:.2px;text-transform:uppercase}
     .pText{margin:0;color:var(--muted);font-weight:750;font-size:12px;line-height:1.4}
 
-    /* Placeholder mini card (visual only) */
-    .mini{
+    /* ✅ Card preview image placeholder */
+    .preview{
       border:1px solid rgba(255,255,255,.10);
       border-radius:14px;
       background:
-        radial-gradient(320px 180px at 20% 20%, rgba(0,229,255,.10), transparent 55%),
-        radial-gradient(260px 160px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
+        radial-gradient(280px 160px at 20% 20%, rgba(0,229,255,.10), transparent 55%),
+        radial-gradient(240px 140px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
         rgba(255,255,255,.02);
       padding:10px;
       display:flex;
-      flex-direction:column;
-      gap:6px;
-      min-height:74px;
+      align-items:center;
+      gap:10px;
+      min-height:76px;
+      overflow:hidden;
     }
-    .miniLine{
+    .previewImg{
+      width:54px;
+      height:54px;
+      border-radius:12px;
+      object-fit:cover;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      flex:0 0 auto;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,.35));
+    }
+    .previewLines{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-width:0;
+    }
+    .pLine{
       height:10px;
       border-radius:999px;
       background:rgba(255,255,255,.08);
-      overflow:hidden;
       position:relative;
+      overflow:hidden;
     }
-    .miniLine::after{
+    .pLine::after{
       content:"";
       position:absolute; inset:0;
       background:linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
       transform:translateX(-60%);
       animation: shimmer 1.5s ease-in-out infinite;
     }
-    .miniLine:nth-child(2){opacity:.75}
-    .miniLine:nth-child(3){opacity:.55; width:72%}
+    .pLine:nth-child(2){opacity:.75; width:82%}
+    .pLine:nth-child(3){opacity:.55; width:64%}
     @keyframes shimmer{
       0%{transform:translateX(-60%)}
       100%{transform:translateX(60%)}
     }
     @media (prefers-reduced-motion:reduce){
-      .miniLine::after{animation:none}
+      .pLine::after{animation:none}
     }
 
     .toast{
@@ -507,7 +525,6 @@
 
           <div class="field" style="max-width:360px">
             <div class="label">Role</div>
-            <!-- ✅ ONLY Student + Tutor -->
             <select id="roleSelect" class="select" aria-label="Role">
               <option value="student">Student</option>
               <option value="tutor">Tutor</option>
@@ -630,6 +647,9 @@
     const REQUIRED_PASSCODE = "duck123";
     const CHIBI3_SRC = "/pic/chibi3.png";
 
+    // ✅ Card placeholder preview (use the same for all now)
+    const CARD_PLACEHOLDER_SRC = "/pic/chibi1.png";
+
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
     if (!room) {
@@ -637,7 +657,6 @@
       throw new Error("Missing room");
     }
 
-    // participant id per browser
     const PID_KEY = "stage1_participant_id";
     let participantId = localStorage.getItem(PID_KEY);
     if (!participantId) {
@@ -645,12 +664,10 @@
       localStorage.setItem(PID_KEY, participantId);
     }
 
-    // auth flag per room
     const AUTH_KEY = `stage1_authed_${room}`;
     const TUT_KEY = `stage1_tut_seen_${room}`;
     const NAME_KEY = `stage1_name_${room}`;
 
-    // UI refs
     const $ = (q, el=document) => el.querySelector(q);
 
     const roomOut = $("#roomOut"), meOut = $("#meOut");
@@ -665,34 +682,28 @@
     const btnNext = $("#btnNext");
     const toast = $("#toast");
 
-    // overlays
     const pwOverlay = $("#pwOverlay");
     const lockedOverlay = $("#lockedOverlay");
     const tutOverlay = $("#tutOverlay");
 
-    // loading
     const loading = $("#loading");
     const chibiImg = $("#chibiImg");
     const loadingTitle = $("#loadingTitle");
     const loadingSub = $("#loadingSub");
 
-    // buttons
     const btnTutorial = $("#btnTutorial");
     const btnExit = $("#btnExit");
     const btnReset = $("#btnReset");
 
-    // password modal controls
     const btnOpenPw = $("#btnOpenPw");
     const btnClosePw = $("#btnClosePw");
     const btnPwCancel = $("#btnPwCancel");
     const pwInput = $("#pwInput");
     const btnUnlock = $("#btnUnlock");
 
-    // locked tutorial modal
     const btnCloseLocked = $("#btnCloseLocked");
     const btnLockedUnlock = $("#btnLockedUnlock");
 
-    // tutorial controls
     const btnCloseTut = $("#btnCloseTut");
     const tutSteps = $("#tutSteps");
     const tutContent = $("#tutContent");
@@ -733,14 +744,12 @@
       document.body.style.overflow = "";
     }
 
-    // Close overlays on outside click
     [pwOverlay, lockedOverlay, tutOverlay].forEach(ov => {
       ov.addEventListener("mousedown", (e) => {
         if (e.target === ov) closeOverlay(ov);
       });
     });
 
-    // Esc closes whichever is open (NOT loading)
     window.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
       if (tutOverlay.style.display === "flex") closeOverlay(tutOverlay);
@@ -793,7 +802,6 @@
       btnNext.disabled = !state.persona_id || !state.display_name;
     }
 
-    // local name first
     state.display_name = cleanName(localStorage.getItem(NAME_KEY));
     if (nameInput) nameInput.value = state.display_name || "";
     refreshMeOut();
@@ -859,17 +867,22 @@
         const el = document.createElement("div");
         el.className = "persona" + (state.persona_id === c.id ? " selected" : "");
 
-        // ✅ Add a visual placeholder of what the card could look like
+        // ✅ Now the "preview" actually points to /pic/chibi1.png (same for all for now)
         el.innerHTML = `
           <div class="pTop">
             <p class="pTitle">${escapeHtml(c.title)}</p>
-            <span class="mono">Preview</span>
+            <span class="mono">Card preview</span>
           </div>
-          <div class="mini" aria-hidden="true">
-            <div class="miniLine" style="width:92%"></div>
-            <div class="miniLine" style="width:84%"></div>
-            <div class="miniLine"></div>
+
+          <div class="preview" aria-hidden="true">
+            <img class="previewImg" src="${CARD_PLACEHOLDER_SRC}" alt="" loading="lazy"/>
+            <div class="previewLines">
+              <div class="pLine" style="width:92%"></div>
+              <div class="pLine"></div>
+              <div class="pLine"></div>
+            </div>
           </div>
+
           <p class="pText">${escapeHtml(c.text)}</p>
         `;
 
@@ -943,7 +956,6 @@
       if (error) throw error;
 
       if (data){
-        // role: only allow student/tutor
         const r = (data.role || state.role);
         state.role = (r === "tutor" ? "tutor" : "student");
 
@@ -974,7 +986,6 @@
       mainCard.style.display = "block";
     }
 
-    // ===== Tutorial slides =====
     const tutorialSlides = [
       {
         title: "What you do in Step 1",
@@ -1076,7 +1087,6 @@
 
     btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
 
-    // ===== Tutorial button behaviour =====
     btnTutorial.addEventListener("click", () => {
       if (localStorage.getItem(AUTH_KEY) === "1"){
         openTutorial(0);
@@ -1092,7 +1102,6 @@
       setTimeout(() => pwInput?.focus(), 0);
     });
 
-    // ===== Password modal behaviour =====
     btnOpenPw.addEventListener("click", () => {
       openOverlay(pwOverlay);
       setTimeout(() => pwInput?.focus(), 0);
@@ -1143,7 +1152,6 @@
       showToast("Unlocked");
     });
 
-    // ===== Initial state =====
     if (localStorage.getItem(AUTH_KEY) === "1"){
       postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
         .then(() => localStorage.setItem(TUT_KEY, "1"));
