@@ -6,50 +6,276 @@
   <title>Stage 1 • Step 1</title>
   <style>
     :root{
-      --bg:#0b0d12; --panel:#121625; --panel2:#0f1320; --border:#2a3350;
-      --text:#e9ecff; --muted:#aab0d6;
-      --accent:#00e5ff; --accent2:#ff2bd6; --good:#47ff87; --bad:#ff4d4d;
-      --r:18px; --shadow:0 16px 40px rgba(0,0,0,.38);
+      --bg:#0b0d12;
+      --panel:#121625;
+      --panel2:#0f1320;
+      --border:#2a3350;
+      --text:#e9ecff;
+      --muted:#aab0d6;
+
+      --accent:#00e5ff;
+      --accent2:#ff2bd6;
+      --good:#47ff87;
+      --bad:#ff4d4d;
+
+      --r:18px;
+      --shadow:0 18px 44px rgba(0,0,0,.42);
+
+      --focus: 0 0 0 4px rgba(0,229,255,.18);
     }
+
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--text)}
-    .wrap{max-width:980px;margin:0 auto;padding:16px 14px 88px}
-    header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-    .badge{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:var(--panel);box-shadow:0 10px 30px rgba(0,0,0,.28);font-weight:1000;font-size:12px}
-    .dot{width:10px;height:10px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 3px rgba(0,229,255,.14)}
-    .subtitle{color:var(--muted);font-weight:800;font-size:13px;line-height:1.35;margin-top:8px}
-    .card{border:1px solid var(--border);background:linear-gradient(0deg,var(--panel2),var(--panel));border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-top:14px}
-    .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .cardHead h2{margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase}
-    .cardBody{padding:14px;display:flex;flex-direction:column;gap:12px}
-    button{appearance:none;border:1px solid var(--border);background:var(--panel);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:1000;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28)}
-    button:hover{border-color:color-mix(in srgb,var(--accent) 60%, var(--border))}
-    button:disabled{opacity:.55;cursor:not-allowed}
-    .btnPrimary{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));box-shadow:0 14px 34px rgba(0,229,255,.12)}
-    .btnDanger{border-color:color-mix(in srgb,var(--bad) 65%, var(--border))}
-    .btnGhost{background:rgba(255,255,255,.03)}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:900;font-size:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);padding:3px 8px;border-radius:999px}
-    .select,input{
-      border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);
-      border-radius:14px;padding:10px 12px;font-weight:900;outline:none;min-width:240px
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
     }
+
+    /* ===== Subtle animated background ===== */
+    .bg{
+      position:fixed; inset:0; z-index:-1;
+      background:
+        radial-gradient(900px 520px at 15% 18%, rgba(0,229,255,.12), transparent 58%),
+        radial-gradient(820px 480px at 85% 72%, rgba(255,43,214,.12), transparent 58%),
+        radial-gradient(600px 360px at 62% 22%, rgba(71,255,135,.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
+        var(--bg);
+      filter:saturate(1.05);
+      animation:bgDrift 12s ease-in-out infinite alternate;
+    }
+    @keyframes bgDrift{
+      0%{transform:translate3d(0,0,0) scale(1)}
+      100%{transform:translate3d(-10px, 8px, 0) scale(1.02)}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .bg{animation:none}
+      *{scroll-behavior:auto}
+    }
+
+    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 92px}
+    header{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .leftHead{min-width:min(520px,100%); flex:1}
+    .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:7px 11px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      background:rgba(18,22,37,.78);
+      box-shadow:0 10px 30px rgba(0,0,0,.28);
+      font-weight:1000;
+      font-size:12px;
+      letter-spacing:.25px;
+      backdrop-filter: blur(8px);
+    }
+    .dot{
+      width:10px;height:10px;border-radius:3px;
+      background:var(--accent);
+      box-shadow:0 0 0 3px rgba(0,229,255,.14);
+    }
+    .subtitle{
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+      line-height:1.4;
+      margin-top:9px;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+      min-width:260px;
+    }
+
+    .card{
+      border:1px solid rgba(255,255,255,.10);
+      background:linear-gradient(0deg, rgba(15,19,32,.88), rgba(18,22,37,.88));
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-top:14px;
+      backdrop-filter: blur(10px);
+    }
+    .cardHead{
+      padding:14px 14px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .cardHead h2{
+      margin:0;
+      font-size:14px;
+      font-weight:1000;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+    }
+    .cardBody{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .rowLeft{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+    .mono{
+      font-family:ui-monospace,Menlo,Consolas,monospace;
+      font-weight:900;
+      font-size:12px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      padding:3px 8px;
+      border-radius:999px;
+    }
+
+    /* Inputs */
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:min(360px, 100%);
+      flex:1;
+    }
+    .label{
+      font-size:12px;
+      font-weight:1000;
+      letter-spacing:.25px;
+      color:var(--muted);
+      text-transform:uppercase;
+    }
+    .hint{
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted);
+      line-height:1.4;
+    }
+
+    .select,input{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:14px;
+      padding:11px 12px;
+      font-weight:900;
+      outline:none;
+      min-width:240px;
+      transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+    input::placeholder{color:rgba(170,176,214,.75)}
+    input:focus, .select:focus{
+      border-color:color-mix(in srgb, var(--accent) 70%, rgba(255,255,255,.10));
+      box-shadow:var(--focus);
+    }
+
+    /* Buttons */
+    button{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(18,22,37,.78);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:1000;
+      cursor:pointer;
+      box-shadow:0 10px 26px rgba(0,0,0,.26);
+      transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease, background .14s ease;
+      backdrop-filter: blur(8px);
+      will-change: transform;
+    }
+    button:hover{
+      transform: translateY(-1px);
+      border-color:color-mix(in srgb,var(--accent) 60%, rgba(255,255,255,.10));
+      box-shadow:0 14px 30px rgba(0,0,0,.32);
+    }
+    button:active{transform: translateY(0px) scale(.99)}
+    button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+    .btnPrimary{
+      border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.10));
+      box-shadow:0 14px 34px rgba(0,229,255,.12);
+      background:linear-gradient(180deg, rgba(0,229,255,.10), rgba(18,22,37,.78));
+    }
+    .btnDanger{
+      border-color:color-mix(in srgb,var(--bad) 65%, rgba(255,255,255,.10));
+      background:linear-gradient(180deg, rgba(255,77,77,.10), rgba(18,22,37,.78));
+    }
+    .btnGhost{
+      background:rgba(255,255,255,.03);
+    }
+
+    /* Persona grid */
     .personaGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
     @media (max-width:860px){.personaGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:520px){.personaGrid{grid-template-columns:repeat(1,minmax(0,1fr))}}
+
     .persona{
-      border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);
-      padding:12px;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:110px;position:relative
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      padding:12px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-height:108px;
+      position:relative;
+      transition: transform .14s ease, border-color .14s ease, background .14s ease;
     }
-    .persona:hover{border-color:color-mix(in srgb,var(--accent2) 55%, var(--border))}
-    .persona.selected{border-color:color-mix(in srgb,var(--accent2) 75%, var(--border));background:rgba(255,43,214,.06)}
+    .persona:hover{
+      transform: translateY(-1px);
+      border-color:color-mix(in srgb,var(--accent2) 55%, rgba(255,255,255,.10));
+    }
+    .persona.selected{
+      border-color:color-mix(in srgb,var(--accent2) 75%, rgba(255,255,255,.10));
+      background:rgba(255,43,214,.07);
+    }
     .persona.selected::after{
-      content:"SELECTED";position:absolute;top:10px;right:10px;font-size:10px;font-weight:1000;
-      letter-spacing:.4px;padding:6px 8px;border-radius:999px;color:#0b0d12;background:var(--accent2)
+      content:"SELECTED";
+      position:absolute;top:10px;right:10px;
+      font-size:10px;font-weight:1000;
+      letter-spacing:.4px;
+      padding:6px 8px;
+      border-radius:999px;
+      color:#0b0d12;background:var(--accent2);
+      box-shadow:0 12px 22px rgba(255,43,214,.14);
     }
     .pTitle{margin:0;font-size:12px;font-weight:1000;letter-spacing:.2px;text-transform:uppercase}
-    .pText{margin:0;color:var(--muted);font-weight:700;font-size:12px;line-height:1.35}
-    .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
-      border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);max-width:360px;color:var(--text);font-weight:900;font-size:12px;display:none}
+    .pText{margin:0;color:var(--muted);font-weight:750;font-size:12px;line-height:1.4}
+
+    .metaRow{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-start;
+      padding-top:2px;
+    }
+
+    .toast{
+      position:fixed;right:14px;bottom:14px;z-index:80;
+      background:rgba(18,22,37,.92);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:10px 12px;
+      box-shadow:var(--shadow);
+      max-width:360px;
+      color:var(--text);
+      font-weight:900;
+      font-size:12px;
+      display:none;
+      backdrop-filter: blur(10px);
+    }
 
     /* ===== Modal ===== */
     .overlay{
@@ -66,6 +292,7 @@
       border-radius:20px;
       box-shadow:var(--shadow);
       overflow:hidden;
+      backdrop-filter: blur(10px);
     }
     .modalHead{
       padding:14px;
@@ -73,11 +300,7 @@
       display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
     }
     .modalHead h3{
-      margin:0;
-      font-size:14px;
-      font-weight:1000;
-      letter-spacing:.35px;
-      text-transform:uppercase;
+      margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase;
     }
     .modalBody{padding:14px; display:flex; flex-direction:column; gap:10px}
     .modalFoot{
@@ -85,7 +308,7 @@
       border-top:1px solid rgba(255,255,255,.08);
       display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
     }
-    .kicker{color:var(--muted); font-weight:800; font-size:12px; line-height:1.35}
+    .kicker{color:var(--muted); font-weight:800; font-size:12px; line-height:1.4}
     .steps{
       display:flex; gap:8px; align-items:center; flex-wrap:wrap;
       color:var(--muted); font-weight:900; font-size:12px;
@@ -127,7 +350,7 @@
       background:radial-gradient(1200px 600px at 30% 20%, rgba(0,229,255,.10), transparent 55%),
                  radial-gradient(900px 500px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
                  rgba(0,0,0,.72);
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
       padding:16px;
     }
     .loadingCard{
@@ -183,19 +406,29 @@
       50%{transform:translateX(120%)}
       100%{transform:translateX(-40%)}
     }
+
+    /* Small polish */
+    .divider{
+      height:1px;
+      background:rgba(255,255,255,.08);
+      margin:2px 0 4px;
+    }
   </style>
 </head>
 <body>
+  <div class="bg" aria-hidden="true"></div>
+
   <div class="wrap">
     <header>
-      <div>
+      <div class="leftHead">
         <div class="badge"><span class="dot"></span> Stage 1 • Step 1</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
           Step 1 is passcode-gated. After unlock, you can go to Step 2 and Step 3.
         </div>
       </div>
-      <div class="row" style="justify-content:flex-end">
+
+      <div class="actions">
         <button id="btnTutorial" class="btnGhost">Tutorial</button>
         <button id="btnExit">← Back</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
@@ -214,7 +447,7 @@
           </div>
           <button id="btnOpenPw" class="btnPrimary">Unlock</button>
         </div>
-        <div class="subtitle">Client-side gate for now. Later we can enforce properly with RLS / session secret.</div>
+        <div class="hint">Client-side gate for now. Later we can enforce properly with RLS / session secret.</div>
       </div>
     </section>
 
@@ -223,21 +456,36 @@
         <h2>Role + Personality Card</h2>
         <button id="btnNext" class="btnPrimary" disabled>Next → Step 2</button>
       </div>
+
       <div class="cardBody">
-        <div class="row">
-          <select id="roleSelect" class="select">
-            <option value="student">Student</option>
-            <option value="tutor">Tutor</option>
-            <option value="observer">Observer</option>
-          </select>
-          <div class="subtitle" style="margin:0">Pick your role, then choose a card.</div>
+
+        <!-- Name + Role -->
+        <div class="row" style="align-items:flex-end">
+          <div class="field">
+            <div class="label">Your name</div>
+            <input id="nameInput" type="text" placeholder="e.g., Jackie" maxlength="32" autocomplete="name"/>
+            <div class="hint">This is what others will see in the room.</div>
+          </div>
+
+          <div class="field" style="max-width:360px">
+            <div class="label">Role</div>
+            <select id="roleSelect" class="select" aria-label="Role">
+              <option value="student">Student</option>
+              <option value="tutor">Tutor</option>
+              <option value="observer">Observer</option>
+            </select>
+            <div class="hint">Pick your role, then choose a card.</div>
+          </div>
         </div>
+
+        <div class="divider"></div>
 
         <div class="personaGrid" id="personaGrid"></div>
 
-        <div class="row">
+        <div class="metaRow">
           <span class="mono">Selected: <span id="selPersona">None</span></span>
           <span class="mono">Role: <span id="selRole">student</span></span>
+          <span class="mono">Name: <span id="selName">—</span></span>
         </div>
       </div>
     </section>
@@ -256,7 +504,7 @@
     </div>
   </div>
 
-  <!-- ===== Password Modal (NO rationale / NO tutorial link) ===== -->
+  <!-- ===== Password Modal ===== -->
   <div class="overlay" id="pwOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
       <div class="modalHead">
@@ -267,7 +515,7 @@
         <button id="btnClosePw" class="btnGhost" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
-        <div class="row">
+        <div class="row" style="justify-content:flex-start">
           <input id="pwInput" type="password" placeholder="Passcode" autocomplete="one-time-code"/>
           <button id="btnUnlock" class="btnPrimary">Unlock</button>
         </div>
@@ -284,7 +532,7 @@
     </div>
   </div>
 
-  <!-- ===== Locked Tutorial Modal (no rationale, just directs to passcode) ===== -->
+  <!-- ===== Locked Tutorial Modal ===== -->
   <div class="overlay" id="lockedOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="lockedTitle">
       <div class="modalHead">
@@ -295,9 +543,7 @@
         <button id="btnCloseLocked" class="btnGhost" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
-        <div class="callout">
-          Enter the passcode to access the tutorial and start Step 1.
-        </div>
+        <div class="callout">Enter the passcode to access the tutorial and start Step 1.</div>
       </div>
       <div class="modalFoot">
         <div class="kicker">You’ll see the tutorial right after unlock.</div>
@@ -308,7 +554,7 @@
     </div>
   </div>
 
-  <!-- ===== Tutorial Modal (only accessible after unlock) ===== -->
+  <!-- ===== Tutorial Modal ===== -->
   <div class="overlay" id="tutOverlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
       <div class="modalHead">
@@ -348,8 +594,8 @@
     // Passcode (client-side gate)
     const REQUIRED_PASSCODE = "duck123";
 
-    // Chibi image for loading screen (set this!)
-    const CHIBI3_SRC = "/pic/chibi3.png"; // <- change if needed
+    // Chibi image for loading screen
+    const CHIBI3_SRC = "/pic/chibi3.png"; // change if needed
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
@@ -369,14 +615,20 @@
     // auth flag per room
     const AUTH_KEY = `stage1_authed_${room}`;
     const TUT_KEY = `stage1_tut_seen_${room}`;
+    const NAME_KEY = `stage1_name_${room}`;
 
     // UI refs
     const $ = (q, el=document) => el.querySelector(q);
+
     const roomOut = $("#roomOut"), meOut = $("#meOut");
     const gateCard = $("#gateCard"), mainCard = $("#mainCard");
     const gateStatus = $("#gateStatus");
-    const roleSelect = $("#roleSelect"), personaGrid = $("#personaGrid");
+
+    const roleSelect = $("#roleSelect");
+    const personaGrid = $("#personaGrid");
     const selPersona = $("#selPersona"), selRole = $("#selRole");
+    const selName = $("#selName");
+    const nameInput = $("#nameInput");
     const btnNext = $("#btnNext");
     const toast = $("#toast");
 
@@ -415,7 +667,6 @@
     const btnNextStep = $("#btnNextStep");
 
     roomOut.textContent = room;
-    meOut.textContent = participantId.slice(0, 8);
 
     // preload chibi
     chibiImg.src = CHIBI3_SRC;
@@ -424,7 +675,7 @@
       toast.textContent = msg;
       toast.style.display = "block";
       clearTimeout(showToast._t);
-      showToast._t = setTimeout(() => toast.style.display = "none", 2200);
+      showToast._t = setTimeout(() => toast.style.display = "none", 2400);
     }
 
     function openOverlay(el){
@@ -480,8 +731,28 @@
     const state = {
       role: "student",
       persona_id: null,
-      persona_title: null
+      persona_title: null,
+      display_name: null
     };
+
+    function cleanName(raw){
+      const name = (raw || "").trim().replace(/\s+/g, " ");
+      if (!name) return null;
+      if (name.length < 2) return null;
+      if (name.length > 32) return name.slice(0, 32);
+      return name;
+    }
+
+    function refreshMeOut(){
+      const shown = state.display_name ? state.display_name : participantId.slice(0, 8);
+      meOut.textContent = shown;
+      selName.textContent = state.display_name ? state.display_name : "—";
+    }
+
+    // load local name first (fast UI)
+    state.display_name = cleanName(localStorage.getItem(NAME_KEY));
+    if (nameInput) nameInput.value = state.display_name || "";
+    refreshMeOut();
 
     function escapeHtml(str){
       return (str ?? "")
@@ -490,6 +761,66 @@
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
+    }
+
+    function updateNextEnabled(){
+      btnNext.disabled = !state.persona_id || !state.display_name;
+    }
+
+    async function saveParticipant(patch){
+      const { error } = await supabase.from("workshop_participants").update(patch).eq("id", participantId);
+      if (error) throw error;
+    }
+
+    async function saveName(name){
+      const cleaned = cleanName(name);
+      if (!cleaned){
+        showToast("Name must be at least 2 characters");
+        return false;
+      }
+      state.display_name = cleaned;
+      localStorage.setItem(NAME_KEY, cleaned);
+      if (nameInput) nameInput.value = cleaned;
+      refreshMeOut();
+      updateNextEnabled();
+
+      showLoading("Saving your name…", "Syncing it to the room.");
+      try{
+        await saveParticipant({ display_name: cleaned });
+        showToast("Name saved");
+        return true;
+      } catch (err){
+        console.error(err);
+        showToast("Couldn’t save name (network?)");
+        return false;
+      } finally {
+        hideLoading();
+      }
+    }
+
+    if (nameInput){
+      nameInput.addEventListener("keydown", async (e) => {
+        if (e.key === "Enter"){
+          e.preventDefault();
+          await saveName(nameInput.value);
+          nameInput.blur();
+        }
+      });
+      nameInput.addEventListener("blur", async () => {
+        const cleaned = cleanName(nameInput.value);
+        if (!cleaned){
+          state.display_name = null;
+          localStorage.removeItem(NAME_KEY);
+          refreshMeOut();
+          updateNextEnabled();
+          showToast("Name cleared");
+          return;
+        }
+        // only write if changed
+        if (cleaned !== state.display_name){
+          await saveName(cleaned);
+        }
+      });
     }
 
     function renderPersonas(){
@@ -502,33 +833,41 @@
           state.persona_id = c.id;
           state.persona_title = c.title;
           selPersona.textContent = c.title;
-          btnNext.disabled = false;
 
           [...personaGrid.children].forEach(x => x.classList.remove("selected"));
           el.classList.add("selected");
 
-          // light loading during update (optional, but makes it feel responsive)
-          showLoading("Saving your card…", "Hang on a sec — Supabase can be a bit slow sometimes.");
+          updateNextEnabled();
+
+          showLoading("Saving your card…", "Hang on a sec — syncing your selection.");
           try{
             await saveParticipant({ persona_id: state.persona_id });
             showToast("Card saved");
+          } catch (err){
+            console.error(err);
+            showToast("Couldn’t save card (network?)");
           } finally {
             hideLoading();
           }
         });
         personaGrid.appendChild(el);
       });
+
       selPersona.textContent = state.persona_title || "None";
-      btnNext.disabled = !state.persona_id;
+      updateNextEnabled();
     }
 
     roleSelect.addEventListener("change", async () => {
       state.role = roleSelect.value;
       selRole.textContent = state.role;
+
       showLoading("Saving your role…", "Syncing selection to the room.");
       try{
         await saveParticipant({ role: state.role });
         showToast("Role saved");
+      } catch (err){
+        console.error(err);
+        showToast("Couldn’t save role (network?)");
       } finally {
         hideLoading();
       }
@@ -544,7 +883,8 @@
         id: participantId,
         session_id: room,
         role: state.role,
-        persona_id: state.persona_id
+        persona_id: state.persona_id,
+        display_name: state.display_name
       }, { onConflict: "id" });
       if (error) throw error;
     }
@@ -559,17 +899,26 @@
 
       if (data){
         state.role = data.role || state.role;
+
         state.persona_id = data.persona_id || null;
-        state.persona_title = state.persona_id ? (personaCards.find(p => p.id === state.persona_id)?.title || null) : null;
+        state.persona_title = state.persona_id
+          ? (personaCards.find(p => p.id === state.persona_id)?.title || null)
+          : null;
+
+        const dbName = cleanName(data.display_name);
+        if (dbName){
+          state.display_name = dbName;
+          localStorage.setItem(NAME_KEY, dbName);
+        }
       }
+
       roleSelect.value = state.role;
       selRole.textContent = state.role;
-      renderPersonas();
-    }
 
-    async function saveParticipant(patch){
-      const { error } = await supabase.from("workshop_participants").update(patch).eq("id", participantId);
-      if (error) throw error;
+      if (nameInput) nameInput.value = state.display_name || "";
+      refreshMeOut();
+
+      renderPersonas();
     }
 
     function unlockUI(){
@@ -584,10 +933,12 @@
         title: "What you do in Step 1",
         html: `
           <div class="callout">
-            Step 1 is quick: choose your <span class="mono">role</span> and pick a <span class="mono">personality card</span>.
+            Step 1 is quick: choose your <span class="mono">role</span> and set your <span class="mono">name</span>, then pick a
+            <span class="mono">personality card</span>.
             Your choices save automatically.
           </div>
           <ul class="list">
+            <li>Type your name (this is what others see).</li>
             <li>Select your role (Student / Tutor / Observer).</li>
             <li>Click one personality card that matches how you prefer feedback.</li>
             <li>Then hit <span class="mono">Next → Step 2</span>.</li>
@@ -627,7 +978,7 @@
             Your selection is saved to this room and used in later activities.
           </div>
           <ul class="list">
-            <li>You can change your role/card if you misclicked.</li>
+            <li>You can change your role/name/card if you misclicked.</li>
             <li>We use your card to make later discussion more structured.</li>
           </ul>
         `
@@ -689,8 +1040,8 @@
       }
     });
 
-    $("#btnCloseLocked").addEventListener("click", () => closeOverlay(lockedOverlay));
-    $("#btnLockedUnlock").addEventListener("click", () => {
+    btnCloseLocked.addEventListener("click", () => closeOverlay(lockedOverlay));
+    btnLockedUnlock.addEventListener("click", () => {
       closeOverlay(lockedOverlay);
       openOverlay(pwOverlay);
       setTimeout(() => pwInput?.focus(), 0);
@@ -716,7 +1067,7 @@
         await ensureSession();
         showLoading("Almost there…", "Saving your identity to this room.");
         await ensureParticipant();
-        showLoading("Loading your profile…", "Fetching your saved role/card (if any).");
+        showLoading("Loading your profile…", "Fetching your saved role/name/card (if any).");
         await loadParticipant();
       } catch (err){
         console.error(err);
@@ -759,7 +1110,10 @@
     }
 
     btnNext.addEventListener("click", () => {
-      if (!state.persona_id) return;
+      if (!state.persona_id || !state.display_name) {
+        showToast("Please enter your name and pick a card");
+        return;
+      }
       location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`;
     });
 
@@ -771,8 +1125,14 @@
       localStorage.removeItem(PID_KEY);
       localStorage.removeItem(AUTH_KEY);
       localStorage.removeItem(TUT_KEY);
+      localStorage.removeItem(NAME_KEY);
       location.reload();
     });
+
+    // initial UI
+    selRole.textContent = state.role;
+    renderPersonas();
+    updateNextEnabled();
   })();
   </script>
 </body>
