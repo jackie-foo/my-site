@@ -9,18 +9,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#081126;
-      --panel:#102044;
-      --panel2:#0b1733;
-      --border:#37558f;
-      --text:#eef6ff;
-      --muted:#b7c8ec;
-      --accent:#66d2ff;
+      --bg:#070b17;
+      --panel:#121a32;
+      --panel2:#0d1428;
+      --border:#31406b;
+      --text:#e9ecff;
+      --muted:#aab0d6;
+      --accent:#00e5ff;
       --accent2:#59f0c5;
       --warn:#ffd46e;
       --bad:#ff8390;
       --r:18px;
-      --shadow:0 18px 40px rgba(0,0,0,.35);
+      --shadow:0 18px 44px rgba(0,0,0,.42);
     }
     *{box-sizing:border-box}
     body{
@@ -28,22 +28,23 @@
       font-family:"Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(760px 420px at 14% 12%, rgba(102,210,255,.14), transparent 58%),
-        radial-gradient(920px 500px at 84% 78%, rgba(89,240,197,.12), transparent 60%),
+        radial-gradient(860px 420px at 12% 14%, rgba(0,229,255,.11), transparent 62%),
+        radial-gradient(960px 520px at 86% 78%, rgba(89,240,197,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 38%),
         var(--bg);
     }
-    .wrap{max-width:1480px;margin:0 auto;padding:16px 14px 90px}
+    .wrap{max-width:1260px;margin:0 auto;padding:18px 14px 88px}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
     .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(16,32,68,.86);padding:6px 10px;font-size:12px;font-weight:700}
     .dot{width:10px;height:10px;border-radius:3px;background:var(--accent2)}
     .subtitle{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.45;font-weight:500}
     .mono{font-family:ui-monospace,Menlo,Consolas,monospace;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:3px 8px;background:rgba(255,255,255,.06);font-size:12px;font-weight:700}
     button,input,select,textarea{font:inherit}
-    button{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(16,32,68,.84);color:var(--text);padding:9px 12px;border-radius:14px;font-weight:700;cursor:pointer;box-shadow:0 10px 20px rgba(0,0,0,.22)}
+    button{appearance:none;border:1px solid rgba(255,255,255,.12);background:var(--panel);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:1000;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28)}
     button:hover{border-color:color-mix(in srgb,var(--accent) 62%, rgba(255,255,255,.16))}
-    .btnPrimary{border-color:color-mix(in srgb,var(--accent2) 70%, rgba(255,255,255,.16));background:linear-gradient(180deg, rgba(89,240,197,.18), rgba(16,32,68,.84))}
+    .btnPrimary{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));box-shadow:0 14px 34px rgba(0,229,255,.12)}
     .tiny{border:none;border-radius:10px;padding:6px 8px;font-size:11px;font-weight:700;background:rgba(255,255,255,.14);cursor:pointer;color:var(--text);box-shadow:none}
-    .card{margin-top:14px;border:1px solid rgba(255,255,255,.14);border-radius:var(--r);background:linear-gradient(0deg,var(--panel2),var(--panel));box-shadow:var(--shadow);overflow:hidden}
+    .card{margin-top:14px;border:1px solid rgba(255,255,255,.12);border-radius:var(--r);background:linear-gradient(0deg,var(--panel2),var(--panel));box-shadow:var(--shadow);overflow:hidden}
     .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.1)}
     .cardHead h2{margin:0;font-size:14px;letter-spacing:.3px;text-transform:uppercase}
     .cardBody{padding:14px}
@@ -62,6 +63,7 @@
       rgba(0,0,0,.16);
       overflow:hidden;
     }
+    .boardWrap.connecting{cursor:crosshair}
     .boardSvg{position:absolute;inset:0;pointer-events:none}
     .edgeLabels{position:absolute;inset:0;pointer-events:none}
     .edgeTag{
@@ -97,6 +99,31 @@
     .c-action{background:rgba(102,210,255,.22)}
     .c-decision{background:rgba(255,212,110,.22)}
     .resizeHandle{position:absolute;right:4px;bottom:4px;width:14px;height:14px;border-radius:4px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.65);cursor:nwse-resize}
+    .connectorOut{
+      position:absolute;
+      right:-10px;
+      top:50%;
+      transform:translateY(-50%);
+      width:18px;
+      height:18px;
+      border-radius:999px;
+      border:2px solid rgba(255,255,255,.75);
+      background:radial-gradient(circle at 30% 30%, #9df6ff, #00e5ff);
+      box-shadow:0 0 0 3px rgba(0,229,255,.24);
+      cursor:crosshair;
+    }
+    .connectorOut::before,
+    .connectorOut::after{
+      content:"";
+      position:absolute;
+      background:rgba(7,11,23,.86);
+      left:50%;
+      top:50%;
+      transform:translate(-50%, -50%);
+      border-radius:1px;
+    }
+    .connectorOut::before{width:8px;height:2px}
+    .connectorOut::after{width:2px;height:8px}
 
     .summary{border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);line-height:1.45}
     .diag{margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);font-weight:500}
@@ -138,7 +165,7 @@
           <input id="nodeOwner" class="field" maxlength="60" placeholder="Owner / team (e.g. Unit coordinator)"/>
           <textarea id="nodeSpec" class="field" placeholder="Specification clarification question or instruction"></textarea>
           <button id="btnAdd" class="btnPrimary">Add Workflow Node</button>
-          <div class="hint">Drag nodes. Use <b>Link</b> on node A then node B to draw arrows.</div>
+          <div class="hint">Drag nodes. Drag the <b>+ handle</b> on the right side of a node into another node to create a connector.</div>
 
           <h3>Lifecycle Templates</h3>
           <button class="tiny" data-tpl-text="Release assignment brief to students" data-tpl-type="workflow_action">Brief release</button>
@@ -148,7 +175,7 @@
           <button class="tiny" data-tpl-text="Final feedback released to students" data-tpl-type="workflow_support">Feedback release</button>
 
           <div class="summary" id="summaryBox">Markers allocated across visible nodes: 0</div>
-          <div class="diag" id="diag">Connecting…</div>
+          <div class="diag" id="diag">Start here: 1) add a workflow node 2) drag + to connect 3) add friction text on each connector.</div>
         </aside>
 
         <div id="board" class="boardWrap">
@@ -264,7 +291,7 @@
       nodes: [],
       edges: [],
       selectedId: null,
-      linkFrom: null,
+      connecting: null,
       drag: null,
       resize: null
     };
@@ -321,6 +348,13 @@
 
     function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
     function typeMeta(type){ return TYPE_META[type] || TYPE_META.workflow_action; }
+    function toBoardPoint(clientX, clientY){
+      const rect = board.getBoundingClientRect();
+      return {
+        x: clamp(clientX - rect.left, 0, board.clientWidth),
+        y: clamp(clientY - rect.top, 0, board.clientHeight)
+      };
+    }
 
     async function ensureScopeSession(){
       const a = await supabase.from("workshop_sessions").upsert({ id: flowSession }, { onConflict:"id" });
@@ -343,6 +377,14 @@
     function nodeCenter(row){
       const n = parseNode(row);
       return { x: n.x + n.w / 2, y: n.y + n.h / 2 };
+    }
+    function nodeRightAnchor(row){
+      const n = parseNode(row);
+      return { x: n.x + n.w, y: n.y + n.h / 2 };
+    }
+    function nodeLeftAnchor(row){
+      const n = parseNode(row);
+      return { x: n.x, y: n.y + n.h / 2 };
     }
 
     function parseEdge(row){
@@ -375,10 +417,10 @@
         const from = getNodeById(e.from);
         const to = getNodeById(e.to);
         if (!from || !to) return;
-        const a = nodeCenter(from);
-        const b = nodeCenter(to);
-        const midX = (a.x + b.x) / 2;
-        const d = `M ${a.x} ${a.y} C ${midX} ${a.y}, ${midX} ${b.y}, ${b.x} ${b.y}`;
+        const a = nodeRightAnchor(from);
+        const b = nodeLeftAnchor(to);
+        const dx = Math.max(45, Math.abs(b.x - a.x) * 0.35);
+        const d = `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`;
 
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", d);
@@ -400,6 +442,22 @@
         tag.textContent = e.issue || "Issue?";
         edgeLabels.appendChild(tag);
       });
+
+      if (state.connecting){
+        const from = getNodeById(state.connecting.from);
+        if (from){
+          const a = nodeRightAnchor(from);
+          const b = { x: state.connecting.x, y: state.connecting.y };
+          const dx = Math.max(45, Math.abs(b.x - a.x) * 0.35);
+          const temp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          temp.setAttribute("d", `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`);
+          temp.setAttribute("fill", "none");
+          temp.setAttribute("stroke", "rgba(0,229,255,.95)");
+          temp.setAttribute("stroke-width", "2.2");
+          temp.setAttribute("stroke-dasharray", "6 5");
+          svg.appendChild(temp);
+        }
+      }
     }
 
     function updateSummary(){
@@ -449,21 +507,21 @@
             <span class="chip ${meta.cls}">${shared.escapeHtml(meta.label)}</span>
             <span class="chip">Markers: ${shared.escapeHtml(String(n.markers || 0))}</span>
             ${n.owner ? `<span class="chip">${shared.escapeHtml(n.owner)}</span>` : ""}
-            <button class="tiny" data-link="${shared.escapeHtml(row.id)}">Link</button>
             <button class="tiny" data-type="${shared.escapeHtml(row.id)}">Cycle</button>
             <button class="tiny" data-del="${shared.escapeHtml(row.id)}">Delete</button>
           </div>
+          <div class="connectorOut" data-connect="${shared.escapeHtml(row.id)}" title="Drag to connect"></div>
           <div class="resizeHandle" data-resize="${shared.escapeHtml(row.id)}"></div>
         `;
 
         el.addEventListener("click", (e) => {
-          if (e.target.closest("button") || e.target.closest("[data-resize]")) return;
+          if (e.target.closest("button") || e.target.closest("[data-resize]") || e.target.closest("[data-connect]")) return;
           selectNode(row.id);
           renderNodes();
         });
 
         el.addEventListener("pointerdown", (e) => {
-          if (e.target.closest("button")) return;
+          if (e.target.closest("button") || e.target.closest("[data-connect]")) return;
           const isResize = !!e.target.closest("[data-resize]");
           el.setPointerCapture(e.pointerId);
           if (isResize){
@@ -769,27 +827,6 @@
       });
 
       nodesEl.addEventListener("click", async (e) => {
-        const linkBtn = e.target.closest("[data-link]");
-        if (linkBtn){
-          const id = linkBtn.getAttribute("data-link");
-          if (!id) return;
-          if (!state.linkFrom){
-            state.linkFrom = id;
-            setDiag("Link mode: choose target node and click Link.", false);
-          } else {
-            const from = state.linkFrom;
-            state.linkFrom = null;
-            try {
-              const issue = prompt("Problem/friction between these two workflow steps?", "") || "";
-              await addEdge(from, id, issue);
-              setDiag("Connected.", false);
-            } catch (err){
-              setDiag(err.message || "Edge create failed", true);
-            }
-          }
-          return;
-        }
-
         const typeBtn = e.target.closest("[data-type]");
         if (typeBtn){
           try { await cycleNodeType(typeBtn.getAttribute("data-type")); }
@@ -805,6 +842,63 @@
           try { await deleteNode(id); } catch (err){ showToast(err.message || "Delete failed"); }
         }
       });
+
+      nodesEl.addEventListener("pointerdown", (e) => {
+        const connectEl = e.target.closest("[data-connect]");
+        if (!connectEl) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const from = connectEl.getAttribute("data-connect");
+        if (!from) return;
+        const p = toBoardPoint(e.clientX, e.clientY);
+        state.connecting = { from, x: p.x, y: p.y };
+        board.classList.add("connecting");
+        renderEdges();
+        setDiag("Connecting: drag to target node and release.", false);
+      });
+
+      document.addEventListener("pointermove", (e) => {
+        if (!state.connecting) return;
+        const p = toBoardPoint(e.clientX, e.clientY);
+        state.connecting.x = p.x;
+        state.connecting.y = p.y;
+        renderEdges();
+      });
+
+      document.addEventListener("pointerup", async (e) => {
+        if (!state.connecting) return;
+        const from = state.connecting.from;
+        const targetNode = e.target.closest ? e.target.closest(".node") : null;
+        state.connecting = null;
+        board.classList.remove("connecting");
+        renderEdges();
+
+        if (!targetNode){
+          setDiag("Connector cancelled.", false);
+          return;
+        }
+        const to = targetNode.getAttribute("data-id");
+        if (!to || to === from){
+          setDiag("Cannot connect to the same node.", true);
+          return;
+        }
+        try {
+          const issue = prompt("Problem/friction between these workflow steps?", "") || "";
+          await addEdge(from, to, issue);
+          setDiag("Connected.", false);
+        } catch (err){
+          setDiag(err.message || "Edge create failed", true);
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape" || !state.connecting) return;
+        state.connecting = null;
+        board.classList.remove("connecting");
+        renderEdges();
+        setDiag("Connector cancelled.", false);
+      });
+
       edgeLabels.addEventListener("click", async (e) => {
         const tag = e.target.closest("[data-edge-id]");
         if (!tag) return;
