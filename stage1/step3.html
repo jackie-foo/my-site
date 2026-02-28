@@ -6,13 +6,22 @@
   <title>Stage 1 • Step 3</title>
   <style>
     :root{
-      --bg:#0b0d12; --panel:#121625; --panel2:#0f1320; --border:#2a3350;
+      --bg:#070b17; --panel:#121a32; --panel2:#0d1428; --border:#31406b;
       --text:#e9ecff; --muted:#aab0d6; --accent:#00e5ff; --accent2:#ff2bd6; --bad:#ff4d4d;
       --constraint:#ff4d4d; --support:#00e5ff; --wish:#47ff87; --neutral:#ffe44d;
-      --r:18px; --shadow:0 16px 40px rgba(0,0,0,.38);
+      --r:18px; --shadow:0 18px 44px rgba(0,0,0,.42);
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--text)}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:
+        radial-gradient(860px 420px at 12% 14%, rgba(0,229,255,.11), transparent 62%),
+        radial-gradient(960px 520px at 86% 78%, rgba(255,43,214,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 38%),
+        var(--bg);
+      color:var(--text);
+    }
     .wrap{max-width:1240px;margin:0 auto;padding:16px 14px 88px}
     header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
     .badge{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:var(--panel);box-shadow:0 10px 30px rgba(0,0,0,.28);font-weight:1000;font-size:12px}
@@ -28,12 +37,29 @@
     .btnDanger{border-color:color-mix(in srgb,var(--bad) 65%, var(--border))}
     .btnGhost{background:rgba(255,255,255,.03)}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .card{border:1px solid var(--border);background:linear-gradient(0deg,var(--panel2),var(--panel));border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-top:14px}
+    .card{
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(125deg, rgba(0,229,255,.05), transparent 36%),
+        linear-gradient(0deg,var(--panel2),var(--panel));
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-top:14px
+    }
     .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;align-items:center}
     .cardHead h2{margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase}
     .cardBody{padding:14px;display:flex;flex-direction:column;gap:12px}
 
-    .timeline{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);padding:12px;overflow:auto}
+    .timeline{
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:18px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        rgba(255,255,255,.02);
+      padding:12px;
+      overflow:auto
+    }
     .weeks{display:grid;grid-template-columns:repeat(13,minmax(170px,1fr));gap:10px;min-width:1120px}
     .week{border-radius:16px;border:1px dashed rgba(255,255,255,.20);background:rgba(255,255,255,.02);padding:10px;min-height:230px;display:flex;flex-direction:column;gap:10px; position:relative}
     .week.special{
@@ -88,7 +114,18 @@
     }
     .dropZone{display:flex;flex-direction:column;gap:8px}
 
-    .placed{border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);padding:10px;box-shadow:0 14px 30px rgba(0,0,0,.26);cursor:grab;user-select:none;touch-action:none}
+    .placed{
+      border-radius:14px;border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);padding:10px;
+      box-shadow:0 14px 30px rgba(0,0,0,.26);
+      cursor:grab;user-select:none;touch-action:none;
+      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .placed:hover{
+      transform:translateY(-1px);
+      border-color:color-mix(in srgb,var(--accent) 60%, rgba(255,255,255,.18));
+      box-shadow:0 16px 34px rgba(0,0,0,.32);
+    }
     .placed:active{cursor:grabbing}
     .placedTop{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:6px}
     .placedTitle{margin:0;font-weight:1000;font-size:12px;text-transform:uppercase;letter-spacing:.2px}
@@ -200,6 +237,36 @@
       line-height:1.45;
       font-weight:800;
     }
+    .legend{
+      border:1px solid rgba(255,255,255,.11);
+      background:rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:10px;
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:8px;
+    }
+    @media (max-width:980px){ .legend{grid-template-columns:repeat(2,minmax(0,1fr));} }
+    @media (max-width:560px){ .legend{grid-template-columns:1fr;} }
+    .legendChip{
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:12px;
+      padding:8px;
+      font-size:11px;
+      font-weight:900;
+      line-height:1.35;
+      background:rgba(255,255,255,.02);
+    }
+    .legendChip.release{
+      border-color:rgba(53,216,255,.52);
+      background:rgba(53,216,255,.12);
+      color:#d8f6ff;
+    }
+    .legendChip.critical{
+      border-color:rgba(255,107,119,.52);
+      background:rgba(255,107,119,.14);
+      color:#ffd9de;
+    }
 
     .field{width:100%; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.04); color:var(--text);
       border-radius:14px; padding:10px 12px; font-weight:900; outline:none;}
@@ -216,7 +283,7 @@
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
           Role: <span class="mono" id="roleOut">student</span> • Card: <span class="mono" id="personaOut">None</span><br/>
-          Desktop: right-click a week. Phone: long-press a week. Tap tag to cycle: Neutral → Constraint → Support → Wish.
+          Map your Step 2 friction stories across release → due → feedback-return → reaction milestones.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
@@ -239,6 +306,13 @@
         </section>
         <div class="subtitle" style="margin:0">
           Tip: Long-press a week on phone to add. Milestone weeks are highlighted for release / due / feedback / reaction.
+        </div>
+        <div class="legend">
+          <div class="legendChip release">Week 2: Assignment 1 brief released</div>
+          <div class="legendChip release">Week 4: Assignment 2 brief released</div>
+          <div class="legendChip critical">Week 7: Assignment 1 due</div>
+          <div class="legendChip critical">Week 8: Assignment 2 due + Feedback 1 returns</div>
+          <div class="legendChip critical">Week 9: Reaction + Instructions 2/3</div>
         </div>
       </div>
     </section>
@@ -570,6 +644,8 @@
 
     const state = { placed: [] };
     let itemsPollTimer = null;
+    let lastJourneySnapshot = "";
+    let lastNotesBody = "";
 
     function safeJson(s){ try { return JSON.parse(s); } catch { return null; } }
     const escapeHtml = shared.escapeHtml;
@@ -855,11 +931,7 @@
         .subscribe((status) => {
           if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED"){
             console.warn("Step3 notes realtime unavailable, using polling fallback");
-            if (!itemsPollTimer){
-              itemsPollTimer = setInterval(() => {
-                loadInitial().catch(err => console.error("step3 polling refresh failed", err));
-              }, 5000);
-            }
+            startJourneyPolling();
           }
         });
     }
@@ -1078,12 +1150,72 @@
         state.placed = (data || []).map(it => ({
           id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id
         }));
+        lastJourneySnapshot = JSON.stringify(
+          state.placed
+            .map(it => [it.id, it.week, it.label, it.type, it.participant_id || ""])
+            .sort((a,b)=>String(a[0]).localeCompare(String(b[0])))
+        );
         renderPlaced();
 
         await loadOrCreateNotesRow();
+        lastNotesBody = notesBox.value || "";
       } finally {
         hideLoading();
       }
+    }
+    async function refreshJourneyAndNotes({ silent=true } = {}){
+      try{
+        const { data, error } = await supabase
+          .from("workshop_journey_items")
+          .select("*")
+          .eq("session_id", room);
+        if (error) throw error;
+        const nextPlaced = (data || []).map(it => ({
+          id:it.id, week:it.week, label:it.label, type:it.type, participant_id:it.participant_id
+        }));
+        const nextSnapshot = JSON.stringify(
+          nextPlaced
+            .map(it => [it.id, it.week, it.label, it.type, it.participant_id || ""])
+            .sort((a,b)=>String(a[0]).localeCompare(String(b[0])))
+        );
+        if (nextSnapshot !== lastJourneySnapshot){
+          lastJourneySnapshot = nextSnapshot;
+          state.placed = nextPlaced;
+          renderPlaced();
+        }
+
+        let q = supabase
+          .from("workshop_journey_notes")
+          .select("*")
+          .eq("session_id", room)
+          .order("updated_at", { ascending:false })
+          .limit(5);
+        if (NOTES_SHARED) q = q.is("participant_id", null);
+        else q = q.eq("participant_id", participantId);
+
+        const noteRes = await q;
+        if (noteRes.error) throw noteRes.error;
+        const row = (noteRes.data || [])[0];
+        if (row){
+          notesRowId = row.id;
+          const body = row.body || "";
+          if (document.activeElement !== notesBox && body !== lastNotesBody){
+            notesSuppress = true;
+            notesBox.value = body;
+            notesSuppress = false;
+            notesStatus.textContent = "Saved";
+          }
+          lastNotesBody = body;
+        }
+      } catch (err){
+        if (!silent) console.error("step3 refresh failed", err);
+      }
+    }
+    function startJourneyPolling(){
+      if (itemsPollTimer) return;
+      itemsPollTimer = setInterval(() => {
+        refreshJourneyAndNotes({ silent:true });
+      }, 2200);
     }
 
     function subscribeRealtime(){
@@ -1117,11 +1249,7 @@
         .subscribe((status) => {
           if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED"){
             console.warn("Step3 journey realtime unavailable, using polling fallback");
-            if (!itemsPollTimer){
-              itemsPollTimer = setInterval(() => {
-                loadInitial().catch(err => console.error("step3 polling refresh failed", err));
-              }, 5000);
-            }
+            startJourneyPolling();
           }
         });
     }
@@ -1145,10 +1273,24 @@
     // ===== boot =====
     renderWeeks();
     initTemplateSelect(1);
-    loadInitial().then(()=>{
-      subscribeRealtime();
-      subscribeNotesRealtime();
-      maybeShowTutorialOnce();
+    (async () => {
+      try{
+        await loadInitial();
+      } catch (err){
+        console.error("step3 initial load failed", err);
+        showToast("Initial load failed. Polling fallback still running.");
+      } finally {
+        subscribeRealtime();
+        subscribeNotesRealtime();
+        startJourneyPolling();
+        maybeShowTutorialOnce();
+      }
+    })();
+    window.addEventListener("beforeunload", () => {
+      if (itemsPollTimer){
+        clearInterval(itemsPollTimer);
+        itemsPollTimer = null;
+      }
     });
   })();
   </script>

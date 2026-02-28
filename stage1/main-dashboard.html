@@ -232,6 +232,22 @@
       font-weight:800;
       text-align:center;
     }
+    .diag{
+      margin-top:10px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      padding:10px;
+      background:rgba(255,255,255,.03);
+      font-size:12px;
+      line-height:1.45;
+      font-weight:800;
+      color:var(--muted);
+    }
+    .diag.bad{
+      border-color:rgba(255,107,119,.42);
+      background:rgba(255,107,119,.10);
+      color:#ffd3d8;
+    }
     .overlay{
       position:fixed; inset:0; z-index:200;
       background:rgba(0,0,0,.72);
@@ -311,6 +327,7 @@
             <span class="mono" id="p3Text">0%</span>
           </div>
         </div>
+        <div class="diag" id="diagBox">Waiting for data...</div>
       </div>
     </section>
 
@@ -401,6 +418,7 @@
     const participantSummary = $("#participantSummary");
     const feed = $("#feed");
     const eventCount = $("#eventCount");
+    const diagBox = $("#diagBox");
     const qStep1 = $("#qStep1"), qStep2 = $("#qStep2"), qStep3 = $("#qStep3");
 
     function fmtTime(d){
@@ -431,6 +449,10 @@
     }
     function statusPill(label, cls){
       return `<span class="pill ${cls}">${shared.escapeHtml(label)}</span>`;
+    }
+    function setDiag(message, isBad=false){
+      diagBox.textContent = message;
+      diagBox.classList.toggle("bad", !!isBad);
     }
 
     function computePrompts(summary){
@@ -499,21 +521,40 @@
     }
 
     async function loadData(){
-      const [pRes, sRes, jRes, nRes] = await Promise.all([
-        supabase.from("workshop_participants").select("id,display_name,role,persona_id,created_at,updated_at").eq("session_id", room),
-        supabase.from("workshop_stickies").select("id,participant_id,text,created_at,updated_at").eq("session_id", room),
-        supabase.from("workshop_journey_items").select("id,participant_id,week,label,type,created_at,updated_at").eq("session_id", room),
-        supabase.from("workshop_journey_notes").select("id,participant_id,updated_at").eq("session_id", room)
+      const queries = {
+        participants: supabase.from("workshop_participants").select("id,display_name,role,persona_id,created_at,updated_at").eq("session_id", room),
+        stickies: supabase.from("workshop_stickies").select("id,participant_id,text,created_at,updated_at").eq("session_id", room),
+        journey: supabase.from("workshop_journey_items").select("id,participant_id,week,label,type,created_at,updated_at").eq("session_id", room),
+        notes: supabase.from("workshop_journey_notes").select("id,participant_id,updated_at").eq("session_id", room)
+      };
+      const settled = await Promise.allSettled([
+        queries.participants,
+        queries.stickies,
+        queries.journey,
+        queries.notes
       ]);
-      if (pRes.error) throw pRes.error;
-      if (sRes.error) throw sRes.error;
-      if (jRes.error) throw jRes.error;
-      if (nRes.error) throw nRes.error;
+      const keys = ["participants","stickies","journey","notes"];
+      const errors = [];
+      const payload = { participants:[], stickies:[], journey:[], notes:[] };
 
-      const participants = pRes.data || [];
-      const stickies = sRes.data || [];
-      const journey = jRes.data || [];
-      const notes = nRes.data || [];
+      settled.forEach((res, idx) => {
+        const k = keys[idx];
+        if (res.status !== "fulfilled"){
+          errors.push(`${k}: request failed`);
+          return;
+        }
+        const row = res.value;
+        if (row.error){
+          errors.push(`${k}: ${row.error.message || "query error"}`);
+          return;
+        }
+        payload[k] = row.data || [];
+      });
+
+      const participants = payload.participants;
+      const stickies = payload.stickies;
+      const journey = payload.journey;
+      const notes = payload.notes;
 
       const stickyAuthors = new Set(stickies.map(s => s.participant_id).filter(Boolean));
       const journeyAuthors = new Set(journey.map(j => j.participant_id).filter(Boolean));
@@ -536,6 +577,17 @@
       lastUpdated.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
       renderParticipants(participants, stickyAuthors, journeyAuthors);
       computePrompts({ total: participants.length, readyStep1: step1ReadyCount, activeStep2: step2Count, activeStep3: step3Count, notesCount: notes.length });
+
+      if (errors.length){
+        const hint = "Supabase checks: RLS SELECT policy for anon role, tables in realtime publication, correct session_id column.";
+        setDiag(
+          `Partial data loaded. ${hint} Errors: ${errors.slice(0,2).join(" | ")}`,
+          true
+        );
+        addFeed("diag", errors[0]);
+      } else {
+        setDiag("Connected. Live polling + realtime active.", false);
+      }
     }
 
     function wireNav(){
@@ -562,7 +614,12 @@
             addFeed(def.label, `${payload.eventType} • id=${id}`);
             loadData().catch(err => addFeed("error", err.message || String(err)));
           })
-          .subscribe();
+          .subscribe((status) => {
+            if (status === "CHANNEL_ERROR" || status === "TIMED_OUT"){
+              addFeed("diag", `Realtime issue on ${def.table}. Polling still active.`);
+              setDiag("Realtime degraded. Polling active; check Supabase Realtime settings.", true);
+            }
+          });
         subs.push(ch);
       });
     }
@@ -579,7 +636,7 @@
         .then(() => addFeed("system", `Dashboard ready for room "${room}"`))
         .catch(err => addFeed("error", err.message || String(err)));
       subscribeRealtime();
-      setInterval(() => loadData().catch(()=>{}), 15000);
+      setInterval(() => loadData().catch(()=>{}), 5000);
     }
 
     wireNav();
