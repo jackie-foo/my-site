@@ -9,39 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
+<!-- ✅ Shared global theme + header -->
+<link rel="stylesheet" href="/sharedheader/theme.css">
+<link rel="stylesheet" href="/sharedheader/header.css">
+
 <style>
-:root{
-  --bg:#07070b;
-  --text:#f6f6ff;
-  --muted:rgba(246,246,255,.66);
-  --accent:#7c5cff;
-  --accent2:#ff2bd6;
-}
-
-*{box-sizing:border-box}
-html,body{height:100%}
-
-body{
-  margin:0;
-  font-family:"Space Grotesk", sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  overflow-x:hidden;
-}
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:-20%;
-  background:
-    radial-gradient(700px 500px at 18% 10%, rgba(255,43,214,.14), transparent 60%),
-    radial-gradient(820px 620px at 84% 20%, rgba(124,92,255,.14), transparent 62%);
-  z-index:-1;
-}
+/* Keep your page-specific styles here (global theme is now in /sharedheader/theme.css) */
 
 .container{max-width:980px; width:100%}
 
@@ -250,69 +223,88 @@ small{
 </head>
 
 <body>
-<div class="container">
-  <div class="hero">
-    <div class="chibi">
-      <img src="/pic/chibi1.png" alt="Jackie chibi">
-    </div>
+  <!-- ✅ Smooth transition wrapper (matches theme.css .page) -->
+  <div class="page">
+    <!-- ✅ Global header mount -->
+    <div id="headerMount"></div>
 
-    <div>
-      <h1><span class="highlight">Jackie Foo</span></h1>
+    <div class="container">
+      <div class="hero">
+        <div class="chibi">
+          <img src="/pic/chibi1.png" alt="Jackie chibi">
+        </div>
 
-      <p class="lead">
-        <b>I’m Jackie. This is my corner of the internet.</b> 
-        More is coming. Stay tuned.
-      </p>
+        <div>
+          <h1><span class="highlight">Jackie Foo</span></h1>
 
-      <div class="workshopLine">
-        If you're here for the workshop, click below to indicate.
+          <p class="lead">
+            <b>I’m Jackie. This is my corner of the internet.</b>
+            More is coming. Stay tuned.
+          </p>
+
+          <div class="workshopLine">
+            If you're here for the workshop, click below to indicate.
+          </div>
+          <button class="primary" id="workshopBtn">Workshop 1</button>
+
+          <div class="links">
+            <a class="link" href="#" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="link" href="#" target="_blank" rel="noopener">GitHub</a>
+            <a class="link" href="mailto:you@email.com">Email</a>
+            <a class="link" href="#" target="_blank" rel="noopener">Resume</a>
+          </div>
+
+          <small>© <span id="year"></span></small>
+        </div>
       </div>
-      <button class="primary" id="workshopBtn">Workshop 1</button>
-
-      <div class="links">
-        <a class="link" href="#" target="_blank">LinkedIn</a>
-        <a class="link" href="#" target="_blank">GitHub</a>
-        <a class="link" href="mailto:you@email.com">Email</a>
-        <a class="link" href="#" target="_blank">Resume</a>
-      </div>
-
-      <small>© <span id="year"></span></small>
     </div>
   </div>
-</div>
 
-<!-- Modal -->
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="modalRow">
-      <div class="modalChibi">
-        <img src="/pic/chibi2.png" alt="">
+  <!-- Modal -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div class="modalRow">
+        <div class="modalChibi">
+          <img src="/pic/chibi2.png" alt="">
+        </div>
+
+        <div class="modalContent">
+          <h2>Workshop 1</h2>
+          <p>Select your university below.</p>
+        </div>
       </div>
 
-      <div class="modalContent">
-        <h2>Workshop 1</h2>
-        <p>Select your university below.</p>
+      <div class="choices">
+        <button class="choice" onclick="window.location.href='https://example.com/monash'">
+          Monash University
+        </button>
+        <button class="choice" onclick="window.location.href='https://example.com/upng'">
+          UPNG
+        </button>
       </div>
-    </div>
-
-    <div class="choices">
-      <button class="choice" onclick="window.location.href='https://example.com/monash'">
-        Monash University
-      </button>
-      <button class="choice" onclick="window.location.href='https://example.com/upng'">
-        UPNG
-      </button>
     </div>
   </div>
-</div>
 
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
+  <!-- ✅ Use module so we can import sharedheader/ui.js -->
+  <script type="module">
+    import { mountGlobalHeader, enablePageTransition } from "/sharedheader/ui.js";
 
-const overlay = document.getElementById("overlay");
-document.getElementById("workshopBtn").onclick = () => overlay.classList.add("open");
-overlay.onclick = (e) => { if(e.target === overlay) overlay.classList.remove("open"); };
-</script>
+    // mount global header (index: no tutorial/back/next/reset)
+    await mountGlobalHeader({
+      meta: `<span style="color:rgba(246,246,255,.72)">Soft launch</span>`,
+      show: { help:false, back:false, next:false, reset:false }
+    });
+
+    // smooth fade-in
+    enablePageTransition();
+
+    // your existing footer year + modal behaviour
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const overlay = document.getElementById("overlay");
+    document.getElementById("workshopBtn").onclick = () => overlay.classList.add("open");
+    overlay.onclick = (e) => { if (e.target === overlay) overlay.classList.remove("open"); };
+  </script>
 
 </body>
 </html>
