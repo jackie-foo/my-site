@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Stage 1 Entry Hub</title>
+  <title>Stage 1 Launch</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -16,10 +16,11 @@
       --text:#e9ecff;
       --muted:#aab0d6;
       --accent:#00e5ff;
-      --accent2:#59f0c5;
+      --mint:#59f0c5;
+      --sun:#ffd46e;
+      --r:22px;
+      --shadow:0 24px 54px rgba(0,0,0,.44);
       --focus:0 0 0 4px rgba(0,229,255,.2);
-      --r:20px;
-      --shadow:0 22px 48px rgba(0,0,0,.42);
     }
     *{box-sizing:border-box}
     body{
@@ -27,40 +28,46 @@
       font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(900px 480px at 12% 14%, rgba(0,229,255,.11), transparent 60%),
-        radial-gradient(960px 540px at 86% 82%, rgba(89,240,197,.10), transparent 60%),
+        radial-gradient(900px 500px at 12% 12%, rgba(0,229,255,.11), transparent 60%),
+        radial-gradient(980px 560px at 88% 82%, rgba(89,240,197,.10), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
         var(--bg);
       min-height:100vh;
     }
-    .wrap{max-width:1160px;margin:0 auto;padding:22px 14px 86px}
+    .wrap{max-width:1160px;margin:0 auto;padding:24px 14px 80px}
     .badge{
       display:inline-flex;gap:8px;align-items:center;
       border:1px solid rgba(255,255,255,.13);
       border-radius:999px;
       padding:7px 12px;
-      background:rgba(18,26,50,.78);
+      background:rgba(18,26,50,.76);
       font-size:12px;
       font-weight:1000;
       letter-spacing:.2px;
     }
-    .dot{width:10px;height:10px;border-radius:3px;background:var(--accent2);box-shadow:0 0 0 3px rgba(89,240,197,.18)}
-    .hero{margin-top:12px;display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:stretch}
-    @media (max-width:960px){.hero{grid-template-columns:1fr}}
-    .card{
+    .dot{width:10px;height:10px;border-radius:3px;background:var(--mint);box-shadow:0 0 0 3px rgba(89,240,197,.2)}
+
+    .hero{
+      margin-top:12px;
       border:1px solid rgba(255,255,255,.12);
       border-radius:var(--r);
       background:
-        linear-gradient(120deg, rgba(0,229,255,.05), transparent 36%),
+        linear-gradient(120deg, rgba(0,229,255,.05), transparent 40%),
         linear-gradient(0deg,var(--panel2),var(--panel));
       box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .head{padding:16px;border-bottom:1px solid rgba(255,255,255,.08)}
-    .head h1{margin:0;font-size:30px;line-height:1.05;letter-spacing:-.02em}
-    .sub{margin-top:10px;color:var(--muted);font-size:13px;font-weight:800;line-height:1.5}
-    .body{padding:14px;display:grid;gap:12px}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .heroHead{padding:18px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .heroHead h1{margin:0;font-size:32px;line-height:1.05;letter-spacing:-.02em}
+    .heroSub{margin-top:10px;color:var(--muted);font-size:13px;font-weight:800;line-height:1.5;max-width:72ch}
+
+    .controls{
+      padding:14px 18px 18px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
     .field{
       border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.04);
@@ -73,142 +80,133 @@
     }
     .field:focus{border-color:color-mix(in srgb,var(--accent) 64%, rgba(255,255,255,.15));box-shadow:var(--focus)}
     .field::placeholder{color:rgba(233,236,255,.58)}
+
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      padding:14px;
+      display:grid;
+      gap:12px;
+    }
+    .card h2{margin:0;font-size:14px;text-transform:uppercase;letter-spacing:.24px}
+    .kicker{font-size:12px;color:var(--muted);font-weight:800;line-height:1.45}
+
+    .launchGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width:620px){.launchGrid{grid-template-columns:1fr}}
+
     button{
       appearance:none;
       border:1px solid rgba(255,255,255,.14);
       border-radius:14px;
-      padding:11px 13px;
+      padding:12px 14px;
       background:rgba(18,26,50,.88);
       color:var(--text);
       font-weight:1000;
       cursor:pointer;
       box-shadow:0 10px 22px rgba(0,0,0,.25);
+      text-align:left;
     }
     button:hover{border-color:color-mix(in srgb,var(--accent) 62%, rgba(255,255,255,.14))}
-    .btnPrimary{border-color:color-mix(in srgb,var(--accent) 72%, rgba(255,255,255,.15));background:linear-gradient(180deg, rgba(0,229,255,.16), rgba(18,26,50,.88))}
-    .btnTutor{border-color:color-mix(in srgb,var(--accent2) 72%, rgba(255,255,255,.15));background:linear-gradient(180deg, rgba(89,240,197,.14), rgba(18,26,50,.88))}
+    .studentBtn{border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.14));background:linear-gradient(180deg, rgba(0,229,255,.16), rgba(18,26,50,.88))}
+    .tutorBtn{border-color:color-mix(in srgb,var(--mint) 70%, rgba(255,255,255,.14));background:linear-gradient(180deg, rgba(89,240,197,.15), rgba(18,26,50,.88))}
+    .adminBtn{border-color:color-mix(in srgb,var(--sun) 70%, rgba(255,255,255,.14));background:linear-gradient(180deg, rgba(255,212,110,.14), rgba(18,26,50,.88));text-align:center}
+    .homeBtn{text-align:center}
 
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:860px){.grid{grid-template-columns:1fr}}
-    .panel{
+    .label{display:block;font-size:13px}
+    .subLabel{display:block;margin-top:4px;font-size:11px;color:var(--muted);font-weight:800}
+
+    .purpose{
       border:1px solid rgba(255,255,255,.14);
       border-radius:16px;
       background:rgba(255,255,255,.03);
       padding:12px;
-      display:grid;
-      gap:10px;
-      align-content:start;
-    }
-    .panel h2{margin:0;font-size:13px;font-weight:1000;letter-spacing:.25px;text-transform:uppercase}
-    .kicker{font-size:12px;line-height:1.45;color:var(--muted);font-weight:800}
-    .mono{
-      font-family:ui-monospace,Menlo,Consolas,monospace;
-      border:1px solid rgba(255,255,255,.16);
-      border-radius:12px;
-      background:rgba(255,255,255,.05);
-      color:var(--text);
-      padding:8px 10px;
-      font-size:11px;
-      line-height:1.45;
-      font-weight:900;
-      word-break:break-all;
-      min-height:46px;
-    }
-    .pillRow{display:flex;gap:8px;flex-wrap:wrap}
-    .pill{
-      border:1px solid rgba(255,255,255,.16);
-      border-radius:999px;
-      background:rgba(255,255,255,.04);
+      font-size:12px;
       color:var(--muted);
-      padding:5px 9px;
-      font-size:10px;
-      font-weight:1000;
-      letter-spacing:.2px;
-      text-transform:uppercase;
+      font-weight:800;
+      line-height:1.5;
     }
-    .purposeList{margin:0;padding-left:18px;color:var(--muted);font-size:12px;line-height:1.5;font-weight:800}
+    .purpose strong{color:var(--text)}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="badge"><span class="dot"></span> Stage 1 Entry Hub</div>
+    <div class="badge"><span class="dot"></span> Stage 1 Launch</div>
 
     <section class="hero">
-      <article class="card">
-        <div class="head">
-          <h1>Launch By Campus + Role</h1>
-          <div class="sub">Generate a room once, then open the exact participant route directly.</div>
-        </div>
-        <div class="body">
-          <div class="row">
-            <input id="roomInput" class="field" type="text" placeholder="room id (e.g. demo)" value="demo"/>
-            <input id="groupInput" class="field" type="text" placeholder="tutor group (e.g. g1)" value="core"/>
-          </div>
-          <div class="pillRow">
-            <span class="pill">Link-based entry</span>
-            <span class="pill">No participant passcode</span>
-            <span class="pill">Room-scoped tracking</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="head">
-          <h1 style="font-size:22px">Quick Launch</h1>
-          <div class="sub">Open directly without extra clicks.</div>
-        </div>
-        <div class="body">
-          <div class="grid">
-            <button id="btnUpngStudent" class="btnPrimary">UPNG Student</button>
-            <button id="btnMonashStudent" class="btnPrimary">Monash Student</button>
-            <button id="btnUpngTutor" class="btnTutor">UPNG Tutor</button>
-            <button id="btnMonashTutor" class="btnTutor">Monash Tutor</button>
-          </div>
-          <div class="row">
-            <button id="btnDashboard">Open Facilitator Dashboard</button>
-            <button id="btnHome">Back to Home</button>
-          </div>
-        </div>
-      </article>
+      <div class="heroHead">
+        <h1>Launch Participants Fast</h1>
+        <div class="heroSub">Pick a room id once, then launch the exact entry point by campus and role. This page is for setup only; participants should only use the launch buttons you share.</div>
+      </div>
+      <div class="controls">
+        <input id="roomInput" class="field" type="text" placeholder="room id (e.g. demo)" value="demo"/>
+        <input id="groupInput" class="field" type="text" placeholder="tutor group (e.g. g1)" value="core"/>
+      </div>
     </section>
 
-    <section class="card" style="margin-top:14px">
-      <div class="body">
-        <div class="grid">
-          <article class="panel">
-            <h2>UPNG Student Link</h2>
-            <div id="upngStudentLink" class="mono"></div>
-            <button id="btnCopyUpngStudent">Copy UPNG Student Link</button>
-          </article>
-
-          <article class="panel">
-            <h2>Monash Student Link</h2>
-            <div id="monashStudentLink" class="mono"></div>
-            <button id="btnCopyMonashStudent">Copy Monash Student Link</button>
-          </article>
-
-          <article class="panel">
-            <h2>UPNG Tutor Link</h2>
-            <div id="upngTutorLink" class="mono"></div>
-            <button id="btnCopyUpngTutor">Copy UPNG Tutor Link</button>
-          </article>
-
-          <article class="panel">
-            <h2>Monash Tutor Link</h2>
-            <div id="monashTutorLink" class="mono"></div>
-            <button id="btnCopyMonashTutor">Copy Monash Tutor Link</button>
-          </article>
+    <section class="grid">
+      <article class="card">
+        <h2>Student Launch</h2>
+        <div class="kicker">Choose by campus. Opens Stage 1 student entry directly.</div>
+        <div class="launchGrid">
+          <button id="btnUpngStudent" class="studentBtn">
+            <span class="label">UPNG Student</span>
+            <span class="subLabel">Step 1 student flow</span>
+          </button>
+          <button id="btnMonashStudent" class="studentBtn">
+            <span class="label">Monash Student</span>
+            <span class="subLabel">Step 1 student flow</span>
+          </button>
         </div>
+      </article>
 
-        <article class="panel">
-          <h2>Purpose</h2>
-          <ul class="purposeList">
-            <li>Participants should only use Student or Tutor links above.</li>
-            <li>Facilitator dashboard is for monitoring stage progress, friction notes, and workflow snapshots.</li>
-            <li>Use one room id per workshop run so your data stays clean and comparable.</li>
-          </ul>
-        </article>
-      </div>
+      <article class="card">
+        <h2>Tutor Launch</h2>
+        <div class="kicker">Choose by campus. Uses current tutor group value.</div>
+        <div class="launchGrid">
+          <button id="btnUpngTutor" class="tutorBtn">
+            <span class="label">UPNG Tutor</span>
+            <span class="subLabel">Step 1 tutor flow</span>
+          </button>
+          <button id="btnMonashTutor" class="tutorBtn">
+            <span class="label">Monash Tutor</span>
+            <span class="subLabel">Step 1 tutor flow</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Facilitator Tools</h2>
+        <div class="kicker">Open dashboard on your facilitator screen only.</div>
+        <div class="launchGrid">
+          <button id="btnDashboardUpng" class="adminBtn">
+            <span class="label">UPNG Dashboard</span>
+          </button>
+          <button id="btnDashboardMonash" class="adminBtn">
+            <span class="label">Monash Dashboard</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Purpose</h2>
+        <div class="purpose">
+          <strong>Why this page exists:</strong> quickly route each participant to the correct stage entry (student vs tutor, UPNG vs Monash) without exposing internal dashboard controls.
+        </div>
+        <button id="btnHome" class="homeBtn">Back to Home</button>
+      </article>
     </section>
   </div>
 
@@ -216,11 +214,6 @@
   (() => {
     const roomInput = document.getElementById("roomInput");
     const groupInput = document.getElementById("groupInput");
-
-    const upngStudentLink = document.getElementById("upngStudentLink");
-    const monashStudentLink = document.getElementById("monashStudentLink");
-    const upngTutorLink = document.getElementById("upngTutorLink");
-    const monashTutorLink = document.getElementById("monashTutorLink");
 
     const params = new URLSearchParams(location.search);
     roomInput.value = (params.get("room") || "demo").trim() || "demo";
@@ -232,7 +225,7 @@
       return { room, group };
     }
 
-    function build(campus, track){
+    function participantPath(campus, track){
       const { room, group } = values();
       const q = `room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
       if (track === "student") return `/stage1/step1.html?${q}`;
@@ -244,34 +237,29 @@
       return `/stage1/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
     }
 
-    function render(){
-      upngStudentLink.textContent = `${location.origin}${build("upng", "student")}`;
-      monashStudentLink.textContent = `${location.origin}${build("monash", "student")}`;
-      upngTutorLink.textContent = `${location.origin}${build("upng", "tutor")}`;
-      monashTutorLink.textContent = `${location.origin}${build("monash", "tutor")}`;
-    }
+    document.getElementById("btnUpngStudent").addEventListener("click", () => {
+      location.href = participantPath("upng", "student");
+    });
+    document.getElementById("btnMonashStudent").addEventListener("click", () => {
+      location.href = participantPath("monash", "student");
+    });
+    document.getElementById("btnUpngTutor").addEventListener("click", () => {
+      location.href = participantPath("upng", "tutor");
+    });
+    document.getElementById("btnMonashTutor").addEventListener("click", () => {
+      location.href = participantPath("monash", "tutor");
+    });
 
-    async function copy(text){
-      try{ await navigator.clipboard.writeText(text); } catch {}
-    }
+    document.getElementById("btnDashboardUpng").addEventListener("click", () => {
+      location.href = dashboardPath("upng");
+    });
+    document.getElementById("btnDashboardMonash").addEventListener("click", () => {
+      location.href = dashboardPath("monash");
+    });
 
-    roomInput.addEventListener("input", render);
-    groupInput.addEventListener("input", render);
-
-    document.getElementById("btnUpngStudent").addEventListener("click", () => { location.href = build("upng", "student"); });
-    document.getElementById("btnMonashStudent").addEventListener("click", () => { location.href = build("monash", "student"); });
-    document.getElementById("btnUpngTutor").addEventListener("click", () => { location.href = build("upng", "tutor"); });
-    document.getElementById("btnMonashTutor").addEventListener("click", () => { location.href = build("monash", "tutor"); });
-    document.getElementById("btnDashboard").addEventListener("click", () => { location.href = dashboardPath("upng"); });
-
-    document.getElementById("btnCopyUpngStudent").addEventListener("click", () => copy(`${location.origin}${build("upng", "student")}`));
-    document.getElementById("btnCopyMonashStudent").addEventListener("click", () => copy(`${location.origin}${build("monash", "student")}`));
-    document.getElementById("btnCopyUpngTutor").addEventListener("click", () => copy(`${location.origin}${build("upng", "tutor")}`));
-    document.getElementById("btnCopyMonashTutor").addEventListener("click", () => copy(`${location.origin}${build("monash", "tutor")}`));
-
-    document.getElementById("btnHome").addEventListener("click", () => { location.href = "/index.html"; });
-
-    render();
+    document.getElementById("btnHome").addEventListener("click", () => {
+      location.href = "/index.html";
+    });
   })();
   </script>
 </body>
