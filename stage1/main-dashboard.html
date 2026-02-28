@@ -65,6 +65,44 @@
       display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;
       min-width:320px;
     }
+    .tabs{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .tabGroup{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:6px;
+      background:rgba(17,24,45,.72);
+    }
+    .tabLabel{
+      font-size:10px;
+      letter-spacing:.25px;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:1000;
+      padding:0 4px 0 6px;
+    }
+    .tabBtn{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
+      padding:7px 11px;
+      font-size:11px;
+      font-weight:1000;
+      box-shadow:none;
+    }
+    .tabBtn.active{
+      border-color:color-mix(in srgb,var(--accent) 64%, rgba(255,255,255,.15));
+      background:linear-gradient(180deg, rgba(53,216,255,.16), rgba(255,255,255,.04));
+    }
     .field{
       border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.04);
@@ -365,6 +403,21 @@
         <button id="btnIndex" class="btnAccent">Home</button>
       </div>
     </div>
+    <div class="tabs">
+      <div class="tabGroup" id="audienceTabs">
+        <span class="tabLabel">Audience</span>
+        <button class="tabBtn active" data-audience-tab="all">All</button>
+        <button class="tabBtn" data-audience-tab="student">Students</button>
+        <button class="tabBtn" data-audience-tab="tutor">Tutors</button>
+      </div>
+      <div class="tabGroup" id="stageTabs">
+        <span class="tabLabel">Stage</span>
+        <button class="tabBtn active" data-stage-tab="all">All</button>
+        <button class="tabBtn" data-stage-tab="1">Stage 1</button>
+        <button class="tabBtn" data-stage-tab="2">Stage 2</button>
+        <button class="tabBtn" data-stage-tab="3">Stage 3</button>
+      </div>
+    </div>
 
     <section class="card">
       <div class="cardHead">
@@ -467,7 +520,7 @@
       </section>
       <section class="card">
         <div class="cardHead">
-          <h2>Tutor Workflow By Week</h2>
+          <h2>Tutor Workflow Snapshots</h2>
           <span class="mono" id="workflowCount">0 workflow nodes</span>
         </div>
         <div class="cardBody">
@@ -476,7 +529,7 @@
       </section>
     </div>
 
-    <div class="grid2">
+    <div class="grid2" id="viewStage3Support">
       <section class="card">
         <div class="cardHead">
           <h2>Parking Lot Notes</h2>
@@ -572,12 +625,18 @@
     const groupInput = $("#groupInput");
     const studentLinkOut = $("#studentLinkOut");
     const tutorLinkOut = $("#tutorLinkOut");
+    const audienceTabs = $("#audienceTabs");
+    const stageTabs = $("#stageTabs");
+    const viewStage1 = $("#viewStage1");
+    const viewStage2 = $("#viewStage2");
+    const viewStage3 = $("#viewStage3");
+    const viewStage3Support = $("#viewStage3Support");
+
+    const view = { audience: "all", stage: "all" };
+    const cache = { participants: [], stickies: [], journey: [], notes: [], workflow: [] };
 
     function withCampus(path){
       return `${path}?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
-    }
-    function flowSessionId(){
-      return `${room}::tutor:${group}`;
     }
     function buildShareLinks(){
       const origin = location.origin || "https://www.jackiefoo.me";
@@ -698,14 +757,19 @@
         body: content.slice(idx + 1).trim()
       };
     }
-    function renderSharedPrompts(stickies){
+    function renderSharedPrompts(stickies, roleByParticipant, audience){
       const sharedOnly = (stickies || []).filter(s => String(s.text || "").startsWith("[SHARED] "));
-      sharedPromptCount.textContent = `${sharedOnly.length} prompts`;
-      if (!sharedOnly.length){
-        sharedPromptsList.innerHTML = `<div class="empty">No shared prompts yet. Ask participants to publish from Step 2 drafts.</div>`;
+      const scoped = sharedOnly.filter(s => {
+        if (audience === "all") return true;
+        const role = String(roleByParticipant.get(String(s.participant_id || "")) || "");
+        return role === audience;
+      });
+      sharedPromptCount.textContent = `${scoped.length} prompts`;
+      if (!scoped.length){
+        sharedPromptsList.innerHTML = `<div class="empty">No shared prompts in this filter.</div>`;
         return;
       }
-      sharedPromptsList.innerHTML = sharedOnly.map(s => {
+      sharedPromptsList.innerHTML = scoped.map(s => {
         const parsed = parseSharedPrompt(s);
         return `
           <article class="laneCard" style="border-left:4px solid ${shared.escapeHtml(s.color || "#47ff87")}">
@@ -747,11 +811,16 @@
         `;
       }).join("");
     }
-    function renderConstraintsByWeek(journey){
-      const constraints = (journey || []).filter(j => j.type === "constraint");
+    function renderConstraintsByWeek(journey, roleByParticipant, audience){
+      const constraints = (journey || []).filter(j => {
+        if (j.type !== "constraint") return false;
+        if (audience === "all") return true;
+        const role = String(roleByParticipant.get(String(j.participant_id || "")) || "");
+        return role === audience;
+      });
       constraintCount.textContent = `${constraints.length} constraints`;
       if (!constraints.length){
-        constraintWeekList.innerHTML = `<div class="empty">No constraints mapped yet in Step 3.</div>`;
+        constraintWeekList.innerHTML = `<div class="empty">No constraints in this filter.</div>`;
         return;
       }
       const byWeek = new Map();
@@ -780,35 +849,47 @@
       } catch {}
       return raw || "(no label)";
     }
-    function renderWorkflowByWeek(journey){
-      const flows = (journey || []).filter(j => String(j.type || "").startsWith("workflow_") && String(j.type || "") !== "workflow_edge");
-      workflowCount.textContent = `${flows.length} workflow nodes`;
+    function renderWorkflowByWeek(journey, roleByParticipant, audience){
+      const flows = (journey || []).filter(j => {
+        if (!String(j.type || "").startsWith("workflow_")) return false;
+        if (String(j.type || "") === "workflow_edge") return false;
+        if (audience === "all") return true;
+        const role = String(roleByParticipant.get(String(j.participant_id || "")) || "");
+        return role === audience;
+      });
+      workflowCount.textContent = `${flows.length} workflow boxes`;
       if (!flows.length){
-        workflowWeekList.innerHTML = `<div class="empty">No tutor workflow nodes mapped yet.</div>`;
+        workflowWeekList.innerHTML = `<div class="empty">No workflow boxes in this filter.</div>`;
         return;
       }
-      const byWeek = new Map();
+      const byTutor = new Map();
       flows.forEach(f => {
-        const w = Number(f.week) || 0;
-        if (!byWeek.has(w)) byWeek.set(w, []);
-        byWeek.get(w).push(f);
+        const pid = String(f.participant_id || "unknown");
+        if (!byTutor.has(pid)) byTutor.set(pid, []);
+        byTutor.get(pid).push(f);
       });
-      const weeks = [...byWeek.keys()].sort((a,b)=>a-b);
-      workflowWeekList.innerHTML = weeks.map(w => {
-        const cards = byWeek.get(w) || [];
+      const tutors = [...byTutor.keys()].sort((a,b) => a.localeCompare(b));
+      workflowWeekList.innerHTML = tutors.map(pid => {
+        const cards = byTutor.get(pid) || [];
+        const preview = cards.slice(0, 4).map(x => `• ${shared.escapeHtml(workflowLabel(x))}`).join("<br/>");
         return `
           <article class="laneCard">
-            <div class="laneMeta">Week ${w} • ${cards.length} workflow node${cards.length > 1 ? "s" : ""}</div>
-            <div>${cards.map(x => `• ${shared.escapeHtml(workflowLabel(x))}`).join("<br/>")}</div>
+            <div class="laneMeta">Tutor ${shared.escapeHtml(pid.slice(0,8))} • ${cards.length} workflow box${cards.length > 1 ? "es" : ""}</div>
+            <div>${preview || "(empty)"}</div>
           </article>
         `;
       }).join("");
     }
-    function renderParkingNotes(notes){
-      const rows = (notes || []).slice().sort((a,b) => String(b.updated_at || "").localeCompare(String(a.updated_at || "")));
+    function renderParkingNotes(notes, roleByParticipant, audience){
+      const scoped = (notes || []).filter(n => {
+        if (audience === "all") return true;
+        const role = String(roleByParticipant.get(String(n.participant_id || "")) || "");
+        return role === audience;
+      });
+      const rows = scoped.slice().sort((a,b) => String(b.updated_at || "").localeCompare(String(a.updated_at || "")));
       notesCountPill.textContent = `${rows.length} notes`;
       if (!rows.length){
-        parkingNotesList.innerHTML = `<div class="empty">No parking-lot notes saved yet.</div>`;
+        parkingNotesList.innerHTML = `<div class="empty">No parking-lot notes in this filter.</div>`;
         return;
       }
       parkingNotesList.innerHTML = rows.map(n => {
@@ -824,13 +905,80 @@
       }).join("");
     }
 
+    function applyTabState(){
+      audienceTabs.querySelectorAll("[data-audience-tab]").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-audience-tab") === view.audience);
+      });
+      stageTabs.querySelectorAll("[data-stage-tab]").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-stage-tab") === view.stage);
+      });
+
+      viewStage1.style.display = (view.stage === "all" || view.stage === "1") ? "" : "none";
+      viewStage2.style.display = (view.stage === "all" || view.stage === "2") ? "" : "none";
+      const show3 = (view.stage === "all" || view.stage === "3");
+      viewStage3.style.display = show3 ? "" : "none";
+      viewStage3Support.style.display = show3 ? "" : "none";
+    }
+
+    function renderAll(){
+      const participants = cache.participants || [];
+      const stickies = cache.stickies || [];
+      const journey = cache.journey || [];
+      const notes = cache.notes || [];
+      const workflowJourney = cache.workflow || [];
+      const studentJourney = journey.filter(j => !String(j.type || "").startsWith("workflow_"));
+      const roleByParticipant = new Map((participants || []).map(p => [String(p.id || ""), String(p.role || "")]));
+
+      const visibleParticipants = participants.filter(p => view.audience === "all" || String(p.role || "") === view.audience);
+      const visibleIds = new Set(visibleParticipants.map(p => p.id));
+      const stickyAuthors = new Set(stickies.map(s => s.participant_id).filter(id => visibleIds.has(id)));
+      const journeyAuthors = new Set(studentJourney.map(j => j.participant_id).filter(id => visibleIds.has(id)));
+      const workflowNodes = workflowJourney.filter(j => {
+        if (!String(j.type || "").startsWith("workflow_") || String(j.type || "") === "workflow_edge") return false;
+        if (view.audience === "all") return true;
+        const role = String(roleByParticipant.get(String(j.participant_id || "")) || "");
+        return role === view.audience;
+      }).length;
+      const step1ReadyCount = visibleParticipants.filter(p => shared.cleanDisplayName(p.display_name) && p.persona_id).length;
+      const step2Count = stickyAuthors.size;
+      const step3Count = journeyAuthors.size;
+
+      totalParticipants.textContent = String(visibleParticipants.length);
+      step1Ready.textContent = String(step1ReadyCount);
+      step2Active.textContent = String(step2Count);
+      step3Active.textContent = String(step3Count);
+      journeyCount.textContent = String(studentJourney.filter(j => visibleIds.has(j.participant_id)).length);
+
+      const p1v = pct(step1ReadyCount, visibleParticipants.length);
+      const p2v = pct(step2Count, visibleParticipants.length);
+      const p3v = pct(step3Count, visibleParticipants.length);
+      p1.style.width = `${p1v}%`; p2.style.width = `${p2v}%`; p3.style.width = `${p3v}%`;
+      p1Text.textContent = `${p1v}%`; p2Text.textContent = `${p2v}%`; p3Text.textContent = `${p3v}%`;
+      lastUpdated.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
+
+      renderPlayerMap(visibleParticipants, stickyAuthors, journeyAuthors);
+      renderSharedPrompts(stickies, roleByParticipant, view.audience);
+      renderConstraintsByWeek(studentJourney, roleByParticipant, view.audience);
+      renderWorkflowByWeek(workflowJourney, roleByParticipant, view.audience);
+      renderParkingNotes(notes, roleByParticipant, view.audience);
+      computePrompts({
+        total: visibleParticipants.length,
+        readyStep1: step1ReadyCount,
+        activeStep2: step2Count,
+        activeStep3: step3Count,
+        workflowNodes,
+        notesCount: notes.length
+      });
+      applyTabState();
+    }
+
     async function loadData(){
       const queries = {
         participants: supabase.from("workshop_participants").select("*").eq("session_id", room),
         stickies: supabase.from("workshop_stickies").select("*").eq("session_id", room),
         journey: supabase.from("workshop_journey_items").select("*").eq("session_id", room),
         notes: supabase.from("workshop_journey_notes").select("*").eq("session_id", room),
-        workflow: supabase.from("workshop_journey_items").select("*").eq("session_id", flowSessionId())
+        workflow: supabase.from("workshop_journey_items").select("*").eq("session_id", room).like("type", "workflow_%")
       };
       const settled = await Promise.allSettled([
         queries.participants,
@@ -857,38 +1005,12 @@
         payload[k] = row.data || [];
       });
 
-      const participants = payload.participants;
-      const stickies = payload.stickies;
-      const journey = payload.journey;
-      const notes = payload.notes;
-      const workflowJourney = payload.workflow;
-
-      const stickyAuthors = new Set(stickies.map(s => s.participant_id).filter(Boolean));
-      const journeyAuthors = new Set(journey.map(j => j.participant_id).filter(Boolean));
-      const workflowNodes = workflowJourney.filter(j => String(j.type || "").startsWith("workflow_") && String(j.type || "") !== "workflow_edge").length;
-      const step1ReadyCount = participants.filter(p => shared.cleanDisplayName(p.display_name) && p.persona_id).length;
-      const step2Count = stickyAuthors.size;
-      const step3Count = journeyAuthors.size;
-
-      totalParticipants.textContent = String(participants.length);
-      step1Ready.textContent = String(step1ReadyCount);
-      step2Active.textContent = String(step2Count);
-      step3Active.textContent = String(step3Count);
-      journeyCount.textContent = String(journey.length);
-
-      const p1v = pct(step1ReadyCount, participants.length);
-      const p2v = pct(step2Count, participants.length);
-      const p3v = pct(step3Count, participants.length);
-      p1.style.width = `${p1v}%`; p2.style.width = `${p2v}%`; p3.style.width = `${p3v}%`;
-      p1Text.textContent = `${p1v}%`; p2Text.textContent = `${p2v}%`; p3Text.textContent = `${p3v}%`;
-
-      lastUpdated.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
-      renderPlayerMap(participants, stickyAuthors, journeyAuthors);
-      renderSharedPrompts(stickies);
-      renderConstraintsByWeek(journey);
-      renderWorkflowByWeek(workflowJourney);
-      renderParkingNotes(notes);
-      computePrompts({ total: participants.length, readyStep1: step1ReadyCount, activeStep2: step2Count, activeStep3: step3Count, workflowNodes, notesCount: notes.length });
+      cache.participants = payload.participants;
+      cache.stickies = payload.stickies;
+      cache.journey = payload.journey;
+      cache.notes = payload.notes;
+      cache.workflow = payload.workflow;
+      renderAll();
 
       if (errors.length){
         const hint = "Supabase checks: RLS SELECT policy for anon role, tables in realtime publication, correct session_id column.";
@@ -904,6 +1026,7 @@
 
     function wireNav(){
       applyRoomCampusUI();
+      applyTabState();
       $("#btnRefresh").addEventListener("click", () => loadData().catch(err => addFeed("error", err.message || String(err))));
       $("#btnStep1").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step1.html`));
       $("#btnStep2").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step2.html`));
@@ -923,6 +1046,18 @@
       $("#btnCopyTutor").addEventListener("click", () => {
         const links = buildShareLinks();
         copyText(links.tutor);
+      });
+      audienceTabs.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-audience-tab]");
+        if (!btn) return;
+        view.audience = btn.getAttribute("data-audience-tab") || "all";
+        renderAll();
+      });
+      stageTabs.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-stage-tab]");
+        if (!btn) return;
+        view.stage = btn.getAttribute("data-stage-tab") || "all";
+        applyTabState();
       });
       sharedPromptsList.addEventListener("click", async (e) => {
         const btn = e.target.closest("[data-remove-sticky]");
@@ -967,13 +1102,10 @@
         { table:"workshop_participants", label:"participant" },
         { table:"workshop_stickies", label:"sticky" },
         { table:"workshop_journey_items", label:"journey" },
-        { table:"workshop_journey_items", label:"workflow" },
         { table:"workshop_journey_notes", label:"notes" }
       ];
       defs.forEach(def => {
-        const filterSession = def.table === "workshop_journey_items" && def.label === "workflow"
-          ? flowSessionId()
-          : room;
+        const filterSession = room;
         const ch = supabase
           .channel(`dash:${room}:${def.table}:${def.label}`)
           .on("postgres_changes", { event:"*", schema:"public", table:def.table, filter:`session_id=eq.${filterSession}` }, (payload) => {

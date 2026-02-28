@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Stage 1 • Tutor Workflow Map</title>
+  <title>Stage 1 • Tutor Workflow Canvas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,7 +17,6 @@
       --muted:#aab0d6;
       --accent:#00e5ff;
       --accent2:#59f0c5;
-      --warn:#ffd46e;
       --bad:#ff8390;
       --r:18px;
       --shadow:0 18px 44px rgba(0,0,0,.42);
@@ -25,7 +24,7 @@
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:"Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
       background:
         radial-gradient(860px 420px at 12% 14%, rgba(0,229,255,.11), transparent 62%),
@@ -35,29 +34,27 @@
     }
     .wrap{max-width:1260px;margin:0 auto;padding:18px 14px 88px}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(16,32,68,.86);padding:6px 10px;font-size:12px;font-weight:700}
+    .badge{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:var(--panel);font-weight:1000;font-size:12px}
     .dot{width:10px;height:10px;border-radius:3px;background:var(--accent2)}
-    .subtitle{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.45;font-weight:500}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:3px 8px;background:rgba(255,255,255,.06);font-size:12px;font-weight:700}
-    button,input,select,textarea{font:inherit}
+    .subtitle{color:var(--muted);font-weight:700;font-size:13px;line-height:1.4;margin-top:8px}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:900;font-size:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);padding:3px 8px;border-radius:999px}
     button{appearance:none;border:1px solid rgba(255,255,255,.12);background:var(--panel);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:1000;cursor:pointer;box-shadow:0 10px 26px rgba(0,0,0,.28)}
     button:hover{border-color:color-mix(in srgb,var(--accent) 62%, rgba(255,255,255,.16))}
     .btnPrimary{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));box-shadow:0 14px 34px rgba(0,229,255,.12)}
-    .tiny{border:none;border-radius:10px;padding:6px 8px;font-size:11px;font-weight:700;background:rgba(255,255,255,.14);cursor:pointer;color:var(--text);box-shadow:none}
-    .card{margin-top:14px;border:1px solid rgba(255,255,255,.12);border-radius:var(--r);background:linear-gradient(0deg,var(--panel2),var(--panel));box-shadow:var(--shadow);overflow:hidden}
-    .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.1)}
-    .cardHead h2{margin:0;font-size:14px;letter-spacing:.3px;text-transform:uppercase}
-    .cardBody{padding:14px}
-    .layout{display:grid;grid-template-columns:320px 1fr 320px;gap:12px}
-    @media (max-width:1260px){.layout{grid-template-columns:1fr}}
-    .panel{border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.04);padding:10px;display:grid;gap:10px;align-content:start}
-    .panel h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.25px}
-    .field{width:100%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--text);border-radius:12px;padding:10px 11px;font-weight:600;outline:none}
-    .field::placeholder{color:rgba(238,246,255,.56)}
-    textarea.field{min-height:86px;resize:vertical}
-    .hint{font-size:12px;color:var(--muted);line-height:1.45}
 
-    .boardWrap{position:relative;border:1px solid rgba(255,255,255,.16);border-radius:14px;min-height:700px;background:
+    .card{margin-top:14px;border:1px solid rgba(255,255,255,.12);border-radius:var(--r);background:linear-gradient(0deg,var(--panel2),var(--panel));box-shadow:var(--shadow);overflow:hidden}
+    .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .cardHead h2{margin:0;font-size:14px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
+    .cardBody{padding:14px;display:grid;grid-template-columns:280px 1fr;gap:12px}
+    @media (max-width:1020px){.cardBody{grid-template-columns:1fr}}
+
+    .panel{border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.04);padding:12px;display:grid;gap:10px;align-content:start}
+    .panel h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.25px}
+    .hint{font-size:12px;color:var(--muted);line-height:1.45}
+    .diag{border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);font-weight:600}
+    .diag.bad{border-color:rgba(255,131,144,.5);background:rgba(255,131,144,.12);color:#ffd5db}
+
+    .boardWrap{position:relative;border:1px solid rgba(255,255,255,.16);border-radius:14px;min-height:740px;background:
       linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / 24px 24px,
       linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px) 0 0 / 24px 24px,
       rgba(0,0,0,.16);
@@ -76,58 +73,52 @@
       padding:3px 8px;
       font-size:10px;
       font-weight:700;
-      max-width:200px;
+      max-width:220px;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
       pointer-events:auto;
       cursor:pointer;
     }
-    .laneMarks{position:absolute;inset:0;pointer-events:none}
-    .lane{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.08)}
-    .laneLabel{position:absolute;top:8px;transform:translateX(-50%);font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.35);padding:2px 6px;border-radius:999px;border:1px solid rgba(255,255,255,.14)}
 
-    .node{position:absolute;width:240px;min-height:130px;border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px;background:rgba(255,255,255,.09);box-shadow:0 10px 24px rgba(0,0,0,.24);cursor:grab;user-select:none}
-    .node.drag,.node.resize{cursor:grabbing;opacity:.96}
-    .node.selected{outline:2px solid rgba(89,240,197,.75)}
-    .node h4{margin:0;font-size:12px;line-height:1.35}
-    .node p{margin:6px 0 0;font-size:11px;line-height:1.4;color:var(--muted)}
-    .meta{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-    .chip{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.2);font-size:10px;font-weight:700;text-transform:uppercase}
-    .c-constraint{background:rgba(255,131,144,.2)}
-    .c-support{background:rgba(89,240,197,.22)}
-    .c-action{background:rgba(102,210,255,.22)}
-    .c-decision{background:rgba(255,212,110,.22)}
-    .resizeHandle{position:absolute;right:4px;bottom:4px;width:14px;height:14px;border-radius:4px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.65);cursor:nwse-resize}
-    .connectorOut{
+    .node{
       position:absolute;
-      right:-10px;
-      top:50%;
-      transform:translateY(-50%);
-      width:18px;
-      height:18px;
+      width:260px;
+      min-height:128px;
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:12px;
+      padding:8px;
+      background:rgba(255,255,255,.09);
+      box-shadow:0 10px 24px rgba(0,0,0,.24);
+      cursor:grab;
+      user-select:none;
+    }
+    .node.drag{cursor:grabbing;opacity:.96}
+    .node.selected{outline:2px solid rgba(89,240,197,.75)}
+    .nodeTop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+    .timePill{border-radius:999px;border:1px solid rgba(255,255,255,.2);padding:3px 8px;font-size:10px;font-weight:1000;text-transform:uppercase;letter-spacing:.2px;background:rgba(0,0,0,.24);cursor:pointer}
+    .miniDanger{border:1px solid rgba(255,131,144,.48);background:rgba(255,131,144,.16);padding:4px 8px;border-radius:10px;font-size:10px;font-weight:900;box-shadow:none}
+    .nodeText{outline:none;border:none;background:transparent;color:var(--text);font-size:13px;font-weight:800;line-height:1.35;min-height:72px;white-space:pre-wrap;word-break:break-word;cursor:text;padding:4px}
+    .nodeText:empty:before{content:attr(data-placeholder);color:rgba(233,236,255,.5)}
+
+    .anchor{
+      position:absolute;
+      width:16px;
+      height:16px;
       border-radius:999px;
       border:2px solid rgba(255,255,255,.75);
       background:radial-gradient(circle at 30% 30%, #9df6ff, #00e5ff);
-      box-shadow:0 0 0 3px rgba(0,229,255,.24);
+      box-shadow:0 0 0 3px rgba(0,229,255,.22);
       cursor:crosshair;
     }
-    .connectorOut::before,
-    .connectorOut::after{
-      content:"";
-      position:absolute;
-      background:rgba(7,11,23,.86);
-      left:50%;
-      top:50%;
-      transform:translate(-50%, -50%);
-      border-radius:1px;
-    }
-    .connectorOut::before{width:8px;height:2px}
-    .connectorOut::after{width:2px;height:8px}
+    .anchor::before,.anchor::after{content:"";position:absolute;background:rgba(7,11,23,.86);left:50%;top:50%;transform:translate(-50%, -50%);border-radius:1px}
+    .anchor::before{width:7px;height:2px}
+    .anchor::after{width:2px;height:7px}
+    .anchor.top{top:-8px;left:50%;transform:translateX(-50%)}
+    .anchor.right{right:-8px;top:50%;transform:translateY(-50%)}
+    .anchor.bottom{bottom:-8px;left:50%;transform:translateX(-50%)}
+    .anchor.left{left:-8px;top:50%;transform:translateY(-50%)}
 
-    .summary{border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);line-height:1.45}
-    .diag{margin-top:10px;border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);font-weight:500}
-    .diag.bad{border-color:rgba(255,131,144,.5);background:rgba(255,131,144,.12);color:#ffd5db}
     .toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:80;background:rgba(0,0,0,.76);border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;display:none}
   </style>
 </head>
@@ -135,10 +126,10 @@
   <div class="wrap">
     <header class="row">
       <div>
-        <div class="badge"><span class="dot"></span> Stage 1 • Tutor Workflow Map</div>
+        <div class="badge"><span class="dot"></span> Stage 1 • Tutor Workflow Canvas</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • Group: <span class="mono" id="groupOut"></span> • Campus: <span class="mono" id="campusOut"></span><br/>
-          Map the full marking workflow: assignment release -> spec clarification -> distribution -> marking -> moderation -> feedback release.
+          Private tutor map (not shared with other tutors live). Drag boxes, type directly in them, and connect from any side.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
@@ -150,61 +141,27 @@
     </header>
 
     <section class="card">
-      <div class="cardHead"><h2>Group Flowchart Board</h2></div>
-      <div class="cardBody layout">
+      <div class="cardHead">
+        <h2>Tutor Flowchart Board</h2>
+        <span class="mono" id="nodeCount">0 boxes</span>
+      </div>
+      <div class="cardBody">
         <aside class="panel">
-          <h3>Add Node</h3>
-          <input id="nodeLabel" class="field" maxlength="90" placeholder="e.g. Clarify assignment specification"/>
-          <select id="nodeType" class="field">
-            <option value="workflow_constraint">Constraint</option>
-            <option value="workflow_decision">Decision</option>
-            <option value="workflow_action">Action</option>
-            <option value="workflow_support">Support</option>
-          </select>
-          <input id="nodeMarkers" class="field" type="number" min="0" step="1" placeholder="Markers involved (e.g. 6)"/>
-          <input id="nodeOwner" class="field" maxlength="60" placeholder="Owner / team (e.g. Unit coordinator)"/>
-          <textarea id="nodeSpec" class="field" placeholder="Specification clarification question or instruction"></textarea>
-          <button id="btnAdd" class="btnPrimary">Add Workflow Node</button>
-          <div class="hint">Drag nodes. Drag the <b>+ handle</b> on the right side of a node into another node to create a connector.</div>
-
-          <h3>Lifecycle Templates</h3>
-          <button class="tiny" data-tpl-text="Release assignment brief to students" data-tpl-type="workflow_action">Brief release</button>
-          <button class="tiny" data-tpl-text="Clarify ambiguous specification before marking" data-tpl-type="workflow_decision">Spec clarification</button>
-          <button class="tiny" data-tpl-text="Distribute scripts across markers" data-tpl-type="workflow_action">Script distribution</button>
-          <button class="tiny" data-tpl-text="Moderation detects rubric inconsistency" data-tpl-type="workflow_constraint">Moderation issue</button>
-          <button class="tiny" data-tpl-text="Final feedback released to students" data-tpl-type="workflow_support">Feedback release</button>
-
-          <div class="summary" id="summaryBox">Markers allocated across visible nodes: 0</div>
-          <div class="diag" id="diag">Start here: 1) add a workflow node 2) drag + to connect 3) add friction text on each connector.</div>
+          <h3>Quick Actions</h3>
+          <button id="btnAdd" class="btnPrimary">Add Box</button>
+          <button id="btnStarter">Add Starter Flow</button>
+          <button id="btnClearMine">Clear My Canvas</button>
+          <div class="hint">When adding a box, enter only the estimated time taken. Then type directly inside the box.</div>
+          <div class="hint">Connectors: drag from any <b>+ anchor</b> on a box (top/right/bottom/left) to another box anchor.</div>
+          <div class="hint">Click connector label to set/edit friction between steps.</div>
+          <div id="diag" class="diag">Ready.</div>
         </aside>
 
         <div id="board" class="boardWrap">
           <svg id="boardSvg" class="boardSvg"></svg>
-          <div class="laneMarks" id="laneMarks"></div>
           <div id="nodes"></div>
           <div id="edgeLabels" class="edgeLabels"></div>
         </div>
-
-        <aside class="panel">
-          <h3>Selected Node Editor</h3>
-          <div class="hint" id="editHint">Select a node on the board to edit square size, workload, and specification notes.</div>
-          <input id="editLabel" class="field" maxlength="90" placeholder="Node label"/>
-          <select id="editType" class="field">
-            <option value="workflow_constraint">Constraint</option>
-            <option value="workflow_decision">Decision</option>
-            <option value="workflow_action">Action</option>
-            <option value="workflow_support">Support</option>
-          </select>
-          <input id="editMarkers" class="field" type="number" min="0" step="1" placeholder="Markers involved"/>
-          <input id="editOwner" class="field" maxlength="60" placeholder="Owner / team"/>
-          <textarea id="editSpec" class="field" placeholder="Specification clarification notes"></textarea>
-          <textarea id="editNotes" class="field" placeholder="Other notes"></textarea>
-          <div class="row" style="justify-content:flex-start">
-            <button id="btnSaveNode" class="btnPrimary">Save Node</button>
-            <button id="btnDuplicateNode">Duplicate</button>
-          </div>
-          <div class="hint">Resize square: drag bottom-right corner handle on each node.</div>
-        </aside>
       </div>
     </section>
   </div>
@@ -231,7 +188,6 @@
     const keys = shared.getKeys(room);
     const participantId = shared.getOrCreateParticipantId(keys.PID_KEY);
     localStorage.setItem(keys.ROLE_KEY, "tutor");
-    const flowSession = `${room}::tutor:${group}`;
 
     const $ = (q, el=document) => el.querySelector(q);
     const roomOut = $("#roomOut");
@@ -241,59 +197,21 @@
     const nodesEl = $("#nodes");
     const svg = $("#boardSvg");
     const edgeLabels = $("#edgeLabels");
-    const laneMarks = $("#laneMarks");
     const diag = $("#diag");
-    const summaryBox = $("#summaryBox");
     const toast = $("#toast");
-
-    const nodeLabel = $("#nodeLabel");
-    const nodeType = $("#nodeType");
-    const nodeMarkers = $("#nodeMarkers");
-    const nodeOwner = $("#nodeOwner");
-    const nodeSpec = $("#nodeSpec");
-
-    const editHint = $("#editHint");
-    const editLabel = $("#editLabel");
-    const editType = $("#editType");
-    const editMarkers = $("#editMarkers");
-    const editOwner = $("#editOwner");
-    const editSpec = $("#editSpec");
-    const editNotes = $("#editNotes");
+    const nodeCount = $("#nodeCount");
 
     roomOut.textContent = room;
     groupOut.textContent = group;
     campusOut.textContent = campus === "monash" ? "Monash" : "UPNG";
 
-    const TYPE_META = {
-      workflow_constraint: { label:"Constraint", cls:"c-constraint" },
-      workflow_decision: { label:"Decision", cls:"c-decision" },
-      workflow_action: { label:"Action", cls:"c-action" },
-      workflow_support: { label:"Support", cls:"c-support" }
-    };
-
-    const LANE_META = campus === "monash"
-      ? [
-          { x: 120, label: "Brief" },
-          { x: 360, label: "Clarify" },
-          { x: 600, label: "Distribute" },
-          { x: 840, label: "Mark / Moderate" },
-          { x: 1080, label: "Release" }
-        ]
-      : [
-          { x: 120, label: "Release" },
-          { x: 360, label: "Clarify" },
-          { x: 600, label: "Distribute" },
-          { x: 840, label: "Mark / Moderate" },
-          { x: 1080, label: "Feedback" }
-        ];
-
     const state = {
       nodes: [],
       edges: [],
       selectedId: null,
-      connecting: null,
       drag: null,
-      resize: null
+      connecting: null,
+      saveTimers: new Map()
     };
 
     function showToast(msg){
@@ -302,52 +220,14 @@
       clearTimeout(showToast.t);
       showToast.t = setTimeout(() => toast.style.display = "none", 2000);
     }
+
     function setDiag(msg, bad=false){
       diag.textContent = msg;
       diag.classList.toggle("bad", !!bad);
     }
 
-    function defaultNodeText(row){
-      return String(row?.label || "(untitled)");
-    }
-
-    function parseNode(row){
-      const fallback = { text: defaultNodeText(row), x: 180, y: 120, w: 240, h: 130, markers: 0, owner: "", spec: "", notes: "" };
-      try {
-        const obj = JSON.parse(String(row?.label || ""));
-        if (!obj || typeof obj !== "object") return fallback;
-        return {
-          text: String(obj.text || fallback.text),
-          x: Number(obj.x) || fallback.x,
-          y: Number(obj.y) || fallback.y,
-          w: Math.max(180, Number(obj.w) || fallback.w),
-          h: Math.max(110, Number(obj.h) || fallback.h),
-          markers: Math.max(0, Number(obj.markers) || 0),
-          owner: String(obj.owner || ""),
-          spec: String(obj.spec || ""),
-          notes: String(obj.notes || "")
-        };
-      } catch {
-        return fallback;
-      }
-    }
-
-    function stringifyNode(n){
-      return JSON.stringify({
-        text: n.text,
-        x: Math.round(n.x),
-        y: Math.round(n.y),
-        w: Math.round(n.w),
-        h: Math.round(n.h),
-        markers: Math.max(0, Number(n.markers) || 0),
-        owner: n.owner || "",
-        spec: n.spec || "",
-        notes: n.notes || ""
-      });
-    }
-
     function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-    function typeMeta(type){ return TYPE_META[type] || TYPE_META.workflow_action; }
+
     function toBoardPoint(clientX, clientY){
       const rect = board.getBoundingClientRect();
       return {
@@ -356,48 +236,95 @@
       };
     }
 
-    async function ensureScopeSession(){
-      const a = await supabase.from("workshop_sessions").upsert({ id: flowSession }, { onConflict:"id" });
-      if (a.error) throw a.error;
-      const b = await supabase.from("workshop_participants").upsert({ id: participantId, session_id: flowSession, role:"tutor" }, { onConflict:"id" });
-      if (b.error) throw b.error;
+    function defaultNodeText(row){
+      return String(row?.label || "(untitled)");
     }
 
-    function renderLanes(){
-      laneMarks.innerHTML = LANE_META.map(m => `
-        <div class="lane" style="left:${m.x}px"></div>
-        <div class="laneLabel" style="left:${m.x}px">${shared.escapeHtml(m.label)}</div>
-      `).join("");
+    function parseNode(row){
+      const fallback = { text: defaultNodeText(row), x: 180, y: 120, w: 260, h: 128, time: "15m" };
+      try {
+        const obj = JSON.parse(String(row?.label || ""));
+        if (!obj || typeof obj !== "object") return fallback;
+        return {
+          text: String(obj.text || fallback.text),
+          x: Number(obj.x) || fallback.x,
+          y: Number(obj.y) || fallback.y,
+          w: Math.max(220, Number(obj.w) || fallback.w),
+          h: Math.max(112, Number(obj.h) || fallback.h),
+          time: String(obj.time || fallback.time)
+        };
+      } catch {
+        return fallback;
+      }
+    }
+
+    function stringifyNode(n){
+      return JSON.stringify({
+        text: String(n.text || "").trim(),
+        x: Math.round(n.x),
+        y: Math.round(n.y),
+        w: Math.round(n.w),
+        h: Math.round(n.h),
+        time: String(n.time || "15m")
+      });
+    }
+
+    function parseEdge(row){
+      try {
+        const obj = JSON.parse(String(row?.label || "{}"));
+        return {
+          from: String(obj.from || ""),
+          to: String(obj.to || ""),
+          fromSide: String(obj.fromSide || "right"),
+          toSide: String(obj.toSide || "left"),
+          issue: String(obj.issue || "")
+        };
+      } catch {
+        return { from:"", to:"", fromSide:"right", toSide:"left", issue:"" };
+      }
+    }
+
+    function edgePayload(from, to, fromSide, toSide, issue=""){
+      return JSON.stringify({ from, to, fromSide, toSide, issue: String(issue || "") });
     }
 
     function getNodeById(id){
       return state.nodes.find(n => n.id === id) || null;
     }
 
-    function nodeCenter(row){
+    function nodeAnchor(row, side){
       const n = parseNode(row);
-      return { x: n.x + n.w / 2, y: n.y + n.h / 2 };
-    }
-    function nodeRightAnchor(row){
-      const n = parseNode(row);
+      if (side === "top") return { x: n.x + n.w / 2, y: n.y };
+      if (side === "bottom") return { x: n.x + n.w / 2, y: n.y + n.h };
+      if (side === "left") return { x: n.x, y: n.y + n.h / 2 };
       return { x: n.x + n.w, y: n.y + n.h / 2 };
     }
-    function nodeLeftAnchor(row){
+
+    function nearestSide(row, point){
       const n = parseNode(row);
-      return { x: n.x, y: n.y + n.h / 2 };
+      const cands = ["top","right","bottom","left"];
+      let best = "right";
+      let bestD = Infinity;
+      cands.forEach(side => {
+        const p = nodeAnchor(row, side);
+        const d = Math.hypot(point.x - p.x, point.y - p.y);
+        if (d < bestD){ bestD = d; best = side; }
+      });
+      return best;
     }
 
-    function parseEdge(row){
-      try {
-        const obj = JSON.parse(String(row.label || "{}"));
-        return { from: String(obj.from || ""), to: String(obj.to || ""), issue: String(obj.issue || "") };
-      } catch {
-        return { from: "", to: "", issue: "" };
-      }
-    }
-
-    function edgePayload(from, to, issue=""){
-      return JSON.stringify({ from, to, issue: String(issue || "") });
+    function bezierPath(a, b){
+      const dx = Math.max(42, Math.abs(b.x - a.x) * 0.35);
+      const dy = Math.max(30, Math.abs(b.y - a.y) * 0.25);
+      const c1 = {
+        x: a.x + (a.side === "right" ? dx : a.side === "left" ? -dx : 0),
+        y: a.y + (a.side === "bottom" ? dy : a.side === "top" ? -dy : 0)
+      };
+      const c2 = {
+        x: b.x + (b.side === "right" ? dx : b.side === "left" ? -dx : 0),
+        y: b.y + (b.side === "bottom" ? dy : b.side === "top" ? -dy : 0)
+      };
+      return `M ${a.x} ${a.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${b.x} ${b.y}`;
     }
 
     function renderEdges(){
@@ -417,10 +344,10 @@
         const from = getNodeById(e.from);
         const to = getNodeById(e.to);
         if (!from || !to) return;
-        const a = nodeRightAnchor(from);
-        const b = nodeLeftAnchor(to);
-        const dx = Math.max(45, Math.abs(b.x - a.x) * 0.35);
-        const d = `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`;
+
+        const a = { ...nodeAnchor(from, e.fromSide), side: e.fromSide };
+        const b = { ...nodeAnchor(to, e.toSide), side: e.toSide };
+        const d = bezierPath(a, b);
 
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", d);
@@ -430,27 +357,25 @@
         path.setAttribute("marker-end", "url(#arrow)");
         svg.appendChild(path);
 
-        const lx = (a.x + b.x) / 2;
-        const ly = (a.y + b.y) / 2;
         const tag = document.createElement("button");
         tag.className = "edgeTag";
         tag.type = "button";
-        tag.style.left = `${lx}px`;
-        tag.style.top = `${ly}px`;
         tag.dataset.edgeId = e.id;
-        tag.title = "Click to edit connection issue";
+        tag.style.left = `${(a.x + b.x) / 2}px`;
+        tag.style.top = `${(a.y + b.y) / 2}px`;
         tag.textContent = e.issue || "Issue?";
+        tag.title = "Click to edit connector issue";
         edgeLabels.appendChild(tag);
       });
 
       if (state.connecting){
         const from = getNodeById(state.connecting.from);
         if (from){
-          const a = nodeRightAnchor(from);
-          const b = { x: state.connecting.x, y: state.connecting.y };
-          const dx = Math.max(45, Math.abs(b.x - a.x) * 0.35);
+          const a = { ...nodeAnchor(from, state.connecting.fromSide), side: state.connecting.fromSide };
+          const b = { x: state.connecting.x, y: state.connecting.y, side: "right" };
+          const d = bezierPath(a, b);
           const temp = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          temp.setAttribute("d", `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`);
+          temp.setAttribute("d", d);
           temp.setAttribute("fill", "none");
           temp.setAttribute("stroke", "rgba(0,229,255,.95)");
           temp.setAttribute("stroke-width", "2.2");
@@ -460,39 +385,12 @@
       }
     }
 
-    function updateSummary(){
-      const total = state.nodes.reduce((acc, row) => acc + (parseNode(row).markers || 0), 0);
-      summaryBox.textContent = `Markers allocated across visible nodes: ${total}`;
-    }
-
-    function selectNode(id){
-      state.selectedId = id;
-      const row = getNodeById(id);
-      if (!row){
-        editHint.textContent = "Select a node on the board to edit square size, workload, and specification notes.";
-        editLabel.value = "";
-        editMarkers.value = "";
-        editOwner.value = "";
-        editSpec.value = "";
-        editNotes.value = "";
-        return;
-      }
-      const n = parseNode(row);
-      editHint.textContent = `Editing node: ${n.text}`;
-      editLabel.value = n.text;
-      editType.value = row.type;
-      editMarkers.value = String(n.markers || 0);
-      editOwner.value = n.owner;
-      editSpec.value = n.spec;
-      editNotes.value = n.notes;
-    }
-
     function renderNodes(){
       nodesEl.innerHTML = "";
+      nodeCount.textContent = `${state.nodes.length} box${state.nodes.length === 1 ? "" : "es"}`;
+
       state.nodes.forEach(row => {
         const n = parseNode(row);
-        const meta = typeMeta(row.type);
-
         const el = document.createElement("article");
         el.className = `node${state.selectedId === row.id ? " selected" : ""}`;
         el.style.left = `${n.x}px`;
@@ -501,227 +399,95 @@
         el.style.minHeight = `${n.h}px`;
         el.dataset.id = row.id;
         el.innerHTML = `
-          <h4>${shared.escapeHtml(n.text)}</h4>
-          <p>${n.spec ? shared.escapeHtml(n.spec) : "No spec clarification note"}</p>
-          <div class="meta">
-            <span class="chip ${meta.cls}">${shared.escapeHtml(meta.label)}</span>
-            <span class="chip">Markers: ${shared.escapeHtml(String(n.markers || 0))}</span>
-            ${n.owner ? `<span class="chip">${shared.escapeHtml(n.owner)}</span>` : ""}
-            <button class="tiny" data-type="${shared.escapeHtml(row.id)}">Cycle</button>
-            <button class="tiny" data-del="${shared.escapeHtml(row.id)}">Delete</button>
+          <div class="nodeTop">
+            <button class="timePill" type="button" data-time="${shared.escapeHtml(row.id)}">${shared.escapeHtml(n.time)}</button>
+            <button class="miniDanger" type="button" data-del="${shared.escapeHtml(row.id)}">Delete</button>
           </div>
-          <div class="connectorOut" data-connect="${shared.escapeHtml(row.id)}" title="Drag to connect"></div>
-          <div class="resizeHandle" data-resize="${shared.escapeHtml(row.id)}"></div>
+          <div class="nodeText" contenteditable="true" data-text="${shared.escapeHtml(row.id)}" data-placeholder="Type this workflow step...">${shared.escapeHtml(n.text)}</div>
+          <div class="anchor top" data-anchor="top" data-anchor-id="${shared.escapeHtml(row.id)}" title="Connect from top"></div>
+          <div class="anchor right" data-anchor="right" data-anchor-id="${shared.escapeHtml(row.id)}" title="Connect from right"></div>
+          <div class="anchor bottom" data-anchor="bottom" data-anchor-id="${shared.escapeHtml(row.id)}" title="Connect from bottom"></div>
+          <div class="anchor left" data-anchor="left" data-anchor-id="${shared.escapeHtml(row.id)}" title="Connect from left"></div>
         `;
 
-        el.addEventListener("click", (e) => {
-          if (e.target.closest("button") || e.target.closest("[data-resize]") || e.target.closest("[data-connect]")) return;
-          selectNode(row.id);
-          renderNodes();
-        });
-
         el.addEventListener("pointerdown", (e) => {
-          if (e.target.closest("button") || e.target.closest("[data-connect]")) return;
-          const isResize = !!e.target.closest("[data-resize]");
-          el.setPointerCapture(e.pointerId);
-          if (isResize){
-            state.resize = {
-              id: row.id,
-              startX: e.clientX,
-              startY: e.clientY,
-              w: n.w,
-              h: n.h,
-              el
-            };
-            el.classList.add("resize");
-            return;
-          }
+          if (e.target.closest("[data-anchor]") || e.target.closest("button") || e.target.closest(".nodeText")) return;
+          const p = parseNode(row);
+          state.selectedId = row.id;
           state.drag = {
             id: row.id,
             startX: e.clientX,
             startY: e.clientY,
-            x: n.x,
-            y: n.y,
-            w: n.w,
-            h: n.h,
+            x: p.x,
+            y: p.y,
+            w: p.w,
+            h: p.h,
             el
           };
           el.classList.add("drag");
         });
 
-        el.addEventListener("pointermove", (e) => {
-          if (state.resize && state.resize.id === row.id){
-            const dw = e.clientX - state.resize.startX;
-            const dh = e.clientY - state.resize.startY;
-            const nw = clamp(state.resize.w + dw, 180, 420);
-            const nh = clamp(state.resize.h + dh, 110, 320);
-            el.style.width = `${nw}px`;
-            el.style.minHeight = `${nh}px`;
-            renderEdges();
-            return;
-          }
-
-          if (state.drag && state.drag.id === row.id){
-            const dx = e.clientX - state.drag.startX;
-            const dy = e.clientY - state.drag.startY;
-            const nx = clamp(state.drag.x + dx, 6, board.clientWidth - state.drag.w - 6);
-            const ny = clamp(state.drag.y + dy, 34, board.clientHeight - state.drag.h - 6);
-            el.style.left = `${nx}px`;
-            el.style.top = `${ny}px`;
-            renderEdges();
-          }
-        });
-
-        el.addEventListener("pointerup", async () => {
-          const rowRef = getNodeById(row.id);
-          if (!rowRef) return;
-          const parsed = parseNode(rowRef);
-
-          if (state.resize && state.resize.id === row.id){
-            el.classList.remove("resize");
-            const next = {
-              ...parsed,
-              w: parseFloat(el.style.width) || parsed.w,
-              h: parseFloat(el.style.minHeight) || parsed.h
-            };
-            state.resize = null;
-            try {
-              const label = stringifyNode(next);
-              const { error } = await supabase.from("workshop_journey_items").update({ label }).eq("id", row.id);
-              if (error) throw error;
-              rowRef.label = label;
-              if (state.selectedId === row.id) selectNode(row.id);
-              renderEdges();
-            } catch (err){ showToast(err.message || "Resize save failed"); }
-            return;
-          }
-
-          if (state.drag && state.drag.id === row.id){
-            el.classList.remove("drag");
-            const next = {
-              ...parsed,
-              x: parseFloat(el.style.left) || parsed.x,
-              y: parseFloat(el.style.top) || parsed.y
-            };
-            state.drag = null;
-            try {
-              const label = stringifyNode(next);
-              const { error } = await supabase.from("workshop_journey_items").update({ label }).eq("id", row.id);
-              if (error) throw error;
-              rowRef.label = label;
-              renderEdges();
-            } catch (err){ showToast(err.message || "Move save failed"); }
-          }
-        });
-
         nodesEl.appendChild(el);
       });
-      updateSummary();
       renderEdges();
     }
 
-    async function addNode({ text, type, markers=0, owner="", spec="", notes="" }){
-      const clean = String(text || "").trim();
-      if (!clean) return;
-      const label = stringifyNode({
-        text: clean,
-        x: 200 + Math.floor(Math.random() * 220),
-        y: 90 + Math.floor(Math.random() * 280),
-        w: 240,
-        h: 130,
-        markers: Math.max(0, Number(markers) || 0),
-        owner: String(owner || ""),
-        spec: String(spec || ""),
-        notes: String(notes || "")
-      });
+    async function upsertNodeLabel(id, next){
+      const label = stringifyNode(next);
+      const { error } = await supabase.from("workshop_journey_items").update({ label }).eq("id", id).eq("participant_id", participantId).eq("session_id", room);
+      if (error) throw error;
+      const row = getNodeById(id);
+      if (row) row.label = label;
+    }
 
+    function queueTextSave(id, value){
+      const existing = state.saveTimers.get(id);
+      if (existing) clearTimeout(existing);
+      const t = setTimeout(async () => {
+        state.saveTimers.delete(id);
+        const row = getNodeById(id);
+        if (!row) return;
+        const n = parseNode(row);
+        const next = { ...n, text: (value || "").trim() || "Untitled step" };
+        try { await upsertNodeLabel(id, next); }
+        catch (err){ showToast(err.message || "Text save failed"); }
+      }, 260);
+      state.saveTimers.set(id, t);
+    }
+
+    async function addNode({ text = "New workflow step", time = "15m", x = 180, y = 120 }){
+      const label = stringifyNode({ text, time, x, y, w:260, h:128 });
       const payload = {
-        session_id: flowSession,
+        session_id: room,
         participant_id: participantId,
         week: 1,
-        type,
+        type: "workflow_node",
         label
       };
-
-      let ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
-      if (ins.error){
-        const relaxed = { ...payload };
-        delete relaxed.participant_id;
-        ins = await supabase.from("workshop_journey_items").insert(relaxed).select().single();
-      }
+      const ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
       if (ins.error) throw ins.error;
-
       state.nodes.push(ins.data);
-      selectNode(ins.data.id);
+      state.selectedId = ins.data.id;
       renderNodes();
-      showToast("Node added");
+      showToast("Box added");
     }
 
-    async function saveSelected(){
-      const row = getNodeById(state.selectedId);
-      if (!row){ showToast("Select a node first"); return; }
-      const n = parseNode(row);
-      const next = {
-        ...n,
-        text: (editLabel.value || "").trim() || n.text,
-        markers: Math.max(0, Number(editMarkers.value) || 0),
-        owner: (editOwner.value || "").trim(),
-        spec: (editSpec.value || "").trim(),
-        notes: (editNotes.value || "").trim()
-      };
-      const nextType = editType.value;
-      try {
-        const label = stringifyNode(next);
-        const { error } = await supabase
-          .from("workshop_journey_items")
-          .update({ label, type: nextType })
-          .eq("id", row.id);
-        if (error) throw error;
-        row.label = label;
-        row.type = nextType;
-        renderNodes();
-        selectNode(row.id);
-        showToast("Node saved");
-      } catch (err){
-        showToast(err.message || "Save failed");
-      }
-    }
-
-    async function duplicateSelected(){
-      const row = getNodeById(state.selectedId);
-      if (!row){ showToast("Select a node first"); return; }
-      const n = parseNode(row);
-      await addNode({
-        text: `${n.text} (copy)`,
-        type: row.type,
-        markers: n.markers,
-        owner: n.owner,
-        spec: n.spec,
-        notes: n.notes
-      });
-    }
-
-    async function addEdge(from, to, issue=""){
+    async function addEdge(from, to, fromSide, toSide, issue = ""){
       if (!from || !to || from === to) return;
-      if (state.edges.some(e => e.from === from && e.to === to)){
-        showToast("Edge already exists");
+      if (state.edges.some(e => e.from === from && e.to === to && e.fromSide === fromSide && e.toSide === toSide)){
+        showToast("Connector already exists");
         return;
       }
       const payload = {
-        session_id: flowSession,
+        session_id: room,
         participant_id: participantId,
         week: 0,
         type: "workflow_edge",
-        label: edgePayload(from, to, issue)
+        label: edgePayload(from, to, fromSide, toSide, issue)
       };
-      let ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
-      if (ins.error){
-        const relaxed = { ...payload };
-        delete relaxed.participant_id;
-        ins = await supabase.from("workshop_journey_items").insert(relaxed).select().single();
-      }
+      const ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
       if (ins.error) throw ins.error;
-      state.edges.push({ id: ins.data.id, from, to, issue });
+      state.edges.push({ id: ins.data.id, from, to, fromSide, toSide, issue });
       renderEdges();
     }
 
@@ -730,8 +496,10 @@
       if (!edge) return;
       const { error } = await supabase
         .from("workshop_journey_items")
-        .update({ label: edgePayload(edge.from, edge.to, issue) })
-        .eq("id", edgeId);
+        .update({ label: edgePayload(edge.from, edge.to, edge.fromSide, edge.toSide, issue) })
+        .eq("id", edgeId)
+        .eq("participant_id", participantId)
+        .eq("session_id", room);
       if (error) throw error;
       edge.issue = String(issue || "");
       renderEdges();
@@ -740,28 +508,39 @@
     async function deleteNode(id){
       const edgeIds = state.edges.filter(e => e.from === id || e.to === id).map(e => e.id);
       if (edgeIds.length){
-        const { error: e1 } = await supabase.from("workshop_journey_items").delete().in("id", edgeIds);
+        const { error: e1 } = await supabase
+          .from("workshop_journey_items")
+          .delete()
+          .in("id", edgeIds)
+          .eq("participant_id", participantId)
+          .eq("session_id", room);
         if (e1) throw e1;
       }
-      const { error } = await supabase.from("workshop_journey_items").delete().eq("id", id);
+      const { error } = await supabase
+        .from("workshop_journey_items")
+        .delete()
+        .eq("id", id)
+        .eq("participant_id", participantId)
+        .eq("session_id", room);
       if (error) throw error;
       state.nodes = state.nodes.filter(n => n.id !== id);
       state.edges = state.edges.filter(e => e.from !== id && e.to !== id);
-      if (state.selectedId === id) selectNode(null);
+      if (state.selectedId === id) state.selectedId = null;
       renderNodes();
     }
 
-    async function cycleNodeType(id){
-      const order = ["workflow_constraint", "workflow_decision", "workflow_action", "workflow_support"];
-      const row = getNodeById(id);
-      if (!row) return;
-      const idx = order.indexOf(row.type);
-      const next = order[(idx + 1) % order.length];
-      const { error } = await supabase.from("workshop_journey_items").update({ type: next }).eq("id", id);
+    async function clearMine(){
+      const { error } = await supabase
+        .from("workshop_journey_items")
+        .delete()
+        .eq("session_id", room)
+        .eq("participant_id", participantId)
+        .like("type", "workflow_%");
       if (error) throw error;
-      row.type = next;
+      state.nodes = [];
+      state.edges = [];
+      state.selectedId = null;
       renderNodes();
-      if (state.selectedId === id) selectNode(id);
     }
 
     function hydrateRows(rows){
@@ -770,8 +549,8 @@
       (rows || []).forEach(r => {
         if (String(r.type || "") === "workflow_edge"){
           const p = parseEdge(r);
-          if (p.from && p.to) edges.push({ id: r.id, from: p.from, to: p.to, issue: p.issue || "" });
-        } else if (String(r.type || "").startsWith("workflow_")){
+          if (p.from && p.to) edges.push({ id: r.id, from: p.from, to: p.to, fromSide: p.fromSide, toSide: p.toSide, issue: p.issue || "" });
+        } else if (String(r.type || "") === "workflow_node" || String(r.type || "") === "workflow_action" || String(r.type || "") === "workflow_constraint" || String(r.type || "") === "workflow_decision" || String(r.type || "") === "workflow_support"){
           nodes.push(r);
         }
       });
@@ -779,124 +558,239 @@
       state.edges = edges;
       if (state.selectedId && !getNodeById(state.selectedId)) state.selectedId = null;
       renderNodes();
-      if (state.selectedId) selectNode(state.selectedId);
     }
 
     async function loadAll(){
       const { data, error } = await supabase
         .from("workshop_journey_items")
         .select("*")
-        .eq("session_id", flowSession);
+        .eq("session_id", room)
+        .eq("participant_id", participantId)
+        .like("type", "workflow_%");
       if (error) throw error;
       hydrateRows(data || []);
     }
 
+    async function ensureScopeSession(){
+      const a = await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict:"id" });
+      if (a.error) throw a.error;
+      const b = await supabase.from("workshop_participants").upsert({ id: participantId, session_id: room, role:"tutor" }, { onConflict:"id" });
+      if (b.error) throw b.error;
+    }
+
     function wireActions(){
       $("#btnAdd").addEventListener("click", async () => {
+        const time = prompt("Estimated time taken for this step? (e.g. 20m)", "20m");
+        if (time === null) return;
         try {
           await addNode({
-            text: nodeLabel.value,
-            type: nodeType.value,
-            markers: nodeMarkers.value,
-            owner: nodeOwner.value,
-            spec: nodeSpec.value,
-            notes: ""
+            text: "Type workflow step...",
+            time: (time || "20m").trim() || "20m",
+            x: 140 + Math.floor(Math.random() * 260),
+            y: 100 + Math.floor(Math.random() * 240)
           });
-          nodeLabel.value = "";
-          nodeMarkers.value = "";
-          nodeOwner.value = "";
-          nodeSpec.value = "";
         } catch (err){ showToast(err.message || "Add failed"); }
       });
 
-      nodeLabel.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") $("#btnAdd").click();
+      $("#btnStarter").addEventListener("click", async () => {
+        if (state.nodes.length){
+          const ok = confirm("Starter flow will add more boxes to your current canvas. Continue?");
+          if (!ok) return;
+        }
+        try {
+          const baseX = 140;
+          const y = 180;
+          const a = await addNode({ text:"Assignment brief released", time:"10m", x:baseX, y });
+          const b = await addNode({ text:"Spec clarified with markers", time:"25m", x:baseX + 310, y });
+          const c = await addNode({ text:"Scripts distributed", time:"15m", x:baseX + 620, y });
+          const d = await addNode({ text:"Marking + moderation", time:"180m", x:baseX + 620, y: y + 190 });
+          const e = await addNode({ text:"Feedback returned", time:"20m", x:baseX + 310, y: y + 190 });
+
+          const ids = state.nodes.slice(-5).map(n => n.id);
+          if (ids.length === 5){
+            await addEdge(ids[0], ids[1], "right", "left", "Spec ambiguity");
+            await addEdge(ids[1], ids[2], "right", "left", "Allocation load");
+            await addEdge(ids[2], ids[3], "bottom", "top", "Rubric interpretation mismatch");
+            await addEdge(ids[3], ids[4], "left", "right", "Moderation delay");
+          }
+          setDiag("Starter flow inserted. Edit text directly in each box.", false);
+        } catch (err){
+          showToast(err.message || "Starter flow failed");
+        }
       });
 
-      document.querySelectorAll("[data-tpl-text]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          nodeLabel.value = btn.getAttribute("data-tpl-text") || "";
-          nodeType.value = btn.getAttribute("data-tpl-type") || "workflow_action";
-          nodeSpec.value = "";
-        });
+      $("#btnClearMine").addEventListener("click", async () => {
+        const ok = confirm("Clear your private tutor canvas?");
+        if (!ok) return;
+        try {
+          await clearMine();
+          setDiag("Canvas cleared.", false);
+        } catch (err){
+          setDiag(err.message || "Clear failed", true);
+        }
       });
 
-      $("#btnSaveNode").addEventListener("click", saveSelected);
-      $("#btnDuplicateNode").addEventListener("click", () => {
-        duplicateSelected().catch(err => showToast(err.message || "Duplicate failed"));
+      nodesEl.addEventListener("input", (e) => {
+        const textEl = e.target.closest("[data-text]");
+        if (!textEl) return;
+        const id = textEl.getAttribute("data-text");
+        if (!id) return;
+        queueTextSave(id, textEl.textContent || "");
       });
+
+      nodesEl.addEventListener("blur", (e) => {
+        const textEl = e.target.closest("[data-text]");
+        if (!textEl) return;
+        const id = textEl.getAttribute("data-text");
+        if (!id) return;
+        queueTextSave(id, textEl.textContent || "");
+      }, true);
 
       nodesEl.addEventListener("click", async (e) => {
-        const typeBtn = e.target.closest("[data-type]");
-        if (typeBtn){
-          try { await cycleNodeType(typeBtn.getAttribute("data-type")); }
-          catch (err){ showToast(err.message || "Type update failed"); }
-          return;
-        }
-
         const delBtn = e.target.closest("[data-del]");
         if (delBtn){
           const id = delBtn.getAttribute("data-del");
-          const ok = confirm("Delete this node and connected arrows?");
+          if (!id) return;
+          const ok = confirm("Delete this box and related connectors?");
           if (!ok) return;
-          try { await deleteNode(id); } catch (err){ showToast(err.message || "Delete failed"); }
+          try { await deleteNode(id); }
+          catch (err){ showToast(err.message || "Delete failed"); }
+          return;
+        }
+
+        const timeBtn = e.target.closest("[data-time]");
+        if (timeBtn){
+          const id = timeBtn.getAttribute("data-time");
+          const row = getNodeById(id);
+          if (!row) return;
+          const now = parseNode(row);
+          const next = prompt("Update time taken (e.g. 30m / 2h)", now.time || "20m");
+          if (next === null) return;
+          try {
+            await upsertNodeLabel(id, { ...now, time: (next || "").trim() || "20m" });
+            renderNodes();
+          } catch (err){
+            showToast(err.message || "Time update failed");
+          }
+          return;
+        }
+
+        const card = e.target.closest(".node");
+        if (card){
+          state.selectedId = card.getAttribute("data-id");
+          renderNodes();
         }
       });
 
       nodesEl.addEventListener("pointerdown", (e) => {
-        const connectEl = e.target.closest("[data-connect]");
-        if (!connectEl) return;
+        const anchor = e.target.closest("[data-anchor]");
+        if (!anchor) return;
         e.preventDefault();
         e.stopPropagation();
-        const from = connectEl.getAttribute("data-connect");
-        if (!from) return;
+        const from = anchor.getAttribute("data-anchor-id");
+        const fromSide = anchor.getAttribute("data-anchor");
+        if (!from || !fromSide) return;
         const p = toBoardPoint(e.clientX, e.clientY);
-        state.connecting = { from, x: p.x, y: p.y };
+        state.connecting = { from, fromSide, x:p.x, y:p.y };
         board.classList.add("connecting");
         renderEdges();
-        setDiag("Connecting: drag to target node and release.", false);
+        setDiag("Connecting: release on a target anchor (top/right/bottom/left).", false);
       });
 
       document.addEventListener("pointermove", (e) => {
-        if (!state.connecting) return;
-        const p = toBoardPoint(e.clientX, e.clientY);
-        state.connecting.x = p.x;
-        state.connecting.y = p.y;
-        renderEdges();
+        if (state.drag){
+          const row = getNodeById(state.drag.id);
+          if (!row) return;
+          const n = parseNode(row);
+          const dx = e.clientX - state.drag.startX;
+          const dy = e.clientY - state.drag.startY;
+          const nx = clamp(state.drag.x + dx, 6, board.clientWidth - n.w - 6);
+          const ny = clamp(state.drag.y + dy, 6, board.clientHeight - n.h - 6);
+          state.drag.el.style.left = `${nx}px`;
+          state.drag.el.style.top = `${ny}px`;
+          renderEdges();
+          return;
+        }
+
+        if (state.connecting){
+          const p = toBoardPoint(e.clientX, e.clientY);
+          state.connecting.x = p.x;
+          state.connecting.y = p.y;
+          renderEdges();
+        }
       });
 
       document.addEventListener("pointerup", async (e) => {
+        if (state.drag){
+          const d = state.drag;
+          state.drag = null;
+          d.el.classList.remove("drag");
+          const row = getNodeById(d.id);
+          if (!row) return;
+          const n = parseNode(row);
+          try {
+            const next = {
+              ...n,
+              x: parseFloat(d.el.style.left) || n.x,
+              y: parseFloat(d.el.style.top) || n.y
+            };
+            await upsertNodeLabel(d.id, next);
+            renderEdges();
+          } catch (err){
+            showToast(err.message || "Move save failed");
+          }
+          return;
+        }
+
         if (!state.connecting) return;
-        const from = state.connecting.from;
-        const targetNode = e.target.closest ? e.target.closest(".node") : null;
+        const link = state.connecting;
         state.connecting = null;
         board.classList.remove("connecting");
         renderEdges();
 
-        if (!targetNode){
+        let toId = "";
+        let toSide = "";
+        const anchor = e.target.closest ? e.target.closest("[data-anchor]") : null;
+        if (anchor){
+          toId = anchor.getAttribute("data-anchor-id") || "";
+          toSide = anchor.getAttribute("data-anchor") || "";
+        } else {
+          const nodeEl = e.target.closest ? e.target.closest(".node") : null;
+          if (nodeEl){
+            toId = nodeEl.getAttribute("data-id") || "";
+            const row = getNodeById(toId);
+            if (row){
+              const p = toBoardPoint(e.clientX, e.clientY);
+              toSide = nearestSide(row, p);
+            }
+          }
+        }
+
+        if (!toId || !toSide){
           setDiag("Connector cancelled.", false);
           return;
         }
-        const to = targetNode.getAttribute("data-id");
-        if (!to || to === from){
-          setDiag("Cannot connect to the same node.", true);
+        if (toId === link.from){
+          setDiag("Cannot connect a box to itself.", true);
           return;
         }
+
         try {
           const issue = prompt("Problem/friction between these workflow steps?", "") || "";
-          await addEdge(from, to, issue);
-          setDiag("Connected.", false);
+          await addEdge(link.from, toId, link.fromSide, toSide, issue);
+          setDiag("Connector created.", false);
         } catch (err){
-          setDiag(err.message || "Edge create failed", true);
+          setDiag(err.message || "Connector create failed", true);
         }
       });
 
       document.addEventListener("keydown", (e) => {
-        if (e.key !== "Escape" || !state.connecting) return;
-        state.connecting = null;
-        board.classList.remove("connecting");
-        renderEdges();
-        setDiag("Connector cancelled.", false);
+        if (e.key === "Escape" && state.connecting){
+          state.connecting = null;
+          board.classList.remove("connecting");
+          renderEdges();
+          setDiag("Connector cancelled.", false);
+        }
       });
 
       edgeLabels.addEventListener("click", async (e) => {
@@ -907,7 +801,7 @@
         if (!edge) return;
         const next = prompt("Edit problem on this connector (leave blank to clear):", edge.issue || "");
         if (next === null) return;
-        try{
+        try {
           await updateEdgeIssue(edgeId, next.trim());
           showToast("Connector issue updated");
         } catch (err){
@@ -932,21 +826,20 @@
 
     function subscribe(){
       supabase
-        .channel("step3tutorflow:" + flowSession)
-        .on("postgres_changes", { event:"*", schema:"public", table:"workshop_journey_items", filter:`session_id=eq.${flowSession}` }, () => {
+        .channel("step3tutorprivate:" + room + ":" + participantId)
+        .on("postgres_changes", { event:"*", schema:"public", table:"workshop_journey_items", filter:`session_id=eq.${room}` }, () => {
           loadAll().catch(() => {});
         })
         .subscribe((status) => {
-          if (status === "SUBSCRIBED") setDiag("Connected. Group workflow realtime active.", false);
+          if (status === "SUBSCRIBED") setDiag("Connected. Private tutor canvas active.", false);
           if (status === "TIMED_OUT" || status === "CHANNEL_ERROR") setDiag("Realtime degraded. Manual refresh still works.", true);
         });
     }
 
-    renderLanes();
     wireActions();
     ensureScopeSession()
       .then(() => loadAll())
-      .then(() => setDiag("Connected. Build the tutor flowchart with workload and spec checkpoints.", false))
+      .then(() => setDiag("Connected. Build your workflow privately; dashboard can still monitor outputs.", false))
       .catch((err) => setDiag(err.message || "Load failed", true));
     subscribe();
     window.addEventListener("resize", renderEdges);
