@@ -15,7 +15,6 @@
 
       --accent:#00e5ff;
       --accent2:#ff2bd6;
-      --good:#47ff87;
       --bad:#ff4d4d;
 
       --r:18px;
@@ -33,7 +32,7 @@
       overflow-x:hidden;
     }
 
-    /* ===== Subtle animated background ===== */
+    /* subtle background (static, no moving placeholder) */
     .bg{
       position:fixed; inset:0; z-index:-1;
       background:
@@ -43,14 +42,6 @@
         linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
         var(--bg);
       filter:saturate(1.05);
-      animation:bgDrift 12s ease-in-out infinite alternate;
-    }
-    @keyframes bgDrift{
-      0%{transform:translate3d(0,0,0) scale(1)}
-      100%{transform:translate3d(-10px, 8px, 0) scale(1.02)}
-    }
-    @media (prefers-reduced-motion:reduce){
-      .bg{animation:none}
     }
 
     .wrap{max-width:980px;margin:0 auto;padding:18px 14px 92px}
@@ -231,7 +222,7 @@
       display:flex;
       flex-direction:column;
       gap:10px;
-      min-height:154px;
+      min-height:150px;
       position:relative;
       transition: transform .14s ease, border-color .14s ease, background .14s ease;
     }
@@ -263,60 +254,23 @@
     .pTitle{margin:0;font-size:12px;font-weight:1000;letter-spacing:.2px;text-transform:uppercase}
     .pText{margin:0;color:var(--muted);font-weight:750;font-size:12px;line-height:1.4}
 
-    /* ✅ Card preview image placeholder */
-    .preview{
+    /* static chibi thumbnail on each card */
+    .thumbWrap{
       border:1px solid rgba(255,255,255,.10);
       border-radius:14px;
-      background:
-        radial-gradient(280px 160px at 20% 20%, rgba(0,229,255,.10), transparent 55%),
-        radial-gradient(240px 140px at 80% 70%, rgba(255,43,214,.10), transparent 55%),
-        rgba(255,255,255,.02);
+      background:rgba(255,255,255,.02);
       padding:10px;
       display:flex;
       align-items:center;
-      gap:10px;
-      min-height:76px;
-      overflow:hidden;
+      justify-content:center;
+      min-height:78px;
     }
-    .previewImg{
-      width:54px;
-      height:54px;
+    .thumb{
+      width:72px;
+      height:72px;
+      object-fit:contain;
+      filter: drop-shadow(0 14px 18px rgba(0,0,0,.40));
       border-radius:12px;
-      object-fit:cover;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      flex:0 0 auto;
-      filter: drop-shadow(0 10px 16px rgba(0,0,0,.35));
-    }
-    .previewLines{
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      min-width:0;
-    }
-    .pLine{
-      height:10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.08);
-      position:relative;
-      overflow:hidden;
-    }
-    .pLine::after{
-      content:"";
-      position:absolute; inset:0;
-      background:linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
-      transform:translateX(-60%);
-      animation: shimmer 1.5s ease-in-out infinite;
-    }
-    .pLine:nth-child(2){opacity:.75; width:82%}
-    .pLine:nth-child(3){opacity:.55; width:64%}
-    @keyframes shimmer{
-      0%{transform:translateX(-60%)}
-      100%{transform:translateX(60%)}
-    }
-    @media (prefers-reduced-motion:reduce){
-      .pLine::after{animation:none}
     }
 
     .toast{
@@ -424,7 +378,7 @@
       gap:12px;
       align-items:center;
     }
-    .chibi{
+    .chibiBig{
       width:140px; height:140px;
       object-fit:contain;
       filter: drop-shadow(0 16px 22px rgba(0,0,0,.45));
@@ -551,7 +505,7 @@
   <!-- ===== Loading Screen ===== -->
   <div class="loading" id="loading" aria-hidden="true">
     <div class="loadingCard">
-      <img id="chibiImg" class="chibi" alt="Loading chibi"/>
+      <img id="chibiImg" class="chibiBig" alt="Loading chibi"/>
       <p class="loadingTitle" id="loadingTitle">Getting things ready…</p>
       <p class="loadingSub" id="loadingSub">Syncing your room + saving your identity.</p>
       <div class="bar" aria-hidden="true"><div></div></div>
@@ -645,10 +599,20 @@
 
     const BASE_PATH = "/stage1";
     const REQUIRED_PASSCODE = "duck123";
+
+    // Loading screen image
     const CHIBI3_SRC = "/pic/chibi3.png";
 
-    // ✅ Card placeholder preview (use the same for all now)
-    const CARD_PLACEHOLDER_SRC = "/pic/chibi1.png";
+    // ✅ Card thumbnail placeholders:
+    // Each card has its own line so you can change them later.
+    const CARD_IMG_CLARIFIER     = "/pic/chibi1.png";
+    const CARD_IMG_OPTIMIZER     = "/pic/chibi1.png";
+    const CARD_IMG_VALIDATOR     = "/pic/chibi1.png";
+    const CARD_IMG_OVERWHELMED   = "/pic/chibi1.png";
+    const CARD_IMG_INDEPENDENT   = "/pic/chibi1.png";
+    const CARD_IMG_STORYBUILDER  = "/pic/chibi1.png";
+    const CARD_IMG_PERFECTIONIST = "/pic/chibi1.png";
+    const CARD_IMG_STRATEGIST    = "/pic/chibi1.png";
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
@@ -657,6 +621,7 @@
       throw new Error("Missing room");
     }
 
+    // participant id per browser
     const PID_KEY = "stage1_participant_id";
     let participantId = localStorage.getItem(PID_KEY);
     if (!participantId) {
@@ -664,10 +629,12 @@
       localStorage.setItem(PID_KEY, participantId);
     }
 
+    // auth flag per room
     const AUTH_KEY = `stage1_authed_${room}`;
     const TUT_KEY = `stage1_tut_seen_${room}`;
     const NAME_KEY = `stage1_name_${room}`;
 
+    // UI refs
     const $ = (q, el=document) => el.querySelector(q);
 
     const roomOut = $("#roomOut"), meOut = $("#meOut");
@@ -682,28 +649,34 @@
     const btnNext = $("#btnNext");
     const toast = $("#toast");
 
+    // overlays
     const pwOverlay = $("#pwOverlay");
     const lockedOverlay = $("#lockedOverlay");
     const tutOverlay = $("#tutOverlay");
 
+    // loading
     const loading = $("#loading");
     const chibiImg = $("#chibiImg");
     const loadingTitle = $("#loadingTitle");
     const loadingSub = $("#loadingSub");
 
+    // buttons
     const btnTutorial = $("#btnTutorial");
     const btnExit = $("#btnExit");
     const btnReset = $("#btnReset");
 
+    // password modal controls
     const btnOpenPw = $("#btnOpenPw");
     const btnClosePw = $("#btnClosePw");
     const btnPwCancel = $("#btnPwCancel");
     const pwInput = $("#pwInput");
     const btnUnlock = $("#btnUnlock");
 
+    // locked tutorial modal
     const btnCloseLocked = $("#btnCloseLocked");
     const btnLockedUnlock = $("#btnLockedUnlock");
 
+    // tutorial controls
     const btnCloseTut = $("#btnCloseTut");
     const tutSteps = $("#tutSteps");
     const tutContent = $("#tutContent");
@@ -744,12 +717,14 @@
       document.body.style.overflow = "";
     }
 
+    // Close overlays on outside click
     [pwOverlay, lockedOverlay, tutOverlay].forEach(ov => {
       ov.addEventListener("mousedown", (e) => {
         if (e.target === ov) closeOverlay(ov);
       });
     });
 
+    // Esc closes whichever is open (NOT loading)
     window.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
       if (tutOverlay.style.display === "flex") closeOverlay(tutOverlay);
@@ -757,15 +732,16 @@
       if (pwOverlay.style.display === "flex") closeOverlay(pwOverlay);
     });
 
+    // ✅ persona cards now include an imgSrc per card
     const personaCards = [
-      { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want examples." },
-      { id:"optimizer", title:"Optimizer", text:"Give me actions. I iterate. I care about efficiency." },
-      { id:"validator", title:"Validator", text:"I check fairness and rubric alignment." },
-      { id:"overwhelmed", title:"Overwhelmed", text:"Too vague or too much makes me shut down." },
-      { id:"independent", title:"Independent", text:"I’ll figure it out, but I need a direction." },
-      { id:"storybuilder", title:"Story Builder", text:"I want the ‘why’ to connect the picture." },
-      { id:"perfectionist", title:"Perfectionist", text:"I fix everything. Tell me what matters most." },
-      { id:"strategist", title:"Strategist", text:"I plan ahead with checkpoints and timelines." }
+      { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want examples.", imgSrc: CARD_IMG_CLARIFIER },
+      { id:"optimizer", title:"Optimizer", text:"Give me actions. I iterate. I care about efficiency.", imgSrc: CARD_IMG_OPTIMIZER },
+      { id:"validator", title:"Validator", text:"I check fairness and rubric alignment.", imgSrc: CARD_IMG_VALIDATOR },
+      { id:"overwhelmed", title:"Overwhelmed", text:"Too vague or too much makes me shut down.", imgSrc: CARD_IMG_OVERWHELMED },
+      { id:"independent", title:"Independent", text:"I’ll figure it out, but I need a direction.", imgSrc: CARD_IMG_INDEPENDENT },
+      { id:"storybuilder", title:"Story Builder", text:"I want the ‘why’ to connect the picture.", imgSrc: CARD_IMG_STORYBUILDER },
+      { id:"perfectionist", title:"Perfectionist", text:"I fix everything. Tell me what matters most.", imgSrc: CARD_IMG_PERFECTIONIST },
+      { id:"strategist", title:"Strategist", text:"I plan ahead with checkpoints and timelines.", imgSrc: CARD_IMG_STRATEGIST }
     ];
 
     const state = {
@@ -802,6 +778,7 @@
       btnNext.disabled = !state.persona_id || !state.display_name;
     }
 
+    // local name first
     state.display_name = cleanName(localStorage.getItem(NAME_KEY));
     if (nameInput) nameInput.value = state.display_name || "";
     refreshMeOut();
@@ -867,22 +844,15 @@
         const el = document.createElement("div");
         el.className = "persona" + (state.persona_id === c.id ? " selected" : "");
 
-        // ✅ Now the "preview" actually points to /pic/chibi1.png (same for all for now)
+        // ✅ Static chibi thumbnail (no shimmer / no placeholder animation)
         el.innerHTML = `
           <div class="pTop">
             <p class="pTitle">${escapeHtml(c.title)}</p>
-            <span class="mono">Card preview</span>
+            <span class="mono">Card</span>
           </div>
-
-          <div class="preview" aria-hidden="true">
-            <img class="previewImg" src="${CARD_PLACEHOLDER_SRC}" alt="" loading="lazy"/>
-            <div class="previewLines">
-              <div class="pLine" style="width:92%"></div>
-              <div class="pLine"></div>
-              <div class="pLine"></div>
-            </div>
+          <div class="thumbWrap">
+            <img class="thumb" src="${escapeHtml(c.imgSrc)}" alt="${escapeHtml(c.title)} preview"/>
           </div>
-
           <p class="pText">${escapeHtml(c.text)}</p>
         `;
 
@@ -896,7 +866,7 @@
 
           updateNextEnabled();
 
-          showLoading("Saving your card…", "Hang on a sec — syncing your selection.");
+          showLoading("Saving your card…", "Syncing your selection.");
           try{
             await saveParticipant({ persona_id: state.persona_id });
             showToast("Card saved");
@@ -916,7 +886,8 @@
     }
 
     roleSelect.addEventListener("change", async () => {
-      state.role = roleSelect.value;
+      const v = roleSelect.value;
+      state.role = (v === "tutor") ? "tutor" : "student";
       selRole.textContent = state.role;
 
       showLoading("Saving your role…", "Syncing selection to the room.");
@@ -957,7 +928,7 @@
 
       if (data){
         const r = (data.role || state.role);
-        state.role = (r === "tutor" ? "tutor" : "student");
+        state.role = (r === "tutor") ? "tutor" : "student";
 
         state.persona_id = data.persona_id || null;
         state.persona_title = state.persona_id
@@ -986,6 +957,7 @@
       mainCard.style.display = "block";
     }
 
+    // ===== Tutorial slides =====
     const tutorialSlides = [
       {
         title: "What you do in Step 1",
@@ -1022,20 +994,7 @@
           </div>
           <ul class="list">
             <li>Turns “make it better” into a clearer need (e.g., “Clarifier”, “Optimizer”).</li>
-            <li>Lets us compare patterns across participants in the same room.</li>
-            <li>Helps tailor later prompts in Step 2 / Step 3.</li>
-          </ul>
-        `
-      },
-      {
-        title: "What happens after you pick",
-        html: `
-          <div class="callout">
-            Your selection is saved to this room and used in later activities.
-          </div>
-          <ul class="list">
-            <li>You can change your role/name/card if you misclicked.</li>
-            <li>We use your card to make later discussion more structured.</li>
+            <li>Helps structure later prompts in Step 2 / Step 3.</li>
           </ul>
         `
       }
@@ -1087,6 +1046,7 @@
 
     btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
 
+    // Tutorial button behaviour
     btnTutorial.addEventListener("click", () => {
       if (localStorage.getItem(AUTH_KEY) === "1"){
         openTutorial(0);
@@ -1102,6 +1062,7 @@
       setTimeout(() => pwInput?.focus(), 0);
     });
 
+    // Password modal behaviour
     btnOpenPw.addEventListener("click", () => {
       openOverlay(pwOverlay);
       setTimeout(() => pwInput?.focus(), 0);
@@ -1152,6 +1113,7 @@
       showToast("Unlocked");
     });
 
+    // Initial state
     if (localStorage.getItem(AUTH_KEY) === "1"){
       postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
         .then(() => localStorage.setItem(TUT_KEY, "1"));
