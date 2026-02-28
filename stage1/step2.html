@@ -173,12 +173,24 @@
     .mini{display:flex;gap:8px;align-items:center;justify-content:space-between}
     .tinyBtn{
       border:none;background: rgba(0,0,0,.18);
-      color: rgba(0,0,0,.8);
-      font-weight: 1000;border-radius: 10px;padding: 6px 8px;cursor:pointer;
+      color: rgba(0,0,0,.82);
+      font-weight: 1000;border-radius: 10px;padding: 6px 9px;cursor:pointer;
       box-shadow:none;
+      font-size:10px;
+      letter-spacing:.2px;
+      text-transform:uppercase;
     }
     .tinyBtn.pub{
-      background:rgba(255,255,255,.28);
+      background:rgba(255,255,255,.3);
+    }
+    .tinyBtn.del{
+      background:rgba(0,0,0,.26);
+      color:rgba(0,0,0,.9);
+    }
+    .miniActions{
+      display:flex;
+      justify-content:flex-end;
+      gap:6px;
     }
     .statusPill{
       border-radius:999px;
@@ -764,13 +776,13 @@
         el.innerHTML = `
           <div class="mini">
             <span style="font-weight:1000;color:rgba(0,0,0,.82);font-size:11px;letter-spacing:.2px;text-transform:uppercase">Draft</span>
-            <div style="display:flex;gap:8px;align-items:center">
-              <span class="statusPill ${isSaving ? "saving" : ""}" data-pill>${isSaving ? "saving" : "saved"}</span>
-              <button class="tinyBtn pub" title="Publish to shared board" aria-label="Publish">Share</button>
-              <button class="tinyBtn del" title="Delete" aria-label="Delete">X</button>
-            </div>
+            <span class="statusPill ${isSaving ? "saving" : ""}" data-pill>${isSaving ? "saving" : "saved"}</span>
           </div>
           <textarea placeholder="Write your goal...">${escapeHtml(s.text)}</textarea>
+          <div class="miniActions">
+            <button class="tinyBtn pub" title="Publish to shared board" aria-label="Publish">Share</button>
+            <button class="tinyBtn del" title="Delete" aria-label="Delete">Delete</button>
+          </div>
         `;
 
         const delBtn = el.querySelector(".tinyBtn.del");
@@ -1026,6 +1038,7 @@
       const seen = currentSharedSigSet();
       let okCount = 0;
       let skipCount = 0;
+      const removedDraftIds = new Set();
       for (const s of drafts){
         const body = (s.text || "").trim();
         const sig = sharedSig(author, body);
@@ -1036,6 +1049,7 @@
           skipCount += 1;
           try{
             await removeDraftRowById(s.id);
+            removedDraftIds.add(s.id);
           } catch (err){
             console.error(err);
           }
@@ -1059,6 +1073,7 @@
           seen.add(sig);
           try{
             await removeDraftRowById(s.id);
+            removedDraftIds.add(s.id);
           } catch (err){
             console.error(err);
           }
@@ -1066,12 +1081,12 @@
       }
       if (okCount > 0){
         showToast(`Published ${okCount} draft${okCount > 1 ? "s" : ""}${skipCount ? `, skipped ${skipCount} duplicate${skipCount > 1 ? "s" : ""}` : ""}`);
-        state.stickies = state.stickies.filter(s => !drafts.some(d => d.id === s.id));
+        state.stickies = state.stickies.filter(s => !removedDraftIds.has(s.id));
         render();
         await refreshStickiesFromDb({ silent:true });
       } else if (skipCount > 0){
         showToast(`Skipped ${skipCount} duplicate draft${skipCount > 1 ? "s" : ""}`);
-        state.stickies = state.stickies.filter(s => !drafts.some(d => d.id === s.id));
+        state.stickies = state.stickies.filter(s => !removedDraftIds.has(s.id));
         render();
         await refreshStickiesFromDb({ silent:true });
       } else {

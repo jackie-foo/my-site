@@ -62,28 +62,6 @@
       display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;
       min-width:320px;
     }
-    .viewTabs{
-      margin-top:12px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-    .viewTab{
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:999px;
-      background:rgba(255,255,255,.04);
-      padding:8px 12px;
-      font-size:12px;
-      font-weight:1000;
-      cursor:pointer;
-    }
-    .viewTab.active{
-      border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.14));
-      box-shadow:0 10px 24px rgba(53,216,255,.18);
-      color:var(--text);
-    }
-    .viewSection{display:none}
-    .viewSection.active{display:block}
     .field{
       border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.04);
@@ -250,6 +228,18 @@
       color:var(--muted);
       line-height:1.35;
     }
+    .miniDanger{
+      border:1px solid rgba(255,107,119,.45);
+      background:rgba(255,107,119,.14);
+      color:#ffd8dd;
+      border-radius:10px;
+      padding:6px 8px;
+      font-size:10px;
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.2px;
+      cursor:pointer;
+    }
     .laneMeta{
       margin-bottom:5px;
       font-size:10px;
@@ -362,11 +352,6 @@
           Room: <span class="mono" id="roomOut">demo</span> • Live monitor for Step 1 → Step 3.<br/>
           Use this as facilitator screen while participants run their own pages.
         </div>
-        <div class="viewTabs">
-          <button id="tabStage1" class="viewTab active">Stage 1 Player Map</button>
-          <button id="tabStage2" class="viewTab">Stage 2 Shared Prompts</button>
-          <button id="tabStage3" class="viewTab">Stage 3 Constraints + Notes</button>
-        </div>
       </div>
       <div class="toolbar">
         <button id="btnRefresh">Refresh</button>
@@ -411,7 +396,7 @@
       </div>
     </section>
 
-    <section class="card viewSection active" id="viewStage1">
+    <section class="card" id="viewStage1">
       <div class="cardHead">
         <h2>Player + Character Map (Step 1)</h2>
         <span class="mono" id="playerCount">0 players</span>
@@ -421,7 +406,7 @@
       </div>
     </section>
 
-    <div class="grid2 viewSection" id="viewStage2">
+    <div class="grid2" id="viewStage2">
       <section class="card">
         <div class="cardHead">
           <h2>Shared Sticky Prompts (Step 2)</h2>
@@ -433,7 +418,7 @@
       </section>
     </div>
 
-    <div class="grid2 viewSection" id="viewStage3">
+    <div class="grid2" id="viewStage3">
       <section class="card">
         <div class="cardHead">
           <h2>Constraint Map By Week (Step 3)</h2>
@@ -516,12 +501,6 @@
     const journeyCount = $("#journeyCount");
     const p1 = $("#p1"), p2 = $("#p2"), p3 = $("#p3");
     const p1Text = $("#p1Text"), p2Text = $("#p2Text"), p3Text = $("#p3Text");
-    const tabStage1 = $("#tabStage1");
-    const tabStage2 = $("#tabStage2");
-    const tabStage3 = $("#tabStage3");
-    const viewStage1 = $("#viewStage1");
-    const viewStage2 = $("#viewStage2");
-    const viewStage3 = $("#viewStage3");
     const playerCount = $("#playerCount");
     const playerMapList = $("#playerMapList");
     const sharedPromptCount = $("#sharedPromptCount");
@@ -567,20 +546,6 @@
     function setDiag(message, isBad=false){
       diagBox.textContent = message;
       diagBox.classList.toggle("bad", !!isBad);
-    }
-    function setView(view){
-      const map = {
-        stage1: [tabStage1, viewStage1],
-        stage2: [tabStage2, viewStage2],
-        stage3: [tabStage3, viewStage3]
-      };
-      [["stage1",tabStage1,viewStage1],["stage2",tabStage2,viewStage2],["stage3",tabStage3,viewStage3]].forEach(([,tab,sec]) => {
-        tab.classList.remove("active");
-        sec.classList.remove("active");
-      });
-      const hit = map[view] || map.stage1;
-      hit[0].classList.add("active");
-      hit[1].classList.add("active");
     }
 
     function computePrompts(summary){
@@ -645,6 +610,9 @@
           <article class="laneCard" style="border-left:4px solid ${shared.escapeHtml(s.color || "#47ff87")}">
             <div class="laneMeta">Shared by ${shared.escapeHtml(parsed.author)}</div>
             <div>${shared.escapeHtml(parsed.body || "(empty)")}</div>
+            <div style="margin-top:8px;display:flex;justify-content:flex-end">
+              <button class="miniDanger" data-remove-sticky="${shared.escapeHtml(s.id)}">Delete Sticky</button>
+            </div>
           </article>
         `;
       }).join("");
@@ -671,6 +639,9 @@
               s2Done ? statusPill("S2 Active", "ok") : statusPill("S2 Idle", "warn"),
               s3Done ? statusPill("S3 Active", "ok") : statusPill("S3 Idle", "bad")
             ].join(" ")}</div>
+            <div style="display:flex;justify-content:flex-end">
+              <button class="miniDanger" data-remove-player="${shared.escapeHtml(p.id)}">Remove Player</button>
+            </div>
           </article>
         `;
       }).join("");
@@ -799,9 +770,42 @@
       $("#btnStep2").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
       $("#btnStep3").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step3.html?room=${encodeURIComponent(room)}`);
       $("#btnIndex").addEventListener("click", () => location.href = "/index.html");
-      tabStage1.addEventListener("click", () => setView("stage1"));
-      tabStage2.addEventListener("click", () => setView("stage2"));
-      tabStage3.addEventListener("click", () => setView("stage3"));
+      sharedPromptsList.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-remove-sticky]");
+        if (!btn) return;
+        const id = btn.getAttribute("data-remove-sticky");
+        if (!id) return;
+        const ok = confirm("Delete this shared sticky from the room?");
+        if (!ok) return;
+        const { error } = await supabase.from("workshop_stickies").delete().eq("id", id).eq("session_id", room);
+        if (error){
+          addFeed("error", error.message || "failed deleting sticky");
+          return;
+        }
+        addFeed("action", `Sticky ${id} deleted`);
+        await loadData().catch(err => addFeed("error", err.message || String(err)));
+      });
+      playerMapList.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-remove-player]");
+        if (!btn) return;
+        const id = btn.getAttribute("data-remove-player");
+        if (!id) return;
+        const ok = confirm("Remove this player and their workshop data from this room?");
+        if (!ok) return;
+        const ops = await Promise.all([
+          supabase.from("workshop_stickies").delete().eq("participant_id", id).eq("session_id", room),
+          supabase.from("workshop_journey_items").delete().eq("participant_id", id).eq("session_id", room),
+          supabase.from("workshop_journey_notes").delete().eq("participant_id", id).eq("session_id", room),
+          supabase.from("workshop_participants").delete().eq("id", id).eq("session_id", room)
+        ]);
+        const bad = ops.find(x => x.error);
+        if (bad){
+          addFeed("error", bad.error.message || "failed removing player");
+          return;
+        }
+        addFeed("action", `Player ${id.slice(0,8)} removed`);
+        await loadData().catch(err => addFeed("error", err.message || String(err)));
+      });
     }
 
     function subscribeRealtime(){
