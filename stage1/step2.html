@@ -435,18 +435,18 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
       <div class="modalHead">
         <div>
-          <h3 id="gateTitle">Passcode required</h3>
-          <div class="kicker">Enter the Step 3 passcode to proceed.</div>
+          <h3 id="gateTitle">Continue to Step 3</h3>
+          <div class="kicker">Step 3 now opens directly from this page.</div>
         </div>
         <button id="btnCloseGate" class="btnGhost" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
         <div class="row">
-          <input id="gateInput" class="field" type="password" placeholder="Step 3 passcode" autocomplete="one-time-code"/>
+          <input id="gateInput" class="field" type="password" placeholder="Not required" autocomplete="one-time-code"/>
           <button id="btnGateGo" class="btnPrimary">Proceed</button>
         </div>
         <div class="callout">
-          This gate helps keep the workshop in sync (so people don’t jump ahead).
+          Workshop flow is link-based. Use room links to control sequencing.
         </div>
       </div>
       <div class="modalFoot">
@@ -478,7 +478,7 @@
     const BASE_PATH = shared.BASE_PATH;
     const CHIBI3_SRC = "/pic/chibi3.png"; // <- change if needed
 
-    // ✅ Step 3 gate passcode (client-side)
+    // Step 3 direct navigation (no passcode)
     const STEP3_PASSCODE = "duck456";
 
     const params = new URLSearchParams(location.search);
@@ -1156,7 +1156,7 @@
           </div>
           <ul class="list">
             <li>If you’re done, click <span class="mono">Next → Step 3</span>.</li>
-            <li>You’ll be asked for a Step 3 passcode.</li>
+            <li>You’ll go directly to Step 3 from this button.</li>
           </ul>
         `
       }
@@ -1216,7 +1216,7 @@
       }
     }
 
-    // ===== Step 3 passcode gate =====
+    // ===== Step 3 direct navigation =====
     const gateInput = $("#gateInput");
     const btnGateGo = $("#btnGateGo");
 
@@ -1253,7 +1253,7 @@
     btnGateGo.addEventListener("click", ()=>{
       const pw = (gateInput.value || "").trim();
       if (pw !== STEP3_PASSCODE){
-        showToast("Wrong Step 3 passcode");
+        showToast("Step 3 opens directly now");
         gateInput.focus();
         gateInput.select?.();
         return;
@@ -1266,13 +1266,10 @@
     $("#btnBack").addEventListener("click", ()=> location.href = backStep1Path());
     $("#btnDashboard").addEventListener("click", ()=> location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`);
 
-    // Next button requires Step 3 passcode
+    // Next button goes directly to Step 3
     $("#btnNext").addEventListener("click", ()=>{
-      if (localStorage.getItem(STEP3_KEY) === "1"){
-        proceedToStep3();
-        return;
-      }
-      openGate();
+      localStorage.setItem(STEP3_KEY, "1");
+      proceedToStep3();
     });
 
     $("#btnReset").addEventListener("click", ()=>{

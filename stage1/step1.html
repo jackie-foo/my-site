@@ -450,7 +450,7 @@
         <div class="badge"><span class="dot"></span> Stage 1 • Step 1</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
-          Step 1 is passcode-gated. After unlock, choose role + a persona lens (not a fixed label).
+          Link-based entry. Choose role + a persona lens (not a fixed label), then continue to Step 2.
         </div>
       </div>
 
@@ -464,17 +464,17 @@
 
     <section class="card" id="gateCard">
       <div class="cardHead">
-        <h2>Passcode</h2>
-        <span class="mono" id="gateStatus">Locked</span>
+        <h2>Start</h2>
+        <span class="mono" id="gateStatus">Ready</span>
       </div>
       <div class="cardBody">
         <div class="row">
           <div class="subtitle" style="margin:0">
-            This step is locked. Click <span class="mono">Unlock</span> to enter the passcode.
+            Start Step 1 when ready.
           </div>
-          <button id="btnOpenPw" class="btnPrimary">Unlock</button>
+          <button id="btnOpenPw" class="btnPrimary">Start</button>
         </div>
-        <div class="hint">Client-side gate for now. Later we can enforce properly with RLS / session secret.</div>
+        <div class="hint">Your room, role, and card selection are saved automatically.</div>
       </div>
     </section>
 
@@ -535,18 +535,18 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
       <div class="modalHead">
         <div>
-          <h3 id="pwTitle">Enter Passcode</h3>
-          <div class="kicker">This room is gated. Please enter the passcode to proceed.</div>
+          <h3 id="pwTitle">Start Step 1</h3>
+          <div class="kicker">Continue to sync room and participant identity.</div>
         </div>
         <button id="btnClosePw" class="btnGhost" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
         <div class="row" style="justify-content:flex-start">
-          <input id="pwInput" type="password" placeholder="Passcode" autocomplete="one-time-code"/>
-          <button id="btnUnlock" class="btnPrimary">Unlock</button>
+          <input id="pwInput" type="password" placeholder="Optional" autocomplete="one-time-code"/>
+          <button id="btnUnlock" class="btnPrimary">Continue</button>
         </div>
         <div class="callout">
-          You should have received a room link like <span class="mono">?room=demo</span> + a separate passcode.
+          You should have received a room link like <span class="mono">?room=demo</span>.
         </div>
       </div>
       <div class="modalFoot">
@@ -563,18 +563,18 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="lockedTitle">
       <div class="modalHead">
         <div>
-          <h3 id="lockedTitle">Tutorial is locked</h3>
-          <div class="kicker">Please unlock Step 1 first.</div>
+          <h3 id="lockedTitle">Open Tutorial</h3>
+          <div class="kicker">Tutorial is available anytime on this page.</div>
         </div>
         <button id="btnCloseLocked" class="btnGhost" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
-        <div class="callout">Enter the passcode to access the tutorial and start Step 1.</div>
+        <div class="callout">Open the quick tutorial before choosing role and card.</div>
       </div>
       <div class="modalFoot">
         <div class="kicker">You’ll see the tutorial right after unlock.</div>
         <div class="row" style="justify-content:flex-end">
-          <button id="btnLockedUnlock" class="btnPrimary">Unlock</button>
+          <button id="btnLockedUnlock" class="btnPrimary">Open Tutorial</button>
         </div>
       </div>
     </div>
@@ -614,7 +614,6 @@
     const shared = window.Stage1Shared;
     const supabase = window.supabase.createClient(shared.SUPABASE_URL, shared.SUPABASE_ANON_KEY);
     const BASE_PATH = shared.BASE_PATH;
-    const REQUIRED_PASSCODE = "duck123";
 
     // Loading screen image
     const CHIBI3_SRC = "/pic/chibi3.png";
@@ -1057,13 +1056,7 @@
     btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
 
     // Tutorial button behaviour
-    btnTutorial.addEventListener("click", () => {
-      if (localStorage.getItem(AUTH_KEY) === "1"){
-        openTutorial(0);
-      } else {
-        openOverlay(lockedOverlay);
-      }
-    });
+    btnTutorial.addEventListener("click", () => openTutorial(0));
 
     btnCloseLocked.addEventListener("click", () => closeOverlay(lockedOverlay));
     btnLockedUnlock.addEventListener("click", () => {
@@ -1072,10 +1065,15 @@
       setTimeout(() => pwInput?.focus(), 0);
     });
 
-    // Password modal behaviour
-    btnOpenPw.addEventListener("click", () => {
-      openOverlay(pwOverlay);
-      setTimeout(() => pwInput?.focus(), 0);
+    // Link-based flow: no passcode prompt
+    btnOpenPw.addEventListener("click", async () => {
+      if (localStorage.getItem(AUTH_KEY) === "1"){
+        openTutorial(0);
+        return;
+      }
+      localStorage.setItem(AUTH_KEY, "1");
+      await postUnlockBootstrap({ showTutorial:true });
+      localStorage.setItem(TUT_KEY, "1");
     });
     btnClosePw.addEventListener("click", () => closeOverlay(pwOverlay));
     btnPwCancel.addEventListener("click", () => closeOverlay(pwOverlay));
@@ -1087,7 +1085,7 @@
     async function postUnlockBootstrap({ showTutorial=true } = {}){
       unlockUI();
 
-      showLoading("Unlocking…", "Creating the room and syncing your participant profile.");
+      showLoading("Loading Step 1…", "Creating the room and syncing your participant profile.");
       try{
         await ensureSession();
         showLoading("Almost there…", "Saving your identity to this room.");
@@ -1107,30 +1105,16 @@
     }
 
     btnUnlock.addEventListener("click", async () => {
-      const pw = (pwInput.value || "").trim();
-      if (pw !== REQUIRED_PASSCODE){
-        showToast("Wrong passcode");
-        pwInput.focus();
-        pwInput.select?.();
-        return;
-      }
-
       localStorage.setItem(AUTH_KEY, "1");
       closeOverlay(pwOverlay);
-
       await postUnlockBootstrap({ showTutorial:true });
       localStorage.setItem(TUT_KEY, "1");
-      showToast("Unlocked");
     });
 
-    // Initial state
-    if (localStorage.getItem(AUTH_KEY) === "1"){
-      postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
-        .then(() => localStorage.setItem(TUT_KEY, "1"));
-    } else {
-      openOverlay(pwOverlay);
-      setTimeout(() => pwInput?.focus(), 0);
-    }
+    // Initial state: direct link entry (no passcode gate)
+    localStorage.setItem(AUTH_KEY, "1");
+    postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
+      .then(() => localStorage.setItem(TUT_KEY, "1"));
 
     btnNext.addEventListener("click", () => {
       if (!state.persona_id || !state.display_name) {
