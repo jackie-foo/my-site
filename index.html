@@ -1,318 +1,506 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Jackie Foo</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jackie Foo</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Jackie Foo — portfolio landing page. More coming soon." />
+  <meta name="theme-color" content="#07070b" />
 
-<style>
-:root{
-  --bg:#07070b;
-  --text:#f6f6ff;
-  --muted:rgba(246,246,255,.66);
-  --accent:#7c5cff;
-  --accent2:#ff2bd6;
-}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
-*{box-sizing:border-box}
-html,body{height:100%}
+  <style>
+    :root{
+      --bg:#07070b;
+      --text:#f6f6ff;
+      --muted:rgba(246,246,255,.66);
+      --accent:#7c5cff;
+      --accent2:#ff2bd6;
+      --panel:#11111b;
+      --border:rgba(255,255,255,.16);
+    }
 
-body{
-  margin:0;
-  font-family:"Space Grotesk", sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  overflow-x:hidden;
-}
+    *{box-sizing:border-box}
+    html,body{height:100%}
 
-body::before{
-  content:"";
-  position:fixed;
-  inset:-20%;
-  background:
-    radial-gradient(700px 500px at 18% 10%, rgba(255,43,214,.14), transparent 60%),
-    radial-gradient(820px 620px at 84% 20%, rgba(124,92,255,.14), transparent 62%);
-  z-index:-1;
-}
+    body{
+      margin:0;
+      font-family:"Space Grotesk", sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      overflow-x:hidden;
+    }
 
-.container{max-width:980px; width:100%}
+    /* Animated ambient background */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-25%;
+      z-index:-2;
+      background:
+        radial-gradient(700px 500px at 18% 10%, rgba(255,43,214,.16), transparent 62%),
+        radial-gradient(820px 620px at 84% 20%, rgba(124,92,255,.16), transparent 64%),
+        radial-gradient(620px 520px at 45% 85%, rgba(124,92,255,.10), transparent 62%);
+      filter:saturate(1.05);
+      animation:bgFloat 16s ease-in-out infinite;
+      will-change:transform;
+    }
 
-.hero{
-  display:flex;
-  align-items:center;
-  gap:48px;
-}
+    /* Subtle film grain/texture */
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-1;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      opacity:.08;
+      mix-blend-mode:overlay;
+    }
 
-@media (max-width:780px){
-  .hero{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:28px;
-  }
-}
+    @keyframes bgFloat{
+      0%   { transform:translate3d(0,0,0) scale(1); }
+      50%  { transform:translate3d(2.5%, -2%, 0) scale(1.02); }
+      100% { transform:translate3d(0,0,0) scale(1); }
+    }
 
-/* Main chibi */
-.chibi{
-  width:clamp(160px, 26vw, 220px);
-  aspect-ratio:1/1;
-  border-radius:999px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.16);
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.45),
-    0 0 0 6px rgba(124,92,255,.08);
-  flex-shrink:0;
-}
-.chibi img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  transform:scale(1.03);
-}
+    .container{max-width:980px; width:100%}
 
-h1{
-  font-size:clamp(56px, 8vw, 96px);
-  margin:0;
-  line-height:.92;
-  letter-spacing:-.04em;
-}
+    .hero{
+      display:flex;
+      align-items:center;
+      gap:48px;
+    }
 
-.highlight{
-  position:relative;
-  display:inline-block;
-  padding:0 4px;
-}
-.highlight::after{
-  content:"";
-  position:absolute;
-  left:0; right:0;
-  bottom:10px;
-  height:10px;
-  background:rgba(124,92,255,.22);
-  z-index:-1;
-  transform:skewX(-10deg);
-}
+    @media (max-width:780px){
+      .hero{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:28px;
+      }
+    }
 
-.lead{
-  margin:20px 0 0;
-  font-size:18px;
-  line-height:1.75;
-  color:var(--muted);
-  max-width:58ch;
-}
-.lead b{color:var(--text)}
+    /* Main chibi */
+    .chibi{
+      width:clamp(160px, 26vw, 220px);
+      aspect-ratio:1/1;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,.45),
+        0 0 0 6px rgba(124,92,255,.08);
+      flex-shrink:0;
+      transform:translateZ(0);
+    }
+    .chibi img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transform:scale(1.03);
+    }
 
-.workshopLine{
-  margin-top:26px;
-  font-size:16px;
-  color:rgba(246,246,255,.74);
-}
+    h1{
+      font-size:clamp(56px, 8vw, 96px);
+      margin:0;
+      line-height:.92;
+      letter-spacing:-.04em;
+    }
 
-button.primary{
-  margin-top:10px;
-  border:1px solid rgba(255,43,214,.35);
-  background:rgba(255,43,214,.10);
-  color:var(--text);
-  padding:14px 18px;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:800;
-  cursor:pointer;
-  transition:.2s ease;
-}
-button.primary:hover{background:rgba(255,43,214,.16)}
+    .highlight{
+      position:relative;
+      display:inline-block;
+      padding:0 4px;
+    }
+    .highlight::after{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      bottom:10px;
+      height:10px;
+      background:rgba(124,92,255,.22);
+      z-index:-1;
+      transform:skewX(-10deg);
+    }
 
-.links{
-  margin-top:32px;
-  display:flex;
-  gap:26px;
-  flex-wrap:wrap;
-}
-a.link{
-  text-decoration:none;
-  font-size:16px;
-  font-weight:600;
-  color:var(--text);
-  position:relative;
-}
-a.link::after{
-  content:"";
-  position:absolute;
-  left:0;
-  bottom:-6px;
-  width:100%;
-  height:2px;
-  background:var(--accent2);
-  transform:scaleX(0);
-  transform-origin:left;
-  transition:.25s ease;
-}
-a.link:hover::after{transform:scaleX(1)}
+    .lead{
+      margin:20px 0 0;
+      font-size:18px;
+      line-height:1.75;
+      color:var(--muted);
+      max-width:58ch;
+    }
+    .lead b{color:var(--text)}
 
-small{
-  display:block;
-  margin-top:48px;
-  font-size:13px;
-  color:rgba(246,246,255,.42);
-}
+    .workshopLine{
+      margin-top:26px;
+      font-size:16px;
+      color:rgba(246,246,255,.74);
+    }
 
-/* Modal */
-.overlay{
-  position:fixed; inset:0;
-  background:rgba(10,10,18,.6);
-  backdrop-filter:blur(6px);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:50;
-}
-.overlay.open{display:flex}
+    button.primary{
+      margin-top:10px;
+      border:1px solid rgba(255,43,214,.35);
+      background:rgba(255,43,214,.10);
+      color:var(--text);
+      padding:14px 18px;
+      border-radius:14px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .18s ease, background .2s ease, border-color .2s ease;
+    }
+    button.primary:hover{
+      background:rgba(255,43,214,.16);
+      transform:translateY(-1px);
+      border-color:rgba(255,43,214,.5);
+    }
+    button.primary:active{transform:translateY(0)}
+    button.primary:focus-visible{
+      outline:3px solid rgba(124,92,255,.35);
+      outline-offset:3px;
+    }
 
-.modal{
-  width:min(560px, 100%);
-  background:#11111b;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.16);
-  padding:22px;
-  box-shadow:0 26px 80px rgba(0,0,0,.6);
-}
+    .links{
+      margin-top:32px;
+      display:flex;
+      gap:26px;
+      flex-wrap:wrap;
+    }
+    a.link{
+      text-decoration:none;
+      font-size:16px;
+      font-weight:600;
+      color:var(--text);
+      position:relative;
+    }
+    a.link::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-6px;
+      width:100%;
+      height:2px;
+      background:var(--accent2);
+      transform:scaleX(0);
+      transform-origin:left;
+      transition:.25s ease;
+    }
+    a.link:hover::after{transform:scaleX(1)}
+    a.link:focus-visible{
+      outline:3px solid rgba(124,92,255,.35);
+      outline-offset:6px;
+      border-radius:8px;
+    }
 
-.modalRow{
-  display:flex;
-  gap:24px;
-  align-items:center;
-}
+    small{
+      display:block;
+      margin-top:48px;
+      font-size:13px;
+      color:rgba(246,246,255,.42);
+    }
 
-/* Chibi2 */
-.modalChibi{
-  width:100px;
-  height:100px;
-  border-radius:999px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.16);
-  flex:0 0 auto;
-}
-.modalChibi img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
+    /* Modal overlay (use [hidden] for semantics) */
+    .overlay{
+      position:fixed; inset:0;
+      background:rgba(10,10,18,.62);
+      backdrop-filter:blur(8px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:50;
 
-.modalContent{
-  flex:1;
-}
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition:opacity .18s ease, visibility .18s ease;
+    }
+    .overlay.open{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+    }
 
-.modal h2{
-  margin:0;
-  font-size:20px;
-}
+    .modal{
+      width:min(560px, 100%);
+      background:var(--panel);
+      border-radius:20px;
+      border:1px solid var(--border);
+      padding:22px;
+      box-shadow:0 26px 80px rgba(0,0,0,.6);
+      transform:translateY(6px) scale(.99);
+      transition:transform .18s ease;
+      position:relative;
+    }
+    .overlay.open .modal{
+      transform:translateY(0) scale(1);
+    }
 
-.modal p{
-  margin:10px 0 0;
-  font-size:15px;
-  color:rgba(246,246,255,.72);
-  line-height:1.55;
-}
+    .modalRow{
+      display:flex;
+      gap:24px;
+      align-items:center;
+    }
 
-/* White buttons */
-.choices{
-  margin-top:24px;
-  display:grid;
-  gap:14px;
-}
-.choice{
-  padding:16px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.3);
-  background:#ffffff;
-  color:#111;
-  font-weight:800;
-  font-size:15px;
-  cursor:pointer;
-  transition:.18s ease;
-}
-.choice:hover{
-  background:#f2f2f2;
-  transform:translateY(-1px);
-}
-</style>
+    /* Chibi2 */
+    .modalChibi{
+      width:100px;
+      height:100px;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      flex:0 0 auto;
+    }
+    .modalChibi img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .modalContent{flex:1}
+
+    .modal h2{
+      margin:0;
+      font-size:20px;
+    }
+
+    .modal p{
+      margin:10px 0 0;
+      font-size:15px;
+      color:rgba(246,246,255,.72);
+      line-height:1.55;
+    }
+
+    /* Close button */
+    .closeBtn{
+      position:absolute;
+      top:14px;
+      right:14px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:800;
+      transition:transform .18s ease, background .2s ease;
+    }
+    .closeBtn:hover{background:rgba(255,255,255,.10); transform:translateY(-1px)}
+    .closeBtn:active{transform:translateY(0)}
+    .closeBtn:focus-visible{
+      outline:3px solid rgba(124,92,255,.35);
+      outline-offset:3px;
+    }
+
+    /* White buttons */
+    .choices{
+      margin-top:24px;
+      display:grid;
+      gap:14px;
+    }
+    .choice{
+      padding:16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.3);
+      background:#ffffff;
+      color:#111;
+      font-weight:800;
+      font-size:15px;
+      cursor:pointer;
+      transition:transform .18s ease, background .18s ease;
+      text-align:left;
+    }
+    .choice:hover{
+      background:#f2f2f2;
+      transform:translateY(-1px);
+    }
+    .choice:active{transform:translateY(0)}
+    .choice:focus-visible{
+      outline:3px solid rgba(124,92,255,.35);
+      outline-offset:3px;
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce){
+      body::before{animation:none}
+      .overlay, .modal, button.primary, .choice, .closeBtn, a.link::after{
+        transition:none !important;
+      }
+      .overlay.open .modal{transform:none}
+      button.primary:hover, .choice:hover, .closeBtn:hover{transform:none}
+    }
+  </style>
 </head>
 
 <body>
-<div class="container">
-  <div class="hero">
-    <div class="chibi">
-      <img src="/pic/chibi1.png" alt="Jackie chibi">
-    </div>
-
-    <div>
-      <h1><span class="highlight">Jackie Foo</span></h1>
-
-      <p class="lead">
-        <b>I’m Jackie. This is my corner of the internet.</b> 
-        More is coming. Stay tuned.
-      </p>
-
-      <div class="workshopLine">
-        If you're here for the workshop, click below to indicate.
-      </div>
-      <button class="primary" id="workshopBtn">Workshop 1</button>
-
-      <div class="links">
-        <a class="link" href="#" target="_blank">LinkedIn</a>
-        <a class="link" href="#" target="_blank">GitHub</a>
-        <a class="link" href="mailto:you@email.com">Email</a>
-        <a class="link" href="#" target="_blank">Resume</a>
+  <div class="container">
+    <div class="hero">
+      <div class="chibi" aria-hidden="true">
+        <img src="/pic/chibi1.png" alt="Jackie chibi">
       </div>
 
-      <small>© <span id="year"></span></small>
-    </div>
-  </div>
-</div>
+      <main>
+        <h1><span class="highlight">Jackie Foo</span></h1>
 
-<!-- Modal -->
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="modalRow">
-      <div class="modalChibi">
-        <img src="/pic/chibi2.png" alt="">
-      </div>
+        <p class="lead">
+          <b>I’m Jackie. This is my corner of the internet.</b>
+          More is coming. Stay tuned.
+        </p>
 
-      <div class="modalContent">
-        <h2>Workshop 1</h2>
-        <p>Select your university below.</p>
-      </div>
-    </div>
+        <div class="workshopLine">
+          If you're here for the workshop, click below to indicate.
+        </div>
+        <button class="primary" id="workshopBtn" type="button">
+          Workshop 1
+        </button>
 
-    <div class="choices">
-      <button class="choice" onclick="window.location.href='https://example.com/monash'">
-        Monash University
-      </button>
-      <button class="choice" onclick="window.location.href='https://example.com/upng'">
-        UPNG
-      </button>
+        <nav class="links" aria-label="Jackie links">
+          <a class="link" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a class="link" href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a class="link" href="mailto:you@email.com">Email</a>
+          <a class="link" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
+        </nav>
+
+        <small>© <span id="year"></span></small>
+      </main>
     </div>
   </div>
-</div>
 
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
+  <!-- Modal (accessible dialog) -->
+  <div class="overlay" id="overlay" hidden>
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+      aria-describedby="modalDesc"
+    >
+      <button class="closeBtn" id="closeBtn" type="button" aria-label="Close dialog">Close</button>
 
-const overlay = document.getElementById("overlay");
-document.getElementById("workshopBtn").onclick = () => overlay.classList.add("open");
-overlay.onclick = (e) => { if(e.target === overlay) overlay.classList.remove("open"); };
-</script>
+      <div class="modalRow">
+        <div class="modalChibi" aria-hidden="true">
+          <img src="/pic/chibi2.png" alt="">
+        </div>
 
+        <div class="modalContent">
+          <h2 id="modalTitle">Workshop 1</h2>
+          <p id="modalDesc">Select your university below.</p>
+        </div>
+      </div>
+
+      <div class="choices" role="group" aria-label="University choices">
+        <button class="choice" id="monashBtn" type="button">Monash University</button>
+        <button class="choice" id="upngBtn" type="button">UPNG</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Elements
+    const overlay = document.getElementById("overlay");
+    const modal = overlay.querySelector(".modal");
+    const openBtn = document.getElementById("workshopBtn");
+    const closeBtn = document.getElementById("closeBtn");
+    const monashBtn = document.getElementById("monashBtn");
+    const upngBtn = document.getElementById("upngBtn");
+
+    // Links for the choices
+    const LINKS = {
+      monash: "https://example.com/monash",
+      upng: "https://example.com/upng"
+    };
+
+    // Focus management
+    let lastFocusedEl = null;
+
+    function openModal() {
+      lastFocusedEl = document.activeElement;
+
+      overlay.hidden = false;
+      // next frame to allow transitions to apply
+      requestAnimationFrame(() => overlay.classList.add("open"));
+
+      // move focus to first actionable item
+      monashBtn.focus();
+
+      // prevent background scroll (nice-to-have)
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      overlay.classList.remove("open");
+
+      // wait for transition then hide
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const delay = prefersReducedMotion ? 0 : 180;
+
+      window.setTimeout(() => {
+        overlay.hidden = true;
+        document.body.style.overflow = "";
+        if (lastFocusedEl && typeof lastFocusedEl.focus === "function") lastFocusedEl.focus();
+      }, delay);
+    }
+
+    // Open / close events
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+
+    // Close when clicking outside modal
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    // Esc to close + simple focus trap
+    document.addEventListener("keydown", (e) => {
+      const isOpen = !overlay.hidden && overlay.classList.contains("open");
+      if (!isOpen) return;
+
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+
+      // Focus trap inside modal
+      if (e.key === "Tab") {
+        const focusable = modal.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusable.length) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // Choice navigation (no inline onclick)
+    monashBtn.addEventListener("click", () => {
+      window.location.href = LINKS.monash;
+    });
+    upngBtn.addEventListener("click", () => {
+      window.location.href = LINKS.upng;
+    });
+  </script>
 </body>
 </html>
