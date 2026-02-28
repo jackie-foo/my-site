@@ -36,9 +36,33 @@
     .timeline{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.03);padding:12px;overflow:auto}
     .weeks{display:grid;grid-template-columns:repeat(13,minmax(170px,1fr));gap:10px;min-width:1120px}
     .week{border-radius:16px;border:1px dashed rgba(255,255,255,.20);background:rgba(255,255,255,.02);padding:10px;min-height:230px;display:flex;flex-direction:column;gap:10px; position:relative}
+    .week.special{
+      border-color:color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,.18));
+      background:
+        linear-gradient(170deg, rgba(0,229,255,.08), rgba(255,255,255,.02) 35%),
+        rgba(255,255,255,.03);
+    }
     .weekHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08)}
     .weekHead strong{font-size:12px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
     .weekHead span{font-size:11px;color:var(--muted);font-weight:900;white-space:nowrap}
+    .milestone{
+      display:inline-flex;
+      align-items:center;
+      margin-top:4px;
+      font-size:10px;
+      font-weight:1000;
+      letter-spacing:.25px;
+      border-radius:999px;
+      padding:4px 8px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.22);
+      color:var(--text);
+      text-transform:uppercase;
+      max-width:100%;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
     .dropZone{display:flex;flex-direction:column;gap:8px}
 
     .placed{border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);padding:10px;box-shadow:0 14px 30px rgba(0,0,0,.26);cursor:grab;user-select:none;touch-action:none}
@@ -131,6 +155,28 @@
     .pill.active{border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.12)); box-shadow:0 12px 28px rgba(0,229,255,.10); color:var(--text);}
     .list{margin:0; padding-left:18px; color:var(--muted); font-weight:800; font-size:13px; line-height:1.55;}
     .callout{border:1px solid rgba(255,255,255,.10); background:rgba(0,229,255,.06); border-radius:16px; padding:10px 12px; color:var(--text); font-weight:900; font-size:12px; line-height:1.45;}
+    .promptPanel{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:10px;
+    }
+    .promptTitle{
+      margin:0 0 6px;
+      font-size:11px;
+      font-weight:1000;
+      letter-spacing:.25px;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .promptList{
+      margin:0;
+      padding-left:18px;
+      color:var(--text);
+      font-size:12px;
+      line-height:1.45;
+      font-weight:800;
+    }
 
     .field{width:100%; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.04); color:var(--text);
       border-radius:14px; padding:10px 12px; font-weight:900; outline:none;}
@@ -152,6 +198,7 @@
       </div>
       <div class="row" style="justify-content:flex-end">
         <button id="btnTutorial" class="btnGhost">Tutorial</button>
+        <button id="btnDashboard" class="btnGhost">Dashboard</button>
         <button id="btnBack">← Step 2</button>
         <button id="btnToStep4" class="btnPrimary">Next → Step 4</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
@@ -168,7 +215,7 @@
           <div class="weeks" id="weeks"></div>
         </section>
         <div class="subtitle" style="margin:0">
-          Tip: Long-press a week on phone to add. Drag cards to move weeks.
+          Tip: Long-press a week on phone to add. Weeks 7–9 include milestone prompts to steer discussion.
         </div>
       </div>
     </section>
@@ -283,6 +330,10 @@
             <button type="button" data-type="wish">Wish</button>
           </div>
         </div>
+        <div class="promptPanel">
+          <p class="promptTitle">Prompt Cues For This Card</p>
+          <ul class="promptList" id="promptList"></ul>
+        </div>
       </div>
       <div class="modalFoot">
         <div class="kicker">You can move it later by dragging.</div>
@@ -293,14 +344,13 @@
     </div>
   </div>
 
+  <script src="/stage1/shared.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   (() => {
-    const SUPABASE_URL = "https://djqwztoavtkqspxpvluc.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcXd6dG9hdnRrcXNweHB2bHVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyMDU3MDEsImV4cCI6MjA4Nzc4MTcwMX0.ZVcMU8DeHxHMw3WWegz88BmCei9z4UX3tZR7n1XFRj0";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const BASE_PATH = "/stage1";
+    const shared = window.Stage1Shared;
+    const supabase = window.supabase.createClient(shared.SUPABASE_URL, shared.SUPABASE_ANON_KEY);
+    const BASE_PATH = shared.BASE_PATH;
     const CHIBI3_SRC = "/pic/chibi3.png";
 
     // ===== NOTES MODE =====
@@ -312,14 +362,9 @@
     const room = (params.get("room") || "").trim();
     if (!room) { location.href = `${BASE_PATH}/step1.html?room=demo`; return; }
 
-    const PID_KEY = "stage1_participant_id";
-    let participantId = localStorage.getItem(PID_KEY);
-    if (!participantId) { participantId = crypto.randomUUID(); localStorage.setItem(PID_KEY, participantId); }
-
-    const AUTH_KEY = `stage1_authed_${room}`;
-    const NAME_KEY = `stage1_name_${room}`;
-    const ROLE_KEY = `stage1_role_${room}`;
-    const PERSONA_KEY = `stage1_persona_${room}`;
+    const keys = shared.getKeys(room);
+    const participantId = shared.getOrCreateParticipantId(keys.PID_KEY);
+    const { PID_KEY, AUTH_KEY, NAME_KEY, ROLE_KEY, PERSONA_KEY, STEP3_TUT_KEY } = keys;
     if (localStorage.getItem(AUTH_KEY) !== "1") {
       location.href = `${BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`;
       return;
@@ -345,23 +390,10 @@
     notesScopePill.textContent = NOTES_SHARED ? "Notes: Shared" : "Notes: Private";
 
     roomOut.textContent = room;
-    function personaIdToTitle(id){
-      const map = {
-        clarifier: "Clarifier",
-        optimizer: "Optimizer",
-        validator: "Validator",
-        overwhelmed: "Overwhelmed",
-        independent: "Independent",
-        storybuilder: "Story Builder",
-        perfectionist: "Perfectionist",
-        strategist: "Strategist"
-      };
-      return map[id] || "None";
-    }
     function refreshIdentityUI({ displayName=null, role="student", personaId=null } = {}){
       meOut.textContent = displayName || participantId.slice(0,8);
       roleOut.textContent = role === "tutor" ? "tutor" : "student";
-      personaOut.textContent = personaIdToTitle(personaId);
+      personaOut.textContent = shared.personaTitle(personaId);
     }
     refreshIdentityUI({
       displayName: (localStorage.getItem(NAME_KEY) || "").trim() || null,
@@ -392,28 +424,107 @@
     function openOverlay(el){ el.style.display="flex"; el.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden"; }
     function closeOverlay(el){ el.style.display="none"; el.setAttribute("aria-hidden","true"); document.body.style.overflow=""; }
 
-    const baseEvents = [
-      { id:"evt-brief",    name:"Assessment brief / rubric arrives" },
-      { id:"evt-work",     name:"Working on assignment" },
-      { id:"evt-submit",   name:"Submit assignment" },
-      { id:"evt-feedback", name:"Feedback released" },
-      { id:"evt-reflect",  name:"Reflect & decide next action" },
-      { id:"evt-ask",      name:"Ask for clarification" },
-      { id:"evt-peer",     name:"Talk to peers" },
-      { id:"evt-revise",   name:"Revise approach for next task" }
+    const weekMilestones = {
+      7: "Assignment 1 due",
+      8: "Assignment 2 due + Feedback 1",
+      9: "React + Instructions 2/3"
+    };
+
+    const presetLibrary = [
+      {
+        id:"a1_due_pressure",
+        name:"A1 due pressure point",
+        defaultType:"constraint",
+        weeks:[7],
+        prompts:[
+          "What exactly became hard right before submission?",
+          "Which feedback criteria were unclear?",
+          "What support would have changed this outcome?"
+        ]
+      },
+      {
+        id:"feedback_release_signal",
+        name:"First feedback received",
+        defaultType:"neutral",
+        weeks:[8],
+        prompts:[
+          "Which line of feedback had the biggest impact?",
+          "What did you understand vs still not understand?",
+          "Did the feedback suggest a clear next action?"
+        ]
+      },
+      {
+        id:"reaction_week_decision",
+        name:"Week 9 reaction decision",
+        defaultType:"support",
+        weeks:[9],
+        prompts:[
+          "What will you do differently this week?",
+          "Which part of feedback do you trust most?",
+          "What question would you ask your tutor now?"
+        ]
+      },
+      {
+        id:"instruction_2_3_shift",
+        name:"Instruction 2/3 strategy shift",
+        defaultType:"wish",
+        weeks:[9],
+        prompts:[
+          "How do instructions 2 and 3 change your plan?",
+          "Where does new confusion appear?",
+          "What scaffold should exist before next submission?"
+        ]
+      },
+      {
+        id:"brief_rubric_arrives",
+        name:"Brief / rubric arrives",
+        defaultType:"neutral",
+        weeks:[1,2,3,4,5,6,10,11,12,13],
+        prompts:[
+          "What did you think this task was really asking for?",
+          "Which rubric term felt vague?",
+          "What example would have clarified expectations?"
+        ]
+      },
+      {
+        id:"working_on_assignment",
+        name:"Working on assignment",
+        defaultType:"support",
+        weeks:[1,2,3,4,5,6,10,11,12,13],
+        prompts:[
+          "What helped you make progress this week?",
+          "Where did momentum drop?",
+          "What tool or person reduced friction?"
+        ]
+      },
+      {
+        id:"ask_for_clarification",
+        name:"Asked for clarification",
+        defaultType:"support",
+        weeks:[1,2,3,4,5,6,7,8,9,10,11,12,13],
+        prompts:[
+          "What did you ask, and what answer did you get?",
+          "Did it reduce uncertainty enough to act?",
+          "What follow-up question remained unanswered?"
+        ]
+      },
+      {
+        id:"revise_for_next_task",
+        name:"Revised approach for next task",
+        defaultType:"wish",
+        weeks:[8,9,10,11,12,13],
+        prompts:[
+          "What specific change will you test next time?",
+          "How will you know if that change worked?",
+          "What feedback do you need before final submission?"
+        ]
+      }
     ];
 
     const state = { placed: [] };
 
     function safeJson(s){ try { return JSON.parse(s); } catch { return null; } }
-    function escapeHtml(str){
-      return (str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
+    const escapeHtml = shared.escapeHtml;
     function typeLabel(t){
       if(t==="constraint") return "Constraint";
       if(t==="support") return "Support";
@@ -433,41 +544,20 @@
       if(b.error) throw b.error;
     }
     async function hydrateIdentity(){
-      try{
-        const { data, error } = await supabase
-          .from("workshop_participants")
-          .select("display_name, role, persona_id")
-          .eq("id", participantId)
-          .maybeSingle();
-        if (error) throw error;
-        if (!data){
-          refreshIdentityUI({
-            displayName: (localStorage.getItem(NAME_KEY) || "").trim() || null,
-            role: localStorage.getItem(ROLE_KEY) || "student",
-            personaId: localStorage.getItem(PERSONA_KEY)
-          });
-          return;
-        }
-        const displayName = (data.display_name || "").trim() || null;
-        const role = data.role === "tutor" ? "tutor" : "student";
-        const personaId = data.persona_id || null;
-        if (displayName) localStorage.setItem(NAME_KEY, displayName);
-        localStorage.setItem(ROLE_KEY, role);
-        if (personaId) localStorage.setItem(PERSONA_KEY, personaId);
-        refreshIdentityUI({ displayName, role, personaId });
-      } catch (err){
-        console.error("identity load failed", err);
-      }
+      const identity = await shared.hydrateIdentity({ supabase, participantId, keys });
+      refreshIdentityUI(identity);
     }
 
     function renderWeeks(){
       weeksWrap.innerHTML = "";
       for(let w=1; w<=13; w++){
         const weekEl=document.createElement("div");
-        weekEl.className="week";
+        const milestone = weekMilestones[w] || "";
+        weekEl.className = milestone ? "week special" : "week";
         weekEl.dataset.week=String(w);
         weekEl.innerHTML = `
           <div class="weekHead"><strong>Week ${w}</strong><span>Hold / right-click</span></div>
+          ${milestone ? `<div class="milestone">${escapeHtml(milestone)}</div>` : ""}
           <div class="dropZone" data-week="${w}"></div>
         `;
 
@@ -715,31 +805,68 @@
     const tmplSelect = $("#tmplSelect");
     const cardText = $("#cardText");
     const typeSeg = $("#typeSeg");
+    const promptList = $("#promptList");
     const btnAddNow = $("#btnAddNow");
     $("#btnCloseAdd").addEventListener("click", ()=>closeOverlay(addOverlay));
     addOverlay.addEventListener("mousedown",(e)=>{ if(e.target===addOverlay) closeOverlay(addOverlay); });
 
     let addWeek = 1;
     let addType = "neutral";
+    let availablePresets = [];
 
-    function initTemplateSelect(){
-      tmplSelect.innerHTML =
-        baseEvents.map(e=>`<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)}</option>`).join("");
-      tmplSelect.value = baseEvents[0].id;
+    function setActiveType(type){
+      addType = ["neutral","constraint","support","wish"].includes(type) ? type : "neutral";
+      [...typeSeg.querySelectorAll("button")].forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.type === addType);
+      });
+    }
+
+    function presetsForWeek(week){
+      const specific = presetLibrary.filter(p => p.weeks.includes(week));
+      const fallback = presetLibrary.filter(p => p.weeks.length >= 10 && !specific.includes(p));
+      return [...specific, ...fallback];
+    }
+
+    function renderPromptList(prompts){
+      const list = Array.isArray(prompts) && prompts.length ? prompts : [
+        "What happened in this moment?",
+        "Why did this matter for your learning?",
+        "What should happen next?"
+      ];
+      promptList.innerHTML = list.map(p => `<li>${escapeHtml(p)}</li>`).join("");
+    }
+
+    function applyPresetById(presetId){
+      const preset = availablePresets.find(x => x.id === presetId) || availablePresets[0] || null;
+      if (!preset){
+        setActiveType("neutral");
+        renderPromptList([]);
+        return;
+      }
+      setActiveType(preset.defaultType);
+      renderPromptList(preset.prompts);
+    }
+
+    function initTemplateSelect(week){
+      availablePresets = presetsForWeek(week);
+      tmplSelect.innerHTML = availablePresets
+        .map(p=>`<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`)
+        .join("");
+      tmplSelect.value = availablePresets[0]?.id || "";
+      applyPresetById(tmplSelect.value);
     }
 
     typeSeg.addEventListener("click",(e)=>{
       const btn = e.target.closest("button[data-type]");
       if(!btn) return;
-      addType = btn.dataset.type;
-      [...typeSeg.querySelectorAll("button")].forEach(b=>b.classList.toggle("active", b===btn));
+      setActiveType(btn.dataset.type);
     });
+    tmplSelect.addEventListener("change", ()=> applyPresetById(tmplSelect.value));
 
     function openAddModal(week){
       addWeek = week;
       addWeekPill.textContent = `Week ${week}`;
-      addType = "neutral";
-      [...typeSeg.querySelectorAll("button")].forEach((b,i)=>b.classList.toggle("active", i===0));
+      initTemplateSelect(week);
       cardText.value = "";
       openOverlay(addOverlay);
       setTimeout(()=>cardText.focus(), 0);
@@ -747,7 +874,7 @@
 
     btnAddNow.addEventListener("click", async ()=>{
       const presetId = tmplSelect.value;
-      const preset = baseEvents.find(x=>x.id===presetId);
+      const preset = availablePresets.find(x=>x.id===presetId);
       const typed = (cardText.value || "").trim();
       const label = typed || (preset ? preset.name : "");
       if(!label){ showToast("Pick a preset or type your wording"); return; }
@@ -779,7 +906,7 @@
     const tutContent = $("#tutContent");
     const btnPrev = $("#btnPrev");
     const btnNextStep = $("#btnNextStep");
-    const TUT_KEY = `stage1_step3_tut_seen_${room}`;
+    const TUT_KEY = STEP3_TUT_KEY;
     let tutIndex=0;
 
     const tutorialSlides = [
@@ -787,10 +914,11 @@
         title:"Add cards (desktop + phone)",
         html: `
           <div class="callout">
-            Desktop: right-click a week. Phone: long-press a week (~0.5s).
+            Desktop: right-click a week. Phone: long-press a week (~0.5s). Weeks 7–9 contain special milestone prompts.
           </div>
           <ul class="list">
             <li>Choose a preset (dropdown).</li>
+            <li>Use prompt cues to shape sharper card wording.</li>
             <li>Type your wording (or leave blank to use preset text).</li>
             <li>Pick a starting tag.</li>
           </ul>
@@ -926,6 +1054,7 @@
 
     // ===== nav/reset =====
     $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
+    $("#btnDashboard").addEventListener("click", ()=> location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}`);
     $("#btnToStep4").addEventListener("click", ()=> location.href = `${BASE_PATH}/step4.html?room=${encodeURIComponent(room)}`);
     $("#btnReset").addEventListener("click", ()=>{
       const ok = confirm("Clear local workshop storage and reload?");
@@ -941,7 +1070,7 @@
 
     // ===== boot =====
     renderWeeks();
-    initTemplateSelect();
+    initTemplateSelect(1);
     loadInitial().then(()=>{
       subscribeRealtime();
       subscribeNotesRealtime();

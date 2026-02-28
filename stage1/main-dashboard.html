@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Stage 1 • Main Dashboard</title>
+  <style>
+    :root{
+      --bg:#060b16;
+      --panel:#11182d;
+      --panel2:#0c1222;
+      --border:#31406a;
+      --text:#e9ecff;
+      --muted:#aab4de;
+      --accent:#35d8ff;
+      --accent2:#ff9f4a;
+      --ok:#47ff87;
+      --warn:#ffe44d;
+      --bad:#ff6b77;
+      --r:18px;
+      --shadow:0 20px 46px rgba(0,0,0,.44);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 520px at 18% 14%, rgba(53,216,255,.11), transparent 56%),
+        radial-gradient(740px 460px at 84% 72%, rgba(255,159,74,.10), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
+        var(--bg);
+      min-height:100vh;
+    }
+    .wrap{max-width:1260px;margin:0 auto;padding:18px 14px 90px}
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      background:rgba(17,24,45,.8);
+      padding:7px 11px;
+      font-size:12px;
+      font-weight:1000;
+    }
+    .dot{width:10px;height:10px;border-radius:3px;background:var(--accent)}
+    .subtitle{margin-top:8px;font-size:13px;font-weight:800;line-height:1.4;color:var(--muted)}
+    .mono{
+      font-family:ui-monospace,Menlo,Consolas,monospace;
+      font-size:12px;font-weight:900;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;padding:3px 8px;
+      background:rgba(255,255,255,.05);
+    }
+    .toolbar{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;
+      min-width:320px;
+    }
+    .field{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:14px;
+      padding:10px 12px;
+      min-width:230px;
+      font-weight:900;
+      outline:none;
+    }
+    button{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:14px;
+      padding:10px 12px;
+      background:rgba(17,24,45,.82);
+      color:var(--text);
+      font-weight:1000;
+      cursor:pointer;
+      box-shadow:0 10px 26px rgba(0,0,0,.26);
+    }
+    button:hover{border-color:color-mix(in srgb,var(--accent) 62%, rgba(255,255,255,.14))}
+    .btnPrimary{
+      border-color:color-mix(in srgb,var(--accent) 75%, rgba(255,255,255,.14));
+      background:linear-gradient(180deg, rgba(53,216,255,.14), rgba(17,24,45,.82));
+    }
+    .btnAccent{
+      border-color:color-mix(in srgb,var(--accent2) 70%, rgba(255,255,255,.14));
+      background:linear-gradient(180deg, rgba(255,159,74,.16), rgba(17,24,45,.82));
+    }
+    .card{
+      margin-top:14px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:var(--r);
+      background:
+        linear-gradient(110deg, rgba(53,216,255,.04), transparent 34%),
+        linear-gradient(0deg, rgba(12,18,34,.92), rgba(17,24,45,.92));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .cardHead{
+      padding:14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+    }
+    .cardHead h2{
+      margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase;
+    }
+    .cardBody{padding:14px}
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:10px;
+    }
+    @media (max-width:980px){ .stats{grid-template-columns:repeat(2,minmax(0,1fr));} }
+    @media (max-width:560px){ .stats{grid-template-columns:1fr;} }
+    .stat{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      padding:12px;
+      background:rgba(255,255,255,.03);
+    }
+    .stat h3{margin:0;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.25px}
+    .stat p{margin:8px 0 0;font-size:28px;font-weight:1000;line-height:1}
+    .progressWrap{
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      margin-top:10px;
+      display:grid;
+      gap:8px;
+    }
+    .progRow{display:grid;grid-template-columns:120px 1fr 60px;gap:10px;align-items:center}
+    .bar{
+      height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid rgba(255,255,255,.10);
+    }
+    .bar > div{height:100%;border-radius:999px}
+    .b1{background:linear-gradient(90deg,#35d8ff,#6ae6ff)}
+    .b2{background:linear-gradient(90deg,#47ff87,#8dfbb2)}
+    .b3{background:linear-gradient(90deg,#ff9f4a,#ffd08d)}
+    .grid2{
+      display:grid;
+      grid-template-columns:1.25fr .95fr;
+      gap:12px;
+    }
+    @media (max-width:1020px){ .grid2{grid-template-columns:1fr;} }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+    }
+    th,td{
+      text-align:left;
+      border-bottom:1px solid rgba(255,255,255,.09);
+      padding:8px 6px;
+      vertical-align:top;
+    }
+    th{
+      color:var(--muted);
+      text-transform:uppercase;
+      font-size:10px;
+      letter-spacing:.25px;
+    }
+    .pill{
+      display:inline-flex;align-items:center;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;padding:3px 7px;
+      font-size:10px;font-weight:1000;letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+    .ok{background:rgba(71,255,135,.14);border-color:rgba(71,255,135,.35);color:#9dfcc1}
+    .warn{background:rgba(255,228,77,.12);border-color:rgba(255,228,77,.35);color:#fff0a3}
+    .bad{background:rgba(255,107,119,.12);border-color:rgba(255,107,119,.35);color:#ffc3c9}
+    .feed{
+      max-height:420px;
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .feedItem{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:10px;
+      font-size:12px;
+      line-height:1.4;
+    }
+    .feedTop{
+      display:flex;justify-content:space-between;gap:10px;
+      font-size:10px;font-weight:1000;color:var(--muted);text-transform:uppercase;
+      letter-spacing:.2px;
+      margin-bottom:6px;
+    }
+    .promptGrid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+    }
+    @media (max-width:980px){ .promptGrid{grid-template-columns:1fr;} }
+    .promptCard{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      padding:12px;
+      background:rgba(255,255,255,.03);
+    }
+    .promptCard h3{
+      margin:0 0 8px;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.25px;
+    }
+    .promptList{
+      margin:0;
+      padding-left:18px;
+      line-height:1.45;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .empty{
+      border:1px dashed rgba(255,255,255,.24);
+      border-radius:14px;
+      padding:14px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="badge"><span class="dot"></span> Stage 1 Main Dashboard</div>
+        <div class="subtitle">
+          Room: <span class="mono" id="roomOut">demo</span> • Live monitor for Step 1 → Step 3.<br/>
+          Use this as facilitator screen while participants run their own pages.
+        </div>
+      </div>
+      <div class="toolbar">
+        <input id="roomInput" class="field" placeholder="Room id (e.g. demo)"/>
+        <button id="btnApply" class="btnPrimary">Open Room</button>
+        <button id="btnRefresh">Refresh</button>
+        <button id="btnStep1">Step 1</button>
+        <button id="btnStep2">Step 2</button>
+        <button id="btnStep3">Step 3</button>
+        <button id="btnIndex" class="btnAccent">Home</button>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="cardHead">
+        <h2>Live Stage Health</h2>
+        <span class="mono" id="lastUpdated">Last update: --</span>
+      </div>
+      <div class="cardBody">
+        <div class="stats">
+          <div class="stat"><h3>Total Participants</h3><p id="totalParticipants">0</p></div>
+          <div class="stat"><h3>Step 1 Ready</h3><p id="step1Ready">0</p></div>
+          <div class="stat"><h3>Step 2 Active</h3><p id="step2Active">0</p></div>
+          <div class="stat"><h3>Step 3 Active</h3><p id="step3Active">0</p></div>
+          <div class="stat"><h3>Journey Cards</h3><p id="journeyCount">0</p></div>
+        </div>
+        <div class="progressWrap">
+          <div class="progRow">
+            <span class="mono">Step 1</span>
+            <div class="bar"><div id="p1" class="b1" style="width:0%"></div></div>
+            <span class="mono" id="p1Text">0%</span>
+          </div>
+          <div class="progRow">
+            <span class="mono">Step 2</span>
+            <div class="bar"><div id="p2" class="b2" style="width:0%"></div></div>
+            <span class="mono" id="p2Text">0%</span>
+          </div>
+          <div class="progRow">
+            <span class="mono">Step 3</span>
+            <div class="bar"><div id="p3" class="b3" style="width:0%"></div></div>
+            <span class="mono" id="p3Text">0%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid2">
+      <section class="card">
+        <div class="cardHead">
+          <h2>Participants</h2>
+          <span class="mono" id="participantSummary">0 rows</span>
+        </div>
+        <div class="cardBody" style="padding-top:8px">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Card</th>
+                <th>Step Status</th>
+              </tr>
+            </thead>
+            <tbody id="participantRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="cardHead">
+          <h2>Realtime Activity</h2>
+          <span class="mono" id="eventCount">0 events</span>
+        </div>
+        <div class="cardBody">
+          <div id="feed" class="feed"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card">
+      <div class="cardHead">
+        <h2>Facilitator Prompt Questions</h2>
+        <span class="mono">Adaptive Guidance</span>
+      </div>
+      <div class="cardBody">
+        <div class="promptGrid">
+          <article class="promptCard">
+            <h3>Stage 1 Questions</h3>
+            <ul class="promptList" id="qStep1"></ul>
+          </article>
+          <article class="promptCard">
+            <h3>Stage 2 Questions</h3>
+            <ul class="promptList" id="qStep2"></ul>
+          </article>
+          <article class="promptCard">
+            <h3>Stage 3 Questions</h3>
+            <ul class="promptList" id="qStep3"></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/stage1/shared.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (() => {
+    const shared = window.Stage1Shared;
+    const supabase = window.supabase.createClient(shared.SUPABASE_URL, shared.SUPABASE_ANON_KEY);
+
+    const $ = (q, el=document) => el.querySelector(q);
+    const params = new URLSearchParams(location.search);
+    let room = (params.get("room") || "demo").trim() || "demo";
+    let subs = [];
+    let feedItems = [];
+
+    const roomOut = $("#roomOut");
+    const roomInput = $("#roomInput");
+    const lastUpdated = $("#lastUpdated");
+    const totalParticipants = $("#totalParticipants");
+    const step1Ready = $("#step1Ready");
+    const step2Active = $("#step2Active");
+    const step3Active = $("#step3Active");
+    const journeyCount = $("#journeyCount");
+    const p1 = $("#p1"), p2 = $("#p2"), p3 = $("#p3");
+    const p1Text = $("#p1Text"), p2Text = $("#p2Text"), p3Text = $("#p3Text");
+    const participantRows = $("#participantRows");
+    const participantSummary = $("#participantSummary");
+    const feed = $("#feed");
+    const eventCount = $("#eventCount");
+    const qStep1 = $("#qStep1"), qStep2 = $("#qStep2"), qStep3 = $("#qStep3");
+
+    function fmtTime(d){
+      const dt = new Date(d);
+      return Number.isNaN(dt.getTime()) ? "unknown" : dt.toLocaleTimeString([], { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+    }
+    function pct(val, total){
+      if (!total) return 0;
+      return Math.max(0, Math.min(100, Math.round((val / total) * 100)));
+    }
+    function addFeed(kind, message, ts = Date.now()){
+      feedItems.unshift({ kind, message, ts });
+      feedItems = feedItems.slice(0, 60);
+      renderFeed();
+    }
+    function renderFeed(){
+      eventCount.textContent = `${feedItems.length} events`;
+      if (!feedItems.length){
+        feed.innerHTML = `<div class="empty">No activity yet for this room.</div>`;
+        return;
+      }
+      feed.innerHTML = feedItems.map(item => `
+        <div class="feedItem">
+          <div class="feedTop"><span>${shared.escapeHtml(item.kind)}</span><span>${fmtTime(item.ts)}</span></div>
+          <div>${shared.escapeHtml(item.message)}</div>
+        </div>
+      `).join("");
+    }
+    function statusPill(label, cls){
+      return `<span class="pill ${cls}">${shared.escapeHtml(label)}</span>`;
+    }
+
+    function computePrompts(summary){
+      const { total, readyStep1, activeStep2, activeStep3 } = summary;
+      const q1 = [];
+      const q2 = [];
+      const q3 = [];
+
+      if (readyStep1 < total){
+        q1.push("Who still needs to choose a role and personality card?");
+        q1.push("Do they understand why card choice matters for later reflection?");
+      } else {
+        q1.push("Which roles/cards are over-represented in this room?");
+        q1.push("How might that bias the type of feedback participants value?");
+      }
+
+      if (activeStep2 < total){
+        q2.push("Who has not added a sticky yet, and what blocker are they facing?");
+        q2.push("Are stickies written as actions, not vague statements?");
+      } else {
+        q2.push("Which sticky clusters indicate shared goals or tensions?");
+        q2.push("What sticky should be carried into Week 9 reaction planning?");
+      }
+
+      q3.push("In Week 7, what made Assignment 1 hardest at submission time?");
+      q3.push("In Week 8, which first feedback comment changed behavior most?");
+      q3.push("In Week 9, what concrete action follows instructions 2/3?");
+      if (activeStep3 < Math.max(1, Math.floor(total * 0.6))){
+        q3.push("Who needs help turning story details into week-specific cards?");
+      }
+
+      qStep1.innerHTML = q1.map(x => `<li>${shared.escapeHtml(x)}</li>`).join("");
+      qStep2.innerHTML = q2.map(x => `<li>${shared.escapeHtml(x)}</li>`).join("");
+      qStep3.innerHTML = q3.map(x => `<li>${shared.escapeHtml(x)}</li>`).join("");
+    }
+
+    function renderParticipants(participants, stickyAuthors, journeyAuthors){
+      participantSummary.textContent = `${participants.length} rows`;
+      if (!participants.length){
+        participantRows.innerHTML = `<tr><td colspan="4"><div class="empty">No participants found for this room yet.</div></td></tr>`;
+        return;
+      }
+      participantRows.innerHTML = participants.map(p => {
+        const name = shared.cleanDisplayName(p.display_name) || p.id.slice(0, 8);
+        const role = p.role === "tutor" ? "Tutor" : "Student";
+        const card = shared.personaTitle(p.persona_id);
+        const s1Done = !!(shared.cleanDisplayName(p.display_name) && p.persona_id);
+        const s2Done = stickyAuthors.has(p.id);
+        const s3Done = journeyAuthors.has(p.id);
+        const stage = [
+          s1Done ? statusPill("S1 Ready", "ok") : statusPill("S1 Pending", "warn"),
+          s2Done ? statusPill("S2 Active", "ok") : statusPill("S2 Idle", "warn"),
+          s3Done ? statusPill("S3 Active", "ok") : statusPill("S3 Idle", "bad")
+        ].join(" ");
+        return `
+          <tr>
+            <td>${shared.escapeHtml(name)}</td>
+            <td>${shared.escapeHtml(role)}</td>
+            <td>${shared.escapeHtml(card)}</td>
+            <td>${stage}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    async function loadData(){
+      const [pRes, sRes, jRes, nRes] = await Promise.all([
+        supabase.from("workshop_participants").select("id,display_name,role,persona_id,created_at,updated_at").eq("session_id", room),
+        supabase.from("workshop_stickies").select("id,participant_id,text,created_at,updated_at").eq("session_id", room),
+        supabase.from("workshop_journey_items").select("id,participant_id,week,label,type,created_at,updated_at").eq("session_id", room),
+        supabase.from("workshop_journey_notes").select("id,participant_id,updated_at").eq("session_id", room)
+      ]);
+      if (pRes.error) throw pRes.error;
+      if (sRes.error) throw sRes.error;
+      if (jRes.error) throw jRes.error;
+      if (nRes.error) throw nRes.error;
+
+      const participants = pRes.data || [];
+      const stickies = sRes.data || [];
+      const journey = jRes.data || [];
+      const notes = nRes.data || [];
+
+      const stickyAuthors = new Set(stickies.map(s => s.participant_id).filter(Boolean));
+      const journeyAuthors = new Set(journey.map(j => j.participant_id).filter(Boolean));
+      const step1ReadyCount = participants.filter(p => shared.cleanDisplayName(p.display_name) && p.persona_id).length;
+      const step2Count = stickyAuthors.size;
+      const step3Count = journeyAuthors.size;
+
+      totalParticipants.textContent = String(participants.length);
+      step1Ready.textContent = String(step1ReadyCount);
+      step2Active.textContent = String(step2Count);
+      step3Active.textContent = String(step3Count);
+      journeyCount.textContent = String(journey.length);
+
+      const p1v = pct(step1ReadyCount, participants.length);
+      const p2v = pct(step2Count, participants.length);
+      const p3v = pct(step3Count, participants.length);
+      p1.style.width = `${p1v}%`; p2.style.width = `${p2v}%`; p3.style.width = `${p3v}%`;
+      p1Text.textContent = `${p1v}%`; p2Text.textContent = `${p2v}%`; p3Text.textContent = `${p3v}%`;
+
+      lastUpdated.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
+      renderParticipants(participants, stickyAuthors, journeyAuthors);
+      computePrompts({ total: participants.length, readyStep1: step1ReadyCount, activeStep2: step2Count, activeStep3: step3Count, notesCount: notes.length });
+    }
+
+    function wireNav(){
+      roomInput.value = room;
+      roomOut.textContent = room;
+      $("#btnApply").addEventListener("click", () => {
+        const nextRoom = (roomInput.value || "").trim();
+        if (!nextRoom) return;
+        location.search = `?room=${encodeURIComponent(nextRoom)}`;
+      });
+      $("#btnRefresh").addEventListener("click", () => loadData().catch(err => addFeed("error", err.message || String(err))));
+      $("#btnStep1").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step1.html?room=${encodeURIComponent(room)}`);
+      $("#btnStep2").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step2.html?room=${encodeURIComponent(room)}`);
+      $("#btnStep3").addEventListener("click", () => location.href = `${shared.BASE_PATH}/step3.html?room=${encodeURIComponent(room)}`);
+      $("#btnIndex").addEventListener("click", () => location.href = "/index.html");
+    }
+
+    function subscribeRealtime(){
+      const defs = [
+        { table:"workshop_participants", label:"participant" },
+        { table:"workshop_stickies", label:"sticky" },
+        { table:"workshop_journey_items", label:"journey" },
+        { table:"workshop_journey_notes", label:"notes" }
+      ];
+      defs.forEach(def => {
+        const ch = supabase
+          .channel(`dash:${room}:${def.table}`)
+          .on("postgres_changes", { event:"*", schema:"public", table:def.table, filter:`session_id=eq.${room}` }, (payload) => {
+            const id = payload.new?.id || payload.old?.id || "unknown";
+            addFeed(def.label, `${payload.eventType} • id=${id}`);
+            loadData().catch(err => addFeed("error", err.message || String(err)));
+          })
+          .subscribe();
+        subs.push(ch);
+      });
+    }
+
+    function clearSubs(){
+      subs.forEach(ch => supabase.removeChannel(ch));
+      subs = [];
+    }
+
+    wireNav();
+    loadData()
+      .then(() => addFeed("system", `Dashboard ready for room "${room}"`))
+      .catch(err => addFeed("error", err.message || String(err)));
+    subscribeRealtime();
+    setInterval(() => loadData().catch(()=>{}), 15000);
+    window.addEventListener("beforeunload", clearSubs);
+  })();
+  </script>
+</body>
+</html>
