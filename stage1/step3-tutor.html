@@ -63,6 +63,24 @@
       overflow:hidden;
     }
     .boardSvg{position:absolute;inset:0;pointer-events:none}
+    .edgeLabels{position:absolute;inset:0;pointer-events:none}
+    .edgeTag{
+      position:absolute;
+      transform:translate(-50%, -50%);
+      border:1px solid rgba(255,255,255,.3);
+      border-radius:999px;
+      background:rgba(10,18,40,.86);
+      color:#ffd8dc;
+      padding:3px 8px;
+      font-size:10px;
+      font-weight:700;
+      max-width:200px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      pointer-events:auto;
+      cursor:pointer;
+    }
     .laneMarks{position:absolute;inset:0;pointer-events:none}
     .lane{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.08)}
     .laneLabel{position:absolute;top:8px;transform:translateX(-50%);font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);background:rgba(0,0,0,.35);padding:2px 6px;border-radius:999px;border:1px solid rgba(255,255,255,.14)}
@@ -137,6 +155,7 @@
           <svg id="boardSvg" class="boardSvg"></svg>
           <div class="laneMarks" id="laneMarks"></div>
           <div id="nodes"></div>
+          <div id="edgeLabels" class="edgeLabels"></div>
         </div>
 
         <aside class="panel">
@@ -194,6 +213,7 @@
     const board = $("#board");
     const nodesEl = $("#nodes");
     const svg = $("#boardSvg");
+    const edgeLabels = $("#edgeLabels");
     const laneMarks = $("#laneMarks");
     const diag = $("#diag");
     const summaryBox = $("#summaryBox");
@@ -328,14 +348,14 @@
     function parseEdge(row){
       try {
         const obj = JSON.parse(String(row.label || "{}"));
-        return { from: String(obj.from || ""), to: String(obj.to || "") };
+        return { from: String(obj.from || ""), to: String(obj.to || ""), issue: String(obj.issue || "") };
       } catch {
-        return { from: "", to: "" };
+        return { from: "", to: "", issue: "" };
       }
     }
 
-    function edgePayload(from, to){
-      return JSON.stringify({ from, to });
+    function edgePayload(from, to, issue=""){
+      return JSON.stringify({ from, to, issue: String(issue || "") });
     }
 
     function renderEdges(){
@@ -349,6 +369,7 @@
           </marker>
         </defs>
       `;
+      edgeLabels.innerHTML = "";
 
       state.edges.forEach(e => {
         const from = getNodeById(e.from);
@@ -362,10 +383,22 @@
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", d);
         path.setAttribute("fill", "none");
-        path.setAttribute("stroke", "rgba(102,210,255,.88)");
+        path.setAttribute("stroke", e.issue ? "rgba(255,131,144,.95)" : "rgba(102,210,255,.88)");
         path.setAttribute("stroke-width", "2.2");
         path.setAttribute("marker-end", "url(#arrow)");
         svg.appendChild(path);
+
+        const lx = (a.x + b.x) / 2;
+        const ly = (a.y + b.y) / 2;
+        const tag = document.createElement("button");
+        tag.className = "edgeTag";
+        tag.type = "button";
+        tag.style.left = `${lx}px`;
+        tag.style.top = `${ly}px`;
+        tag.dataset.edgeId = e.id;
+        tag.title = "Click to edit connection issue";
+        tag.textContent = e.issue || "Issue?";
+        edgeLabels.appendChild(tag);
       });
     }
 
@@ -610,7 +643,7 @@
       });
     }
 
-    async function addEdge(from, to){
+    async function addEdge(from, to, issue=""){
       if (!from || !to || from === to) return;
       if (state.edges.some(e => e.from === from && e.to === to)){
         showToast("Edge already exists");
@@ -621,7 +654,7 @@
         participant_id: participantId,
         week: 0,
         type: "workflow_edge",
-        label: edgePayload(from, to)
+        label: edgePayload(from, to, issue)
       };
       let ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
       if (ins.error){
@@ -630,7 +663,19 @@
         ins = await supabase.from("workshop_journey_items").insert(relaxed).select().single();
       }
       if (ins.error) throw ins.error;
-      state.edges.push({ id: ins.data.id, from, to });
+      state.edges.push({ id: ins.data.id, from, to, issue });
+      renderEdges();
+    }
+
+    async function updateEdgeIssue(edgeId, issue){
+      const edge = state.edges.find(e => e.id === edgeId);
+      if (!edge) return;
+      const { error } = await supabase
+        .from("workshop_journey_items")
+        .update({ label: edgePayload(edge.from, edge.to, issue) })
+        .eq("id", edgeId);
+      if (error) throw error;
+      edge.issue = String(issue || "");
       renderEdges();
     }
 
@@ -667,7 +712,7 @@
       (rows || []).forEach(r => {
         if (String(r.type || "") === "workflow_edge"){
           const p = parseEdge(r);
-          if (p.from && p.to) edges.push({ id: r.id, from: p.from, to: p.to });
+          if (p.from && p.to) edges.push({ id: r.id, from: p.from, to: p.to, issue: p.issue || "" });
         } else if (String(r.type || "").startsWith("workflow_")){
           nodes.push(r);
         }
@@ -735,7 +780,8 @@
             const from = state.linkFrom;
             state.linkFrom = null;
             try {
-              await addEdge(from, id);
+              const issue = prompt("Problem/friction between these two workflow steps?", "") || "";
+              await addEdge(from, id, issue);
               setDiag("Connected.", false);
             } catch (err){
               setDiag(err.message || "Edge create failed", true);
@@ -757,6 +803,21 @@
           const ok = confirm("Delete this node and connected arrows?");
           if (!ok) return;
           try { await deleteNode(id); } catch (err){ showToast(err.message || "Delete failed"); }
+        }
+      });
+      edgeLabels.addEventListener("click", async (e) => {
+        const tag = e.target.closest("[data-edge-id]");
+        if (!tag) return;
+        const edgeId = tag.getAttribute("data-edge-id");
+        const edge = state.edges.find(x => x.id === edgeId);
+        if (!edge) return;
+        const next = prompt("Edit problem on this connector (leave blank to clear):", edge.issue || "");
+        if (next === null) return;
+        try{
+          await updateEdgeIssue(edgeId, next.trim());
+          showToast("Connector issue updated");
+        } catch (err){
+          showToast(err.message || "Connector update failed");
         }
       });
 
