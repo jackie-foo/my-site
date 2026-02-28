@@ -5,398 +5,554 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Jackie Foo</title>
 
-  <meta name="description" content="Jackie Foo — portfolio landing page. More coming soon." />
-  <meta name="theme-color" content="#07070b" />
+  <meta name="description" content="Jackie Foo — portfolio landing page." />
+  <meta name="theme-color" content="#08122d" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --bg:#07070b;
-      --text:#f6f6ff;
-      --muted:rgba(246,246,255,.66);
-      --accent:#7c5cff;
-      --accent2:#ff2bd6;
-      --panel:#11111b;
-      --border:rgba(255,255,255,.16);
+    :root {
+      --bg-1: #071022;
+      --bg-2: #0f2047;
+      --bg-3: #2f6f96;
+      --text: #f6fbff;
+      --muted: rgba(246, 251, 255, 0.75);
+      --panel: rgba(8, 17, 40, 0.72);
+      --panel-border: rgba(170, 214, 255, 0.3);
+      --accent: #6cd6ff;
+      --accent-2: #4ff2c3;
+      --shadow: 0 26px 80px rgba(0, 0, 0, 0.45);
+      --radius-xl: 26px;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
 
-    body{
-      margin:0;
-      font-family:"Space Grotesk", sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-      overflow-x:hidden;
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 20% 20%, #1e5d84 0%, #0f2047 38%, #071022 72%);
+      overflow-x: hidden;
     }
 
-    /* Animated ambient background:
-       - bgDrift: obvious rightward drift
-       - hueShift: cycles purple -> green -> yellow -> back (via hue rotate) */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:-30%;
-      z-index:-2;
-      background:
-        radial-gradient(720px 520px at 14% 18%, rgba(255,43,214,.18), transparent 62%),
-        radial-gradient(860px 660px at 88% 24%, rgba(124,92,255,.18), transparent 64%),
-        radial-gradient(680px 560px at 50% 92%, rgba(124,92,255,.10), transparent 62%);
-      filter:saturate(1.08) contrast(1.02);
-      will-change:transform, filter;
-      animation:
-        bgDrift 18s linear infinite,
-        hueShift 22s ease-in-out infinite;
-      transform:translate3d(0,0,0);
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      overflow: hidden;
     }
 
-    /* Slight texture (optional) */
-    body::after{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:-1;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
-      opacity:.08;
-      mix-blend-mode:overlay;
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(1px);
+      opacity: 0.48;
+      mix-blend-mode: screen;
+      animation: drift 16s ease-in-out infinite;
     }
 
-    /* Moves to the RIGHT continuously, with a tiny up/down to feel organic */
-    @keyframes bgDrift{
-      0%   { transform:translate3d(-4%, 0%, 0) scale(1); }
-      50%  { transform:translate3d(4%, -1.5%, 0) scale(1.02); }
-      100% { transform:translate3d(-4%, 0%, 0) scale(1); }
+    .blob.one {
+      width: 42vmax;
+      height: 42vmax;
+      left: -10vmax;
+      top: -9vmax;
+      background: radial-gradient(circle at 35% 35%, rgba(108, 214, 255, 0.95) 0%, rgba(108, 214, 255, 0.08) 68%, transparent 78%);
+      animation-delay: -3s;
     }
 
-    /* Hue rotates the glow so it shifts through purple -> green -> yellow -> back */
-    @keyframes hueShift{
-      0%   { filter:saturate(1.08) contrast(1.02) hue-rotate(0deg); }
-      33%  { filter:saturate(1.08) contrast(1.02) hue-rotate(120deg); } /* greener */
-      66%  { filter:saturate(1.08) contrast(1.02) hue-rotate(210deg); } /* yellow-ish in this palette */
-      100% { filter:saturate(1.08) contrast(1.02) hue-rotate(360deg); }
+    .blob.two {
+      width: 48vmax;
+      height: 48vmax;
+      right: -14vmax;
+      top: -6vmax;
+      background: radial-gradient(circle at 66% 28%, rgba(79, 242, 195, 0.86) 0%, rgba(79, 242, 195, 0.12) 62%, transparent 78%);
+      animation-delay: -8s;
+      animation-duration: 22s;
     }
 
-    .container{max-width:980px; width:100%}
-
-    .hero{
-      display:flex;
-      align-items:center;
-      gap:48px;
+    .blob.three {
+      width: 52vmax;
+      height: 52vmax;
+      left: 10vmax;
+      bottom: -30vmax;
+      background: radial-gradient(circle at 52% 25%, rgba(80, 160, 255, 0.65) 0%, rgba(80, 160, 255, 0.08) 68%, transparent 78%);
+      animation-delay: -4s;
+      animation-duration: 26s;
     }
 
-    @media (max-width:780px){
-      .hero{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:28px;
+    .grain {
+      position: absolute;
+      inset: 0;
+      opacity: 0.11;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.5) 0.5px, transparent 0.5px);
+      background-size: 4px 4px;
+      mix-blend-mode: soft-light;
+    }
+
+    .spotlight {
+      position: fixed;
+      width: 580px;
+      height: 580px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -2;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.07) 22%, rgba(255, 255, 255, 0.02) 45%, transparent 72%);
+      transition: left 0.18s linear, top 0.18s linear;
+      mix-blend-mode: soft-light;
+    }
+
+    .page {
+      min-height: 100%;
+      padding: clamp(24px, 5vw, 56px);
+      display: grid;
+      place-items: center;
+    }
+
+    .shell {
+      width: min(1080px, 100%);
+      border: 1px solid rgba(193, 231, 255, 0.35);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(11, 23, 50, 0.84), rgba(6, 15, 34, 0.74));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(7px);
+      padding: clamp(22px, 3vw, 38px);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: clamp(18px, 2vw, 30px);
+    }
+
+    .brand {
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(246, 251, 255, 0.72);
+    }
+
+    .pulse {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(246, 251, 255, 0.75);
+      font-size: 0.85rem;
+    }
+
+    .pulse i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 0 rgba(79, 242, 195, 0.9);
+      animation: ping 2s infinite;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(190px, 230px) 1fr;
+      gap: clamp(20px, 3vw, 44px);
+      align-items: center;
+    }
+
+    .avatarWrap {
+      justify-self: center;
+      width: min(230px, 42vw);
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-pill);
+      position: relative;
+      padding: 8px;
+      background: linear-gradient(145deg, rgba(108, 214, 255, 0.8), rgba(79, 242, 195, 0.4));
+      box-shadow: 0 16px 46px rgba(0, 0, 0, 0.45);
+    }
+
+    .avatarWrap::before {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border-radius: inherit;
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      opacity: 0.42;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      overflow: hidden;
+      background: #091229;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transform: scale(1.06);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.8rem, 7.4vw, 5.6rem);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      text-wrap: balance;
+    }
+
+    .titleAccent {
+      background: linear-gradient(90deg, #ebf8ff 0%, #a5edff 36%, #7ef7d6 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      margin: 16px 0 0;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: clamp(1rem, 2.2vw, 1.08rem);
+      line-height: 1.75;
+    }
+
+    .actions {
+      margin-top: 22px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      border-radius: 14px;
+      border: 1px solid transparent;
+      font: inherit;
+      font-weight: 700;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btnPrimary {
+      color: #061227;
+      background: linear-gradient(130deg, #9ce7ff, #6cd6ff 54%, #4ff2c3);
+      box-shadow: 0 12px 30px rgba(73, 200, 255, 0.35);
+    }
+
+    .btnGhost {
+      color: var(--text);
+      border-color: rgba(204, 234, 255, 0.44);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:focus-visible {
+      outline: 3px solid rgba(163, 234, 255, 0.55);
+      outline-offset: 3px;
+    }
+
+    .links {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .link {
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid rgba(173, 223, 255, 0.3);
+      background: rgba(12, 30, 62, 0.55);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .link:hover { background: rgba(17, 42, 83, 0.72); }
+    .link:focus-visible {
+      outline: 3px solid rgba(163, 234, 255, 0.55);
+      outline-offset: 3px;
+    }
+
+    .timeline {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stageCard {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(171, 219, 255, 0.23);
+      background: linear-gradient(140deg, rgba(13, 29, 58, 0.66), rgba(10, 23, 47, 0.46));
+      padding: 12px;
+    }
+
+    .stageLabel {
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(179, 225, 255, 0.68);
+      margin-bottom: 6px;
+    }
+
+    .stageText {
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: rgba(246, 251, 255, 0.9);
+    }
+
+    footer {
+      margin-top: 26px;
+      font-size: 0.8rem;
+      color: rgba(246, 251, 255, 0.52);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: rgba(5, 12, 24, 0.74);
+      backdrop-filter: blur(8px);
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.18s ease, visibility 0.18s ease;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .modal {
+      width: min(580px, 100%);
+      background: linear-gradient(155deg, rgba(8, 20, 45, 0.96), rgba(8, 17, 40, 0.92));
+      border: 1px solid var(--panel-border);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      position: relative;
+      transform: translateY(8px) scale(0.985);
+      transition: transform 0.18s ease;
+    }
+
+    .overlay.open .modal { transform: translateY(0) scale(1); }
+
+    .closeBtn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(200, 233, 255, 0.34);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      font: inherit;
+      font-weight: 700;
+      padding: 8px 11px;
+      cursor: pointer;
+    }
+
+    .closeBtn:focus-visible {
+      outline: 3px solid rgba(163, 234, 255, 0.55);
+      outline-offset: 2px;
+    }
+
+    .modalRow {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-right: 72px;
+    }
+
+    .modalChibi {
+      width: 90px;
+      height: 90px;
+      flex: 0 0 auto;
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      border: 1px solid rgba(213, 239, 255, 0.28);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .modalChibi img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .modal h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .modal p {
+      margin: 8px 0 0;
+      color: rgba(246, 251, 255, 0.75);
+      line-height: 1.5;
+    }
+
+    .choices {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .choice {
+      width: 100%;
+      text-align: left;
+      padding: 13px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(179, 225, 255, 0.38);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.16s ease;
+    }
+
+    .choice:hover {
+      background: rgba(149, 218, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .choice:focus-visible {
+      outline: 3px solid rgba(163, 234, 255, 0.55);
+      outline-offset: 3px;
+    }
+
+    @keyframes drift {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(3vw, -2vh) scale(1.05); }
+      100% { transform: translate(0, 0) scale(1); }
+    }
+
+    @keyframes ping {
+      0% { box-shadow: 0 0 0 0 rgba(79, 242, 195, 0.82); }
+      70% { box-shadow: 0 0 0 10px rgba(79, 242, 195, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(79, 242, 195, 0); }
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
+
+      .avatarWrap {
+        justify-self: start;
+      }
+
+      .timeline {
+        grid-template-columns: 1fr;
       }
     }
 
-    .chibi{
-      width:clamp(160px, 26vw, 220px);
-      aspect-ratio:1/1;
-      border-radius:999px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow:
-        0 20px 60px rgba(0,0,0,.45),
-        0 0 0 6px rgba(124,92,255,.08);
-      flex-shrink:0;
-      transform:translateZ(0);
-    }
-    .chibi img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      transform:scale(1.03);
-    }
-
-    h1{
-      font-size:clamp(56px, 8vw, 96px);
-      margin:0;
-      line-height:.92;
-      letter-spacing:-.04em;
-    }
-
-    .highlight{
-      position:relative;
-      display:inline-block;
-      padding:0 4px;
-    }
-    .highlight::after{
-      content:"";
-      position:absolute;
-      left:0; right:0;
-      bottom:10px;
-      height:10px;
-      background:rgba(124,92,255,.22);
-      z-index:-1;
-      transform:skewX(-10deg);
-    }
-
-    .lead{
-      margin:20px 0 0;
-      font-size:18px;
-      line-height:1.75;
-      color:var(--muted);
-      max-width:58ch;
-    }
-    .lead b{color:var(--text)}
-
-    .workshopLine{
-      margin-top:26px;
-      font-size:16px;
-      color:rgba(246,246,255,.74);
-    }
-
-    button.primary{
-      margin-top:10px;
-      border:1px solid rgba(255,43,214,.35);
-      background:rgba(255,43,214,.10);
-      color:var(--text);
-      padding:14px 18px;
-      border-radius:14px;
-      font-size:16px;
-      font-weight:800;
-      cursor:pointer;
-      transition:transform .18s ease, background .2s ease, border-color .2s ease;
-    }
-    button.primary:hover{
-      background:rgba(255,43,214,.16);
-      transform:translateY(-1px);
-      border-color:rgba(255,43,214,.5);
-    }
-    button.primary:active{transform:translateY(0)}
-    button.primary:focus-visible{
-      outline:3px solid rgba(124,92,255,.35);
-      outline-offset:3px;
-    }
-
-    .links{
-      margin-top:32px;
-      display:flex;
-      gap:26px;
-      flex-wrap:wrap;
-    }
-    a.link{
-      text-decoration:none;
-      font-size:16px;
-      font-weight:600;
-      color:var(--text);
-      position:relative;
-    }
-    a.link::after{
-      content:"";
-      position:absolute;
-      left:0;
-      bottom:-6px;
-      width:100%;
-      height:2px;
-      background:var(--accent2);
-      transform:scaleX(0);
-      transform-origin:left;
-      transition:.25s ease;
-    }
-    a.link:hover::after{transform:scaleX(1)}
-    a.link:focus-visible{
-      outline:3px solid rgba(124,92,255,.35);
-      outline-offset:6px;
-      border-radius:8px;
-    }
-
-    small{
-      display:block;
-      margin-top:48px;
-      font-size:13px;
-      color:rgba(246,246,255,.42);
-    }
-
-    .overlay{
-      position:fixed; inset:0;
-      background:rgba(10,10,18,.62);
-      backdrop-filter:blur(8px);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      z-index:50;
-
-      opacity:0;
-      visibility:hidden;
-      pointer-events:none;
-      transition:opacity .18s ease, visibility .18s ease;
-    }
-    .overlay.open{
-      opacity:1;
-      visibility:visible;
-      pointer-events:auto;
-    }
-
-    .modal{
-      width:min(560px, 100%);
-      background:var(--panel);
-      border-radius:20px;
-      border:1px solid var(--border);
-      padding:22px;
-      box-shadow:0 26px 80px rgba(0,0,0,.6);
-      transform:translateY(6px) scale(.99);
-      transition:transform .18s ease;
-      position:relative;
-    }
-    .overlay.open .modal{
-      transform:translateY(0) scale(1);
-    }
-
-    .modalRow{
-      display:flex;
-      gap:24px;
-      align-items:center;
-    }
-
-    .modalChibi{
-      width:100px;
-      height:100px;
-      border-radius:999px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.16);
-      flex:0 0 auto;
-    }
-    .modalChibi img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .modalContent{flex:1}
-
-    .modal h2{ margin:0; font-size:20px; }
-    .modal p{
-      margin:10px 0 0;
-      font-size:15px;
-      color:rgba(246,246,255,.72);
-      line-height:1.55;
-    }
-
-    .closeBtn{
-      position:absolute;
-      top:14px;
-      right:14px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      border-radius:12px;
-      padding:10px 12px;
-      cursor:pointer;
-      font-weight:800;
-      transition:transform .18s ease, background .2s ease;
-    }
-    .closeBtn:hover{background:rgba(255,255,255,.10); transform:translateY(-1px)}
-    .closeBtn:active{transform:translateY(0)}
-    .closeBtn:focus-visible{
-      outline:3px solid rgba(124,92,255,.35);
-      outline-offset:3px;
-    }
-
-    .choices{
-      margin-top:24px;
-      display:grid;
-      gap:14px;
-    }
-    .choice{
-      padding:16px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.3);
-      background:#ffffff;
-      color:#111;
-      font-weight:800;
-      font-size:15px;
-      cursor:pointer;
-      transition:transform .18s ease, background .18s ease;
-      text-align:left;
-    }
-    .choice:hover{
-      background:#f2f2f2;
-      transform:translateY(-1px);
-    }
-    .choice:active{transform:translateY(0)}
-    .choice:focus-visible{
-      outline:3px solid rgba(124,92,255,.35);
-      outline-offset:3px;
-    }
-
-    /* Reduced motion support */
-    @media (prefers-reduced-motion: reduce){
-      body::before{animation:none}
-      .overlay, .modal, button.primary, .choice, .closeBtn, a.link::after{
-        transition:none !important;
+    @media (prefers-reduced-motion: reduce) {
+      .blob,
+      .pulse i,
+      .btn,
+      .choice,
+      .overlay,
+      .modal,
+      .spotlight {
+        animation: none !important;
+        transition: none !important;
       }
-      .overlay.open .modal{transform:none}
-      button.primary:hover, .choice:hover, .closeBtn:hover{transform:none}
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <div class="hero">
-      <div class="chibi" aria-hidden="true">
-        <img src="/pic/chibi1.png" alt="Jackie chibi">
+  <div class="bg" aria-hidden="true">
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+    <div class="grain"></div>
+  </div>
+  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+
+  <div class="page">
+    <main class="shell">
+      <div class="topbar">
+        <div class="brand">Portfolio Landing</div>
+        <div class="pulse"><i></i>Live workshop space</div>
       </div>
 
-      <main>
-        <h1><span class="highlight">Jackie Foo</span></h1>
-
-        <p class="lead">
-          <b>I’m Jackie. This is my corner of the internet.</b>
-          More is coming. Stay tuned.
-        </p>
-
-        <div class="workshopLine">
-          If you're here for the workshop, click below to indicate.
+      <section class="hero" aria-label="Intro">
+        <div class="avatarWrap" aria-hidden="true">
+          <div class="avatar">
+            <img src="/pic/chibi1.png" alt="Jackie chibi" />
+          </div>
         </div>
-        <button class="primary" id="workshopBtn" type="button">
-          Workshop 1
-        </button>
 
-        <nav class="links" aria-label="Jackie links">
-          <a class="link" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a class="link" href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a class="link" href="mailto:you@email.com">Email</a>
-          <a class="link" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
-        </nav>
+        <div>
+          <h1><span class="titleAccent">Jackie Foo</span></h1>
+          <p class="lead">
+            I design workshop experiences that turn reflection into concrete implementation choices. Use this page to enter the game flow and move through each stage intentionally.
+          </p>
 
-        <small>© <span id="year"></span></small>
-      </main>
-    </div>
+          <div class="actions">
+            <button class="btn btnPrimary" id="workshopBtn" type="button">Enter Workshop 1</button>
+            <a class="btn btnGhost" href="/stage1/main-dashboard.html">Open Main Dashboard</a>
+          </div>
+
+          <nav class="links" aria-label="Jackie links">
+            <a class="link" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a class="link" href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="link" href="mailto:you@email.com">Email</a>
+            <a class="link" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
+          </nav>
+
+          <div class="timeline" aria-label="Workshop stages preview">
+            <article class="stageCard">
+              <div class="stageLabel">Stage 1</div>
+              <div class="stageText">Player mapping and intent setup before decisions.</div>
+            </article>
+            <article class="stageCard">
+              <div class="stageLabel">Stage 2</div>
+              <div class="stageText">Constraint mapping using shared sticky-note prompts.</div>
+            </article>
+            <article class="stageCard">
+              <div class="stageLabel">Stage 3</div>
+              <div class="stageText">Timeline response and implementation design reaction.</div>
+            </article>
+          </div>
+
+          <footer>© <span id="year"></span> Jackie Foo</footer>
+        </div>
+      </section>
+    </main>
   </div>
 
   <div class="overlay" id="overlay" hidden>
-    <div
-      class="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modalTitle"
-      aria-describedby="modalDesc"
-    >
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
       <button class="closeBtn" id="closeBtn" type="button" aria-label="Close dialog">Close</button>
 
       <div class="modalRow">
         <div class="modalChibi" aria-hidden="true">
-          <img src="/pic/chibi2.png" alt="">
+          <img src="/pic/chibi2.png" alt="" />
         </div>
-
-        <div class="modalContent">
+        <div>
           <h2 id="modalTitle">Workshop 1</h2>
           <p id="modalDesc">Select your university below.</p>
         </div>
@@ -412,6 +568,7 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
+    const spotlight = document.getElementById("spotlight");
     const overlay = document.getElementById("overlay");
     const modal = overlay.querySelector(".modal");
     const openBtn = document.getElementById("workshopBtn");
@@ -436,34 +593,36 @@
 
     function closeModal() {
       overlay.classList.remove("open");
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const delay = prefersReducedMotion ? 0 : 180;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const delay = reducedMotion ? 0 : 180;
 
       window.setTimeout(() => {
         overlay.hidden = true;
         document.body.style.overflow = "";
-        if (lastFocusedEl && typeof lastFocusedEl.focus === "function") lastFocusedEl.focus();
+        if (lastFocusedEl && typeof lastFocusedEl.focus === "function") {
+          lastFocusedEl.focus();
+        }
       }, delay);
     }
 
     openBtn.addEventListener("click", openModal);
     closeBtn.addEventListener("click", closeModal);
 
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) closeModal();
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) closeModal();
     });
 
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", (event) => {
       const isOpen = !overlay.hidden && overlay.classList.contains("open");
       if (!isOpen) return;
 
-      if (e.key === "Escape") {
-        e.preventDefault();
+      if (event.key === "Escape") {
+        event.preventDefault();
         closeModal();
         return;
       }
 
-      if (e.key === "Tab") {
+      if (event.key === "Tab") {
         const focusable = modal.querySelectorAll(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
@@ -472,11 +631,11 @@
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
 
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
           last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
           first.focus();
         }
       }
@@ -485,8 +644,14 @@
     monashBtn.addEventListener("click", () => {
       window.location.href = LINKS.monash;
     });
+
     upngBtn.addEventListener("click", () => {
       window.location.href = LINKS.upng;
+    });
+
+    window.addEventListener("pointermove", (event) => {
+      spotlight.style.left = `${event.clientX}px`;
+      spotlight.style.top = `${event.clientY}px`;
     });
   </script>
 </body>
