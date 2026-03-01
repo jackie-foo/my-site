@@ -51,6 +51,45 @@
     .btnDanger{border-color:color-mix(in srgb,var(--bad) 65%, var(--border))}
     .btnGhost{background:rgba(255,255,255,.03)}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .guideGrid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+    }
+    @media (max-width:1080px){.guideGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:620px){.guideGrid{grid-template-columns:1fr}}
+    .guideCard{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      padding:10px;
+      min-height:90px;
+      transition:opacity .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .guideCard.active{
+      border-color:color-mix(in srgb,var(--accent) 68%, rgba(255,255,255,.12));
+      background:rgba(0,229,255,.10);
+      box-shadow:0 10px 24px rgba(0,229,255,.10);
+    }
+    .guideCard.done{
+      border-color:rgba(71,255,135,.42);
+      background:rgba(71,255,135,.08);
+    }
+    .guideCard.dim{opacity:.46}
+    .guideTitle{
+      margin:0 0 6px;
+      font-size:11px;
+      letter-spacing:.25px;
+      text-transform:uppercase;
+      font-weight:1000;
+    }
+    .guideText{
+      margin:0;
+      font-size:12px;
+      line-height:1.4;
+      font-weight:850;
+      color:var(--muted);
+    }
 
     .stickyArea{
       border: 1px dashed color-mix(in srgb, var(--border) 88%, transparent);
@@ -81,6 +120,15 @@
       flex-direction:column;
       gap:8px;
       min-height:320px;
+      transition:opacity .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .sidePanel.focusDim{opacity:.5;filter:saturate(.75)}
+    .sidePanel.focusActive{
+      border-color:color-mix(in srgb,var(--accent) 64%, rgba(255,255,255,.14));
+      box-shadow:0 10px 26px rgba(0,229,255,.10);
+      background:
+        linear-gradient(180deg, rgba(0,229,255,.08), rgba(255,255,255,.02)),
+        rgba(255,255,255,.03);
     }
     .panelHead{
       display:flex;
@@ -137,7 +185,8 @@
     .sticky{
       position:absolute;
       width: 230px;
-      min-height: 130px;
+      height: 190px;
+      min-height: 140px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,.18);
       box-shadow: 0 16px 40px rgba(0,0,0,.34);
@@ -167,11 +216,12 @@
       color: #0b0d12;
       border: none;
       outline:none;
-      resize:vertical;
+      resize:none;
       font-weight: 1000;
       line-height: 1.2;
       font-size: 14px;
-      min-height: 92px;
+      min-height: 0;
+      flex:1;
     }
     .mini{display:flex;gap:8px;align-items:center;justify-content:space-between}
     .tinyBtn{
@@ -195,6 +245,27 @@
       justify-content:flex-end;
       gap:6px;
     }
+    .resizeHandle{
+      position:absolute;
+      right:6px;
+      bottom:6px;
+      width:16px;
+      height:16px;
+      border-radius:6px;
+      cursor:nwse-resize;
+      background:
+        linear-gradient(135deg, transparent 40%, rgba(0,0,0,.45) 40%, rgba(0,0,0,.45) 52%, transparent 52%),
+        linear-gradient(135deg, transparent 58%, rgba(0,0,0,.45) 58%, rgba(0,0,0,.45) 70%, transparent 70%);
+      opacity:.72;
+    }
+    .stickyArea.awaitShare .tinyBtn.pub{
+      animation:sharePulse 1.1s ease-in-out infinite;
+    }
+    @keyframes sharePulse{
+      0%{transform:scale(1);box-shadow:none}
+      50%{transform:scale(1.04);box-shadow:0 0 0 4px rgba(255,255,255,.18)}
+      100%{transform:scale(1);box-shadow:none}
+    }
     .statusPill{
       border-radius:999px;
       padding:4px 8px;
@@ -214,6 +285,14 @@
     .stickyArea.syncing{
       opacity:.72;
       transition:opacity .15s ease;
+    }
+    .btnPrimary.focusPulse{
+      animation:nextPulse 1.25s ease-in-out infinite;
+    }
+    @keyframes nextPulse{
+      0%{transform:translateY(0);box-shadow:0 14px 34px rgba(0,229,255,.12)}
+      50%{transform:translateY(-1px) scale(1.01);box-shadow:0 18px 36px rgba(0,229,255,.26)}
+      100%{transform:translateY(0);box-shadow:0 14px 34px rgba(0,229,255,.12)}
     }
 
     .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
@@ -365,7 +444,6 @@
       <div class="cardHead">
         <h2>Hybrid Board: Draft → Publish</h2>
         <div class="row" style="justify-content:flex-end">
-          <button id="btnPublishAll" class="btnGhost">Publish All Drafts</button>
           <button id="btnAdd" class="btnPrimary">＋ Add draft sticky</button>
         </div>
       </div>
@@ -375,15 +453,33 @@
           Workflow: Draft privately first, then publish only the strongest prompts to shared board.
           Sticky formula: <span class="mono">Friction</span> + <span class="mono">Minimum Action</span> + <span class="mono">Evidence Needed</span>.
         </div>
+        <div class="guideGrid" id="flowGuide">
+          <article class="guideCard active" data-flow-step="1">
+            <p class="guideTitle">1. Add draft</p>
+            <p class="guideText">Create a sticky in the left panel first.</p>
+          </article>
+          <article class="guideCard dim" data-flow-step="2">
+            <p class="guideTitle">2. Edit draft</p>
+            <p class="guideText">Fill friction, minimum action, and evidence.</p>
+          </article>
+          <article class="guideCard dim" data-flow-step="3">
+            <p class="guideTitle">3. Share</p>
+            <p class="guideText">Use each sticky’s Share button to publish.</p>
+          </article>
+          <article class="guideCard dim" data-flow-step="4">
+            <p class="guideTitle">4. Continue</p>
+            <p class="guideText">Add another draft or go to Step 3.</p>
+          </article>
+        </div>
         <div class="boardSplit">
-          <div class="sidePanel">
+          <div class="sidePanel focusActive" id="sideDraft">
             <div class="panelHead">
               <p class="panelTitle">My Draft Stickies (Private)</p>
               <span class="mono" id="draftCount">0</span>
             </div>
             <div class="stickyArea" id="stickyArea"></div>
           </div>
-          <div class="sidePanel">
+          <div class="sidePanel focusDim" id="sideShared">
             <div class="panelHead">
               <p class="panelTitle">Published Shared Prompts</p>
               <span class="mono" id="sharedCount">0</span>
@@ -391,7 +487,7 @@
             <div class="sharedList" id="sharedList"></div>
           </div>
         </div>
-        <div class="subtitle">Tip: Draft is only yours. Published prompts are shared for group discussion and Step 3 mapping.</div>
+        <div class="subtitle" id="flowStatus">Tip: start by adding one draft sticky in the left panel.</div>
       </div>
     </section>
   </div>
@@ -489,7 +585,7 @@
     const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     const trackRole = (params.get("track") || "").trim().toLowerCase() === "tutor" ? "tutor" : "student";
     const group = (params.get("group") || "core").trim() || "core";
-    if (!room) { location.href = `${BASE_PATH}/step1.html?room=demo&campus=${encodeURIComponent(campus)}`; return; }
+    if (!room) { location.href = `${BASE_PATH}/landing.html`; return; }
 
     const keys = shared.getKeys(room);
     const participantId = shared.getOrCreateParticipantId(keys.PID_KEY);
@@ -508,7 +604,11 @@
     const sharedList = $("#sharedList");
     const draftCount = $("#draftCount");
     const sharedCount = $("#sharedCount");
-    const btnPublishAll = $("#btnPublishAll");
+    const sideDraft = $("#sideDraft");
+    const sideShared = $("#sideShared");
+    const flowCards = [...document.querySelectorAll("#flowGuide [data-flow-step]")];
+    const flowStatus = $("#flowStatus");
+    const btnNext = $("#btnNext");
 
     const loading = $("#loading");
     const chibiImg = $("#chibiImg");
@@ -516,6 +616,7 @@
     const loadingSub = $("#loadingSub");
     const SHARED_PREFIX = "[SHARED]";
     const DRAFT_PREFIX = `[DRAFT:${participantId}] `;
+    const DRAFT_SEED_TEXT = "Friction: \nMinimum action: \nEvidence needed: ";
 
     chibiImg.src = CHIBI3_SRC;
 
@@ -594,10 +695,97 @@
       };
     }
 
+    const STICKY_SIZE_KEY = `stage1_step2_sticky_size_${room}_${participantId}`;
+    const SHARED_DONE_KEY = `stage1_step2_shared_done_${room}_${participantId}`;
     const state = { stickies: [], shared: [] };
+    const touchedDrafts = new Set();
+    const stickySizes = (() => {
+      try{
+        const raw = localStorage.getItem(STICKY_SIZE_KEY);
+        const obj = raw ? JSON.parse(raw) : {};
+        return obj && typeof obj === "object" ? obj : {};
+      } catch {
+        return {};
+      }
+    })();
+    let hasSharedByMe = localStorage.getItem(SHARED_DONE_KEY) === "1";
+    let loopBackToDraft = false;
     let stickyPollTimer = null;
     let lastStickySnapshot = "";
     const saving = new Map();
+
+    function persistStickySizes(){
+      localStorage.setItem(STICKY_SIZE_KEY, JSON.stringify(stickySizes));
+    }
+    function getStickySize(id){
+      const rec = stickySizes[String(id)] || {};
+      const w = clamp(Number(rec.w) || 230, 210, 480);
+      const h = clamp(Number(rec.h) || 190, 140, 480);
+      return { w, h };
+    }
+    function rememberStickySize(id, w, h){
+      stickySizes[String(id)] = { w: Math.round(w), h: Math.round(h) };
+      persistStickySizes();
+    }
+    function forgetStickySize(id){
+      delete stickySizes[String(id)];
+      persistStickySizes();
+    }
+
+    function setFlowGuide(activeStep, doneUntil){
+      flowCards.forEach((card) => {
+        const step = Number(card.dataset.flowStep || "0");
+        card.classList.toggle("active", step === activeStep);
+        card.classList.toggle("done", step <= doneUntil);
+        card.classList.toggle("dim", step > activeStep && step > doneUntil);
+      });
+    }
+
+    function updateFlowGuide(){
+      const hasDraft = state.stickies.length > 0;
+      const hasEdited = state.stickies.some((s) => {
+        const txt = (s.text || "").trim();
+        if (!txt) return false;
+        return txt.toLowerCase() !== DRAFT_SEED_TEXT.trim().toLowerCase();
+      });
+
+      let activeStep = 1;
+      let doneUntil = 0;
+      if (!hasDraft){
+        activeStep = 1;
+        doneUntil = hasSharedByMe ? 4 : 0;
+      } else if (!hasEdited){
+        activeStep = 2;
+        doneUntil = 1;
+      } else if (!hasSharedByMe){
+        activeStep = 3;
+        doneUntil = 2;
+      } else if (loopBackToDraft){
+        activeStep = 1;
+        doneUntil = 4;
+      } else {
+        activeStep = 4;
+        doneUntil = 4;
+      }
+
+      setFlowGuide(activeStep, doneUntil);
+
+      sideDraft.classList.toggle("focusActive", activeStep <= 3 || loopBackToDraft);
+      sideDraft.classList.toggle("focusDim", activeStep === 4 && !loopBackToDraft);
+      sideShared.classList.toggle("focusActive", activeStep >= 3 || hasSharedByMe);
+      sideShared.classList.toggle("focusDim", activeStep < 3 && !hasSharedByMe);
+
+      stickyArea.classList.toggle("awaitShare", activeStep === 3);
+      btnNext.classList.toggle("focusPulse", hasSharedByMe);
+
+      if (flowStatus){
+        if (!hasDraft) flowStatus.textContent = "Tip: start by adding one draft sticky in the left panel.";
+        else if (!hasEdited) flowStatus.textContent = "Good start. Now edit the draft content before sharing.";
+        else if (!hasSharedByMe) flowStatus.textContent = "Ready to share: click Share on your draft sticky.";
+        else if (loopBackToDraft) flowStatus.textContent = "Shared. Add another draft from Step 1, or press Next → Step 3.";
+        else flowStatus.textContent = "Great. You can continue drafting, or press Next → Step 3.";
+      }
+    }
 
     function setSaving(id, isSaving){
       saving.set(id, !!isSaving);
@@ -697,7 +885,13 @@
         drafts.push(s);
       });
       state.stickies = drafts.map(s => ({
-        id:s.id, x:s.x, y:s.y, color:s.color, text:stripDraftPrefix(s.text || ""), participant_id:s.participant_id
+        id:s.id,
+        x:s.x,
+        y:s.y,
+        color:s.color,
+        text:stripDraftPrefix(s.text || ""),
+        participant_id:s.participant_id,
+        ...getStickySize(s.id)
       }));
       state.shared = sharedRows.map(s => ({
         id:s.id, color:s.color, text:s.text || "", participant_id:s.participant_id, updated_at:s.updated_at
@@ -716,7 +910,7 @@
 
       el.addEventListener("pointerdown",(e)=>{
         const t = e.target;
-        if (t && (t.closest("textarea") || t.closest("button"))) return;
+        if (t && (t.closest("textarea") || t.closest("button") || t.closest(".resizeHandle"))) return;
 
         el.setPointerCapture(e.pointerId);
         last={x:e.clientX,y:e.clientY};
@@ -741,6 +935,52 @@
         last=null;
         onEnd?.();
       });
+    }
+
+    function bindResizeHandle(el, handle, stickyId){
+      let start = null;
+
+      handle.addEventListener("pointerdown", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const item = state.stickies.find(x => String(x.id) === String(stickyId));
+        if (!item) return;
+        handle.setPointerCapture(e.pointerId);
+        start = {
+          x: e.clientX,
+          y: e.clientY,
+          w: item.w || el.offsetWidth,
+          h: item.h || el.offsetHeight
+        };
+      });
+
+      handle.addEventListener("pointermove", (e) => {
+        if (!start) return;
+        const item = state.stickies.find(x => String(x.id) === String(stickyId));
+        if (!item) return;
+
+        const dx = e.clientX - start.x;
+        const dy = e.clientY - start.y;
+        const maxW = Math.max(210, stickyArea.clientWidth - item.x - 8);
+        const maxH = Math.max(140, stickyArea.clientHeight - item.y - 8);
+
+        item.w = clamp(start.w + dx, 210, maxW);
+        item.h = clamp(start.h + dy, 140, maxH);
+
+        el.style.width = `${Math.round(item.w)}px`;
+        el.style.height = `${Math.round(item.h)}px`;
+      });
+
+      function finishResize(){
+        if (!start) return;
+        const item = state.stickies.find(x => String(x.id) === String(stickyId));
+        if (item){
+          rememberStickySize(item.id, item.w || el.offsetWidth, item.h || el.offsetHeight);
+        }
+        start = null;
+      }
+      handle.addEventListener("pointerup", finishResize);
+      handle.addEventListener("pointercancel", finishResize);
     }
 
     const pushStickyUpdate = throttle(async (id, patch) => {
@@ -782,6 +1022,8 @@
         el.dataset.id = s.id;
         el.style.left = s.x + "px";
         el.style.top  = s.y + "px";
+        el.style.width = `${Math.round(s.w || 230)}px`;
+        el.style.height = `${Math.round(s.h || 190)}px`;
         el.style.background = s.color;
 
         const isSaving = saving.get(s.id) === true;
@@ -796,13 +1038,15 @@
             <button class="tinyBtn pub" title="Publish to shared board" aria-label="Publish">Share</button>
             <button class="tinyBtn del" title="Delete" aria-label="Delete">Delete</button>
           </div>
+          <span class="resizeHandle" title="Resize sticky"></span>
         `;
 
         const delBtn = el.querySelector(".tinyBtn.del");
         const pubBtn = el.querySelector(".tinyBtn.pub");
+        const resizeHandle = el.querySelector(".resizeHandle");
 
         // stop pointerdown so drag never captures this interaction
-        [delBtn, pubBtn].forEach((btn) => {
+        [delBtn, pubBtn, resizeHandle].forEach((btn) => {
           btn.addEventListener("pointerdown", (e)=>{
             e.stopPropagation();
             e.preventDefault();
@@ -826,6 +1070,11 @@
               console.error(err);
             }
             state.stickies = state.stickies.filter(x => x.id !== s.id);
+            touchedDrafts.delete(String(s.id));
+            forgetStickySize(s.id);
+            hasSharedByMe = true;
+            localStorage.setItem(SHARED_DONE_KEY, "1");
+            loopBackToDraft = true;
             render();
             showToast("Already published. Draft removed.");
             await refreshStickiesFromDb({ silent:true });
@@ -855,8 +1104,13 @@
             console.error(err);
           }
           state.stickies = state.stickies.filter(x => x.id !== s.id);
+          touchedDrafts.delete(String(s.id));
+          forgetStickySize(s.id);
+          hasSharedByMe = true;
+          localStorage.setItem(SHARED_DONE_KEY, "1");
+          loopBackToDraft = true;
           render();
-          showToast("Published and moved to shared board");
+          showToast("Published. Add another draft or continue to Step 3.");
           await refreshStickiesFromDb({ silent:true });
         });
 
@@ -868,6 +1122,8 @@
           // optimistic remove
           state.stickies = state.stickies.filter(x => x.id !== id);
           saving.delete(id);
+          touchedDrafts.delete(String(id));
+          forgetStickySize(id);
           render();
 
           // DB delete
@@ -884,6 +1140,11 @@
             showToast("Delete failed (see console)");
             // rollback
             state.stickies.push(s);
+            if (s?.id) {
+              const size = getStickySize(s.id);
+              s.w = size.w;
+              s.h = size.h;
+            }
             render();
           }
         });
@@ -892,6 +1153,9 @@
         ta.addEventListener("input", ()=>{
           const item = state.stickies.find(x=>x.id===s.id);
           if(item) item.text = ta.value;
+          touchedDrafts.add(String(s.id));
+          loopBackToDraft = false;
+          updateFlowGuide();
           setSaving(s.id, true);
           pushStickyTextUpdate(s.id, ta.value);
         });
@@ -918,9 +1182,11 @@
             pushStickyUpdate(s.id, { x: item.x, y: item.y });
           }
         });
+        bindResizeHandle(el, resizeHandle, s.id);
 
         stickyArea.appendChild(el);
       });
+      updateFlowGuide();
     }
 
     async function loadInitial(){
@@ -1000,19 +1266,21 @@
 
     $("#btnAdd").addEventListener("click", async ()=>{
       const rect = stickyArea.getBoundingClientRect();
-      const x = Math.round(Math.max(10, Math.min(rect.width - 190, 12 + Math.random()*40)));
-      const y = Math.round(Math.max(10, Math.min(rect.height - 120, 12 + Math.random()*40)));
+      const defaultW = 230;
+      const defaultH = 190;
+      const x = Math.round(Math.max(10, Math.min(rect.width - defaultW - 12, 12 + Math.random()*40)));
+      const y = Math.round(Math.max(10, Math.min(rect.height - defaultH - 12, 12 + Math.random()*40)));
 
       // optimistic temp
       const tempId = "temp_" + crypto.randomUUID();
       const color = randomStickyColor();
 
-      const seedText = "Friction: \nMinimum action: \nEvidence needed: ";
-      state.stickies.push({ id:tempId, x, y, color, text:seedText, participant_id:participantId });
+      state.stickies.push({ id:tempId, x, y, color, text:DRAFT_SEED_TEXT, participant_id:participantId, w:defaultW, h:defaultH });
+      loopBackToDraft = false;
       setSaving(tempId, true);
       render();
 
-      const payload = { session_id: room, x, y, color, text: encodeDraftText(seedText), participant_id: participantId };
+      const payload = { session_id: room, x, y, color, text: encodeDraftText(DRAFT_SEED_TEXT), participant_id: participantId };
 
       let res = await supabase.from("workshop_stickies").insert(payload).select().single();
       if (res.error && String(res.error.message || "").toLowerCase().includes("participant_id")) {
@@ -1034,79 +1302,15 @@
       saving.delete(tempId);
 
       if (idx >= 0){
-        state.stickies[idx] = { id:row.id, x:row.x, y:row.y, color:row.color, text:stripDraftPrefix(row.text || ""), participant_id:row.participant_id };
+        const size = getStickySize(row.id);
+        state.stickies[idx] = { id:row.id, x:row.x, y:row.y, color:row.color, text:stripDraftPrefix(row.text || ""), participant_id:row.participant_id, w:size.w, h:size.h };
         setSaving(row.id, false);
         render();
       } else {
-        state.stickies.push({ id:row.id, x:row.x, y:row.y, color:row.color, text:stripDraftPrefix(row.text || ""), participant_id:row.participant_id });
+        const size = getStickySize(row.id);
+        state.stickies.push({ id:row.id, x:row.x, y:row.y, color:row.color, text:stripDraftPrefix(row.text || ""), participant_id:row.participant_id, w:size.w, h:size.h });
         setSaving(row.id, false);
         render();
-      }
-    });
-
-    btnPublishAll.addEventListener("click", async () => {
-      const drafts = state.stickies.filter(s => (s.text || "").trim());
-      if (!drafts.length){
-        showToast("No non-empty drafts to publish");
-        return;
-      }
-      const author = (localStorage.getItem(NAME_KEY) || participantId.slice(0, 8)).trim();
-      const seen = currentSharedSigSet();
-      let okCount = 0;
-      let skipCount = 0;
-      const removedDraftIds = new Set();
-      for (const s of drafts){
-        const body = (s.text || "").trim();
-        const sig = sharedSig(author, body);
-        if (!body){
-          continue;
-        }
-        if (seen.has(sig)){
-          skipCount += 1;
-          try{
-            await removeDraftRowById(s.id);
-            removedDraftIds.add(s.id);
-          } catch (err){
-            console.error(err);
-          }
-          continue;
-        }
-        const payload = {
-          session_id: room,
-          x: Math.max(8, Math.round(s.x || 16)),
-          y: Math.max(8, Math.round(s.y || 16)),
-          color: s.color || randomStickyColor(),
-          text: `${SHARED_PREFIX} ${author}\n${body}`,
-          participant_id: participantId
-        };
-        let res = await supabase.from("workshop_stickies").insert(payload).select().single();
-        if (res.error && String(res.error.message || "").toLowerCase().includes("participant_id")) {
-          delete payload.participant_id;
-          res = await supabase.from("workshop_stickies").insert(payload).select().single();
-        }
-        if (!res.error){
-          okCount += 1;
-          seen.add(sig);
-          try{
-            await removeDraftRowById(s.id);
-            removedDraftIds.add(s.id);
-          } catch (err){
-            console.error(err);
-          }
-        }
-      }
-      if (okCount > 0){
-        showToast(`Published ${okCount} draft${okCount > 1 ? "s" : ""}${skipCount ? `, skipped ${skipCount} duplicate${skipCount > 1 ? "s" : ""}` : ""}`);
-        state.stickies = state.stickies.filter(s => !removedDraftIds.has(s.id));
-        render();
-        await refreshStickiesFromDb({ silent:true });
-      } else if (skipCount > 0){
-        showToast(`Skipped ${skipCount} duplicate draft${skipCount > 1 ? "s" : ""}`);
-        state.stickies = state.stickies.filter(s => !removedDraftIds.has(s.id));
-        render();
-        await refreshStickiesFromDb({ silent:true });
-      } else {
-        showToast("Publish failed");
       }
     });
 
@@ -1123,7 +1327,6 @@
             <li>Click <span class="mono">＋ Add draft sticky</span> to create a private draft.</li>
             <li>Fill: <span class="mono">Friction</span>, <span class="mono">Minimum action</span>, <span class="mono">Evidence needed</span>.</li>
             <li>Use <span class="mono">Share</span> on a draft to publish to group board.</li>
-            <li>Use <span class="mono">Publish All Drafts</span> when ready.</li>
           </ul>
         `
       },

@@ -148,6 +148,21 @@
       gap:6px;
       min-width:min(360px, 100%);
       flex:1;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      padding:10px;
+      background:rgba(255,255,255,.02);
+      transition:opacity .16s ease, filter .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .field.focusDim{opacity:.48;filter:saturate(.68)}
+    .field.focusActive{
+      border-color:color-mix(in srgb,var(--accent) 68%, rgba(255,255,255,.10));
+      background:rgba(0,229,255,.08);
+      box-shadow:0 10px 26px rgba(0,229,255,.10);
+    }
+    .field.focusDone{
+      border-color:rgba(71,255,135,.42);
+      background:rgba(71,255,135,.08);
     }
     .label{
       font-size:12px;
@@ -387,6 +402,11 @@
       background:rgba(0,229,255,.10);
       box-shadow:0 10px 24px rgba(0,229,255,.10);
     }
+    .guideCard.done{
+      border-color:rgba(71,255,135,.42);
+      background:rgba(71,255,135,.08);
+    }
+    .guideCard.dim{opacity:.48}
     .guideTitle{
       margin:0 0 6px;
       font-size:12px;
@@ -400,6 +420,19 @@
       line-height:1.45;
       font-weight:850;
       color:var(--muted);
+    }
+    .personaGrid.locked{
+      opacity:.42;
+      pointer-events:none;
+      filter:saturate(.62);
+    }
+    .btnPrimary.focusPulse{
+      animation:nextPulse 1.25s ease-in-out infinite;
+    }
+    @keyframes nextPulse{
+      0%{transform:translateY(0);box-shadow:0 14px 34px rgba(0,229,255,.12)}
+      50%{transform:translateY(-1px) scale(1.01);box-shadow:0 18px 36px rgba(0,229,255,.26)}
+      100%{transform:translateY(0);box-shadow:0 14px 34px rgba(0,229,255,.12)}
     }
 
     /* ===== Loading Screen ===== */
@@ -519,13 +552,13 @@
 
         <!-- Code + Name -->
         <div class="row" style="align-items:flex-end">
-          <div class="field">
+          <div class="field" id="codeField">
             <label class="label" for="codeInput">Workshop code</label>
             <input id="codeInput" type="text" placeholder="Enter workshop code" maxlength="40" autocomplete="off"/>
             <div class="hint">Enter the room code shared by your facilitator.</div>
           </div>
 
-          <div class="field">
+          <div class="field" id="nameField">
             <label class="label" for="nameInput">Your name</label>
             <input id="nameInput" type="text" placeholder="e.g., Jackie" maxlength="32" autocomplete="name"/>
             <div class="hint">This is what others will see in the room.</div>
@@ -533,15 +566,15 @@
         </div>
 
         <div class="guideGrid" id="inlineGuide">
-          <article class="guideCard active">
+          <article class="guideCard active" data-guide-step="1">
             <p class="guideTitle">Step 1 (Now)</p>
             <p class="guideText">Enter workshop code + your name, then choose one tutor lens card.</p>
           </article>
-          <article class="guideCard">
+          <article class="guideCard dim" data-guide-step="2">
             <p class="guideTitle">Step 2</p>
             <p class="guideText">Write sticky prompts about marking constraints, bottlenecks, and minimum actions.</p>
           </article>
-          <article class="guideCard">
+          <article class="guideCard dim" data-guide-step="3">
             <p class="guideTitle">Step 3</p>
             <p class="guideText">Build your workflow flowchart and label friction on connectors between steps.</p>
           </article>
@@ -549,7 +582,10 @@
 
         <div class="divider"></div>
 
-        <div class="personaGrid" id="personaGrid"></div>
+        <div class="field focusDim" id="personaField" style="min-width:100%">
+          <label class="label">Pick your tutor lens card</label>
+          <div class="personaGrid locked" id="personaGrid"></div>
+        </div>
 
         <div class="metaRow">
           <span class="mono">Code: <span id="selCode">Not entered</span></span>
@@ -693,6 +729,10 @@
     const gateCard = $("#gateCard"), mainCard = $("#mainCard");
     const gateStatus = $("#gateStatus");
 
+    const codeField = $("#codeField");
+    const nameField = $("#nameField");
+    const personaField = $("#personaField");
+    const guideCards = [...document.querySelectorAll("#inlineGuide [data-guide-step]")];
     const personaGrid = $("#personaGrid");
     const selPersona = $("#selPersona");
     const selName = $("#selName");
@@ -819,6 +859,45 @@
       const codeOK = ((codeInput?.value || "").trim().toLowerCase() === room.toLowerCase());
       if (selCode) selCode.textContent = codeOK ? "Verified" : "Not entered";
       btnNext.disabled = !codeOK || !state.persona_id || !state.display_name;
+      updateFocusFlow();
+    }
+
+    function setGuideProgress(activeStep, doneUntil){
+      guideCards.forEach((card) => {
+        const step = Number(card.dataset.guideStep || "0");
+        card.classList.toggle("active", step === activeStep);
+        card.classList.toggle("done", step <= doneUntil);
+        card.classList.toggle("dim", step > activeStep && step > doneUntil);
+      });
+    }
+
+    function updateFocusFlow(){
+      const codeOK = ((codeInput?.value || "").trim().toLowerCase() === room.toLowerCase());
+      const nameOK = !!state.display_name;
+      const cardOK = !!state.persona_id;
+      const personaUnlocked = codeOK && nameOK;
+
+      if (nameInput) nameInput.disabled = !codeOK;
+      personaGrid.classList.toggle("locked", !personaUnlocked);
+
+      codeField?.classList.toggle("focusActive", !codeOK);
+      codeField?.classList.toggle("focusDone", codeOK);
+      codeField?.classList.toggle("focusDim", false);
+
+      nameField?.classList.toggle("focusActive", codeOK && !nameOK);
+      nameField?.classList.toggle("focusDone", codeOK && nameOK);
+      nameField?.classList.toggle("focusDim", !codeOK);
+
+      personaField?.classList.toggle("focusActive", personaUnlocked && !cardOK);
+      personaField?.classList.toggle("focusDone", cardOK);
+      personaField?.classList.toggle("focusDim", !personaUnlocked);
+
+      if (!codeOK) setGuideProgress(1, 0);
+      else if (!nameOK) setGuideProgress(2, 1);
+      else if (!cardOK) setGuideProgress(3, 2);
+      else setGuideProgress(3, 3);
+
+      btnNext.classList.toggle("focusPulse", codeOK && nameOK && cardOK);
     }
 
     // local name first
