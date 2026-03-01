@@ -220,11 +220,11 @@
           <button id="btnTutorHelp">Tutorial</button>
           <div class="hint">Add a box, type directly inside it, and set time + color from the pills.</div>
           <div class="hint">Connectors: drag from any <b>+ anchor</b> on a box (top/right/bottom/left) to another box anchor.</div>
-          <div class="hint">Click connector label <b>Issue?</b> to set/edit friction between steps.</div>
+          <div class="hint">Click connector label <b>Issue?</b> to set/edit friction. Type <b>/delete</b> there to remove a connector.</div>
           <div class="toneLegend">
-            <div class="toneChip system">System</div>
-            <div class="toneChip process">Process</div>
-            <div class="toneChip issue">Issue</div>
+            <div class="toneChip system">System (Blue)</div>
+            <div class="toneChip process">Process (Green)</div>
+            <div class="toneChip issue">Issue (Red)</div>
           </div>
           <div id="diag" class="diag">Ready.</div>
         </aside>
@@ -621,6 +621,18 @@
       renderEdges();
     }
 
+    async function deleteEdge(edgeId){
+      const { error } = await supabase
+        .from("workshop_journey_items")
+        .delete()
+        .eq("id", edgeId)
+        .eq("participant_id", participantId)
+        .eq("session_id", room);
+      if (error) throw error;
+      state.edges = state.edges.filter(e => e.id !== edgeId);
+      renderEdges();
+    }
+
     async function deleteNode(id){
       const edgeIds = state.edges.filter(e => e.from === id || e.to === id).map(e => e.id);
       if (edgeIds.length){
@@ -938,11 +950,17 @@
         const edgeId = tag.getAttribute("data-edge-id");
         const edge = state.edges.find(x => x.id === edgeId);
         if (!edge) return;
-        const next = prompt("Edit problem on this connector (leave blank to clear):", edge.issue || "");
+        const next = prompt("Edit connector friction (leave blank to clear, type /delete to remove line):", edge.issue || "");
         if (next === null) return;
         try {
-          await updateEdgeIssue(edgeId, next.trim());
-          showToast("Connector issue updated");
+          const trimmed = next.trim();
+          if (trimmed.toLowerCase() === "/delete"){
+            await deleteEdge(edgeId);
+            showToast("Connector removed");
+            return;
+          }
+          await updateEdgeIssue(edgeId, trimmed);
+          showToast(trimmed ? "Connector issue updated" : "Connector issue cleared");
         } catch (err){
           showToast(err.message || "Connector update failed");
         }
@@ -998,35 +1016,35 @@
 
     const tutorialSlides = [
       {
-        title: "Step 1: Add and classify boxes",
+        title: "Step 1: Create first box",
         html: `
-          <div class="callout">Add one box, write the step, set time, then set color: System / Process / Issue.</div>
+          <div class="callout">Click <span class="mono">Add Box</span> and type: <span class="mono">Submission received</span>.</div>
           <ul class="list">
-            <li>Use <span class="mono">Add Box</span> for each workflow stage.</li>
-            <li>Click time pill to update duration.</li>
-            <li>Click color pill to cycle System → Process → Issue.</li>
+            <li>Click time pill to set duration (example: 10m).</li>
+            <li>Click color pill until it shows <span class="mono">System</span> (blue).</li>
+            <li>This first box is the system-triggered entry point.</li>
           </ul>
         `
       },
       {
-        title: "Step 2: Connect your workflow",
+        title: "Step 2: Add second box and connect",
         html: `
-          <div class="callout">Drag from any + anchor (top/right/bottom/left) to another anchor to create a connection.</div>
+          <div class="callout">Add a second box (example: <span class="mono">Marking begins</span>) and set it to <span class="mono">Process</span> (green).</div>
           <ul class="list">
-            <li>Connections now create instantly.</li>
-            <li>Click connector label <span class="mono">Issue?</span> to add friction text.</li>
-            <li>Press <span class="mono">Esc</span> to cancel an in-progress connector.</li>
+            <li>Drag from first box right + anchor to second box left + anchor.</li>
+            <li>Connection creates instantly.</li>
+            <li>Click connector label <span class="mono">Issue?</span> to add friction text (if any).</li>
           </ul>
         `
       },
       {
-        title: "Step 3: Finalize for discussion",
+        title: "Step 3: Issue mapping and cleanup",
         html: `
-          <div class="callout">A strong final map shows sequence + bottlenecks + where problems happen.</div>
+          <div class="callout">Use <span class="mono">Issue</span> (red) boxes for bottlenecks and keep the map clean.</div>
           <ul class="list">
-            <li>Include all major workflow stages from release to feedback return.</li>
-            <li>Use Issue color where delays or confusion happen.</li>
-            <li>Add friction labels on connectors to explain why delays occur.</li>
+            <li>Add a red issue box where delays/confusion happen.</li>
+            <li>To remove a connector line: click its label and type <span class="mono">/delete</span>.</li>
+            <li>Leave blank in connector prompt to clear text but keep the line.</li>
           </ul>
         `
       }
