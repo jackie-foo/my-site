@@ -100,10 +100,23 @@
       cursor:grab;
       user-select:none;
     }
+    .node.tone-system{
+      background:linear-gradient(170deg, rgba(109,182,255,.28), rgba(255,255,255,.08) 44%), rgba(255,255,255,.06);
+      border-color:rgba(109,182,255,.62);
+    }
+    .node.tone-process{
+      background:linear-gradient(170deg, rgba(89,240,197,.24), rgba(255,255,255,.08) 44%), rgba(255,255,255,.06);
+      border-color:rgba(89,240,197,.62);
+    }
+    .node.tone-issue{
+      background:linear-gradient(170deg, rgba(255,131,144,.26), rgba(255,255,255,.08) 44%), rgba(255,255,255,.06);
+      border-color:rgba(255,131,144,.66);
+    }
     .node.drag{cursor:grabbing;opacity:.96}
     .node.selected{outline:2px solid rgba(89,240,197,.75)}
     .nodeTop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
     .timePill{border-radius:999px;border:1px solid rgba(255,255,255,.2);padding:3px 8px;font-size:10px;font-weight:1000;text-transform:uppercase;letter-spacing:.2px;background:rgba(0,0,0,.24);cursor:pointer}
+    .tonePill{border-radius:999px;border:1px solid rgba(255,255,255,.2);padding:3px 8px;font-size:10px;font-weight:1000;text-transform:uppercase;letter-spacing:.2px;background:rgba(0,0,0,.24);cursor:pointer}
     .miniDanger{border:1px solid rgba(255,131,144,.48);background:rgba(255,131,144,.16);padding:4px 8px;border-radius:10px;font-size:10px;font-weight:900;box-shadow:none}
     .nodeText{outline:none;border:none;background:transparent;color:var(--text);font-size:13px;font-weight:800;line-height:1.35;min-height:72px;white-space:pre-wrap;word-break:break-word;cursor:text;padding:4px}
     .nodeText:empty:before{content:attr(data-placeholder);color:rgba(233,236,255,.5)}
@@ -159,6 +172,24 @@
     .pill.active{border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.12));box-shadow:0 12px 28px rgba(0,229,255,.10);color:var(--text)}
     .list{margin:0;padding-left:18px;color:var(--muted);font-weight:800;font-size:13px;line-height:1.55}
     .callout{border:1px solid rgba(255,255,255,.10);background:rgba(0,229,255,.06);border-radius:16px;padding:10px 12px;color:var(--text);font-weight:900;font-size:12px;line-height:1.45}
+    .toneLegend{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:6px;
+    }
+    .toneChip{
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:12px;
+      padding:8px 9px;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+      background:rgba(255,255,255,.03);
+    }
+    .toneChip.system{border-color:rgba(109,182,255,.58);background:rgba(109,182,255,.16)}
+    .toneChip.process{border-color:rgba(89,240,197,.58);background:rgba(89,240,197,.15)}
+    .toneChip.issue{border-color:rgba(255,131,144,.58);background:rgba(255,131,144,.16)}
   </style>
 </head>
 <body>
@@ -187,11 +218,14 @@
           <h3>Quick Actions</h3>
           <button id="btnAdd" class="btnPrimary">Add Box</button>
           <button id="btnTutorHelp">Tutorial</button>
-          <button id="btnStarter">Add Starter Flow</button>
-          <button id="btnClearMine">Clear My Canvas</button>
-          <div class="hint">When adding a box, enter only the estimated time taken. Then type directly inside the box.</div>
+          <div class="hint">Add a box, type directly inside it, and set time + color from the pills.</div>
           <div class="hint">Connectors: drag from any <b>+ anchor</b> on a box (top/right/bottom/left) to another box anchor.</div>
-          <div class="hint">Click connector label to set/edit friction between steps.</div>
+          <div class="hint">Click connector label <b>Issue?</b> to set/edit friction between steps.</div>
+          <div class="toneLegend">
+            <div class="toneChip system">System</div>
+            <div class="toneChip process">Process</div>
+            <div class="toneChip issue">Issue</div>
+          </div>
           <div id="diag" class="diag">Ready.</div>
         </aside>
 
@@ -242,7 +276,7 @@
     const group = (params.get("group") || "core").trim() || "core";
     const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     if (!room){
-      document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room. Use <b>?room=demo</b></div>";
+      document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room code in URL.</div>";
       throw new Error("Missing room");
     }
 
@@ -300,7 +334,7 @@
     }
 
     function parseNode(row){
-      const fallback = { text: defaultNodeText(row), x: 180, y: 120, w: 260, h: 128, time: "15m" };
+      const fallback = { text: defaultNodeText(row), x: 180, y: 120, w: 260, h: 128, time: "15m", tone: "process" };
       try {
         const obj = JSON.parse(String(row?.label || ""));
         if (!obj || typeof obj !== "object") return fallback;
@@ -310,7 +344,8 @@
           y: Number(obj.y) || fallback.y,
           w: Math.max(220, Number(obj.w) || fallback.w),
           h: Math.max(112, Number(obj.h) || fallback.h),
-          time: String(obj.time || fallback.time)
+          time: String(obj.time || fallback.time),
+          tone: ["system","process","issue"].includes(String(obj.tone || "")) ? String(obj.tone) : fallback.tone
         };
       } catch {
         return fallback;
@@ -324,8 +359,20 @@
         y: Math.round(n.y),
         w: Math.round(n.w),
         h: Math.round(n.h),
-        time: String(n.time || "15m")
+        time: String(n.time || "15m"),
+        tone: ["system","process","issue"].includes(String(n.tone || "")) ? String(n.tone) : "process"
       });
+    }
+
+    function toneLabel(t){
+      if (t === "system") return "System";
+      if (t === "issue") return "Issue";
+      return "Process";
+    }
+    function nextTone(t){
+      const seq = ["system","process","issue"];
+      const i = seq.indexOf(t);
+      return seq[(i + 1) % seq.length];
     }
 
     function parseEdge(row){
@@ -457,7 +504,7 @@
       state.nodes.forEach(row => {
         const n = parseNode(row);
         const el = document.createElement("article");
-        el.className = `node${state.selectedId === row.id ? " selected" : ""}`;
+        el.className = `node tone-${n.tone}${state.selectedId === row.id ? " selected" : ""}`;
         el.style.left = `${n.x}px`;
         el.style.top = `${n.y}px`;
         el.style.width = `${n.w}px`;
@@ -466,6 +513,7 @@
         el.innerHTML = `
           <div class="nodeTop">
             <button class="timePill" type="button" data-time="${shared.escapeHtml(row.id)}">${shared.escapeHtml(n.time)}</button>
+            <button class="tonePill" type="button" data-tone="${shared.escapeHtml(row.id)}">${shared.escapeHtml(toneLabel(n.tone))}</button>
             <button class="miniDanger" type="button" data-del="${shared.escapeHtml(row.id)}">Delete</button>
           </div>
           <div class="nodeText" contenteditable="true" data-text="${shared.escapeHtml(row.id)}" data-placeholder="Type this workflow step...">${shared.escapeHtml(n.text)}</div>
@@ -521,8 +569,8 @@
       state.saveTimers.set(id, t);
     }
 
-    async function addNode({ text = "New workflow step", time = "15m", x = 180, y = 120 }){
-      const label = stringifyNode({ text, time, x, y, w:260, h:128 });
+    async function addNode({ text = "New workflow step", time = "15m", tone = "process", x = 180, y = 120 }){
+      const label = stringifyNode({ text, time, tone, x, y, w:260, h:128 });
       const payload = {
         session_id: room,
         participant_id: participantId,
@@ -538,34 +586,18 @@
       showToast("Box added");
     }
 
-    async function createStarterFlow(){
-      await addNode({ text:"Assignment brief released", time:"10m", x:120, y:170 });
-      await addNode({ text:"Spec clarified with markers", time:"25m", x:420, y:90 });
-      await addNode({ text:"Scripts distributed", time:"15m", x:760, y:170 });
-      await addNode({ text:"Marking + moderation", time:"180m", x:760, y:360 });
-      await addNode({ text:"Feedback returned", time:"20m", x:420, y:460 });
-
-      const ids = state.nodes.slice(-5).map(n => n.id);
-      if (ids.length !== 5) return;
-
-      // Use all connector sides across the starter flow.
-      await addEdge(ids[0], ids[1], "right", "left", "Brief wording unclear");
-      await addEdge(ids[1], ids[2], "right", "left", "Distribution planning delay");
-      await addEdge(ids[2], ids[3], "bottom", "top", "Rubric interpretation mismatch");
-      await addEdge(ids[3], ids[4], "left", "right", "Moderation turnaround pressure");
-      await addEdge(ids[4], ids[0], "top", "bottom", "Student reaction loop");
-    }
-
     async function addEdge(from, to, fromSide, toSide, issue = ""){
       if (!from || !to || from === to) return;
       if (state.edges.some(e => e.from === from && e.to === to && e.fromSide === fromSide && e.toSide === toSide)){
         showToast("Connector already exists");
         return;
       }
+      const fromNode = getNodeById(from);
+      const edgeWeek = clamp(Number(fromNode?.week) || 1, 1, 13);
       const payload = {
         session_id: room,
         participant_id: participantId,
-        week: 0,
+        week: edgeWeek,
         type: "workflow_edge",
         label: edgePayload(from, to, fromSide, toSide, issue)
       };
@@ -613,20 +645,6 @@
       renderNodes();
     }
 
-    async function clearMine(){
-      const { error } = await supabase
-        .from("workshop_journey_items")
-        .delete()
-        .eq("session_id", room)
-        .eq("participant_id", participantId)
-        .like("type", "workflow_%");
-      if (error) throw error;
-      state.nodes = [];
-      state.edges = [];
-      state.selectedId = null;
-      renderNodes();
-    }
-
     function hydrateRows(rows){
       const nodes = [];
       const edges = [];
@@ -664,40 +682,15 @@
 
     function wireActions(){
       $("#btnAdd").addEventListener("click", async () => {
-        const time = prompt("Estimated time taken for this step? (e.g. 20m)", "20m");
-        if (time === null) return;
         try {
           await addNode({
             text: "Type workflow step...",
-            time: (time || "20m").trim() || "20m",
+            time: "20m",
+            tone: "process",
             x: 140 + Math.floor(Math.random() * 260),
             y: 100 + Math.floor(Math.random() * 240)
           });
         } catch (err){ showToast(err.message || "Add failed"); }
-      });
-
-      $("#btnStarter").addEventListener("click", async () => {
-        if (state.nodes.length){
-          const ok = confirm("Starter flow will add more boxes to your current canvas. Continue?");
-          if (!ok) return;
-        }
-        try {
-          await createStarterFlow();
-          setDiag("Starter flow inserted. Edit text directly in each box.", false);
-        } catch (err){
-          showToast(err.message || "Starter flow failed");
-        }
-      });
-
-      $("#btnClearMine").addEventListener("click", async () => {
-        const ok = confirm("Clear your private tutor canvas?");
-        if (!ok) return;
-        try {
-          await clearMine();
-          setDiag("Canvas cleared.", false);
-        } catch (err){
-          setDiag(err.message || "Clear failed", true);
-        }
       });
 
       nodesEl.addEventListener("input", (e) => {
@@ -741,6 +734,22 @@
             renderNodes();
           } catch (err){
             showToast(err.message || "Time update failed");
+          }
+          return;
+        }
+
+        const toneBtn = e.target.closest("[data-tone]");
+        if (toneBtn){
+          const id = toneBtn.getAttribute("data-tone");
+          const row = getNodeById(id);
+          if (!row) return;
+          const now = parseNode(row);
+          const tone = nextTone(now.tone);
+          try {
+            await upsertNodeLabel(id, { ...now, tone });
+            renderNodes();
+          } catch (err){
+            showToast(err.message || "Color update failed");
           }
           return;
         }
@@ -801,6 +810,7 @@
             el.style.width = `${nextW}px`;
             el.style.minHeight = `${nextH}px`;
           }
+          row.label = stringifyNode({ ...n, w: nextW, h: nextH });
           renderEdges();
           return;
         }
@@ -815,6 +825,7 @@
           const ny = clamp(state.drag.y + dy, 6, board.clientHeight - n.h - 6);
           state.drag.el.style.left = `${nx}px`;
           state.drag.el.style.top = `${ny}px`;
+          row.label = stringifyNode({ ...n, x: nx, y: ny });
           renderEdges();
           return;
         }
@@ -948,6 +959,7 @@
         localStorage.removeItem(keys.AUTH_KEY);
         localStorage.removeItem(keys.STEP3_KEY);
         localStorage.removeItem(keys.TUT_KEY);
+        localStorage.removeItem(keys.STEP3_TUT_KEY);
         localStorage.removeItem(keys.NAME_KEY);
         localStorage.removeItem(keys.ROLE_KEY);
         localStorage.removeItem(keys.PERSONA_KEY);
@@ -986,35 +998,35 @@
 
     const tutorialSlides = [
       {
-        title: "Add and resize boxes",
+        title: "Step 1: Add and classify boxes",
         html: `
-          <div class="callout">Use <span class="mono">Add Box</span>, type directly in each box, and resize with the bottom-right handle.</div>
+          <div class="callout">Add one box, write the step, set time, then set color: System / Process / Issue.</div>
           <ul class="list">
-            <li>Every box represents one workflow step.</li>
-            <li>Use the time chip to set estimated duration.</li>
-            <li>Drag boxes to arrange your process flow.</li>
+            <li>Use <span class="mono">Add Box</span> for each workflow stage.</li>
+            <li>Click time pill to update duration.</li>
+            <li>Click color pill to cycle System → Process → Issue.</li>
           </ul>
         `
       },
       {
-        title: "Connect without interruption",
+        title: "Step 2: Connect your workflow",
         html: `
-          <div class="callout">Drag from any + anchor (top/right/bottom/left) to another anchor to create a connector.</div>
+          <div class="callout">Drag from any + anchor (top/right/bottom/left) to another anchor to create a connection.</div>
           <ul class="list">
-            <li>Connections now create instantly (no blocking prompt).</li>
-            <li>Click the connector label <span class="mono">Issue?</span> to add friction text.</li>
+            <li>Connections now create instantly.</li>
+            <li>Click connector label <span class="mono">Issue?</span> to add friction text.</li>
             <li>Press <span class="mono">Esc</span> to cancel an in-progress connector.</li>
           </ul>
         `
       },
       {
-        title: "What good output looks like",
+        title: "Step 3: Finalize for discussion",
         html: `
-          <div class="callout">A complete map has steps + connectors + friction labels for decision bottlenecks.</div>
+          <div class="callout">A strong final map shows sequence + bottlenecks + where problems happen.</div>
           <ul class="list">
-            <li>Start at brief release and end at feedback return.</li>
-            <li>Mark where moderation, workload, or clarification slows things down.</li>
-            <li>Use Starter Flow if you need a fast scaffold.</li>
+            <li>Include all major workflow stages from release to feedback return.</li>
+            <li>Use Issue color where delays or confusion happen.</li>
+            <li>Add friction labels on connectors to explain why delays occur.</li>
           </ul>
         `
       }
@@ -1066,14 +1078,11 @@
     wireActions();
     ensureScopeSession()
       .then(() => loadAll())
-      .then(async () => {
-        if (!state.nodes.length){
-          await createStarterFlow();
-          setDiag("Starter tutor flow ready. Drag anchors on any side to connect more steps.", false);
-        }
-      })
       .then(() => {
-        setDiag("Connected. Build your workflow privately; dashboard can still monitor outputs.", false);
+        const msg = !state.nodes.length
+          ? "Canvas ready. Add first box -> set color -> connect -> label friction."
+          : "Connected. Continue refining your workflow map.";
+        setDiag(msg, false);
         maybeShowTutorialOnce();
       })
       .catch((err) => setDiag(err.message || "Load failed", true));
