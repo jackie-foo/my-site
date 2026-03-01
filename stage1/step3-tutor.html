@@ -43,6 +43,13 @@
     .btnPrimary{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));box-shadow:0 14px 34px rgba(0,229,255,.12)}
 
     .card{margin-top:14px;border:1px solid rgba(255,255,255,.12);border-radius:var(--r);background:linear-gradient(0deg,var(--panel2),var(--panel));box-shadow:var(--shadow);overflow:hidden}
+    .card.completeGlow{
+      border-color:color-mix(in srgb,var(--accent2) 62%, rgba(255,255,255,.16));
+      box-shadow:0 20px 44px rgba(89,240,197,.18);
+      background:
+        linear-gradient(145deg, rgba(89,240,197,.10), transparent 44%),
+        linear-gradient(0deg,var(--panel2),var(--panel));
+    }
     .cardHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;align-items:center}
     .cardHead h2{margin:0;font-size:14px;font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
     .cardBody{padding:14px;display:grid;grid-template-columns:280px 1fr;gap:12px}
@@ -189,6 +196,7 @@
 
     const $ = (q, el=document) => el.querySelector(q);
     const board = $("#board");
+    const workflowCard = document.querySelector(".card");
     const nodesEl = $("#nodes");
     const svg = $("#boardSvg");
     const edgeLabels = $("#edgeLabels");
@@ -374,6 +382,12 @@
           svg.appendChild(temp);
         }
       }
+      updateWorkflowGlow();
+    }
+
+    function updateWorkflowGlow(){
+      const isComplete = state.nodes.length > 0 && state.edges.length > 0;
+      workflowCard?.classList.toggle("completeGlow", isComplete);
     }
 
     function renderNodes(){

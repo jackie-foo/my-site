@@ -800,10 +800,18 @@
       }
 
       setGuideProgress(activeStep, doneUntil);
-      timelineCard.classList.toggle("focusActive", activeStep <= 2);
-      timelineCard.classList.toggle("focusDim", activeStep === 3);
-      notesCard.classList.toggle("focusActive", activeStep === 3 || doneUntil === 3);
-      notesCard.classList.toggle("focusDim", activeStep < 3 && doneUntil < 3);
+      const isComplete = doneUntil === 3;
+      if (isComplete){
+        timelineCard.classList.add("focusActive");
+        timelineCard.classList.remove("focusDim");
+        notesCard.classList.add("focusActive");
+        notesCard.classList.remove("focusDim");
+      } else {
+        timelineCard.classList.toggle("focusActive", activeStep <= 2);
+        timelineCard.classList.toggle("focusDim", activeStep === 3);
+        notesCard.classList.toggle("focusActive", activeStep === 3);
+        notesCard.classList.toggle("focusDim", activeStep < 3);
+      }
 
       if (step3Status){
         if (!hasCard) step3Status.textContent = "Tip: start by adding one card into any week.";

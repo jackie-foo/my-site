@@ -940,6 +940,13 @@
     function bindResizeHandle(el, handle, stickyId){
       let start = null;
 
+      function applyScaledFont(item){
+        const ta = el.querySelector("textarea");
+        if (!ta || !item) return;
+        const font = clamp(14 + ((Number(item.h) || 190) - 190) / 52, 14, 19);
+        ta.style.fontSize = `${font.toFixed(1)}px`;
+      }
+
       handle.addEventListener("pointerdown", (e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -969,6 +976,7 @@
 
         el.style.width = `${Math.round(item.w)}px`;
         el.style.height = `${Math.round(item.h)}px`;
+        applyScaledFont(item);
       });
 
       function finishResize(){
@@ -976,6 +984,7 @@
         const item = state.stickies.find(x => String(x.id) === String(stickyId));
         if (item){
           rememberStickySize(item.id, item.w || el.offsetWidth, item.h || el.offsetHeight);
+          applyScaledFont(item);
         }
         start = null;
       }
@@ -1150,6 +1159,10 @@
         });
 
         const ta = el.querySelector("textarea");
+        {
+          const font = clamp(14 + ((Number(s.h) || 190) - 190) / 52, 14, 19);
+          ta.style.fontSize = `${font.toFixed(1)}px`;
+        }
         ta.addEventListener("input", ()=>{
           const item = state.stickies.find(x=>x.id===s.id);
           if(item) item.text = ta.value;
