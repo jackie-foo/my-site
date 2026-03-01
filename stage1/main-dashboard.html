@@ -404,12 +404,6 @@
       </div>
     </div>
     <div class="tabs">
-      <div class="tabGroup" id="audienceTabs">
-        <span class="tabLabel">Audience</span>
-        <button class="tabBtn active" data-audience-tab="all">All</button>
-        <button class="tabBtn" data-audience-tab="student">Students</button>
-        <button class="tabBtn" data-audience-tab="tutor">Tutors</button>
-      </div>
       <div class="tabGroup" id="stageTabs">
         <span class="tabLabel">Stage</span>
         <button class="tabBtn active" data-stage-tab="all">All</button>
@@ -903,9 +897,11 @@
     }
 
     function applyTabState(){
-      audienceTabs.querySelectorAll("[data-audience-tab]").forEach(btn => {
-        btn.classList.toggle("active", btn.getAttribute("data-audience-tab") === view.audience);
-      });
+      if (audienceTabs){
+        audienceTabs.querySelectorAll("[data-audience-tab]").forEach(btn => {
+          btn.classList.toggle("active", btn.getAttribute("data-audience-tab") === view.audience);
+        });
+      }
       stageTabs.querySelectorAll("[data-stage-tab]").forEach(btn => {
         btn.classList.toggle("active", btn.getAttribute("data-stage-tab") === view.stage);
       });
@@ -1044,12 +1040,14 @@
         const links = buildShareLinks();
         copyText(links.tutor);
       });
-      audienceTabs.addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-audience-tab]");
-        if (!btn) return;
-        view.audience = btn.getAttribute("data-audience-tab") || "all";
-        renderAll();
-      });
+      if (audienceTabs){
+        audienceTabs.addEventListener("click", (e) => {
+          const btn = e.target.closest("[data-audience-tab]");
+          if (!btn) return;
+          view.audience = btn.getAttribute("data-audience-tab") || "all";
+          renderAll();
+        });
+      }
       stageTabs.addEventListener("click", (e) => {
         const btn = e.target.closest("[data-stage-tab]");
         if (!btn) return;

@@ -455,7 +455,7 @@
       </div>
 
       <div class="actions">
-        <button id="btnTutorial" class="btnGhost">Tutorial</button>
+        <button id="btnTutorial" class="btnGhost">Guide</button>
         <button id="btnDashboard" class="btnGhost">Dashboard</button>
         <button id="btnExit">← Back</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
@@ -480,14 +480,20 @@
 
     <section class="card" id="mainCard" style="display:none">
       <div class="cardHead">
-        <h2>Role + Personality Card</h2>
+        <h2>Tutor Setup</h2>
         <button id="btnNext" class="btnPrimary" disabled>Next → Step 2</button>
       </div>
 
       <div class="cardBody">
 
-        <!-- Name + Role -->
+        <!-- Code + Name + Role -->
         <div class="row" style="align-items:flex-end">
+          <div class="field">
+            <label class="label" for="codeInput">Workshop code</label>
+            <input id="codeInput" type="text" placeholder="Type room code (e.g., demo)" maxlength="40" autocomplete="off"/>
+            <div class="hint">Enter the room code shared by your facilitator.</div>
+          </div>
+
           <div class="field">
             <label class="label" for="nameInput">Your name</label>
             <input id="nameInput" type="text" placeholder="e.g., Jackie" maxlength="32" autocomplete="name"/>
@@ -503,13 +509,19 @@
           </div>
         </div>
 
+        <div class="callout" id="inlineGuide">
+          Step reminder: 1) type code + name, 2) choose one tutor lens card, 3) continue to Step 2.
+          The card anchors your workflow/feedback rationale for later steps.
+        </div>
+
         <div class="divider"></div>
 
         <div class="personaGrid" id="personaGrid"></div>
 
         <div class="metaRow">
+          <span class="mono">Code: <span id="selCode">Not entered</span></span>
           <span class="mono">Selected: <span id="selPersona">None</span></span>
-          <span class="mono">Role: <span id="selRole">student</span></span>
+          <span class="mono">Role: <span id="selRole">tutor</span></span>
           <span class="mono">Name: <span id="selName">—</span></span>
         </div>
       </div>
@@ -653,6 +665,8 @@
     const personaGrid = $("#personaGrid");
     const selPersona = $("#selPersona"), selRole = $("#selRole");
     const selName = $("#selName");
+    const selCode = $("#selCode");
+    const codeInput = $("#codeInput");
     const nameInput = $("#nameInput");
     const btnNext = $("#btnNext");
     const toast = $("#toast");
@@ -774,7 +788,9 @@
     const escapeHtml = shared.escapeHtml;
 
     function updateNextEnabled(){
-      btnNext.disabled = !state.persona_id || !state.display_name;
+      const codeOK = ((codeInput?.value || "").trim().toLowerCase() === room.toLowerCase());
+      if (selCode) selCode.textContent = codeOK ? "Verified" : "Not entered";
+      btnNext.disabled = !codeOK || !state.persona_id || !state.display_name;
     }
 
     // local name first
@@ -1052,8 +1068,10 @@
 
     btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
 
-    // Tutorial button behaviour
-    btnTutorial.addEventListener("click", () => openTutorial(0));
+    // Guide button: use inline reminder instead of popup tutorial
+    btnTutorial.addEventListener("click", () => {
+      document.getElementById("inlineGuide")?.scrollIntoView({ behavior:"smooth", block:"center" });
+    });
 
     btnCloseLocked.addEventListener("click", () => closeOverlay(lockedOverlay));
     btnLockedUnlock.addEventListener("click", () => {
@@ -1064,12 +1082,9 @@
 
     // Link-based flow: no passcode prompt
     btnOpenPw.addEventListener("click", async () => {
-      if (localStorage.getItem(AUTH_KEY) === "1"){
-        openTutorial(0);
-        return;
-      }
+      if (localStorage.getItem(AUTH_KEY) === "1") return;
       localStorage.setItem(AUTH_KEY, "1");
-      await postUnlockBootstrap({ showTutorial:true });
+      await postUnlockBootstrap({ showTutorial:false });
       localStorage.setItem(TUT_KEY, "1");
     });
     btnClosePw.addEventListener("click", () => closeOverlay(pwOverlay));
@@ -1079,7 +1094,7 @@
       if (e.key === "Enter") btnUnlock.click();
     });
 
-    async function postUnlockBootstrap({ showTutorial=true } = {}){
+    async function postUnlockBootstrap({ showTutorial=false } = {}){
       unlockUI();
 
       showLoading("Loading Step 1…", "Creating the room and syncing your participant profile.");
@@ -1096,24 +1111,28 @@
         hideLoading();
       }
 
-      if (showTutorial){
-        openTutorial(0);
-      }
+      if (showTutorial){ /* inline guide is always visible */ }
     }
 
     btnUnlock.addEventListener("click", async () => {
       localStorage.setItem(AUTH_KEY, "1");
       closeOverlay(pwOverlay);
-      await postUnlockBootstrap({ showTutorial:true });
+      await postUnlockBootstrap({ showTutorial:false });
       localStorage.setItem(TUT_KEY, "1");
     });
 
     // Initial state: direct link entry (no passcode gate)
     localStorage.setItem(AUTH_KEY, "1");
-    postUnlockBootstrap({ showTutorial: !localStorage.getItem(TUT_KEY) })
+    postUnlockBootstrap({ showTutorial:false })
       .then(() => localStorage.setItem(TUT_KEY, "1"));
 
     btnNext.addEventListener("click", () => {
+      const codeOK = ((codeInput?.value || "").trim().toLowerCase() === room.toLowerCase());
+      if (!codeOK){
+        showToast("Type the correct workshop code first");
+        codeInput?.focus();
+        return;
+      }
       if (!state.persona_id || !state.display_name) {
         showToast("Please enter your name and pick a card");
         return;
@@ -1135,6 +1154,10 @@
       localStorage.removeItem(PERSONA_KEY);
       location.reload();
     });
+
+    if (codeInput){
+      codeInput.addEventListener("input", updateNextEnabled);
+    }
 
     // initial UI
     selRole.textContent = state.role;
