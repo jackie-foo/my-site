@@ -118,7 +118,7 @@
     .timePill{border-radius:999px;border:1px solid rgba(255,255,255,.2);padding:3px 8px;font-size:10px;font-weight:1000;text-transform:uppercase;letter-spacing:.2px;background:rgba(0,0,0,.24);cursor:pointer}
     .tonePill{border-radius:999px;border:1px solid rgba(255,255,255,.2);padding:3px 8px;font-size:10px;font-weight:1000;text-transform:uppercase;letter-spacing:.2px;background:rgba(0,0,0,.24);cursor:pointer}
     .miniDanger{border:1px solid rgba(255,131,144,.48);background:rgba(255,131,144,.16);padding:4px 8px;border-radius:10px;font-size:10px;font-weight:900;box-shadow:none}
-    .nodeText{outline:none;border:none;background:transparent;color:var(--text);font-size:13px;font-weight:800;line-height:1.35;min-height:72px;white-space:pre-wrap;word-break:break-word;cursor:text;padding:4px}
+    .nodeText{outline:none;border:none;background:transparent;color:var(--text);font-size:13px;font-weight:800;line-height:1.35;min-height:72px;white-space:pre-wrap;word-break:break-word;cursor:text;padding:4px;user-select:text;-webkit-user-select:text}
     .nodeText:empty:before{content:attr(data-placeholder);color:rgba(233,236,255,.5)}
     .nodeResizer{
       position:absolute;
@@ -763,6 +763,11 @@
           } catch (err){
             showToast(err.message || "Color update failed");
           }
+          return;
+        }
+
+        // Don't re-render when user is trying to type in the editable box.
+        if (e.target.closest(".nodeText")){
           return;
         }
 
