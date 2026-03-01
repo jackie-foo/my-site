@@ -107,6 +107,19 @@
     .miniDanger{border:1px solid rgba(255,131,144,.48);background:rgba(255,131,144,.16);padding:4px 8px;border-radius:10px;font-size:10px;font-weight:900;box-shadow:none}
     .nodeText{outline:none;border:none;background:transparent;color:var(--text);font-size:13px;font-weight:800;line-height:1.35;min-height:72px;white-space:pre-wrap;word-break:break-word;cursor:text;padding:4px}
     .nodeText:empty:before{content:attr(data-placeholder);color:rgba(233,236,255,.5)}
+    .nodeResizer{
+      position:absolute;
+      right:8px;
+      bottom:8px;
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      cursor:nwse-resize;
+      background:
+        linear-gradient(135deg, transparent 42%, rgba(255,255,255,.75) 42%, rgba(255,255,255,.75) 54%, transparent 54%),
+        linear-gradient(135deg, transparent 62%, rgba(255,255,255,.65) 62%, rgba(255,255,255,.65) 74%, transparent 74%);
+      opacity:.8;
+    }
 
     .anchor{
       position:absolute;
@@ -127,6 +140,25 @@
     .anchor.left{left:-8px;top:50%;transform:translateY(-50%)}
 
     .toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:80;background:rgba(0,0,0,.76);border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;display:none}
+    .overlay{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:16px}
+    .modal{
+      width:min(760px,100%);
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(0deg, rgba(18,22,37,.92), rgba(15,19,32,.92));
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .modalHead{padding:14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .modalHead h3{margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase}
+    .modalBody{padding:14px;display:flex;flex-direction:column;gap:10px}
+    .modalFoot{padding:14px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .kicker{color:var(--muted);font-weight:800;font-size:12px;line-height:1.35}
+    .steps{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--muted);font-weight:900;font-size:12px}
+    .pill{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);padding:4px 8px;border-radius:999px}
+    .pill.active{border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.12));box-shadow:0 12px 28px rgba(0,229,255,.10);color:var(--text)}
+    .list{margin:0;padding-left:18px;color:var(--muted);font-weight:800;font-size:13px;line-height:1.55}
+    .callout{border:1px solid rgba(255,255,255,.10);background:rgba(0,229,255,.06);border-radius:16px;padding:10px 12px;color:var(--text);font-weight:900;font-size:12px;line-height:1.45}
   </style>
 </head>
 <body>
@@ -154,6 +186,7 @@
         <aside class="panel">
           <h3>Quick Actions</h3>
           <button id="btnAdd" class="btnPrimary">Add Box</button>
+          <button id="btnTutorHelp">Tutorial</button>
           <button id="btnStarter">Add Starter Flow</button>
           <button id="btnClearMine">Clear My Canvas</button>
           <div class="hint">When adding a box, enter only the estimated time taken. Then type directly inside the box.</div>
@@ -172,6 +205,29 @@
   </div>
 
   <div id="toast" class="toast"></div>
+
+  <div class="overlay" id="tutOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="tutTitle">Tutor Step 3 Tutorial</h3>
+          <div class="kicker">Build a workflow map: boxes, connectors, friction labels.</div>
+        </div>
+        <button id="btnCloseTut" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="steps" id="tutSteps"></div>
+        <div id="tutContent"></div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">Tip: connect first, then click connector label to add/edit friction.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnPrevTut">← Back</button>
+          <button id="btnNextTut" class="btnPrimary">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="/stage1/shared.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -203,12 +259,16 @@
     const diag = $("#diag");
     const toast = $("#toast");
     const nodeCount = $("#nodeCount");
+    const tutOverlay = $("#tutOverlay");
+    const tutSteps = $("#tutSteps");
+    const tutContent = $("#tutContent");
 
     const state = {
       nodes: [],
       edges: [],
       selectedId: null,
       drag: null,
+      resize: null,
       connecting: null,
       saveTimers: new Map()
     };
@@ -413,10 +473,11 @@
           <div class="anchor right" data-anchor="right" data-anchor-id="${shared.escapeHtml(row.id)}" title="Connect from right"></div>
           <div class="anchor bottom" data-anchor="bottom" data-anchor-id="${shared.escapeHtml(row.id)}" title="Connect from bottom"></div>
           <div class="anchor left" data-anchor="left" data-anchor-id="${shared.escapeHtml(row.id)}" title="Connect from left"></div>
+          <div class="nodeResizer" data-resize="${shared.escapeHtml(row.id)}" title="Resize box"></div>
         `;
 
         el.addEventListener("pointerdown", (e) => {
-          if (e.target.closest("[data-anchor]") || e.target.closest("button") || e.target.closest(".nodeText")) return;
+          if (e.target.closest("[data-anchor]") || e.target.closest("button") || e.target.closest(".nodeText") || e.target.closest("[data-resize]")) return;
           const p = parseNode(row);
           state.selectedId = row.id;
           state.drag = {
@@ -692,6 +753,24 @@
       });
 
       nodesEl.addEventListener("pointerdown", (e) => {
+        const resize = e.target.closest("[data-resize]");
+        if (resize){
+          e.preventDefault();
+          e.stopPropagation();
+          const id = resize.getAttribute("data-resize");
+          const row = getNodeById(id);
+          if (!row) return;
+          const n = parseNode(row);
+          state.resize = {
+            id,
+            startX: e.clientX,
+            startY: e.clientY,
+            w: n.w,
+            h: n.h
+          };
+          return;
+        }
+
         const anchor = e.target.closest("[data-anchor]");
         if (!anchor) return;
         e.preventDefault();
@@ -707,6 +786,25 @@
       });
 
       document.addEventListener("pointermove", (e) => {
+        if (state.resize){
+          const row = getNodeById(state.resize.id);
+          if (!row) return;
+          const n = parseNode(row);
+          const dx = e.clientX - state.resize.startX;
+          const dy = e.clientY - state.resize.startY;
+          const maxW = Math.max(220, board.clientWidth - n.x - 6);
+          const maxH = Math.max(112, board.clientHeight - n.y - 6);
+          const nextW = clamp(state.resize.w + dx, 220, maxW);
+          const nextH = clamp(state.resize.h + dy, 112, maxH);
+          const el = nodesEl.querySelector(`[data-id="${CSS.escape(String(state.resize.id))}"]`);
+          if (el){
+            el.style.width = `${nextW}px`;
+            el.style.minHeight = `${nextH}px`;
+          }
+          renderEdges();
+          return;
+        }
+
         if (state.drag){
           const row = getNodeById(state.drag.id);
           if (!row) return;
@@ -730,6 +828,24 @@
       });
 
       document.addEventListener("pointerup", async (e) => {
+        if (state.resize){
+          const r = state.resize;
+          state.resize = null;
+          const row = getNodeById(r.id);
+          if (!row) return;
+          const n = parseNode(row);
+          const el = nodesEl.querySelector(`[data-id="${CSS.escape(String(r.id))}"]`);
+          const w = el ? (parseFloat(el.style.width) || n.w) : n.w;
+          const h = el ? (parseFloat(el.style.minHeight) || n.h) : n.h;
+          try {
+            await upsertNodeLabel(r.id, { ...n, w, h });
+            renderEdges();
+          } catch (err){
+            showToast(err.message || "Resize save failed");
+          }
+          return;
+        }
+
         if (state.drag){
           const d = state.drag;
           state.drag = null;
@@ -785,15 +901,18 @@
         }
 
         try {
-          const issue = prompt("Problem/friction between these workflow steps?", "") || "";
-          await addEdge(link.from, toId, link.fromSide, toSide, issue);
-          setDiag("Connector created.", false);
+          await addEdge(link.from, toId, link.fromSide, toSide, "");
+          setDiag("Connector created. Click connector label to add friction.", false);
         } catch (err){
           setDiag(err.message || "Connector create failed", true);
         }
       });
 
       document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && tutOverlay.style.display === "flex"){
+          closeOverlay(tutOverlay);
+          return;
+        }
         if (e.key === "Escape" && state.connecting){
           state.connecting = null;
           board.classList.remove("connecting");
@@ -834,6 +953,102 @@
         localStorage.removeItem(keys.PERSONA_KEY);
         location.reload();
       });
+
+      $("#btnTutorHelp").addEventListener("click", () => openTutorial(0));
+      $("#btnCloseTut").addEventListener("click", () => closeOverlay(tutOverlay));
+      $("#btnPrevTut").addEventListener("click", () => {
+        tutIndex = Math.max(0, tutIndex - 1);
+        renderTutorial();
+      });
+      $("#btnNextTut").addEventListener("click", () => {
+        if (tutIndex === tutorialSlides.length - 1){
+          closeOverlay(tutOverlay);
+          return;
+        }
+        tutIndex = Math.min(tutorialSlides.length - 1, tutIndex + 1);
+        renderTutorial();
+      });
+      tutOverlay.addEventListener("mousedown", (e) => {
+        if (e.target === tutOverlay) closeOverlay(tutOverlay);
+      });
+    }
+
+    function openOverlay(el){
+      el.style.display = "flex";
+      el.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+    function closeOverlay(el){
+      el.style.display = "none";
+      el.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    const tutorialSlides = [
+      {
+        title: "Add and resize boxes",
+        html: `
+          <div class="callout">Use <span class="mono">Add Box</span>, type directly in each box, and resize with the bottom-right handle.</div>
+          <ul class="list">
+            <li>Every box represents one workflow step.</li>
+            <li>Use the time chip to set estimated duration.</li>
+            <li>Drag boxes to arrange your process flow.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Connect without interruption",
+        html: `
+          <div class="callout">Drag from any + anchor (top/right/bottom/left) to another anchor to create a connector.</div>
+          <ul class="list">
+            <li>Connections now create instantly (no blocking prompt).</li>
+            <li>Click the connector label <span class="mono">Issue?</span> to add friction text.</li>
+            <li>Press <span class="mono">Esc</span> to cancel an in-progress connector.</li>
+          </ul>
+        `
+      },
+      {
+        title: "What good output looks like",
+        html: `
+          <div class="callout">A complete map has steps + connectors + friction labels for decision bottlenecks.</div>
+          <ul class="list">
+            <li>Start at brief release and end at feedback return.</li>
+            <li>Mark where moderation, workload, or clarification slows things down.</li>
+            <li>Use Starter Flow if you need a fast scaffold.</li>
+          </ul>
+        `
+      }
+    ];
+    let tutIndex = 0;
+    function renderTutorial(){
+      tutSteps.innerHTML = tutorialSlides.map((_, i) => {
+        const cls = "pill" + (i === tutIndex ? " active" : "");
+        return `<span class="${cls}">${i + 1}</span>`;
+      }).join("");
+      const slide = tutorialSlides[tutIndex];
+      tutContent.innerHTML = `
+        <div class="row" style="justify-content:space-between;align-items:flex-end">
+          <div>
+            <div class="mono">Step ${tutIndex + 1} / ${tutorialSlides.length}</div>
+            <div style="margin-top:6px;font-weight:1000;font-size:16px;letter-spacing:.2px">${shared.escapeHtml(slide.title)}</div>
+          </div>
+        </div>
+        <div style="height:6px"></div>
+        ${slide.html}
+      `;
+      $("#btnPrevTut").disabled = (tutIndex === 0);
+      $("#btnNextTut").textContent = (tutIndex === tutorialSlides.length - 1) ? "Done" : "Next";
+    }
+    function openTutorial(startAt = 0){
+      tutIndex = Math.max(0, Math.min(startAt, tutorialSlides.length - 1));
+      renderTutorial();
+      openOverlay(tutOverlay);
+    }
+    function maybeShowTutorialOnce(){
+      const key = keys.STEP3_TUT_KEY || `stage1_step3_tut_seen_${room}`;
+      if (localStorage.getItem(key) === "1") return;
+      localStorage.setItem(key, "1");
+      openTutorial(0);
     }
 
     function subscribe(){
@@ -857,7 +1072,10 @@
           setDiag("Starter tutor flow ready. Drag anchors on any side to connect more steps.", false);
         }
       })
-      .then(() => setDiag("Connected. Build your workflow privately; dashboard can still monitor outputs.", false))
+      .then(() => {
+        setDiag("Connected. Build your workflow privately; dashboard can still monitor outputs.", false);
+        maybeShowTutorialOnce();
+      })
       .catch((err) => setDiag(err.message || "Load failed", true));
     subscribe();
     window.addEventListener("resize", renderEdges);
