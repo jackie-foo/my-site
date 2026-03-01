@@ -348,16 +348,13 @@
       <div>
         <div class="badge"><span class="dot"></span> Stage 1 • Step 3</div>
         <div class="subtitle">
-          Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
+          You: <span class="mono" id="meOut"></span><br/>
           Role: <span class="mono" id="roleOut">student</span> • Card: <span class="mono" id="personaOut">None</span><br/>
           <span id="journeySummary">Map your Step 2 friction stories across release → due → feedback-return → reaction milestones.</span>
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
-        <button id="btnTutorial" class="btnGhost">Tutorial</button>
-        <button id="btnDashboard" class="btnGhost">Dashboard</button>
         <button id="btnBack">← Step 2</button>
-        <button id="btnFinish" class="btnPrimary">Finish → Dashboard</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
       </div>
     </header>
@@ -371,6 +368,9 @@
         <section class="timeline">
           <div class="weeks" id="weeks"></div>
         </section>
+        <div class="callout">
+          <b>Step flow</b>: Step 1 (card lens) -> Step 2 (friction stickies) -> Step 3 (map moments by week and action).
+        </div>
         <div class="subtitle" style="margin:0">
           Tip: Long-press a week on phone to add. Milestone weeks are highlighted for release / due / feedback / reaction.
         </div>
@@ -533,7 +533,7 @@
     }
 
     const $ = (q, el=document) => el.querySelector(q);
-    const roomOut = $("#roomOut"), meOut = $("#meOut");
+    const meOut = $("#meOut");
     const roleOut = $("#roleOut"), personaOut = $("#personaOut");
     const journeySummary = $("#journeySummary");
     const legendWrap = $("#legendWrap");
@@ -553,7 +553,6 @@
     const btnClearNotes = $("#btnClearNotes");
     notesScopePill.textContent = NOTES_SHARED ? "Notes: Shared" : "Notes: Private";
 
-    roomOut.textContent = room;
     function refreshIdentityUI({ displayName=null, role="student", personaId=null } = {}){
       meOut.textContent = displayName || participantId.slice(0,8);
       roleOut.textContent = role === "tutor" ? "tutor" : "student";
@@ -1177,9 +1176,6 @@
       btnNextStep.textContent = (tutIndex===tutorialSlides.length-1) ? "Done" : "Next";
     }
 
-    $("#btnTutorial").addEventListener("click", ()=>{
-      tutIndex=0; renderTutorial(); openOverlay(tutOverlay);
-    });
     btnCloseTut.addEventListener("click", ()=>closeOverlay(tutOverlay));
     tutOverlay.addEventListener("mousedown",(e)=>{ if(e.target===tutOverlay) closeOverlay(tutOverlay); });
     btnPrev.addEventListener("click", ()=>{ tutIndex=Math.max(0, tutIndex-1); renderTutorial(); });
@@ -1190,12 +1186,7 @@
     });
 
     function maybeShowTutorialOnce(){
-      if(!localStorage.getItem(TUT_KEY)){
-        localStorage.setItem(TUT_KEY,"1");
-        tutIndex=0;
-        renderTutorial();
-        openOverlay(tutOverlay);
-      }
+      return;
     }
 
     window.addEventListener("keydown",(e)=>{
@@ -1327,8 +1318,6 @@
 
     // ===== nav/reset =====
     $("#btnBack").addEventListener("click", ()=> location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`);
-    $("#btnDashboard").addEventListener("click", ()=> location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`);
-    $("#btnFinish").addEventListener("click", ()=> location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`);
     $("#btnReset").addEventListener("click", ()=>{
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;

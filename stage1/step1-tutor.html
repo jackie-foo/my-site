@@ -449,14 +449,12 @@
       <div class="leftHead">
         <div class="badge"><span class="dot"></span> Stage 1 • Step 1 Tutor</div>
         <div class="subtitle">
-          Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
-          Tutor path. Link-based entry: set your name and choose your teaching lens card.
+          You: <span class="mono" id="meOut"></span><br/>
+          Step 1 of 3 (Tutor): enter code + name, choose one tutor lens card, then continue.
         </div>
       </div>
 
       <div class="actions">
-        <button id="btnTutorial" class="btnGhost">Guide</button>
-        <button id="btnDashboard" class="btnGhost">Dashboard</button>
         <button id="btnExit">← Back</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
       </div>
@@ -657,7 +655,7 @@
     // UI refs
     const $ = (q, el=document) => el.querySelector(q);
 
-    const roomOut = $("#roomOut"), meOut = $("#meOut");
+    const meOut = $("#meOut");
     const gateCard = $("#gateCard"), mainCard = $("#mainCard");
     const gateStatus = $("#gateStatus");
 
@@ -683,8 +681,6 @@
     const loadingSub = $("#loadingSub");
 
     // buttons
-    const btnTutorial = $("#btnTutorial");
-    const btnDashboard = $("#btnDashboard");
     const btnExit = $("#btnExit");
     const btnReset = $("#btnReset");
 
@@ -706,7 +702,6 @@
     const btnPrev = $("#btnPrev");
     const btnNextStep = $("#btnNextStep");
 
-    roomOut.textContent = room;
     chibiImg.src = CHIBI3_SRC;
 
     function showToast(msg){
@@ -1068,11 +1063,6 @@
 
     btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
 
-    // Guide button: use inline reminder instead of popup tutorial
-    btnTutorial.addEventListener("click", () => {
-      document.getElementById("inlineGuide")?.scrollIntoView({ behavior:"smooth", block:"center" });
-    });
-
     btnCloseLocked.addEventListener("click", () => closeOverlay(lockedOverlay));
     btnLockedUnlock.addEventListener("click", () => {
       closeOverlay(lockedOverlay);
@@ -1141,8 +1131,6 @@
     });
 
     btnExit.addEventListener("click", () => location.href = "/index.html");
-    btnDashboard.addEventListener("click", () => location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`);
-
     btnReset.addEventListener("click", () => {
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;

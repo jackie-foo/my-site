@@ -128,15 +128,13 @@
       <div>
         <div class="badge"><span class="dot"></span> Stage 1 • Tutor Workflow Canvas</div>
         <div class="subtitle">
-          Room: <span class="mono" id="roomOut"></span> • Group: <span class="mono" id="groupOut"></span> • Campus: <span class="mono" id="campusOut"></span><br/>
+          Step 3 of 3 (Tutor): map your marking workflow as a flowchart and label friction on connectors.<br/>
           Private tutor map (not shared with other tutors live). Drag boxes, type directly in them, and connect from any side.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
         <button id="btnBack">← Back</button>
-        <button id="btnDashboard">Dashboard</button>
-        <button id="btnRefresh">Refresh</button>
-        <button id="btnFinish" class="btnPrimary">Finish</button>
+        <button id="btnReset" class="miniDanger">Reset Local</button>
       </div>
     </header>
 
@@ -190,9 +188,6 @@
     localStorage.setItem(keys.ROLE_KEY, "tutor");
 
     const $ = (q, el=document) => el.querySelector(q);
-    const roomOut = $("#roomOut");
-    const groupOut = $("#groupOut");
-    const campusOut = $("#campusOut");
     const board = $("#board");
     const nodesEl = $("#nodes");
     const svg = $("#boardSvg");
@@ -200,10 +195,6 @@
     const diag = $("#diag");
     const toast = $("#toast");
     const nodeCount = $("#nodeCount");
-
-    roomOut.textContent = room;
-    groupOut.textContent = group;
-    campusOut.textContent = campus === "monash" ? "Monash" : "UPNG";
 
     const state = {
       nodes: [],
@@ -813,18 +804,21 @@
         }
       });
 
-      $("#btnRefresh").addEventListener("click", () => {
-        loadAll().then(() => showToast("Refreshed")).catch(err => showToast(err.message || "Refresh failed"));
-      });
-
       $("#btnBack").addEventListener("click", () => {
         location.href = `${BASE_PATH}/step2.html?room=${encodeURIComponent(room)}&track=tutor&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
       });
-      $("#btnDashboard").addEventListener("click", () => {
-        location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
-      });
-      $("#btnFinish").addEventListener("click", () => {
-        location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`;
+
+      $("#btnReset").addEventListener("click", () => {
+        const ok = confirm("Clear local workshop storage and reload?");
+        if (!ok) return;
+        localStorage.removeItem(keys.PID_KEY);
+        localStorage.removeItem(keys.AUTH_KEY);
+        localStorage.removeItem(keys.STEP3_KEY);
+        localStorage.removeItem(keys.TUT_KEY);
+        localStorage.removeItem(keys.NAME_KEY);
+        localStorage.removeItem(keys.ROLE_KEY);
+        localStorage.removeItem(keys.PERSONA_KEY);
+        location.reload();
       });
     }
 

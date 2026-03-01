@@ -136,8 +136,8 @@
     }
     .sticky{
       position:absolute;
-      width: 170px;
-      min-height: 90px;
+      width: 230px;
+      min-height: 130px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,.18);
       box-shadow: 0 16px 40px rgba(0,0,0,.34);
@@ -167,11 +167,11 @@
       color: #0b0d12;
       border: none;
       outline:none;
-      resize:none;
+      resize:vertical;
       font-weight: 1000;
       line-height: 1.2;
-      font-size: 13px;
-      min-height: 56px;
+      font-size: 14px;
+      min-height: 92px;
     }
     .mini{display:flex;gap:8px;align-items:center;justify-content:space-between}
     .tinyBtn{
@@ -210,6 +210,10 @@
       background: rgba(255,255,255,.22);
       border-color: rgba(255,255,255,.18);
       color: rgba(0,0,0,.82);
+    }
+    .stickyArea.syncing{
+      opacity:.72;
+      transition:opacity .15s ease;
     }
 
     .toast{position:fixed;right:14px;bottom:14px;z-index:80;background:rgba(18,22,37,.92);border:1px solid rgba(255,255,255,.10);
@@ -345,14 +349,12 @@
       <div>
         <div class="badge"><span class="dot"></span> Stage 1 • Step 2</div>
         <div class="subtitle">
-          Room: <span class="mono" id="roomOut"></span> • You: <span class="mono" id="meOut"></span><br/>
+          You: <span class="mono" id="meOut"></span><br/>
           Role: <span class="mono" id="roleOut">student</span> • Card: <span class="mono" id="personaOut">None</span><br/>
-          Surface friction around feedback and define minimum next action. These stickies feed Step 3.
+          Step 2 of 3: write friction, minimum action, and needed evidence. These stickies feed Step 3.
         </div>
       </div>
       <div class="row" style="justify-content:flex-end">
-        <button id="btnTutorial" class="btnGhost">Tutorial</button>
-        <button id="btnDashboard" class="btnGhost">Dashboard</button>
         <button id="btnBack">← Step 1</button>
         <button id="btnNext" class="btnPrimary">Next → Step 3</button>
         <button id="btnReset" class="btnDanger">Reset Local</button>
@@ -369,6 +371,7 @@
       </div>
       <div class="cardBody">
         <div class="callout">
+          <b>Step flow</b>: Step 1 (card lens) -> Step 2 (sticky prompts) -> Step 3 (timeline mapping).<br/>
           Workflow: Draft privately first, then publish only the strongest prompts to shared board.
           Sticky formula: <span class="mono">Friction</span> + <span class="mono">Minimum Action</span> + <span class="mono">Evidence Needed</span>.
         </div>
@@ -421,7 +424,7 @@
         <div id="tutContent"></div>
       </div>
       <div class="modalFoot">
-        <div class="kicker">You can reopen this anytime via “Tutorial”.</div>
+        <div class="kicker">Use the written step guide above as your main reference.</div>
         <div class="row" style="justify-content:flex-end">
           <button id="btnPrev" class="btnGhost">← Back</button>
           <button id="btnNextStep" class="btnPrimary">Next</button>
@@ -499,7 +502,7 @@
     }
 
     const $ = (q, el=document) => el.querySelector(q);
-    const roomOut = $("#roomOut"), meOut = $("#meOut");
+    const meOut = $("#meOut");
     const roleOut = $("#roleOut"), personaOut = $("#personaOut");
     const stickyArea = $("#stickyArea"), toast = $("#toast");
     const sharedList = $("#sharedList");
@@ -516,7 +519,6 @@
 
     chibiImg.src = CHIBI3_SRC;
 
-    roomOut.textContent = room;
     function refreshIdentityUI({ displayName=null, role="student", personaId=null } = {}){
       meOut.textContent = displayName || participantId.slice(0,8);
       roleOut.textContent = role === "tutor" ? "tutor" : "student";
@@ -941,6 +943,7 @@
     }
     async function refreshStickiesFromDb({ silent=false } = {}){
       try{
+        if (!silent) stickyArea.classList.add("syncing");
         const active = document.activeElement;
         if (active && active.tagName === "TEXTAREA" && active.closest(".sticky")){
           return;
@@ -957,6 +960,8 @@
         }
       } catch (err){
         if (!silent) console.error("step2 refresh failed", err);
+      } finally {
+        if (!silent) stickyArea.classList.remove("syncing");
       }
     }
     function startStickyPolling(){
@@ -1196,7 +1201,6 @@
       openOverlay(tutOverlay);
     }
 
-    $("#btnTutorial").addEventListener("click", ()=> openTutorial(0));
     $("#btnCloseTut").addEventListener("click", ()=> closeOverlay(tutOverlay));
     btnPrev.addEventListener("click", ()=>{ tutIndex = Math.max(0, tutIndex - 1); renderTutorial(); });
     btnNextStep.addEventListener("click", ()=>{
@@ -1210,10 +1214,7 @@
 
     // auto-show tutorial once (per room)
     function maybeShowTutorialOnce(){
-      if (!localStorage.getItem(TUT_KEY)){
-        localStorage.setItem(TUT_KEY, "1");
-        openTutorial(0);
-      }
+      return;
     }
 
     // ===== Step 3 direct navigation =====
@@ -1264,7 +1265,6 @@
     });
 
     $("#btnBack").addEventListener("click", ()=> location.href = backStep1Path());
-    $("#btnDashboard").addEventListener("click", ()=> location.href = `${BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}&group=${encodeURIComponent(group)}`);
 
     // Next button goes directly to Step 3
     $("#btnNext").addEventListener("click", ()=>{
@@ -1295,7 +1295,7 @@
       } finally {
         subscribeRealtime();
         startStickyPolling();
-        maybeShowTutorialOnce();
+        // inline step guidance is always visible; no auto popup tutorial
       }
     })();
     window.addEventListener("beforeunload", () => {
