@@ -434,9 +434,6 @@
           <input id="groupInput" class="field" type="text" placeholder="tutor group (e.g. g1)" style="min-width:170px" />
           <button id="btnOpenRoom" class="btnPrimary">Open Room</button>
         </div>
-        <div class="diag" style="margin-top:10px">
-          Link-based workshop flow: share student/tutor links below. No participant passcode needed.
-        </div>
         <div class="promptGrid" style="margin-top:10px">
           <article class="promptCard">
             <h3>Student Link</h3>
@@ -640,7 +637,7 @@
     }
     function buildShareLinks(){
       const origin = location.origin || "https://www.jackiefoo.me";
-      const student = `${origin}${withCampus(`${shared.BASE_PATH}/step1.html`)}`;
+      const student = `${origin}${withCampus(`${shared.BASE_PATH}/step1.html`)}&track=student`;
       const tutor = `${origin}${withCampus(`${shared.BASE_PATH}/step1-tutor.html`)}&group=${encodeURIComponent(group)}`;
       studentLinkOut.textContent = student;
       tutorLinkOut.textContent = tutor;

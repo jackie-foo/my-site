@@ -632,6 +632,8 @@
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
     const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
+    const forcedTrack = (params.get("track") || "").trim().toLowerCase();
+    const forcedRole = forcedTrack === "student" ? "student" : (forcedTrack === "tutor" ? "tutor" : null);
     if (!room) {
       document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room. Use <b>?room=demo</b></div>";
       throw new Error("Missing room");
@@ -694,6 +696,11 @@
 
     roomOut.textContent = room;
     chibiImg.src = CHIBI3_SRC;
+    if (forcedRole){
+      roleSelect.innerHTML = `<option value="${forcedRole}">${forcedRole === "tutor" ? "Tutor" : "Student"}</option>`;
+      roleSelect.value = forcedRole;
+      roleSelect.disabled = true;
+    }
 
     function showToast(msg){
       toast.textContent = msg;
@@ -754,7 +761,7 @@
     ];
 
     const state = {
-      role: "student",
+      role: forcedRole || "student",
       persona_id: null,
       persona_title: null,
       display_name: null
@@ -887,6 +894,11 @@
     }
 
     roleSelect.addEventListener("change", async () => {
+      if (forcedRole){
+        roleSelect.value = forcedRole;
+        state.role = forcedRole;
+        return;
+      }
       const v = roleSelect.value;
       state.role = (v === "tutor") ? "tutor" : "student";
       localStorage.setItem(ROLE_KEY, state.role);
@@ -941,17 +953,22 @@
           state.display_name = dbName;
           localStorage.setItem(NAME_KEY, dbName);
         }
-        localStorage.setItem(ROLE_KEY, state.role);
+        localStorage.setItem(ROLE_KEY, forcedRole || state.role);
       } else {
         state.persona_id = localStorage.getItem(PERSONA_KEY) || null;
         state.persona_title = state.persona_id ? titleFromPersonaId(state.persona_id) : null;
         const savedRole = localStorage.getItem(ROLE_KEY);
-        if (savedRole === "student" || savedRole === "tutor"){
+        if (!forcedRole && (savedRole === "student" || savedRole === "tutor")){
           state.role = savedRole;
         }
       }
 
+      if (forcedRole){
+        state.role = forcedRole;
+      }
+
       roleSelect.value = state.role;
+      roleSelect.disabled = !!forcedRole;
       selRole.textContent = state.role;
 
       if (nameInput) nameInput.value = state.display_name || "";

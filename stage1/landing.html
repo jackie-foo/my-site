@@ -228,7 +228,7 @@
     function participantPath(campus, track){
       const { room, group } = values();
       const q = `room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
-      if (track === "student") return `/stage1/step1.html?${q}`;
+      if (track === "student") return `/stage1/step1.html?${q}&track=student`;
       return `/stage1/step1-tutor.html?${q}&group=${encodeURIComponent(group)}`;
     }
 

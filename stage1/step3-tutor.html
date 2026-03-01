@@ -461,7 +461,7 @@
         session_id: room,
         participant_id: participantId,
         week: 1,
-        type: "workflow_node",
+        type: "workflow_action",
         label
       };
       const ins = await supabase.from("workshop_journey_items").insert(payload).select().single();
@@ -470,6 +470,24 @@
       state.selectedId = ins.data.id;
       renderNodes();
       showToast("Box added");
+    }
+
+    async function createStarterFlow(){
+      await addNode({ text:"Assignment brief released", time:"10m", x:120, y:170 });
+      await addNode({ text:"Spec clarified with markers", time:"25m", x:420, y:90 });
+      await addNode({ text:"Scripts distributed", time:"15m", x:760, y:170 });
+      await addNode({ text:"Marking + moderation", time:"180m", x:760, y:360 });
+      await addNode({ text:"Feedback returned", time:"20m", x:420, y:460 });
+
+      const ids = state.nodes.slice(-5).map(n => n.id);
+      if (ids.length !== 5) return;
+
+      // Use all connector sides across the starter flow.
+      await addEdge(ids[0], ids[1], "right", "left", "Brief wording unclear");
+      await addEdge(ids[1], ids[2], "right", "left", "Distribution planning delay");
+      await addEdge(ids[2], ids[3], "bottom", "top", "Rubric interpretation mismatch");
+      await addEdge(ids[3], ids[4], "left", "right", "Moderation turnaround pressure");
+      await addEdge(ids[4], ids[0], "top", "bottom", "Student reaction loop");
     }
 
     async function addEdge(from, to, fromSide, toSide, issue = ""){
@@ -550,7 +568,7 @@
         if (String(r.type || "") === "workflow_edge"){
           const p = parseEdge(r);
           if (p.from && p.to) edges.push({ id: r.id, from: p.from, to: p.to, fromSide: p.fromSide, toSide: p.toSide, issue: p.issue || "" });
-        } else if (String(r.type || "") === "workflow_node" || String(r.type || "") === "workflow_action" || String(r.type || "") === "workflow_constraint" || String(r.type || "") === "workflow_decision" || String(r.type || "") === "workflow_support"){
+        } else if (String(r.type || "").startsWith("workflow_")){
           nodes.push(r);
         }
       });
@@ -598,21 +616,7 @@
           if (!ok) return;
         }
         try {
-          const baseX = 140;
-          const y = 180;
-          const a = await addNode({ text:"Assignment brief released", time:"10m", x:baseX, y });
-          const b = await addNode({ text:"Spec clarified with markers", time:"25m", x:baseX + 310, y });
-          const c = await addNode({ text:"Scripts distributed", time:"15m", x:baseX + 620, y });
-          const d = await addNode({ text:"Marking + moderation", time:"180m", x:baseX + 620, y: y + 190 });
-          const e = await addNode({ text:"Feedback returned", time:"20m", x:baseX + 310, y: y + 190 });
-
-          const ids = state.nodes.slice(-5).map(n => n.id);
-          if (ids.length === 5){
-            await addEdge(ids[0], ids[1], "right", "left", "Spec ambiguity");
-            await addEdge(ids[1], ids[2], "right", "left", "Allocation load");
-            await addEdge(ids[2], ids[3], "bottom", "top", "Rubric interpretation mismatch");
-            await addEdge(ids[3], ids[4], "left", "right", "Moderation delay");
-          }
+          await createStarterFlow();
           setDiag("Starter flow inserted. Edit text directly in each box.", false);
         } catch (err){
           showToast(err.message || "Starter flow failed");
@@ -839,6 +843,12 @@
     wireActions();
     ensureScopeSession()
       .then(() => loadAll())
+      .then(async () => {
+        if (!state.nodes.length){
+          await createStarterFlow();
+          setDiag("Starter tutor flow ready. Drag anchors on any side to connect more steps.", false);
+        }
+      })
       .then(() => setDiag("Connected. Build your workflow privately; dashboard can still monitor outputs.", false))
       .catch((err) => setDiag(err.message || "Load failed", true));
     subscribe();
