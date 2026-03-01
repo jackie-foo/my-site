@@ -369,6 +369,38 @@
       font-size:12px;
       line-height:1.45;
     }
+    .guideGrid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+    }
+    @media (max-width:940px){.guideGrid{grid-template-columns:1fr}}
+    .guideCard{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      padding:10px;
+      min-height:88px;
+    }
+    .guideCard.active{
+      border-color:color-mix(in srgb,var(--accent) 68%, rgba(255,255,255,.12));
+      background:rgba(0,229,255,.10);
+      box-shadow:0 10px 24px rgba(0,229,255,.10);
+    }
+    .guideTitle{
+      margin:0 0 6px;
+      font-size:12px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+    .guideText{
+      margin:0;
+      font-size:12px;
+      line-height:1.45;
+      font-weight:850;
+      color:var(--muted);
+    }
 
     /* ===== Loading Screen ===== */
     .loading{
@@ -450,7 +482,8 @@
         <div class="badge"><span class="dot"></span> Stage 1 • Step 1</div>
         <div class="subtitle">
           You: <span class="mono" id="meOut"></span><br/>
-          Step 1 of 3: enter code + name, choose one card lens, then continue.
+          Step 1 of 3: set your identity and choose one card lens.<br/>
+          Next: Step 2 builds sticky prompts • Step 3 maps your journey.
         </div>
       </div>
 
@@ -472,7 +505,7 @@
           </div>
           <button id="btnOpenPw" class="btnPrimary">Start</button>
         </div>
-        <div class="hint">Your room, role, and card selection are saved automatically.</div>
+        <div class="hint">Your room, name, and card selection are saved automatically.</div>
       </div>
     </section>
 
@@ -484,11 +517,11 @@
 
       <div class="cardBody">
 
-        <!-- Code + Name + Role -->
+        <!-- Code + Name -->
         <div class="row" style="align-items:flex-end">
           <div class="field">
             <label class="label" for="codeInput">Workshop code</label>
-            <input id="codeInput" type="text" placeholder="Type room code (e.g., demo)" maxlength="40" autocomplete="off"/>
+            <input id="codeInput" type="text" placeholder="Enter workshop code" maxlength="40" autocomplete="off"/>
             <div class="hint">Enter the room code shared by your facilitator.</div>
           </div>
 
@@ -497,19 +530,21 @@
             <input id="nameInput" type="text" placeholder="e.g., Jackie" maxlength="32" autocomplete="name"/>
             <div class="hint">This is what others will see in the room.</div>
           </div>
-
-          <div class="field" style="max-width:360px">
-            <label class="label" for="roleSelect">Role</label>
-            <select id="roleSelect" class="select" aria-label="Role" disabled>
-              <option value="student">Student</option>
-            </select>
-            <div class="hint">Fixed by this link.</div>
-          </div>
         </div>
 
-        <div class="callout" id="inlineGuide">
-          Step reminder: 1) type code + name, 2) choose one card that best fits your current learning style, 3) continue to Step 2.
-          The card helps structure feedback reflection later, so pick the one that feels most accurate now.
+        <div class="guideGrid" id="inlineGuide">
+          <article class="guideCard active">
+            <p class="guideTitle">Step 1 (Now)</p>
+            <p class="guideText">Enter workshop code + your name, then choose one card that fits you best.</p>
+          </article>
+          <article class="guideCard">
+            <p class="guideTitle">Step 2</p>
+            <p class="guideText">Turn your friction into sticky prompts: issue, minimum action, and needed evidence.</p>
+          </article>
+          <article class="guideCard">
+            <p class="guideTitle">Step 3</p>
+            <p class="guideText">Map key moments by week so your response strategy is clear and discussable.</p>
+          </article>
         </div>
 
         <div class="divider"></div>
@@ -519,7 +554,6 @@
         <div class="metaRow">
           <span class="mono">Code: <span id="selCode">Not entered</span></span>
           <span class="mono">Selected: <span id="selPersona">None</span></span>
-          <span class="mono">Role: <span id="selRole">student</span></span>
           <span class="mono">Name: <span id="selName">—</span></span>
         </div>
       </div>
@@ -555,11 +589,11 @@
           <button id="btnUnlock" class="btnPrimary">Continue</button>
         </div>
         <div class="callout">
-          You should have received a room link like <span class="mono">?room=demo</span>.
+          Use the workshop link shared by your facilitator.
         </div>
       </div>
       <div class="modalFoot">
-        <div class="kicker">After unlocking, you’ll see a quick tutorial.</div>
+        <div class="kicker">Setup loads immediately after you continue.</div>
         <div class="row" style="justify-content:flex-end">
           <button id="btnPwCancel" class="btnGhost">Cancel</button>
         </div>
@@ -578,7 +612,7 @@
         <button id="btnCloseLocked" class="btnGhost" aria-label="Close">✕</button>
       </div>
       <div class="modalBody">
-        <div class="callout">Open the quick tutorial before choosing role and card.</div>
+        <div class="callout">Open the quick tutorial before choosing your card.</div>
       </div>
       <div class="modalFoot">
         <div class="kicker">You’ll see the tutorial right after unlock.</div>
@@ -606,7 +640,7 @@
       </div>
 
       <div class="modalFoot">
-        <div class="kicker" id="tutHint">You can reopen this anytime via the “Tutorial” button.</div>
+        <div class="kicker" id="tutHint">Use the step guide cards above anytime.</div>
         <div class="row" style="justify-content:flex-end">
           <button id="btnPrev" class="btnGhost">← Back</button>
           <button id="btnNextStep" class="btnPrimary">Next</button>
@@ -642,7 +676,7 @@
     const room = (params.get("room") || "").trim();
     const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     if (!room) {
-      document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room. Use <b>?room=demo</b></div>";
+      document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room code in URL.</div>";
       throw new Error("Missing room");
     }
 
@@ -658,9 +692,8 @@
     const gateCard = $("#gateCard"), mainCard = $("#mainCard");
     const gateStatus = $("#gateStatus");
 
-    const roleSelect = $("#roleSelect");
     const personaGrid = $("#personaGrid");
-    const selPersona = $("#selPersona"), selRole = $("#selRole");
+    const selPersona = $("#selPersona");
     const selName = $("#selName");
     const selCode = $("#selCode");
     const codeInput = $("#codeInput");
@@ -702,9 +735,6 @@
     const btnNextStep = $("#btnNextStep");
 
     chibiImg.src = CHIBI3_SRC;
-    roleSelect.innerHTML = `<option value="student">Student</option>`;
-    roleSelect.value = "student";
-    roleSelect.disabled = true;
 
     function showToast(msg){
       toast.textContent = msg;
@@ -899,13 +929,6 @@
       updateNextEnabled();
     }
 
-    roleSelect.addEventListener("change", () => {
-      roleSelect.value = "student";
-      state.role = "student";
-      localStorage.setItem(ROLE_KEY, "student");
-      selRole.textContent = "student";
-    });
-
     async function ensureSession(){
       const { error } = await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict: "id" });
       if (error) throw error;
@@ -949,10 +972,6 @@
         state.role = "student";
       }
 
-      roleSelect.value = state.role;
-      roleSelect.disabled = true;
-      selRole.textContent = state.role;
-
       if (nameInput) nameInput.value = state.display_name || "";
       refreshMeOut();
 
@@ -971,26 +990,25 @@
         title: "What you do in Step 1",
         html: `
           <div class="callout">
-            Step 1 is quick: type your <span class="mono">name</span>, choose your <span class="mono">role</span>,
-            then pick a <span class="mono">personality card</span>. Your choices save automatically.
+            Step 1 is quick: type your <span class="mono">name</span> and pick one <span class="mono">card lens</span>.
+            Your choices save automatically.
           </div>
           <ul class="list">
             <li>Type your name (this is what others see).</li>
-            <li>Select Student or Tutor.</li>
             <li>Click one personality card.</li>
             <li>Then hit <span class="mono">Next → Step 2</span>.</li>
           </ul>
         `
       },
       {
-        title: "Why we ask for role",
+        title: "What happens in Step 2 and Step 3",
         html: `
           <div class="callout">
-            Students and tutors interpret “good feedback” differently — role helps us compare patterns.
+            The workshop moves from lens to action: you define friction in Step 2 and map timing in Step 3.
           </div>
           <ul class="list">
-            <li><b>Students</b> focus on clarity, actionability, confidence.</li>
-            <li><b>Tutors</b> focus on feasibility, rubric alignment, time.</li>
+            <li><b>Step 2</b>: sticky prompts for friction, minimum action, and evidence needed.</li>
+            <li><b>Step 3</b>: timeline map of release, due, feedback return, and reaction points.</li>
           </ul>
         `
       },
@@ -1083,7 +1101,7 @@
         await ensureSession();
         showLoading("Almost there…", "Saving your identity to this room.");
         await ensureParticipant();
-        showLoading("Loading your profile…", "Fetching your saved role/name/card (if any).");
+        showLoading("Loading your profile…", "Fetching your saved name/card (if any).");
         await loadParticipant();
       } catch (err){
         console.error(err);
@@ -1139,7 +1157,6 @@
     }
 
     // initial UI
-    selRole.textContent = state.role;
     renderPersonas();
     updateNextEnabled();
   })();
