@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jackie Foo | Playboard</title>
-  <meta name="description" content="Minimal playful board." />
-  <meta name="theme-color" content="#d9d6d0" />
+  <title>Jackie Foo | Canvas Projects</title>
+  <meta name="description" content="Open canvas intro with scroll-down projects." />
+  <meta name="theme-color" content="#dcd8d1" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,11 +13,11 @@
 
   <style>
     :root {
-      --bg: #d9d6d0;
-      --paper: #f7f5f0;
-      --line: #d9d6d0;
-      --ink: #141414;
-      --muted: #5b5b5b;
+      --bg: #dcd8d1;
+      --paper: #f5f3ee;
+      --ink: #161616;
+      --muted: #4f4e4b;
+      --line: #d7d1c7;
     }
 
     * { box-sizing: border-box; }
@@ -29,40 +29,38 @@
       background: var(--bg);
       color: var(--ink);
       font-family: "Instrument Sans", sans-serif;
+      overflow-x: hidden;
     }
 
     .page {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px 12px;
+      position: relative;
+      z-index: 2;
     }
 
-    .window {
-      width: min(1120px, calc(100vw - 18px));
-      border: 1px solid #cbc6bd;
-      background: var(--paper);
-    }
-
-    .windowBar {
-      height: 44px;
-      border-bottom: 1px solid var(--line);
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 12;
+      height: 46px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(245, 243, 238, 0.92);
+      backdrop-filter: blur(4px);
       font-size: 0.83rem;
       font-weight: 600;
     }
 
-    .barLeft,
-    .barRight {
+    .topLeft,
+    .topRight {
       display: inline-flex;
-      align-items: center;
       gap: 10px;
+      align-items: center;
     }
 
-    .barRight {
+    .topRight {
       justify-self: end;
     }
 
@@ -83,271 +81,402 @@
       border-color: var(--ink);
     }
 
-    .board {
-      min-height: min(76vh, 760px);
-      display: grid;
-      grid-template-rows: 1fr auto;
-    }
-
-    .scene {
+    .hero {
+      min-height: calc(100vh - 46px);
+      padding: clamp(16px, 3vw, 34px) clamp(16px, 3vw, 36px);
       position: relative;
-      min-height: 510px;
-      overflow: hidden;
-      padding: clamp(24px, 4vw, 42px) clamp(16px, 3vw, 34px) 10px;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.26), rgba(255,255,255,0));
     }
 
-    .title {
+    .heroTitle {
       margin: 0;
       text-align: center;
       font-family: "Gaegu", cursive;
-      font-size: clamp(2.2rem, 5.3vw, 4.3rem);
-      line-height: 0.98;
-      letter-spacing: 0.06em;
-      font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.06em;
+      line-height: 0.98;
+      font-size: clamp(2.2rem, 6.4vw, 5.3rem);
+      z-index: 3;
+      pointer-events: none;
+      max-width: 14ch;
     }
 
-    .visualWrap {
+    .heroVisual {
       position: absolute;
       left: 50%;
       top: 56%;
       transform: translate(-50%, -50%);
-      width: min(72%, 700px);
-      max-height: 70%;
-      display: grid;
-      place-items: center;
+      width: min(74vw, 720px);
+      max-height: 70vh;
       z-index: 2;
       pointer-events: none;
     }
 
-    .visualWrap img {
-      max-width: 100%;
-      max-height: 100%;
+    .heroVisual img {
+      width: 100%;
+      max-height: 70vh;
       object-fit: contain;
       display: block;
-      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.1));
+      filter: drop-shadow(0 9px 12px rgba(0, 0, 0, 0.1));
     }
 
-    .hint {
+    .heroMeta {
       position: absolute;
-      top: calc(56% + 180px);
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.76rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 700;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid #e4dfd7;
+      left: clamp(16px, 3vw, 36px);
+      bottom: clamp(16px, 3vw, 34px);
       z-index: 3;
+      max-width: 34ch;
+      pointer-events: none;
     }
 
-    .drawCanvas {
-      position: absolute;
-      inset: 0;
-      z-index: 4;
-      cursor: crosshair;
-    }
-
-    .bottom {
-      border-top: 1px solid var(--line);
-      padding: 12px 14px;
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 14px;
-      align-items: end;
-    }
-
-    .about h2 {
+    .heroMeta h2 {
       margin: 0;
-      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-size: clamp(2rem, 4vw, 3.2rem);
       line-height: 1;
       letter-spacing: -0.02em;
+      pointer-events: auto;
     }
 
-    .about p {
+    .heroMeta p {
       margin: 8px 0 0;
+      font-size: 0.92rem;
+      line-height: 1.48;
       color: #2f2f2f;
-      font-size: 0.9rem;
-      line-height: 1.45;
-      max-width: 34ch;
+      pointer-events: auto;
     }
 
-    .about a {
+    .heroMeta a {
       margin-top: 10px;
       display: inline-block;
       color: #111;
       text-decoration: none;
       border-bottom: 1px solid #111;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 600;
+      pointer-events: auto;
     }
 
-    .controls {
+    .scrollCue {
+      position: absolute;
+      right: clamp(14px, 3vw, 32px);
+      bottom: clamp(16px, 3vw, 34px);
+      z-index: 3;
       display: inline-flex;
-      gap: 6px;
+      gap: 8px;
       align-items: center;
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .scrollCue i {
+      width: 12px;
+      height: 12px;
+      border-right: 2px solid var(--muted);
+      border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg);
+      display: inline-block;
+      animation: cue 1.2s ease-in-out infinite;
+    }
+
+    @keyframes cue {
+      0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.72; }
+      50% { transform: rotate(45deg) translate(3px, 3px); opacity: 1; }
+    }
+
+    .projects {
+      padding: clamp(28px, 5vw, 52px) clamp(16px, 3vw, 36px) 110px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .projects h3 {
+      margin: 0;
+      font-family: "Gaegu", cursive;
+      font-size: clamp(1.8rem, 4.3vw, 3.3rem);
+      line-height: 1;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .projects p {
+      margin: 0;
+      color: #383734;
+      font-size: 0.94rem;
+      line-height: 1.56;
+      max-width: 62ch;
+    }
+
+    .projectGrid {
+      margin-top: 6px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .project {
+      border: 2px solid #161616;
+      background: var(--paper);
+      padding: 14px;
+      box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.16);
+      display: grid;
+      gap: 8px;
+    }
+
+    .project .num {
+      font-family: "Gaegu", cursive;
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: #4e4c48;
+    }
+
+    .project h4 {
+      margin: 0;
+      font-family: "Gaegu", cursive;
+      font-size: 1.58rem;
+      line-height: 1.04;
+    }
+
+    .project p {
+      font-size: 0.88rem;
+      max-width: none;
+    }
+
+    .project a {
+      width: fit-content;
+      color: #141414;
+      text-decoration: none;
+      border-bottom: 1px solid #141414;
+      font-size: 0.79rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding-bottom: 2px;
+    }
+
+    .drawCanvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 20;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .drawCanvas.active {
+      pointer-events: auto;
+      cursor: crosshair;
+    }
+
+    .toolRail {
+      position: fixed;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      z-index: 30;
+      border: 1px solid #cfc8be;
+      background: rgba(247, 244, 238, 0.95);
+      border-radius: 999px;
+      padding: 7px 8px;
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
       flex-wrap: wrap;
       justify-content: center;
+      max-width: calc(100vw - 14px);
     }
 
     .btn {
-      height: 28px;
-      padding: 0 15px;
+      height: 30px;
       border-radius: 999px;
-      border: 1px solid #8c8a86;
+      border: 1px solid #8d8a84;
       background: transparent;
       color: #222;
       font: inherit;
       font-size: 0.72rem;
       font-weight: 700;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
+      padding: 0 12px;
       cursor: pointer;
     }
 
     .btn.active {
-      background: #1e1e1e;
-      border-color: #1e1e1e;
+      background: #1f1f1f;
+      border-color: #1f1f1f;
       color: #fff;
-    }
-
-    .tools {
-      display: inline-flex;
-      gap: 14px;
-      align-items: center;
-      justify-content: flex-end;
     }
 
     .swatches {
       display: inline-flex;
       gap: 7px;
       align-items: center;
+      margin: 0 3px;
     }
 
     .swatch {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      border: 1px solid rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(0, 0, 0, 0.38);
       cursor: pointer;
-      opacity: 0.88;
+      opacity: 0.82;
       transform: scale(1);
       transition: transform 120ms ease, opacity 120ms ease;
     }
 
     .swatch.active {
-      transform: scale(1.15);
+      transform: scale(1.16);
       opacity: 1;
-      border-color: rgba(0, 0, 0, 0.62);
+      border-color: rgba(0, 0, 0, 0.65);
     }
 
     .size {
       display: inline-flex;
+      gap: 6px;
       align-items: center;
-      gap: 7px;
+      color: #4f4d4a;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-left: 2px;
     }
 
     .size input[type="range"] {
-      width: 92px;
-      accent-color: #2b775d;
+      width: 90px;
+      accent-color: #2f765e;
     }
 
-    .size span {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 700;
-      color: #4f4e4b;
-    }
-
-    @media (max-width: 980px) {
-      .bottom {
+    @media (max-width: 860px) {
+      .projectGrid {
         grid-template-columns: 1fr;
       }
 
-      .tools {
-        justify-content: flex-start;
+      .topRight {
+        gap: 7px;
       }
 
-      .visualWrap {
-        width: min(88%, 640px);
+      .topRight span,
+      .topRight .link:nth-child(2) {
+        display: none;
       }
 
-      .hint {
-        top: calc(56% + 160px);
+      .heroVisual {
+        width: min(88vw, 640px);
+      }
+
+      .heroTitle {
+        font-size: clamp(2rem, 9vw, 3.7rem);
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .swatch { transition: none; }
+      .scrollCue i,
+      .swatch {
+        animation: none !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
 <body>
+  <canvas id="drawCanvas" class="drawCanvas" aria-hidden="true"></canvas>
+
   <main class="page">
-    <section class="window" aria-label="Playboard">
-      <header class="windowBar">
-        <div class="barLeft">
-          <a class="link" href="#">Shop</a>
-          <a class="link" href="#">Play</a>
-        </div>
-        <div class="brand">woset</div>
-        <div class="barRight">
-          <span>Cart (0)</span>
-          <a class="link" href="#">Information</a>
-        </div>
-      </header>
+    <header class="topbar">
+      <div class="topLeft">
+        <a class="link" href="#">Shop</a>
+        <a class="link" href="#">Play</a>
+      </div>
+      <div class="brand">woset</div>
+      <div class="topRight">
+        <span>Cart (0)</span>
+        <a class="link" href="#">Information</a>
+      </div>
+    </header>
 
-      <div class="board">
-        <section id="scene" class="scene">
-          <h1 class="title">Jackie has built<br />a tiny home for ideas</h1>
+    <section class="hero" aria-label="Main canvas hero">
+      <h1 class="heroTitle">Jackie has built<br />a home for ideas</h1>
 
-          <div class="visualWrap">
-            <img id="mainVisual" src="/pic/chibi5.png" alt="Main illustration" />
-          </div>
-          <div class="hint">center visual slot (chibi5)</div>
+      <div class="heroVisual">
+        <img id="mainVisual" src="/pic/chibi5.png" alt="Main visual" />
+      </div>
 
-          <canvas id="drawCanvas" class="drawCanvas"></canvas>
-        </section>
+      <div class="heroMeta">
+        <h2>Jackie</h2>
+        <p>
+          This is my internet corner. Sketch on top, then scroll down to explore projects.
+        </p>
+        <a href="/index.html">Back to Home</a>
+      </div>
 
-        <section class="bottom">
-          <div class="about">
-            <h2>Jackie</h2>
-            <p>
-              A small and playful corner. Draw, erase, and explore.
-              This page is intentionally minimal.
-            </p>
-            <a href="/index.html">Back to Home</a>
-          </div>
+      <div class="scrollCue"><i></i> Scroll for projects</div>
+    </section>
 
-          <div class="controls">
-            <button id="resetBtn" class="btn" type="button">Start Over</button>
-            <button id="eraserBtn" class="btn" type="button">Eraser</button>
-            <button id="saveBtn" class="btn" type="button">Save</button>
-            <button id="shareBtn" class="btn" type="button">Share</button>
-          </div>
+    <section id="projects" class="projects" aria-label="Projects">
+      <h3>Projects</h3>
+      <p>
+        Pick one to open the placeholder page. I can map your final illustrations directly into each case study next.
+      </p>
 
-          <div class="tools">
-            <div id="swatches" class="swatches" aria-label="Color swatches">
-              <button class="swatch active" data-color="#a23e52" style="background:#a23e52" aria-label="Rose"></button>
-              <button class="swatch" data-color="#4868aa" style="background:#4868aa" aria-label="Blue"></button>
-              <button class="swatch" data-color="#4f3f5d" style="background:#4f3f5d" aria-label="Purple"></button>
-              <button class="swatch" data-color="#3d6f63" style="background:#3d6f63" aria-label="Green"></button>
-              <button class="swatch" data-color="#ccb969" style="background:#ccb969" aria-label="Gold"></button>
-            </div>
-            <label class="size">
-              <span>Brush</span>
-              <input id="sizeRange" type="range" min="1" max="14" step="1" value="4" />
-            </label>
-          </div>
-        </section>
+      <div class="projectGrid">
+        <article class="project">
+          <div class="num">Project 01</div>
+          <h4>Feedback Workshop</h4>
+          <p>Workshop stages to surface feedback friction and implementation actions.</p>
+          <a href="/project-view.html?project=1">Open Project</a>
+        </article>
+
+        <article class="project">
+          <div class="num">Project 02</div>
+          <h4>Journey Mapping Tool</h4>
+          <p>Prompt-led mapping for student and tutor constraints in one flow.</p>
+          <a href="/project-view.html?project=2">Open Project</a>
+        </article>
+
+        <article class="project">
+          <div class="num">Project 03</div>
+          <h4>Live Dashboard</h4>
+          <p>Stage monitoring board for workshop facilitation and intervention timing.</p>
+          <a href="/project-view.html?project=3">Open Project</a>
+        </article>
+
+        <article class="project">
+          <div class="num">Project 04</div>
+          <h4>Tutor Workflow</h4>
+          <p>Flow-based constraint mapping for marking and communication bottlenecks.</p>
+          <a href="/project-view.html?project=4">Open Project</a>
+        </article>
       </div>
     </section>
   </main>
+
+  <div class="toolRail" aria-label="Brush tools">
+    <button id="drawBtn" class="btn" type="button">Draw</button>
+    <button id="eraserBtn" class="btn" type="button">Eraser</button>
+    <button id="clearBtn" class="btn" type="button">Start Over</button>
+    <button id="saveBtn" class="btn" type="button">Save</button>
+    <button id="shareBtn" class="btn" type="button">Share</button>
+
+    <div id="swatches" class="swatches">
+      <button class="swatch active" data-color="#a23e52" style="background:#a23e52" aria-label="Rose"></button>
+      <button class="swatch" data-color="#4868aa" style="background:#4868aa" aria-label="Blue"></button>
+      <button class="swatch" data-color="#4d3f5e" style="background:#4d3f5e" aria-label="Purple"></button>
+      <button class="swatch" data-color="#3d6f63" style="background:#3d6f63" aria-label="Green"></button>
+      <button class="swatch" data-color="#c9b668" style="background:#c9b668" aria-label="Gold"></button>
+    </div>
+
+    <label class="size">Brush <input id="sizeRange" type="range" min="1" max="14" step="1" value="4" /></label>
+  </div>
 
   <script>
     (() => {
@@ -356,119 +485,168 @@
         mainVisual.src = "/pic/chibi3.png";
       });
 
-      const scene = document.getElementById("scene");
       const canvas = document.getElementById("drawCanvas");
       const ctx = canvas.getContext("2d");
       const dpr = Math.max(1, window.devicePixelRatio || 1);
 
-      const resetBtn = document.getElementById("resetBtn");
+      const drawBtn = document.getElementById("drawBtn");
       const eraserBtn = document.getElementById("eraserBtn");
+      const clearBtn = document.getElementById("clearBtn");
       const saveBtn = document.getElementById("saveBtn");
       const shareBtn = document.getElementById("shareBtn");
       const swatches = document.getElementById("swatches");
       const sizeRange = document.getElementById("sizeRange");
 
-      let drawing = false;
+      let drawMode = false;
       let erasing = false;
+      let drawing = false;
       let lastX = 0;
       let lastY = 0;
       let penColor = "#a23e52";
 
-      function resizeCanvas() {
-        const rect = scene.getBoundingClientRect();
-        canvas.width = Math.floor(rect.width * dpr);
-        canvas.height = Math.floor(rect.height * dpr);
-        canvas.style.width = `${rect.width}px`;
-        canvas.style.height = `${rect.height}px`;
+      function setCanvasSize() {
+        const fullWidth = Math.max(
+          document.documentElement.scrollWidth,
+          document.body.scrollWidth,
+          window.innerWidth
+        );
+        const fullHeight = Math.max(
+          document.documentElement.scrollHeight,
+          document.body.scrollHeight,
+          window.innerHeight
+        );
+
+        const prev = document.createElement("canvas");
+        prev.width = canvas.width;
+        prev.height = canvas.height;
+        if (prev.width && prev.height) {
+          prev.getContext("2d").drawImage(canvas, 0, 0);
+        }
+
+        canvas.width = Math.floor(fullWidth * dpr);
+        canvas.height = Math.floor(fullHeight * dpr);
+        canvas.style.width = `${fullWidth}px`;
+        canvas.style.height = `${fullHeight}px`;
+
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        ctx.strokeStyle = penColor;
         ctx.lineWidth = Number(sizeRange.value);
+        ctx.strokeStyle = penColor;
+
+        if (prev.width && prev.height) {
+          ctx.drawImage(prev, 0, 0, prev.width / dpr, prev.height / dpr);
+        }
       }
 
-      function drawLine(x, y) {
+      function syncModeButtons() {
+        drawBtn.classList.toggle("active", drawMode && !erasing);
+        eraserBtn.classList.toggle("active", drawMode && erasing);
+        canvas.classList.toggle("active", drawMode);
+      }
+
+      function startDraw(event) {
+        if (!drawMode) return;
+        drawing = true;
+        lastX = event.clientX;
+        lastY = event.clientY + window.scrollY;
+      }
+
+      function moveDraw(event) {
+        if (!drawMode || !drawing) return;
+        const x = event.clientX;
+        const y = event.clientY + window.scrollY;
+
         ctx.save();
         if (erasing) {
           ctx.globalCompositeOperation = "destination-out";
-          ctx.strokeStyle = "rgba(0,0,0,1)";
           ctx.lineWidth = Number(sizeRange.value) * 2;
+          ctx.strokeStyle = "rgba(0,0,0,1)";
         } else {
           ctx.globalCompositeOperation = "source-over";
-          ctx.strokeStyle = penColor;
           ctx.lineWidth = Number(sizeRange.value);
+          ctx.strokeStyle = penColor;
         }
+
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
         ctx.lineTo(x, y);
         ctx.stroke();
         ctx.restore();
+
         lastX = x;
         lastY = y;
       }
 
-      canvas.addEventListener("pointerdown", (event) => {
-        drawing = true;
-        const rect = scene.getBoundingClientRect();
-        lastX = event.clientX - rect.left;
-        lastY = event.clientY - rect.top;
-      });
+      function endDraw() {
+        drawing = false;
+      }
 
-      canvas.addEventListener("pointermove", (event) => {
-        if (!drawing) return;
-        const rect = scene.getBoundingClientRect();
-        drawLine(event.clientX - rect.left, event.clientY - rect.top);
-      });
-
-      canvas.addEventListener("pointerup", () => { drawing = false; });
-      canvas.addEventListener("pointercancel", () => { drawing = false; });
-      canvas.addEventListener("pointerleave", () => { drawing = false; });
-
-      resetBtn.addEventListener("click", () => {
-        const rect = scene.getBoundingClientRect();
-        ctx.clearRect(0, 0, rect.width, rect.height);
-        erasing = false;
-        eraserBtn.classList.remove("active");
+      drawBtn.addEventListener("click", () => {
+        drawMode = !drawMode;
+        if (!drawMode) erasing = false;
+        syncModeButtons();
       });
 
       eraserBtn.addEventListener("click", () => {
+        if (!drawMode) drawMode = true;
         erasing = !erasing;
-        eraserBtn.classList.toggle("active", erasing);
+        syncModeButtons();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
       });
 
       saveBtn.addEventListener("click", () => {
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "playboard-doodle.png";
-        link.click();
+        const exportCanvas = document.createElement("canvas");
+        exportCanvas.width = canvas.width / dpr;
+        exportCanvas.height = canvas.height / dpr;
+        const ectx = exportCanvas.getContext("2d");
+        ectx.fillStyle = "#dcd8d1";
+        ectx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+        ectx.drawImage(canvas, 0, 0, exportCanvas.width, exportCanvas.height);
+
+        const a = document.createElement("a");
+        a.href = exportCanvas.toDataURL("image/png");
+        a.download = "index2-canvas.png";
+        a.click();
       });
 
       shareBtn.addEventListener("click", async () => {
         try {
           await navigator.clipboard.writeText(location.href);
           shareBtn.textContent = "Copied";
-          setTimeout(() => {
-            shareBtn.textContent = "Share";
-          }, 900);
+          setTimeout(() => { shareBtn.textContent = "Share"; }, 950);
         } catch (_) {
           // no-op
         }
       });
 
       swatches.addEventListener("click", (event) => {
-        const btn = event.target.closest(".swatch");
-        if (!btn) return;
+        const dot = event.target.closest(".swatch");
+        if (!dot) return;
+        penColor = dot.dataset.color || penColor;
         swatches.querySelectorAll(".swatch").forEach((node) => node.classList.remove("active"));
-        btn.classList.add("active");
-        penColor = btn.dataset.color || penColor;
+        dot.classList.add("active");
       });
 
       sizeRange.addEventListener("input", () => {
         ctx.lineWidth = Number(sizeRange.value);
       });
 
-      resizeCanvas();
-      window.addEventListener("resize", resizeCanvas);
+      canvas.addEventListener("pointerdown", startDraw);
+      canvas.addEventListener("pointermove", moveDraw);
+      canvas.addEventListener("pointerup", endDraw);
+      canvas.addEventListener("pointercancel", endDraw);
+      canvas.addEventListener("pointerleave", endDraw);
+
+      setCanvasSize();
+      syncModeButtons();
+
+      window.addEventListener("resize", setCanvasSize);
+      window.addEventListener("load", setCanvasSize);
+      setTimeout(setCanvasSize, 400);
     })();
   </script>
 </body>
