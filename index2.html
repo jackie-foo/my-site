@@ -3,22 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jackie Foo | Collaboration Board</title>
-  <meta name="description" content="Interactive collaboration-style portfolio board." />
-  <meta name="theme-color" content="#f2f2f2" />
+  <title>Jackie Foo | Sketchboard</title>
+  <meta name="description" content="A playful sketchboard portfolio experience." />
+  <meta name="theme-color" content="#d8d5cf" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --bg: #f2f2f2;
-      --ink: #1f1f1f;
-      --muted: #606060;
-      --line: #dcdcdc;
-      --shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-      --soft-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      --bg: #d8d5cf;
+      --paper: #f6f4ef;
+      --ink: #121212;
+      --muted: #5b5a58;
+      --line: #d5d1ca;
+      --shadow: 0 16px 34px rgba(24, 24, 24, 0.14);
+      --yellow: #f2e7a5;
+      --pink: #efd0de;
+      --blue: #cbd8f3;
+      --green: #cfe4c2;
     }
 
     * { box-sizing: border-box; }
@@ -26,25 +30,62 @@
     html,
     body {
       margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100%;
       background: var(--bg);
       color: var(--ink);
-      font-family: "Manrope", sans-serif;
+      font-family: "Instrument Sans", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .rainLayer {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .rainChibi {
+      position: absolute;
+      top: -18vh;
+      width: var(--size, 72px);
+      opacity: var(--op, 0.11);
+      transform: translate3d(0, 0, 0);
+      animation: rainFall var(--dur, 19s) linear infinite;
+      filter: saturate(0.9);
+    }
+
+    .rainChibi img {
+      width: 100%;
+      display: block;
+      transform: scaleX(var(--flip, 1));
+    }
+
+    @keyframes rainFall {
+      from {
+        transform: translate3d(0, -16vh, 0) rotate(0deg);
+      }
+      to {
+        transform: translate3d(var(--drift, 22px), 126vh, 0) rotate(var(--spin, 8deg));
+      }
     }
 
     .loader {
       position: fixed;
       inset: 0;
-      z-index: 120;
+      z-index: 50;
       display: grid;
       place-items: center;
       background:
-        radial-gradient(circle at 16% 20%, rgba(255, 223, 120, 0.45), transparent 40%),
-        radial-gradient(circle at 84% 78%, rgba(255, 153, 195, 0.34), transparent 42%),
-        #fffdf6;
-      transition: opacity 640ms ease, visibility 640ms ease;
+        radial-gradient(circle at 18% 18%, rgba(255, 210, 91, 0.48), transparent 40%),
+        radial-gradient(circle at 82% 82%, rgba(132, 164, 244, 0.34), transparent 46%),
+        #fdfaf3;
+      transition: opacity 620ms ease, visibility 620ms ease;
     }
 
     .loader.hide {
@@ -54,272 +95,240 @@
     }
 
     .loaderCard {
-      position: relative;
+      width: min(360px, calc(100vw - 26px));
+      border: 1px solid #d4cfc5;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      padding: 20px 18px;
       text-align: center;
       display: grid;
-      gap: 10px;
+      gap: 9px;
       justify-items: center;
-      padding: 16px 18px 14px;
-      border: 1px solid rgba(0, 0, 0, 0.07);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.85);
-      box-shadow: 0 16px 28px rgba(0, 0, 0, 0.1);
     }
 
     .loaderCard img {
-      width: clamp(90px, 14vw, 150px);
-      height: auto;
-      animation: loadBob 1.2s ease-in-out infinite alternate;
-      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.14));
+      width: clamp(110px, 17vw, 164px);
+      animation: bob 1.1s ease-in-out infinite alternate;
     }
 
     .loaderCard h1 {
       margin: 0;
-      font-size: clamp(1.3rem, 4vw, 2rem);
-      letter-spacing: -0.02em;
+      font-size: clamp(1.2rem, 3.2vw, 1.7rem);
+      letter-spacing: -0.03em;
     }
 
     .loaderCard p {
       margin: 0;
-      color: #555;
-      font-size: 0.84rem;
+      color: #57554f;
+      font-family: "Gaegu", cursive;
+      font-size: 1.22rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .dots {
-      font-family: "Caveat", cursive;
-      font-size: 1.35rem;
-      color: #333;
-      min-width: 60px;
-      text-align: center;
     }
 
     .loaderMeter {
-      width: min(250px, 64vw);
+      width: min(270px, 70vw);
       height: 8px;
       border-radius: 999px;
-      background: #f2eee4;
-      border: 1px solid #ebdfc2;
+      border: 1px solid #ddd6c9;
+      background: #f0ece3;
       overflow: hidden;
     }
 
     .loaderMeterBar {
-      width: 8%;
+      width: 4%;
       height: 100%;
       border-radius: inherit;
-      background: linear-gradient(90deg, #ffc85d, #ff8f9e);
-      transition: width 260ms ease;
+      background: linear-gradient(90deg, #ffbf5a, #6f92eb);
+      transition: width 220ms ease;
     }
 
-    .topbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 58px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(3px);
+    @keyframes bob {
+      from { transform: translateY(-3px) rotate(-2deg); }
+      to { transform: translateY(4px) rotate(2deg); }
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      gap: clamp(34px, 7vh, 64px);
+      padding: 18px 12px 70px;
+    }
+
+    .boardWrap,
+    .projectsWrap {
+      width: min(1120px, calc(100vw - 16px));
+      margin: 0 auto;
+      border: 1px solid #cfcac1;
+      border-radius: 2px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .windowHead {
+      height: 44px;
+      border-bottom: 1px solid #d8d3cb;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 12px;
-      z-index: 30;
+      padding: 0 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #2e2d2c;
     }
 
-    .brand {
+    .dots {
       display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: #222;
-      letter-spacing: 0.01em;
-    }
-
-    .brandDot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #ffcc57;
-    }
-
-    .rightControls {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .activeUsers {
-      display: inline-flex;
-      align-items: center;
       gap: 4px;
-      padding: 3px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #fff;
-    }
-
-    .activeUsers img {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid #f0f0f0;
-    }
-
-    .socialFull {
-      height: 30px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      color: #4e4e4e;
-      text-decoration: none;
-      font-size: 0.74rem;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      padding: 0 9px;
-      display: inline-flex;
       align-items: center;
-      transition: border-color 140ms ease, color 140ms ease;
-      cursor: pointer;
     }
 
-    .socialFull:hover {
-      border-color: #a8a8a8;
-      color: #222;
+    .dots i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #c7c1b8;
+      display: inline-block;
     }
 
-    .shareBtn {
-      border: 1px solid #1f1f1f;
-      border-radius: 8px;
-      background: #1f1f1f;
-      color: #fff;
-      height: 30px;
-      padding: 0 10px;
-      font: inherit;
-      font-size: 0.76rem;
-      font-weight: 800;
+    .headMid {
+      font-family: "Gaegu", cursive;
+      font-size: 1.32rem;
+      font-weight: 700;
       letter-spacing: 0.02em;
-      cursor: pointer;
     }
 
-    .leftTools {
-      position: fixed;
-      top: 76px;
-      left: 12px;
-      width: 44px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.94);
-      box-shadow: var(--soft-shadow);
-      padding: 8px 6px;
+    .headRight,
+    .headLeft {
+      display: inline-flex;
+      gap: 9px;
+      align-items: center;
+    }
+
+    .headLink {
+      color: #212121;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 120ms ease;
+    }
+
+    .headLink:hover {
+      border-color: #212121;
+    }
+
+    .boardBody {
       display: grid;
-      gap: 8px;
-      z-index: 22;
+      grid-template-columns: minmax(150px, 240px) 1fr;
+      min-height: min(72vh, 760px);
     }
 
-    .toolBtn {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      background: #fff;
+    .leftInfo {
+      border-right: 1px solid #ddd8cf;
+      padding: clamp(14px, 2.2vw, 22px);
       display: grid;
-      place-items: center;
-      font-size: 0.76rem;
-      font-weight: 800;
-      color: #777;
-      cursor: pointer;
+      align-content: end;
+      gap: 10px;
     }
 
-    .toolBtn.active {
-      border-color: #999;
-      color: #222;
-      background: #f8f8f8;
+    .leftInfo h2 {
+      margin: 0;
+      font-size: clamp(1.25rem, 3vw, 2rem);
+      letter-spacing: -0.03em;
     }
 
-    .board {
-      position: fixed;
-      inset: 58px 0 0 0;
-      z-index: 10;
+    .leftInfo p {
+      margin: 0;
+      color: #3f3e3b;
+      line-height: 1.52;
+      font-size: 0.88rem;
+      max-width: 24ch;
+    }
+
+    .leftInfo a {
+      color: #161616;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid #8f8a84;
+      width: fit-content;
+    }
+
+    .playArea {
+      position: relative;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      min-width: 0;
+    }
+
+    .canvasZone {
+      position: relative;
       overflow: hidden;
-      background:
-        linear-gradient(transparent 97%, #e8e8e8 97%),
-        linear-gradient(90deg, transparent 97%, #e8e8e8 97%);
-      background-size: 34px 34px;
+      min-height: 440px;
+      background: #f8f6f1;
     }
 
-    .world {
-      position: absolute;
-      inset: 0;
-      transform-origin: center center;
-      transition: transform 220ms ease;
-    }
-
-    .centerCopy {
+    .heroText {
       position: absolute;
       left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
+      top: 13%;
+      transform: translateX(-50%);
+      width: min(88%, 660px);
       text-align: center;
-      pointer-events: none;
-      z-index: 2;
+      z-index: 3;
+      font-family: "Gaegu", cursive;
+      font-size: clamp(1.38rem, 3vw, 2.45rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: 0.02em;
     }
 
-    .centerCopy h2 {
-      margin: 0;
-      font-size: clamp(1.7rem, 4.4vw, 3rem);
-      letter-spacing: -0.02em;
-      color: #2a2a2a;
-    }
-
-    .centerCopy span {
-      display: block;
-      margin-top: 6px;
-      font-family: "Caveat", cursive;
-      font-size: clamp(1.2rem, 2.9vw, 2rem);
-      color: #ff80a7;
-    }
-
-    .scribble {
+    .heroGroup {
       position: absolute;
-      pointer-events: none;
+      left: 50%;
+      top: 54%;
+      transform: translate(-50%, -50%);
+      width: min(68%, 620px);
       z-index: 2;
-      color: #ff88ad;
-      font-family: "Caveat", cursive;
-      font-size: 2rem;
-      transform: rotate(var(--r, 0deg));
+      pointer-events: none;
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+    }
+
+    .heroMain {
+      width: min(56vw, 340px);
+      max-width: 92%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #1d1d1d;
+      background: #fff;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .heroSub {
+      width: min(56vw, 360px);
       opacity: 0.86;
+      mix-blend-mode: multiply;
     }
 
-    .s1 { left: 14%; top: 14%; --r: -9deg; }
-    .s2 { right: 20%; top: 22%; --r: 8deg; }
-    .s3 { left: 28%; bottom: 14%; --r: -5deg; }
-    .s4 { right: 12%; bottom: 22%; --r: 6deg; }
-    .s5 { left: 46%; top: 10%; --r: -3deg; }
-
-    .bgChibi {
+    .scribbleMark {
       position: absolute;
-      width: var(--size, 82px);
-      opacity: var(--op, 0.06);
-      filter: blur(0.2px);
+      font-family: "Gaegu", cursive;
+      font-size: clamp(1.2rem, 2.2vw, 2rem);
+      font-weight: 700;
+      color: #f06790;
+      z-index: 3;
       pointer-events: none;
-      z-index: 1;
-      animation: drift var(--dur, 18s) ease-in-out infinite alternate;
     }
 
-    .bgChibi img {
-      width: 100%;
-      display: block;
-      transform: scaleX(var(--flip, 1));
-    }
+    .sA { left: 12%; top: 28%; transform: rotate(-8deg); }
+    .sB { right: 14%; top: 37%; transform: rotate(12deg); color: #3f67c9; }
+    .sC { right: 22%; bottom: 20%; transform: rotate(-10deg); color: #5f9c6a; }
 
-    .notes,
+    .notesLayer,
     .cursorLayer,
     .doodleLayer {
       position: absolute;
@@ -339,24 +348,28 @@
     .note {
       position: absolute;
       transform: translate(-50%, -50%);
-      width: clamp(170px, 20vw, 230px);
+      width: clamp(160px, 19vw, 218px);
       z-index: 8;
       touch-action: none;
       cursor: grab;
     }
 
+    .note.is-dragging {
+      cursor: grabbing;
+      z-index: 19;
+    }
+
     .noteInner {
       position: relative;
+      background: var(--note-bg, #fff);
+      border: 2px solid #1d1d1d;
       border-radius: 4px;
       padding: 10px;
-      background: var(--note-bg, #ffffff);
-      box-shadow: var(--shadow);
-      user-select: none;
-      transition: box-shadow 130ms ease, transform 130ms ease, opacity 120ms ease;
       transform: rotate(var(--rot, 0deg));
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      z-index: 0;
+      box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
+      transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
       isolation: isolate;
+      user-select: none;
     }
 
     .noteInner::before {
@@ -364,362 +377,408 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: var(--note-layer, #ebebeb);
-      transform: translate(5px, 5px);
+      background: var(--note-layer, #e9e9e9);
+      transform: translate(4px, 4px);
       z-index: -1;
     }
 
     .note:hover .noteInner,
     .note.is-paused .noteInner {
       transform: rotate(var(--rot, 0deg)) scale(1.02);
-      box-shadow: 0 14px 24px rgba(0, 0, 0, 0.16);
     }
 
     .note.is-collab .noteInner {
-      opacity: 0.52;
+      opacity: 0.56;
     }
 
-    .note.is-dragging {
-      cursor: grabbing;
-      z-index: 18;
-    }
+    .note.tone-yellow { --note-bg: var(--yellow); --note-layer: #e1d58a; }
+    .note.tone-pink { --note-bg: var(--pink); --note-layer: #dcbac8; }
+    .note.tone-blue { --note-bg: var(--blue); --note-layer: #b3c2dd; }
+    .note.tone-green { --note-bg: var(--green); --note-layer: #b5caa7; }
+    .note.tone-white { --note-bg: #ffffff; --note-layer: #e8e8e8; }
 
-    .note-sm { width: clamp(150px, 16vw, 190px); }
-    .note-lg { width: clamp(210px, 23vw, 285px); }
-    .note-photo { width: clamp(154px, 17vw, 200px); }
-
-    .note.tone-yellow { --note-bg: #f8efad; --note-layer: #e6d98e; }
-    .note.tone-pink { --note-bg: #f8d5e7; --note-layer: #e7b9d3; }
-    .note.tone-blue { --note-bg: #cfdcfa; --note-layer: #b6c7eb; }
-    .note.tone-green { --note-bg: #d0efbe; --note-layer: #b8dca4; }
-    .note.tone-white { --note-bg: #ffffff; --note-layer: #ececec; }
-
-    .pin {
-      position: absolute;
-      top: -7px;
-      right: 10px;
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      background: #ff5e5e;
-      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    .tag {
+    .note .tag {
       width: fit-content;
+      border: 1px solid rgba(0, 0, 0, 0.45);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.82);
-      color: #555;
-      padding: 3px 8px;
-      font-size: 0.67rem;
-      font-weight: 800;
+      background: rgba(255, 255, 255, 0.74);
+      padding: 2px 8px;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
+      font-size: 0.63rem;
+      font-weight: 700;
       margin-bottom: 7px;
     }
 
     .note h3 {
       margin: 0;
-      font-size: 0.98rem;
-      line-height: 1.3;
-      letter-spacing: -0.01em;
+      font-family: "Gaegu", cursive;
+      font-size: 1.28rem;
+      line-height: 1.13;
     }
 
     .note p {
-      margin: 8px 0 0;
-      color: #343434;
-      font-size: 0.85rem;
-      line-height: 1.5;
+      margin: 6px 0 0;
+      font-size: 0.82rem;
+      line-height: 1.42;
+      color: #2d2d2c;
       font-weight: 600;
     }
 
     .note a {
       display: inline-flex;
       margin-top: 8px;
-      color: #1e1e1e;
-      font-size: 0.79rem;
-      font-weight: 800;
+      color: #111;
       text-decoration: none;
-      border-bottom: 1px solid #888;
-      padding-bottom: 2px;
+      border-bottom: 1px solid #111;
+      font-size: 0.77rem;
+      font-weight: 700;
+      padding-bottom: 1px;
     }
 
-    .note a:hover {
-      border-color: #1e1e1e;
+    .note-photo {
+      width: clamp(140px, 16vw, 180px);
     }
 
-    .photo {
+    .note-photo img {
       width: 100%;
-      border-radius: 3px;
       aspect-ratio: 1 / 1;
       object-fit: cover;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      border: 2px solid #161616;
+      border-radius: 3px;
       margin-top: 6px;
     }
 
+    .controls {
+      border-top: 1px solid #ddd8cf;
+      min-height: 66px;
+      padding: 10px 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .controlGroup {
+      display: inline-flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      height: 32px;
+      border: 1px solid #1d1d1d;
+      border-radius: 999px;
+      background: #fff;
+      padding: 0 12px;
+      font: inherit;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: #1a1a1a;
+    }
+
+    .btn.active {
+      background: #1b1b1b;
+      color: #fff;
+    }
+
+    .swatches {
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid #1a1a1a;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: transform 120ms ease, opacity 120ms ease;
+    }
+
+    .swatch.active {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+
+    .sizeWrap {
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #4f4d49;
+    }
+
+    .sizeRange {
+      accent-color: #2f7e61;
+      width: 98px;
+    }
+
+    .commentForm {
+      margin: 4px 0 0;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .commentForm input,
+    .commentForm textarea,
+    .commentForm select {
+      border: 1px solid #bfb8ad;
+      border-radius: 10px;
+      background: #fff;
+      color: #1f1f1f;
+      font: inherit;
+      font-size: 0.8rem;
+      padding: 7px 8px;
+    }
+
+    .commentForm input { width: 130px; }
+
+    .commentForm textarea {
+      width: min(320px, 48vw);
+      min-height: 34px;
+      max-height: 72px;
+      resize: vertical;
+    }
+
+    .commentForm select { width: 98px; }
+
+    .scrollCue {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      color: #595750;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .scrollCue i {
+      width: 14px;
+      height: 14px;
+      border-right: 2px solid #595750;
+      border-bottom: 2px solid #595750;
+      transform: rotate(45deg);
+      display: inline-block;
+      animation: cue 1.2s ease-in-out infinite;
+    }
+
+    @keyframes cue {
+      0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.7; }
+      50% { transform: rotate(45deg) translate(3px, 3px); opacity: 1; }
+    }
+
+    .cursorLayer { z-index: 10; pointer-events: none; }
+
     .collabCursor {
       position: absolute;
-      z-index: 12;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      pointer-events: none;
-      transition: opacity 120ms ease;
+      transition: opacity 100ms ease;
+      z-index: 10;
     }
 
     .cursorArrow {
-      width: 12px;
-      height: 12px;
-      background: #3f3f3f;
-      clip-path: polygon(0 0, 100% 50%, 0 100%, 18% 56%, 0 0);
-      transform: rotate(-20deg);
+      width: 11px;
+      height: 11px;
+      background: #1d1d1d;
+      clip-path: polygon(0 0, 100% 50%, 0 100%, 20% 56%, 0 0);
+      transform: rotate(-18deg);
     }
 
     .cursorTag {
       border-radius: 999px;
-      background: #222;
       color: #fff;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
       padding: 3px 8px;
-      font-size: 0.66rem;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
     }
 
-    .collabCursor.over {
-      opacity: 0.28;
-    }
+    .collabCursor.over { opacity: 0.26; }
 
-    .zoomPanel {
-      position: absolute;
-      right: 14px;
-      top: 16px;
-      width: clamp(180px, 21vw, 250px);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.94);
-      box-shadow: var(--soft-shadow);
-      z-index: 14;
-      overflow: hidden;
-    }
-
-    .zoomHead {
-      padding: 8px 10px;
-      border-bottom: 1px solid #ececec;
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #666;
-    }
-
-    .zoomTiles {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: #ececec;
-    }
-
-    .tile {
-      background: #fff;
-      aspect-ratio: 1.1 / 1;
-      overflow: hidden;
+    .projectsWrap {
       position: relative;
+      min-height: 90vh;
     }
 
-    .tile img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .tile span {
-      position: absolute;
-      left: 6px;
-      bottom: 6px;
-      background: rgba(0, 0, 0, 0.72);
-      color: #fff;
-      font-size: 0.63rem;
-      font-weight: 700;
-      border-radius: 4px;
-      padding: 2px 5px;
-    }
-
-    .commentPanel {
-      position: fixed;
-      right: 14px;
-      top: 64px;
-      width: min(300px, calc(100vw - 24px));
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.97);
-      box-shadow: var(--soft-shadow);
-      z-index: 35;
-      padding: 10px;
+    .projectsBody {
+      padding: clamp(20px, 3vw, 34px);
       display: grid;
-      gap: 8px;
-      transform: translateY(-10px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 180ms ease, transform 180ms ease;
+      gap: 18px;
     }
 
-    .commentPanel.open {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    .commentPanel h3 {
-      margin: 0;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #555;
-    }
-
-    .commentPanel p {
-      margin: 0;
-      font-size: 0.74rem;
-      color: #666;
-      font-weight: 700;
-    }
-
-    .field,
-    .area,
-    .select {
-      width: 100%;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      font: inherit;
-      font-size: 0.84rem;
-      padding: 8px 9px;
-      color: #222;
-      background: #fff;
-    }
-
-    .area {
-      resize: vertical;
-      min-height: 72px;
-      max-height: 180px;
-    }
-
-    .commentBtn {
-      border: 1px solid #222;
-      border-radius: 8px;
-      background: #222;
-      color: #fff;
-      font: inherit;
-      font-size: 0.74rem;
-      font-weight: 800;
-      padding: 7px 10px;
-      cursor: pointer;
-    }
-
-    .commentList {
-      max-height: 160px;
-      overflow: auto;
-      border-top: 1px solid #eee;
-      padding-top: 8px;
+    .projectIntro {
+      max-width: 74ch;
       display: grid;
       gap: 6px;
     }
 
-    .commentItem {
-      border: 1px solid #efefef;
-      border-radius: 8px;
-      padding: 7px;
+    .projectIntro h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 4vw, 2.6rem);
+      letter-spacing: -0.03em;
+    }
+
+    .projectIntro p {
+      margin: 0;
+      color: #42413e;
+      line-height: 1.52;
+      font-size: 0.93rem;
+    }
+
+    .projectGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .projectCard {
+      border: 2px solid #181818;
+      border-radius: 6px;
       background: #fff;
+      padding: 14px 14px 12px;
+      box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.18);
+      display: grid;
+      gap: 8px;
+      transform: translateY(18px) scale(0.98);
+      opacity: 0;
+      transition: transform 420ms cubic-bezier(0.2, 0.7, 0.22, 1), opacity 420ms ease;
     }
 
-    .commentItem b {
-      font-size: 0.77rem;
+    .projectCard.show {
+      transform: translateY(0) scale(1);
+      opacity: 1;
     }
 
-    .commentItem span {
-      display: block;
-      margin-top: 3px;
-      font-size: 0.8rem;
-      color: #424242;
-      line-height: 1.45;
+    .projectCard:nth-child(odd) { transform: translateY(18px) scale(0.98) rotate(-1.4deg); }
+    .projectCard:nth-child(even) { transform: translateY(18px) scale(0.98) rotate(1.1deg); }
+
+    .projectCard .num {
+      font-family: "Gaegu", cursive;
+      font-size: 1.14rem;
+      color: #4d4a45;
+      font-weight: 700;
     }
 
-    .zoomDock {
-      position: fixed;
-      right: 14px;
-      bottom: 14px;
-      z-index: 40;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.96);
-      box-shadow: var(--soft-shadow);
+    .projectCard h3 {
+      margin: 0;
+      font-family: "Gaegu", cursive;
+      font-size: 1.6rem;
+      line-height: 1.06;
+    }
+
+    .projectCard p {
+      margin: 0;
+      color: #383735;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .projectMeta {
       display: inline-flex;
+      gap: 6px;
       align-items: center;
-      gap: 5px;
-      padding: 6px;
+      flex-wrap: wrap;
+      margin-top: 2px;
     }
 
-    .zoomBtn {
-      width: 28px;
-      height: 28px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      background: #fff;
-      color: #494949;
-      font-size: 1rem;
-      line-height: 1;
-      font-weight: 800;
-      cursor: pointer;
+    .projectMeta img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #d8d8d8;
     }
 
-    .zoomLabel {
-      min-width: 56px;
-      text-align: center;
+    .projectMeta span {
+      font-size: 0.74rem;
+      color: #585653;
+      font-weight: 700;
+    }
+
+    .projectCard a {
+      width: fit-content;
+      color: #151515;
+      text-decoration: none;
+      border-bottom: 1px solid #151515;
       font-size: 0.78rem;
-      font-weight: 800;
-      color: #4a4a4a;
-      padding: 0 6px;
-      transition: transform 180ms ease;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding-bottom: 1px;
     }
 
-    .zoomLabel.bump {
-      transform: scale(1.08);
+    .projectsHint {
+      margin-top: 8px;
+      font-family: "Gaegu", cursive;
+      font-size: 1.28rem;
+      color: #3f3d3a;
     }
 
-    @keyframes loadBob {
-      from { transform: translateY(-4px) rotate(-2deg); }
-      to { transform: translateY(4px) rotate(2deg); }
-    }
-
-    @keyframes drift {
-      from { transform: translate3d(0, 0, 0) rotate(0deg); }
-      to { transform: translate3d(var(--dx, 10px), var(--dy, -12px), 0) rotate(var(--dr, 4deg)); }
+    .footerNote {
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: #5b5955;
+      font-weight: 600;
     }
 
     @media (max-width: 980px) {
-      .socialFull:nth-child(2),
-      .socialFull:nth-child(3) {
-        display: none;
+      .boardBody {
+        grid-template-columns: 1fr;
+      }
+
+      .leftInfo {
+        border-right: 0;
+        border-bottom: 1px solid #ddd8cf;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .commentForm textarea {
+        width: min(100%, 420px);
       }
     }
 
-    @media (max-width: 860px) {
-      .leftTools,
-      .zoomPanel,
-      .commentPanel {
+    @media (max-width: 740px) {
+      .projectGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .headRight {
+        gap: 6px;
+      }
+
+      .headRight .headLink:nth-child(2),
+      .headRight .headLink:nth-child(3) {
         display: none;
       }
-      .note { width: clamp(160px, 44vw, 220px); }
-      .note-sm { width: clamp(146px, 38vw, 184px); }
-      .note-lg { width: clamp(190px, 52vw, 260px); }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .bgChibi,
-      .noteInner,
-      .zoomLabel,
-      .loaderCard img {
+      .rainChibi,
+      .loaderCard img,
+      .scrollCue i,
+      .projectCard,
+      .noteInner {
         animation: none !important;
         transition: none !important;
       }
@@ -727,260 +786,301 @@
   </style>
 </head>
 <body>
+  <div id="rainLayer" class="rainLayer" aria-hidden="true"></div>
+
   <div id="loader" class="loader" aria-hidden="true">
     <div class="loaderCard">
       <img src="/pic/chibi3.png" alt="Loading" />
-      <h1>Loading Board</h1>
-      <p>warming up tiny sticky chaos</p>
-      <div id="dots" class="dots">.</div>
+      <h1>Preparing Sketchboard</h1>
+      <p>sprinkling tiny ideas first...</p>
       <div class="loaderMeter" aria-hidden="true">
-        <div id="loaderMeterBar" class="loaderMeterBar"></div>
+        <div id="loaderBar" class="loaderMeterBar"></div>
       </div>
     </div>
   </div>
 
-  <header class="topbar">
-    <div class="brand"><span class="brandDot"></span>jackie board</div>
-    <div class="rightControls" title="hover cursor over notes to signal collaboration">
-      <div class="activeUsers" title="Active collaborators">
-        <img src="/pic/chibi1.png" alt="active 1" />
-        <img src="/pic/chibi2.png" alt="active 2" />
-        <img src="/pic/chibi3.png" alt="active 3" />
-        <img src="/pic/chibi1.png" alt="active 4" />
-      </div>
-      <a class="socialFull" href="#" aria-label="LinkedIn">LinkedIn</a>
-      <a class="socialFull" href="#" aria-label="GitHub">GitHub</a>
-      <a class="socialFull" href="mailto:you@email.com" aria-label="Email">Email</a>
-      <button id="commentToggle" class="socialFull" type="button">Comment Sticky</button>
-      <button class="shareBtn" type="button">Share</button>
-    </div>
-  </header>
-
-  <aside id="commentPanel" class="commentPanel" aria-label="Comment panel">
-    <h3>Add Sticky Comment</h3>
-    <p>Temporary only. Resets on refresh.</p>
-    <input id="commentName" class="field" type="text" placeholder="Your name" />
-    <textarea id="commentText" class="area" placeholder="Write something funny/useful..."></textarea>
-    <select id="commentTone" class="select">
-      <option value="tone-yellow">Yellow</option>
-      <option value="tone-pink">Pink</option>
-      <option value="tone-blue">Blue</option>
-      <option value="tone-green">Green</option>
-      <option value="tone-white">White</option>
-    </select>
-    <button id="commentSubmit" class="commentBtn" type="button">Add As Sticky</button>
-    <div id="commentList" class="commentList"></div>
-  </aside>
-
-  <aside class="leftTools" aria-hidden="true">
-    <button id="drawToggle" class="toolBtn" type="button">✎</button>
-    <button id="clearDoodle" class="toolBtn" type="button">⌫</button>
-    <div class="toolBtn">T</div>
-    <div class="toolBtn">□</div>
-    <div class="toolBtn">⋯</div>
-  </aside>
-
-  <main id="board" class="board">
-    <div id="world" class="world">
-      <div class="centerCopy">
-        <h2>Let&apos;s explore</h2>
-        <span>catch a card to start</span>
-      </div>
-
-      <div class="scribble s1">✦</div>
-      <div class="scribble s2">✋</div>
-      <div class="scribble s3">↯</div>
-      <div class="scribble s4">✸</div>
-      <div class="scribble s5">➰</div>
-
-      <canvas id="doodleLayer" class="doodleLayer"></canvas>
-      <section id="notesLayer" class="notes"></section>
-      <section id="cursorLayer" class="cursorLayer"></section>
-
-      <aside class="zoomPanel" aria-hidden="true">
-        <div class="zoomHead">Live Collaboration</div>
-        <div class="zoomTiles">
-          <div class="tile"><img src="/pic/chibi1.png" alt="participant" /><span>Thanish</span></div>
-          <div class="tile"><img src="/pic/chibi2.png" alt="participant" /><span>Nevin</span></div>
-          <div class="tile"><img src="/pic/chibi3.png" alt="participant" /><span>Shen</span></div>
-          <div class="tile"><img src="/pic/chibi1.png" alt="participant" /><span>Samantha</span></div>
+  <main class="page">
+    <section class="boardWrap" aria-label="Main board">
+      <header class="windowHead">
+        <div class="headLeft"><span class="dots"><i></i><i></i><i></i></span> <a href="/index.html" class="headLink">Home</a></div>
+        <div class="headMid">woset style playground</div>
+        <div class="headRight">
+          <a class="headLink" href="#projects">Projects</a>
+          <a class="headLink" href="mailto:you@email.com">Email</a>
+          <a class="headLink" href="#">LinkedIn</a>
         </div>
-      </aside>
-    </div>
-  </main>
+      </header>
 
-  <div class="zoomDock">
-    <button id="zoomOut" class="zoomBtn" type="button" aria-label="Zoom out">-</button>
-    <div id="zoomLabel" class="zoomLabel">100%</div>
-    <button id="zoomIn" class="zoomBtn" type="button" aria-label="Zoom in">+</button>
-  </div>
+      <div class="boardBody">
+        <aside class="leftInfo">
+          <h2>Jackie Foo</h2>
+          <p>This corner is playful on purpose. Doodle, drop a sticky, drag things around, then scroll for projects.</p>
+          <a href="#projects">Jump to Projects</a>
+          <div class="scrollCue"><i></i> Scroll to explore</div>
+        </aside>
+
+        <section class="playArea">
+          <div id="canvasZone" class="canvasZone">
+            <div class="heroText">JACKIE IS BUILDING A SMALL INTERNET CORNER<br />FOR PEOPLE + IDEAS + FEEDBACK</div>
+
+            <div class="heroGroup" aria-hidden="true">
+              <img class="heroMain" src="/pic/chibi1.png" alt="Jackie profile" />
+              <img class="heroSub" src="/pic/chibi3.png" alt="" />
+            </div>
+
+            <span class="scribbleMark sA">✷</span>
+            <span class="scribbleMark sB">➹</span>
+            <span class="scribbleMark sC">✦</span>
+
+            <canvas id="doodleLayer" class="doodleLayer"></canvas>
+            <section id="notesLayer" class="notesLayer"></section>
+            <section id="cursorLayer" class="cursorLayer"></section>
+          </div>
+
+          <div class="controls">
+            <div>
+              <div class="controlGroup">
+                <button id="drawToggle" class="btn" type="button">Draw</button>
+                <button id="eraserToggle" class="btn" type="button">Eraser</button>
+                <button id="clearCanvas" class="btn" type="button">Clear</button>
+                <button id="addSticky" class="btn" type="button">Add Sticky</button>
+                <button id="saveBoard" class="btn" type="button">Save</button>
+                <button id="shareBoard" class="btn" type="button">Share</button>
+              </div>
+
+              <div class="commentForm" aria-label="Comment sticky form">
+                <input id="commentName" type="text" placeholder="Name" />
+                <textarea id="commentText" placeholder="Write a sticky comment..."></textarea>
+                <select id="commentTone">
+                  <option value="tone-yellow">Yellow</option>
+                  <option value="tone-pink">Pink</option>
+                  <option value="tone-blue">Blue</option>
+                  <option value="tone-green">Green</option>
+                  <option value="tone-white">White</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="controlGroup">
+              <div class="swatches" id="swatches" aria-label="Pen colors">
+                <button class="swatch active" data-color="#b13d4d" style="background:#b13d4d" aria-label="Rose"></button>
+                <button class="swatch" data-color="#5874bc" style="background:#5874bc" aria-label="Blue"></button>
+                <button class="swatch" data-color="#315d4a" style="background:#315d4a" aria-label="Green"></button>
+                <button class="swatch" data-color="#d4b45d" style="background:#d4b45d" aria-label="Gold"></button>
+                <button class="swatch" data-color="#2a2a2a" style="background:#2a2a2a" aria-label="Ink"></button>
+              </div>
+              <label class="sizeWrap">Size <input id="sizeRange" class="sizeRange" type="range" min="1" max="12" step="1" value="3" /></label>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="projects" class="projectsWrap" aria-label="Projects list">
+      <header class="windowHead">
+        <div class="headLeft"><span class="dots"><i></i><i></i><i></i></span> project index</div>
+        <div class="headMid">4 things i built</div>
+        <div class="headRight"><span>scroll and pick one</span></div>
+      </header>
+
+      <div class="projectsBody">
+        <div class="projectIntro">
+          <h2>Project Board</h2>
+          <p>Same sketch style, less noise. Pick a card to open details. I will replace placeholders with real work + collaborators + links.</p>
+          <div class="projectsHint">tap whichever note catches your eye first</div>
+        </div>
+
+        <div class="projectGrid">
+          <article class="projectCard">
+            <div class="num">Project 01</div>
+            <h3>Feedback Workshop</h3>
+            <p>Designing workshop prompts and stage interactions to surface friction and feedback responses.</p>
+            <div class="projectMeta">
+              <img src="/pic/chibi1.png" alt="Thanish" />
+              <img src="/pic/chibi2.png" alt="Nevin" />
+              <span>Thanish, Nevin</span>
+            </div>
+            <a href="/project-view.html?project=1">Open Project</a>
+          </article>
+
+          <article class="projectCard">
+            <div class="num">Project 02</div>
+            <h3>Journey Mapping Tool</h3>
+            <p>Prompt-driven mapping space for student and tutor constraint discovery during the workshop.</p>
+            <div class="projectMeta">
+              <img src="/pic/chibi3.png" alt="Shen" />
+              <img src="/pic/chibi1.png" alt="Samantha" />
+              <span>Shen, Samantha</span>
+            </div>
+            <a href="/project-view.html?project=2">Open Project</a>
+          </article>
+
+          <article class="projectCard">
+            <div class="num">Project 03</div>
+            <h3>Live Dashboard</h3>
+            <p>Stage-by-stage board for monitoring activity and guiding intervention prompts in real time.</p>
+            <div class="projectMeta">
+              <img src="/pic/chibi2.png" alt="Thanish" />
+              <img src="/pic/chibi3.png" alt="Shen" />
+              <span>Thanish, Shen</span>
+            </div>
+            <a href="/project-view.html?project=3">Open Project</a>
+          </article>
+
+          <article class="projectCard">
+            <div class="num">Project 04</div>
+            <h3>Tutor Workflow</h3>
+            <p>Flow-focused workspace to map assessment process bottlenecks and marking constraints.</p>
+            <div class="projectMeta">
+              <img src="/pic/chibi2.png" alt="Nevin" />
+              <img src="/pic/chibi1.png" alt="Samantha" />
+              <span>Nevin, Samantha</span>
+            </div>
+            <a href="/project-view.html?project=4">Open Project</a>
+          </article>
+        </div>
+
+        <p class="footerNote">Everything here is lightweight and editable so you can swap in your own illustrations and links quickly.</p>
+      </div>
+    </section>
+  </main>
 
   <script>
     (() => {
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       const loader = document.getElementById("loader");
-      const dots = document.getElementById("dots");
-      const loaderMeterBar = document.getElementById("loaderMeterBar");
+      const loaderBar = document.getElementById("loaderBar");
+      const rainLayer = document.getElementById("rainLayer");
 
-      const board = document.getElementById("board");
-      const world = document.getElementById("world");
+      const canvasZone = document.getElementById("canvasZone");
       const notesLayer = document.getElementById("notesLayer");
       const cursorLayer = document.getElementById("cursorLayer");
-      const doodleLayer = document.getElementById("doodleLayer");
-
-      const zoomLabel = document.getElementById("zoomLabel");
-      const zoomIn = document.getElementById("zoomIn");
-      const zoomOut = document.getElementById("zoomOut");
+      const doodle = document.getElementById("doodleLayer");
+      const ctx = doodle.getContext("2d");
 
       const drawToggle = document.getElementById("drawToggle");
-      const clearDoodle = document.getElementById("clearDoodle");
+      const eraserToggle = document.getElementById("eraserToggle");
+      const clearCanvas = document.getElementById("clearCanvas");
+      const addSticky = document.getElementById("addSticky");
+      const saveBoard = document.getElementById("saveBoard");
+      const shareBoard = document.getElementById("shareBoard");
+      const swatches = document.getElementById("swatches");
+      const sizeRange = document.getElementById("sizeRange");
 
-      const commentToggle = document.getElementById("commentToggle");
-      const commentPanel = document.getElementById("commentPanel");
       const commentName = document.getElementById("commentName");
       const commentText = document.getElementById("commentText");
       const commentTone = document.getElementById("commentTone");
-      const commentSubmit = document.getElementById("commentSubmit");
-      const commentList = document.getElementById("commentList");
 
-      let dotCount = 1;
-      const dotTimer = setInterval(() => {
-        dotCount = dotCount % 3 + 1;
-        dots.textContent = "✦".repeat(dotCount);
-      }, 380);
-
-      let loadPct = 8;
-      const loadTimer = setInterval(() => {
-        loadPct = Math.min(96, loadPct + 4 + Math.random() * 14);
-        loaderMeterBar.style.width = `${loadPct}%`;
-      }, 200);
+      // loader
+      let pct = 5;
+      const loaderTimer = setInterval(() => {
+        pct = Math.min(95, pct + 5 + Math.random() * 9);
+        loaderBar.style.width = `${pct}%`;
+      }, 150);
 
       setTimeout(() => {
-        loadPct = 100;
-        loaderMeterBar.style.width = "100%";
+        pct = 100;
+        loaderBar.style.width = "100%";
         loader.classList.add("hide");
-        clearInterval(dotTimer);
-        clearInterval(loadTimer);
-      }, 1850);
+        clearInterval(loaderTimer);
+      }, 1650);
 
-      let zoom = 1;
-      function applyZoom() {
-        world.style.transform = `scale(${zoom})`;
-        zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
-        zoomLabel.classList.remove("bump");
-        void zoomLabel.offsetWidth;
-        zoomLabel.classList.add("bump");
-        layoutStaticNotes();
-        layoutCursors();
-        resizeCanvas();
+      // rain background
+      const rainCount = Math.max(10, Math.floor(window.innerWidth / 90));
+      for (let i = 0; i < rainCount; i += 1) {
+        const el = document.createElement("div");
+        el.className = "rainChibi";
+        el.style.left = `${Math.random() * 100}%`;
+        el.style.setProperty("--size", `${38 + Math.random() * 58}px`);
+        el.style.setProperty("--op", `${0.04 + Math.random() * 0.1}`);
+        el.style.setProperty("--dur", `${16 + Math.random() * 13}s`);
+        el.style.setProperty("--drift", `${-16 + Math.random() * 30}px`);
+        el.style.setProperty("--spin", `${-8 + Math.random() * 16}deg`);
+        el.style.setProperty("--flip", Math.random() > 0.5 ? "-1" : "1");
+        el.style.animationDelay = `${-Math.random() * 25}s`;
+        el.innerHTML = '<img src="/pic/chibi3.png" alt="" />';
+        rainLayer.appendChild(el);
       }
 
-      zoomIn.addEventListener("click", () => {
-        zoom = Math.min(1.35, zoom + 0.05);
-        applyZoom();
-      });
-
-      zoomOut.addEventListener("click", () => {
-        zoom = Math.max(0.8, zoom - 0.05);
-        applyZoom();
-      });
-
-      const notesData = [
+      // sticky notes
+      const baseNotes = [
         {
           tone: "tone-yellow",
-          size: "note-lg",
-          tag: "About Me",
-          title: "Jackie Foo",
-          text: "I design learning experiences and implementation systems that help people act on feedback clearly.",
-          x: 0.18,
+          tag: "About",
+          title: "internet corner",
+          text: "a little piece of me where projects, sketches and experiments live.",
+          x: 0.16,
           y: 0.22,
-          rot: -2,
-          photo: "/pic/chibi1.png"
+          rot: -5
         },
         {
           tone: "tone-pink",
-          size: "note",
           tag: "Project 01",
           title: "Feedback Workshop",
-          text: "Interactive workshop design for reflection and action.",
+          text: "reflection flow + prompts",
           href: "/project-view.html?project=1",
-          x: 0.4,
-          y: 0.15,
-          rot: 3
+          x: 0.73,
+          y: 0.2,
+          rot: 4
         },
         {
           tone: "tone-green",
-          size: "note-sm",
           tag: "Project 02",
-          title: "Journey Mapping Tool",
-          text: "Prompt-first mapping for student/tutor friction.",
+          title: "Journey Mapping",
+          text: "student + tutor constraints",
           href: "/project-view.html?project=2",
-          x: 0.64,
-          y: 0.17,
-          rot: -4
+          x: 0.84,
+          y: 0.42,
+          rot: -3
         },
         {
           tone: "tone-blue",
-          size: "note",
           tag: "Project 03",
           title: "Live Dashboard",
-          text: "Multi-stage monitoring and cleaner workshop flow.",
+          text: "stage signal monitoring",
           href: "/project-view.html?project=3",
-          x: 0.74,
-          y: 0.49,
-          rot: 2
+          x: 0.77,
+          y: 0.66,
+          rot: 3
         },
         {
           tone: "tone-yellow",
-          size: "note-sm",
           tag: "Project 04",
           title: "Tutor Workflow",
-          text: "Flow-based marking map with practical constraints.",
+          text: "flow chart and marking constraints",
           href: "/project-view.html?project=4",
-          x: 0.53,
-          y: 0.69,
-          rot: 1
+          x: 0.56,
+          y: 0.8,
+          rot: -2
         },
         {
           tone: "tone-white",
-          size: "note-photo",
           tag: "Photo",
-          title: "Behind The Scenes",
+          title: "mood",
           text: "",
-          x: 0.27,
-          y: 0.58,
-          rot: -3,
-          photo: "/pic/chibi2.png"
-        },
-        {
-          tone: "tone-green",
-          size: "note-sm",
-          tag: "Prompt",
-          title: "Hi you 👀",
-          text: "Why are you here? Are you offering me snacks, coffee, or brilliant feedback?",
-          x: 0.12,
-          y: 0.73,
-          rot: -6
+          photo: "/pic/chibi2.png",
+          x: 0.26,
+          y: 0.74,
+          rot: 2,
+          className: "note-photo"
         }
       ];
 
-      const noteStates = [];
+      const notes = [];
+
       function createNote(item) {
         const note = document.createElement("article");
-        note.className = `note ${item.tone} ${item.size || ""}`;
-        note.style.left = `${item.x * 100}%`;
-        note.style.top = `${item.y * 100}%`;
+        note.className = `note ${item.tone || "tone-yellow"} ${item.className || ""}`;
         note.style.setProperty("--rot", `${item.rot || 0}deg`);
 
         note.innerHTML = `
           <div class="noteInner">
-            <div class="pin"></div>
-            <div class="tag">${item.tag}</div>
-            <h3>${item.title}</h3>
+            <div class="tag">${item.tag || "Sticky"}</div>
+            <h3>${item.title || "note"}</h3>
             ${item.text ? `<p>${item.text}</p>` : ""}
-            ${item.href ? `<a href="${item.href}" target="_blank" rel="noopener noreferrer">Open project</a>` : ""}
-            ${item.photo ? `<img class="photo" src="${item.photo}" alt="placeholder" />` : ""}
+            ${item.href ? `<a href="${item.href}">Open project</a>` : ""}
+            ${item.photo ? `<img src="${item.photo}" alt="photo" />` : ""}
           </div>
         `;
 
@@ -988,89 +1088,262 @@
 
         const state = {
           el: note,
-          xPct: item.x,
-          yPct: item.y,
+          xPct: item.x ?? 0.5,
+          yPct: item.y ?? 0.5,
           x: 0,
           y: 0,
           w: 0,
           h: 0,
-          collab: false,
-          drag: false
+          drag: false,
+          collab: false
         };
 
         attachDrag(state);
-        noteStates.push(state);
+        notes.push(state);
         return state;
       }
 
+      function clamp(state, width, height) {
+        const pad = 4;
+        state.x = Math.max(pad, Math.min(state.x, width - state.w - pad));
+        state.y = Math.max(pad, Math.min(state.y, height - state.h - pad));
+      }
+
+      function renderNote(state, width, height) {
+        const cx = state.x + state.w / 2;
+        const cy = state.y + state.h / 2;
+        state.el.style.left = `${(cx / width) * 100}%`;
+        state.el.style.top = `${(cy / height) * 100}%`;
+      }
+
       function attachDrag(state) {
-        const note = state.el;
         let startX = 0;
         let startY = 0;
-        note.addEventListener("pointerdown", (event) => {
+
+        state.el.addEventListener("pointerdown", (event) => {
           if (drawMode) return;
           if (event.button !== 0) return;
           state.drag = true;
           startX = event.clientX;
           startY = event.clientY;
-          note.classList.add("is-paused");
-          note.classList.add("is-dragging");
-          note.setPointerCapture(event.pointerId);
+          state.el.classList.add("is-paused", "is-dragging");
+          state.el.setPointerCapture(event.pointerId);
         });
 
-        note.addEventListener("pointermove", (event) => {
+        state.el.addEventListener("pointermove", (event) => {
           if (!state.drag) return;
+          const zone = canvasZone.getBoundingClientRect();
           const travel = Math.hypot(event.clientX - startX, event.clientY - startY);
           if (travel > 2) event.preventDefault();
-          const rect = board.getBoundingClientRect();
-          const localX = (event.clientX - rect.left) / zoom;
-          const localY = (event.clientY - rect.top) / zoom;
-          state.x = localX - state.w / 2;
-          state.y = localY - state.h / 2;
-          clamp(state, rect.width / zoom, rect.height / zoom);
-          renderNote(state);
+          state.x = event.clientX - zone.left - state.w / 2;
+          state.y = event.clientY - zone.top - state.h / 2;
+          clamp(state, zone.width, zone.height);
+          renderNote(state, zone.width, zone.height);
         });
 
-        note.addEventListener("pointerup", (event) => {
+        state.el.addEventListener("pointerup", (event) => {
           if (!state.drag) return;
           state.drag = false;
-          note.classList.remove("is-paused");
-          note.classList.remove("is-dragging");
-          try { note.releasePointerCapture(event.pointerId); } catch (_) {}
-
-          const rect = board.getBoundingClientRect();
-          state.xPct = (state.x + state.w / 2) / (rect.width / zoom);
-          state.yPct = (state.y + state.h / 2) / (rect.height / zoom);
+          state.el.classList.remove("is-paused", "is-dragging");
+          try { state.el.releasePointerCapture(event.pointerId); } catch (_) {}
+          const zone = canvasZone.getBoundingClientRect();
+          state.xPct = (state.x + state.w / 2) / zone.width;
+          state.yPct = (state.y + state.h / 2) / zone.height;
         });
 
-        note.addEventListener("pointercancel", () => {
+        state.el.addEventListener("pointercancel", () => {
           state.drag = false;
-          note.classList.remove("is-paused");
-          note.classList.remove("is-dragging");
+          state.el.classList.remove("is-paused", "is-dragging");
         });
 
-        note.addEventListener("mouseenter", () => note.classList.add("is-paused"));
-        note.addEventListener("mouseleave", () => {
-          if (!state.drag) note.classList.remove("is-paused");
+        state.el.addEventListener("mouseenter", () => state.el.classList.add("is-paused"));
+        state.el.addEventListener("mouseleave", () => {
+          if (!state.drag) state.el.classList.remove("is-paused");
         });
       }
 
-      notesData.forEach(createNote);
+      baseNotes.forEach(createNote);
 
+      function layoutNotes() {
+        const zone = canvasZone.getBoundingClientRect();
+        notes.forEach((state) => {
+          const rect = state.el.getBoundingClientRect();
+          state.w = rect.width;
+          state.h = rect.height;
+          state.x = zone.width * state.xPct - state.w / 2;
+          state.y = zone.height * state.yPct - state.h / 2;
+          clamp(state, zone.width, zone.height);
+          renderNote(state, zone.width, zone.height);
+        });
+      }
+
+      function addCommentSticky() {
+        const text = (commentText.value || "").trim();
+        if (!text) return;
+        const name = (commentName.value || "Anon").trim() || "Anon";
+        const tone = commentTone.value || "tone-yellow";
+
+        createNote({
+          tone,
+          tag: "Comment",
+          title: name,
+          text,
+          x: Math.min(0.88, Math.max(0.14, 0.52 + (Math.random() * 0.2 - 0.1))),
+          y: Math.min(0.84, Math.max(0.16, 0.5 + (Math.random() * 0.2 - 0.1))),
+          rot: -6 + Math.random() * 12
+        });
+
+        layoutNotes();
+        commentText.value = "";
+      }
+
+      addSticky.addEventListener("click", addCommentSticky);
+      commentText.addEventListener("keydown", (event) => {
+        if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+          event.preventDefault();
+          addCommentSticky();
+        }
+      });
+
+      // doodle
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      let drawMode = false;
+      let erasing = false;
+      let drawing = false;
+      let lastX = 0;
+      let lastY = 0;
+      let penColor = "#b13d4d";
+
+      function resizeCanvas() {
+        const rect = canvasZone.getBoundingClientRect();
+        doodle.width = Math.floor(rect.width * dpr);
+        doodle.height = Math.floor(rect.height * dpr);
+        doodle.style.width = `${rect.width}px`;
+        doodle.style.height = `${rect.height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineWidth = Number(sizeRange.value);
+        ctx.strokeStyle = penColor;
+      }
+
+      function syncDrawButtons() {
+        drawToggle.classList.toggle("active", drawMode && !erasing);
+        eraserToggle.classList.toggle("active", drawMode && erasing);
+        doodle.classList.toggle("drawing", drawMode);
+      }
+
+      drawToggle.addEventListener("click", () => {
+        drawMode = !drawMode;
+        if (drawMode) erasing = false;
+        syncDrawButtons();
+      });
+
+      eraserToggle.addEventListener("click", () => {
+        if (!drawMode) drawMode = true;
+        erasing = !erasing;
+        syncDrawButtons();
+      });
+
+      clearCanvas.addEventListener("click", () => {
+        const rect = canvasZone.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+      });
+
+      saveBoard.addEventListener("click", () => {
+        const rect = canvasZone.getBoundingClientRect();
+        const exportCanvas = document.createElement("canvas");
+        exportCanvas.width = rect.width;
+        exportCanvas.height = rect.height;
+        const ectx = exportCanvas.getContext("2d");
+        ectx.fillStyle = "#f8f6f1";
+        ectx.fillRect(0, 0, rect.width, rect.height);
+        ectx.drawImage(doodle, 0, 0, rect.width, rect.height);
+        const a = document.createElement("a");
+        a.href = exportCanvas.toDataURL("image/png");
+        a.download = "jackie-sketch.png";
+        a.click();
+      });
+
+      shareBoard.addEventListener("click", async () => {
+        const link = `${location.origin}/index2.html#projects`;
+        try {
+          await navigator.clipboard.writeText(link);
+          shareBoard.textContent = "Copied";
+          setTimeout(() => { shareBoard.textContent = "Share"; }, 900);
+        } catch (_) {
+          // no-op fallback
+        }
+      });
+
+      swatches.addEventListener("click", (event) => {
+        const btn = event.target.closest(".swatch");
+        if (!btn) return;
+        penColor = btn.dataset.color || penColor;
+        ctx.strokeStyle = penColor;
+        swatches.querySelectorAll(".swatch").forEach((node) => node.classList.remove("active"));
+        btn.classList.add("active");
+      });
+
+      sizeRange.addEventListener("input", () => {
+        ctx.lineWidth = Number(sizeRange.value);
+      });
+
+      doodle.addEventListener("pointerdown", (event) => {
+        if (!drawMode) return;
+        drawing = true;
+        const rect = canvasZone.getBoundingClientRect();
+        lastX = event.clientX - rect.left;
+        lastY = event.clientY - rect.top;
+      });
+
+      doodle.addEventListener("pointermove", (event) => {
+        if (!drawMode || !drawing) return;
+        const rect = canvasZone.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        ctx.save();
+        if (erasing) {
+          ctx.globalCompositeOperation = "destination-out";
+          ctx.lineWidth = Number(sizeRange.value) * 1.9;
+          ctx.strokeStyle = "rgba(0,0,0,1)";
+        } else {
+          ctx.globalCompositeOperation = "source-over";
+          ctx.lineWidth = Number(sizeRange.value);
+          ctx.strokeStyle = penColor;
+        }
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.restore();
+
+        lastX = x;
+        lastY = y;
+      });
+
+      doodle.addEventListener("pointerup", () => {
+        drawing = false;
+      });
+      doodle.addEventListener("pointercancel", () => {
+        drawing = false;
+      });
+
+      // fake collaborators
       const collaborators = [
-        { name: "thanish", color: "#242424", x: 0.18, y: 0.3, vx: 12, vy: 10 },
-        { name: "nevin", color: "#3a5fe8", x: 0.44, y: 0.46, vx: -11, vy: 9 },
-        { name: "shen", color: "#d34f84", x: 0.72, y: 0.28, vx: 10, vy: -11 },
-        { name: "samantha", color: "#1f8f62", x: 0.64, y: 0.62, vx: -9, vy: -8 }
+        { name: "thanish", color: "#1f1f1f", x: 0.15, y: 0.38, vx: 14, vy: 10 },
+        { name: "nevin", color: "#5572c7", x: 0.37, y: 0.62, vx: -9, vy: 12 },
+        { name: "shen", color: "#be4d75", x: 0.74, y: 0.31, vx: 11, vy: -10 },
+        { name: "samantha", color: "#3f8f5f", x: 0.62, y: 0.77, vx: -10, vy: -9 }
       ];
 
-      const cursorStates = collaborators.map((item) => {
+      const cursors = collaborators.map((item) => {
         const el = document.createElement("div");
         el.className = "collabCursor";
         el.innerHTML = `<span class="cursorArrow"></span><span class="cursorTag">${item.name}</span>`;
         el.querySelector(".cursorTag").style.background = item.color;
         cursorLayer.appendChild(el);
-
         return {
           el,
           xPct: item.x,
@@ -1084,199 +1357,50 @@
         };
       });
 
-      function renderNote(state) {
-        state.el.style.left = `${((state.x + state.w / 2) / (board.getBoundingClientRect().width / zoom)) * 100}%`;
-        state.el.style.top = `${((state.y + state.h / 2) / (board.getBoundingClientRect().height / zoom)) * 100}%`;
-      }
-
-      function renderCursor(state) {
-        state.el.style.transform = `translate3d(${state.x}px, ${state.y}px, 0)`;
-      }
-
-      function clamp(state, width, height) {
-        const pad = 4;
-        state.x = Math.max(pad, Math.min(state.x, width - state.w - pad));
-        state.y = Math.max(pad, Math.min(state.y, height - state.h - pad));
-      }
-
       function intersects(a, b) {
         return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
       }
 
-      function layoutStaticNotes() {
-        const rect = board.getBoundingClientRect();
-        const w = rect.width / zoom;
-        const h = rect.height / zoom;
-
-        noteStates.forEach((state) => {
-          const nRect = state.el.getBoundingClientRect();
-          state.w = nRect.width / zoom;
-          state.h = nRect.height / zoom;
-          state.x = w * state.xPct - state.w / 2;
-          state.y = h * state.yPct - state.h / 2;
-          clamp(state, w, h);
-          renderNote(state);
-        });
-      }
-
       function layoutCursors() {
-        const rect = board.getBoundingClientRect();
-        const w = rect.width / zoom;
-        const h = rect.height / zoom;
-
-        cursorStates.forEach((cursor) => {
+        const rect = canvasZone.getBoundingClientRect();
+        cursors.forEach((cursor) => {
           const cRect = cursor.el.getBoundingClientRect();
-          cursor.w = cRect.width / zoom;
-          cursor.h = cRect.height / zoom;
-          cursor.x = w * cursor.xPct;
-          cursor.y = h * cursor.yPct;
-          clamp(cursor, w, h);
-          renderCursor(cursor);
+          cursor.w = cRect.width;
+          cursor.h = cRect.height;
+          cursor.x = rect.width * cursor.xPct;
+          cursor.y = rect.height * cursor.yPct;
+          cursor.x = Math.max(2, Math.min(cursor.x, rect.width - cursor.w - 2));
+          cursor.y = Math.max(2, Math.min(cursor.y, rect.height - cursor.h - 2));
+          cursor.el.style.transform = `translate3d(${cursor.x}px, ${cursor.y}px, 0)`;
         });
       }
-
-      // Comment sticky (in-memory only)
-      const comments = [];
-      function renderComments() {
-        if (!comments.length) {
-          commentList.innerHTML = '<div class="commentItem"><b>No comments yet</b><span>Drop something silly/useful and we pin it.</span></div>';
-          return;
-        }
-        commentList.innerHTML = comments
-          .slice()
-          .reverse()
-          .map((item) => `<div class="commentItem"><b>${item.name}</b><span>${item.text}</span></div>`)
-          .join("");
-      }
-
-      commentToggle.addEventListener("click", () => {
-        commentPanel.classList.toggle("open");
-      });
-
-      commentSubmit.addEventListener("click", () => {
-        const name = (commentName.value || "Anonymous").trim() || "Anonymous";
-        const text = (commentText.value || "").trim();
-        const tone = commentTone.value || "tone-yellow";
-        if (!text) return;
-
-        comments.push({ name, text });
-        renderComments();
-
-        const rect = board.getBoundingClientRect();
-        const w = rect.width / zoom;
-        const h = rect.height / zoom;
-        const x = Math.min(0.86, Math.max(0.14, 0.48 + (Math.random() * 0.22 - 0.11)));
-        const y = Math.min(0.86, Math.max(0.14, 0.5 + (Math.random() * 0.22 - 0.11)));
-
-        const sticky = {
-          tone,
-          size: "note-sm",
-          tag: "Comment",
-          title: name,
-          text,
-          x,
-          y,
-          rot: -6 + Math.random() * 12
-        };
-
-        createNote(sticky);
-        layoutStaticNotes();
-
-        commentText.value = "";
-      });
-
-      renderComments();
-
-      // Doodle tool
-      const dpr = Math.max(1, window.devicePixelRatio || 1);
-      const ctx = doodleLayer.getContext("2d");
-      let drawMode = false;
-      let drawing = false;
-      let lastX = 0;
-      let lastY = 0;
-
-      function resizeCanvas() {
-        const rect = board.getBoundingClientRect();
-        doodleLayer.width = Math.floor(rect.width * dpr);
-        doodleLayer.height = Math.floor(rect.height * dpr);
-        doodleLayer.style.width = `${rect.width}px`;
-        doodleLayer.style.height = `${rect.height}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.lineWidth = 2.4;
-        ctx.strokeStyle = "#ff7ea8";
-      }
-
-      drawToggle.addEventListener("click", () => {
-        drawMode = !drawMode;
-        drawToggle.classList.toggle("active", drawMode);
-        doodleLayer.classList.toggle("drawing", drawMode);
-      });
-
-      clearDoodle.addEventListener("click", () => {
-        const rect = board.getBoundingClientRect();
-        ctx.clearRect(0, 0, rect.width, rect.height);
-      });
-
-      doodleLayer.addEventListener("pointerdown", (event) => {
-        if (!drawMode) return;
-        drawing = true;
-        const rect = board.getBoundingClientRect();
-        lastX = event.clientX - rect.left;
-        lastY = event.clientY - rect.top;
-      });
-
-      doodleLayer.addEventListener("pointermove", (event) => {
-        if (!drawMode || !drawing) return;
-        const rect = board.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        lastX = x;
-        lastY = y;
-      });
-
-      doodleLayer.addEventListener("pointerup", () => {
-        drawing = false;
-      });
-      doodleLayer.addEventListener("pointercancel", () => {
-        drawing = false;
-      });
 
       let prev = performance.now();
-      function loop(now) {
+      function frame(now) {
         const dt = Math.min(0.034, (now - prev) / 1000);
         prev = now;
 
-        if (!reducedMotion) {
-          const rect = board.getBoundingClientRect();
-          const w = rect.width / zoom;
-          const h = rect.height / zoom;
+        if (!reduced) {
+          const rect = canvasZone.getBoundingClientRect();
 
-          noteStates.forEach((state) => {
-            state.collab = false;
-          });
+          notes.forEach((n) => { n.collab = false; });
 
-          cursorStates.forEach((cursor) => {
+          cursors.forEach((cursor) => {
             cursor.x += cursor.vx * dt;
             cursor.y += cursor.vy * dt;
 
-            if (cursor.x <= 2 || cursor.x + cursor.w >= w - 2) {
+            if (cursor.x <= 2 || cursor.x + cursor.w >= rect.width - 2) {
               cursor.vx *= -1;
-              cursor.x = Math.max(2, Math.min(cursor.x, w - cursor.w - 2));
+              cursor.x = Math.max(2, Math.min(cursor.x, rect.width - cursor.w - 2));
             }
-            if (cursor.y <= 2 || cursor.y + cursor.h >= h - 2) {
+            if (cursor.y <= 2 || cursor.y + cursor.h >= rect.height - 2) {
               cursor.vy *= -1;
-              cursor.y = Math.max(2, Math.min(cursor.y, h - cursor.h - 2));
+              cursor.y = Math.max(2, Math.min(cursor.y, rect.height - cursor.h - 2));
             }
 
             const cBox = { x: cursor.x, y: cursor.y, w: cursor.w, h: cursor.h };
             let over = false;
-            noteStates.forEach((state) => {
+            notes.forEach((state) => {
               const sBox = { x: state.x, y: state.y, w: state.w, h: state.h };
               if (intersects(cBox, sBox)) {
                 over = true;
@@ -1285,51 +1409,47 @@
             });
 
             cursor.el.classList.toggle("over", over);
-            renderCursor(cursor);
+            cursor.el.style.transform = `translate3d(${cursor.x}px, ${cursor.y}px, 0)`;
           });
 
-          noteStates.forEach((state) => {
-            state.el.classList.toggle("is-collab", state.collab);
+          notes.forEach((n) => {
+            n.el.classList.toggle("is-collab", n.collab);
           });
         }
 
-        requestAnimationFrame(loop);
+        requestAnimationFrame(frame);
       }
 
-      // subtle background chibi
-      const bgCount = Math.min(8, Math.max(3, Math.floor(window.innerWidth / 260)));
-      for (let i = 0; i < bgCount; i += 1) {
-        const ghost = document.createElement("div");
-        ghost.className = "bgChibi";
-        ghost.style.left = `${Math.random() * 100}%`;
-        ghost.style.top = `${Math.random() * 100}%`;
-        ghost.style.setProperty("--size", `${60 + Math.random() * 90}px`);
-        ghost.style.setProperty("--op", `${0.03 + Math.random() * 0.06}`);
-        ghost.style.setProperty("--dur", `${15 + Math.random() * 18}s`);
-        ghost.style.setProperty("--dx", `${-18 + Math.random() * 36}px`);
-        ghost.style.setProperty("--dy", `${-20 + Math.random() * 40}px`);
-        ghost.style.setProperty("--dr", `${-5 + Math.random() * 10}deg`);
-        ghost.style.setProperty("--flip", Math.random() > 0.5 ? "-1" : "1");
+      // project reveal on scroll
+      const cards = [...document.querySelectorAll(".projectCard")];
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("show");
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.18 });
 
-        const img = document.createElement("img");
-        img.src = "/pic/chibi3.png";
-        img.alt = "";
-        ghost.appendChild(img);
-        world.appendChild(ghost);
+        cards.forEach((card, idx) => {
+          card.style.transitionDelay = `${idx * 60}ms`;
+          io.observe(card);
+        });
+      } else {
+        cards.forEach((card) => card.classList.add("show"));
       }
 
-      applyZoom();
-      requestAnimationFrame(() => {
-        layoutStaticNotes();
-        layoutCursors();
-        resizeCanvas();
-        requestAnimationFrame(loop);
-      });
+      resizeCanvas();
+      layoutNotes();
+      layoutCursors();
+      syncDrawButtons();
+      requestAnimationFrame(frame);
 
       window.addEventListener("resize", () => {
-        layoutStaticNotes();
-        layoutCursors();
         resizeCanvas();
+        layoutNotes();
+        layoutCursors();
       });
     })();
   </script>
