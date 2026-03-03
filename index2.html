@@ -32,6 +32,63 @@
       overflow-x: hidden;
     }
 
+    body.preload {
+      overflow: hidden;
+    }
+
+    .intro404 {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      transition: opacity 460ms ease, visibility 460ms ease;
+    }
+
+    .intro404.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .introCard {
+      text-align: center;
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+    }
+
+    .introCode {
+      margin: 0;
+      font-family: "Gaegu", cursive;
+      font-size: clamp(4rem, 16vw, 12rem);
+      line-height: 0.84;
+      letter-spacing: 0.03em;
+      animation: wobble 720ms ease-in-out infinite alternate;
+    }
+
+    .introMsg {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #5a5751;
+    }
+
+    .introSub {
+      margin: 0;
+      font-family: "Gaegu", cursive;
+      font-size: 1.3rem;
+      color: #4b4943;
+    }
+
+    @keyframes wobble {
+      from { transform: translateY(-4px) rotate(-1deg); }
+      to { transform: translateY(4px) rotate(1deg); }
+    }
+
     .page {
       position: relative;
       z-index: 2;
@@ -92,7 +149,7 @@
       position: absolute;
       top: clamp(48px, 9vw, 108px);
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, var(--title-shift, 0px));
       text-align: center;
       font-family: "Gaegu", cursive;
       text-transform: uppercase;
@@ -102,17 +159,21 @@
       z-index: 3;
       pointer-events: none;
       max-width: 19ch;
+      opacity: 0;
+      transition: opacity 420ms ease 90ms;
     }
 
     .heroVisual {
       position: absolute;
       left: 50%;
       top: 60%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, calc(-50% + var(--visual-shift, 0px)));
       width: min(74vw, 720px);
       max-height: 70vh;
       z-index: 2;
       pointer-events: none;
+      opacity: 0;
+      transition: opacity 540ms ease 180ms;
     }
 
     .heroVisual img {
@@ -130,6 +191,15 @@
       z-index: 3;
       max-width: 34ch;
       pointer-events: none;
+      transform: translateY(var(--meta-shift, 0px));
+      opacity: 0;
+      transition: opacity 420ms ease 280ms;
+    }
+
+    body.loaded .heroTitle,
+    body.loaded .heroVisual,
+    body.loaded .heroMeta {
+      opacity: 1;
     }
 
     .heroMeta h2 {
@@ -505,7 +575,14 @@
     }
   </style>
 </head>
-<body>
+<body class="preload">
+  <div id="intro404" class="intro404" aria-hidden="true">
+    <div class="introCard">
+      <h1 class="introCode">404</h1>
+      <p class="introMsg">not found... maybe?</p>
+      <p class="introSub">just kidding, loading your page</p>
+    </div>
+  </div>
   <canvas id="drawCanvas" class="drawCanvas" aria-hidden="true"></canvas>
 
   <main class="page">
@@ -541,8 +618,8 @@
     </section>
 
     <section id="projects" class="projects" aria-label="Projects">
-      <h3>Projects</h3>
-      <p>
+      <h3 class="reveal">Projects</h3>
+      <p class="reveal" style="--delay: 60ms;">
         Open project flow. Scroll through the story and jump into any case study.
       </p>
 
@@ -630,10 +707,18 @@
 
   <script>
     (() => {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const bodyEl = document.body;
+      const intro404 = document.getElementById("intro404");
+
       const mainVisual = document.getElementById("mainVisual");
       mainVisual.addEventListener("error", () => {
         mainVisual.src = "/pic/chibi3.png";
       });
+
+      const heroTitleEl = document.querySelector(".heroTitle");
+      const heroVisualEl = document.querySelector(".heroVisual");
+      const heroMetaEl = document.querySelector(".heroMeta");
 
       const canvas = document.getElementById("drawCanvas");
       const ctx = canvas.getContext("2d");
@@ -646,6 +731,17 @@
       const shareBtn = document.getElementById("shareBtn");
       const swatches = document.getElementById("swatches");
       const sizeRange = document.getElementById("sizeRange");
+
+      function finishIntro() {
+        if (intro404) {
+          intro404.classList.add("hide");
+          setTimeout(() => intro404.remove(), 520);
+        }
+        bodyEl.classList.remove("preload");
+        bodyEl.classList.add("loaded");
+      }
+
+      setTimeout(finishIntro, reduceMotion ? 620 : 1200);
 
       let drawMode = false;
       let erasing = false;
@@ -753,7 +849,7 @@
         exportCanvas.width = canvas.width / dpr;
         exportCanvas.height = canvas.height / dpr;
         const ectx = exportCanvas.getContext("2d");
-        ectx.fillStyle = "#dcd8d1";
+        ectx.fillStyle = "#fffdf6";
         ectx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
         ectx.drawImage(canvas, 0, 0, exportCanvas.width, exportCanvas.height);
 
@@ -797,6 +893,24 @@
       window.addEventListener("resize", setCanvasSize);
       window.addEventListener("load", setCanvasSize);
       setTimeout(setCanvasSize, 400);
+
+      if (!reduceMotion) {
+        let ticking = false;
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            const y = Math.max(0, window.scrollY || 0);
+            const bound = Math.min(window.innerHeight * 0.95, y);
+            heroTitleEl?.style.setProperty("--title-shift", `${Math.min(42, bound * 0.08)}px`);
+            heroVisualEl?.style.setProperty("--visual-shift", `${Math.min(28, bound * 0.05)}px`);
+            heroMetaEl?.style.setProperty("--meta-shift", `${Math.min(20, bound * 0.03)}px`);
+            ticking = false;
+          });
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      }
 
       const revealNodes = [...document.querySelectorAll(".reveal")];
       if ("IntersectionObserver" in window) {
