@@ -4,450 +4,550 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Jackie Foo</title>
+  <meta name="description" content="Jackie's internet corner." />
+  <meta name="theme-color" content="#f58b1f" />
 
-  <meta name="description" content="Jackie Foo — coming soon landing page." />
-  <meta name="theme-color" content="#ffd288" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --sun-1: #ffe6a7;
-      --sun-2: #ffd28a;
-      --peach: #ffc18f;
-      --apricot: #ffb88f;
-      --cream: #fff4dc;
-      --text: #5f3a1f;
-      --muted: rgba(95, 58, 31, 0.72);
-      --card: rgba(255, 255, 255, 0.72);
-      --card-border: rgba(255, 255, 255, 0.82);
-      --btn: #ffae55;
-      --btn-text: #5a2f14;
-      --link-bg: rgba(255, 255, 255, 0.72);
-      --shadow: 0 24px 60px rgba(180, 112, 38, 0.24);
-      --radius-xl: 30px;
-      --radius-lg: 18px;
-      --radius-pill: 999px;
+      --ink: #2f1205;
+      --cream: #fff2cf;
+      --sun: #ffc74e;
+      --orange: #f58b1f;
+      --orange-deep: #df5d16;
+      --red: #c8371b;
+      --mint: #93f0bb;
+      --mint-deep: #1c6f44;
+      --panel: #fff7e7;
+      --shadow: 0 14px 0 rgba(47, 18, 5, 0.12);
     }
 
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
 
+    html,
     body {
+      width: 100%;
+      height: 100%;
       margin: 0;
       font-family: "Space Grotesk", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 16% 20%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 44%),
-        radial-gradient(circle at 82% 74%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 40%),
-        linear-gradient(140deg, var(--cream) 0%, var(--sun-1) 34%, var(--sun-2) 64%, var(--peach) 84%, var(--apricot) 100%);
-      overflow-x: hidden;
-    }
-
-    .sky {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: -4;
+      background: var(--sun);
+      color: var(--ink);
+      scroll-behavior: smooth;
       overflow: hidden;
     }
 
-    .shape {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(2px);
-      opacity: 0.34;
-      animation: drift 16s ease-in-out infinite;
-    }
-
-    .shape.one {
-      width: 42vmax;
-      height: 42vmax;
-      left: -12vmax;
-      top: -10vmax;
-      background: radial-gradient(circle at 35% 30%, rgba(255, 222, 138, 0.95), rgba(255, 222, 138, 0.16) 58%, transparent 76%);
-      animation-delay: -3s;
-    }
-
-    .shape.two {
-      width: 46vmax;
-      height: 46vmax;
-      right: -14vmax;
-      top: -8vmax;
-      background: radial-gradient(circle at 62% 32%, rgba(255, 187, 118, 0.9), rgba(255, 187, 118, 0.12) 58%, transparent 76%);
-      animation-delay: -8s;
-      animation-duration: 21s;
-    }
-
-    .shape.three {
-      width: 52vmax;
-      height: 52vmax;
-      left: 16vmax;
-      bottom: -28vmax;
-      background: radial-gradient(circle at 44% 26%, rgba(255, 230, 170, 0.84), rgba(255, 230, 170, 0.12) 58%, transparent 76%);
-      animation-delay: -5s;
-      animation-duration: 25s;
-    }
-
-    .sparkles {
-      position: absolute;
-      inset: 0;
-      opacity: 0.42;
-      background-image:
-        radial-gradient(rgba(255, 255, 255, 0.9) 1px, transparent 1px),
-        radial-gradient(rgba(255, 255, 255, 0.7) 1px, transparent 1px);
-      background-size: 34px 34px, 48px 48px;
-      background-position: 0 0, 16px 12px;
-      animation: twinkle 6s ease-in-out infinite;
-    }
-
-    #chibiCloud {
-      position: fixed;
-      inset: 0;
-      z-index: -3;
-      pointer-events: none;
-      overflow: hidden;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
-    }
-
-    .chibiFloat {
-      position: absolute;
-      bottom: -110px;
-      will-change: transform, opacity;
-      animation-name: floatUp;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-      opacity: 0.22;
-      filter: drop-shadow(0 8px 12px rgba(159, 86, 138, 0.22));
-    }
-
-    .chibiFloat img {
-      display: block;
+    .deck {
       width: 100%;
-      height: auto;
-      user-select: none;
-      -webkit-user-drag: none;
+      height: 100%;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      overscroll-behavior-y: contain;
     }
 
-    .page {
-      min-height: 100%;
+    .slide {
+      min-height: 100vh;
+      width: 100%;
+      scroll-snap-align: start;
       display: grid;
       place-items: center;
-      padding: clamp(20px, 4vw, 52px);
+      padding: clamp(18px, 4vw, 58px);
+      position: relative;
+      overflow: clip;
     }
 
-    .shell {
-      width: min(1020px, 100%);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--card-border);
-      background: linear-gradient(155deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.62));
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(8px);
-      padding: clamp(20px, 3vw, 38px);
+    .slide::before,
+    .slide::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      transition: transform 900ms cubic-bezier(0.18, 0.84, 0.26, 1), opacity 900ms;
     }
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
+    .scene {
+      width: min(1080px, 100%);
+      transform: scale(1.12) translateY(24px);
+      transform-origin: center;
+      transition: transform 900ms cubic-bezier(0.18, 0.84, 0.26, 1);
     }
 
-    .brand {
-      font-size: 0.86rem;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: rgba(74, 46, 76, 0.72);
-      font-weight: 700;
+    .slide.is-active .scene {
+      transform: scale(1) translateY(0);
     }
 
-    .pill {
+    .slide.was-active:not(.is-active) .scene {
+      transform: scale(0.92) translateY(-18px);
+    }
+
+    .chip {
       display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(255, 148, 201, 0.46);
-      background: rgba(255, 255, 255, 0.64);
-      border-radius: var(--radius-pill);
-      padding: 5px 12px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #8a4e1f;
-    }
-
-    .pill i {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ffb24a;
-      box-shadow: 0 0 0 0 rgba(255, 178, 74, 0.72);
-      animation: ping 2s infinite;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(160px, 220px) 1fr;
-      gap: clamp(16px, 3vw, 36px);
-      align-items: center;
-    }
-
-    .avatarWrap {
-      justify-self: center;
-      width: min(220px, 42vw);
-      aspect-ratio: 1 / 1;
-      border-radius: var(--radius-pill);
-      padding: 8px;
-      background: linear-gradient(145deg, rgba(255, 210, 129, 0.68), rgba(255, 174, 86, 0.66));
-      box-shadow: 0 12px 36px rgba(184, 118, 40, 0.24);
-    }
-
-    .avatar {
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.9);
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 3px solid var(--ink);
       background: #fff;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 800;
+      box-shadow: var(--shadow);
     }
 
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      transform: scale(1.05);
-      display: block;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.8rem, 7.5vw, 5.4rem);
-      line-height: 0.94;
+    .title {
+      margin: 14px 0 14px;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: clamp(2.4rem, 8.8vw, 8.2rem);
+      line-height: 0.9;
       letter-spacing: -0.04em;
+      text-transform: uppercase;
+      text-wrap: balance;
     }
 
-    .titleAccent {
-      background: linear-gradient(92deg, #f4933e 0%, #e67a31 52%, #c85f24 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+    .title strong {
+      background: var(--ink);
+      color: #fff;
+      padding: 0.04em 0.18em;
+      border-radius: 0.2em;
+      box-shadow: 0.08em 0.08em 0 #ffe8b7;
     }
 
     .lead {
-      margin: 14px 0 0;
-      max-width: 58ch;
-      color: var(--muted);
-      font-size: clamp(1rem, 2.1vw, 1.06rem);
-      line-height: 1.72;
-      font-weight: 500;
-    }
-
-    .actions {
-      margin-top: 22px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      border-radius: 14px;
-      border: 1px solid transparent;
-      font: inherit;
+      margin: 0;
+      max-width: 62ch;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.58;
       font-weight: 700;
-      padding: 12px 16px;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
 
-    .btnPrimary {
-      background: linear-gradient(130deg, #ffd180, #ffb55c 58%, #ffc46b);
-      color: var(--btn-text);
-      border-color: rgba(255, 154, 61, 0.56);
-      box-shadow: 0 10px 24px rgba(190, 116, 28, 0.28);
+    .scrollCta {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: #fff;
+      font-weight: 800;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      padding: 8px 13px;
+      letter-spacing: 0.06em;
+      box-shadow: var(--shadow);
+      animation: bounce 1.6s infinite;
     }
 
-    .btn:hover { transform: translateY(-1px); }
-    .btn:active { transform: translateY(0); }
-    .btn:focus-visible {
-      outline: 3px solid rgba(255, 140, 194, 0.5);
-      outline-offset: 3px;
+    .scrollCta span {
+      font-size: 1.1rem;
+      line-height: 1;
     }
 
-    .links {
-      margin-top: 24px;
+    .words {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .wordRow {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: clamp(1.2rem, 4.2vw, 3.6rem);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      font-weight: 800;
     }
 
-    .link {
-      text-decoration: none;
-      color: #6a3d1a;
-      background: var(--link-bg);
-      border: 1px solid rgba(255, 255, 255, 0.84);
+    .word {
+      border: 3px solid var(--ink);
       border-radius: 12px;
-      padding: 9px 12px;
-      font-size: 0.94rem;
-      font-weight: 600;
-      transition: transform 0.15s ease, background 0.2s ease;
+      background: #fff;
+      padding: 0.12em 0.32em;
+      box-shadow: 0 8px 0 rgba(47, 18, 5, 0.14);
     }
 
-    .link:hover {
+    .word.fill {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .promptGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .promptCard {
+      border: 3px solid var(--ink);
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      min-height: 165px;
+      display: grid;
+      align-content: space-between;
+      gap: 12px;
+    }
+
+    .promptCard h3 {
+      margin: 0;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+
+    .promptCard p {
+      margin: 0;
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .slide1 {
+      background:
+        radial-gradient(circle at 16% 20%, #ffe7ac 0 17%, transparent 17.5%),
+        radial-gradient(circle at 86% 30%, #ffaf47 0 15%, transparent 15.5%),
+        radial-gradient(circle at 78% 80%, #f86f30 0 11%, transparent 11.5%),
+        linear-gradient(140deg, #ffd364 0%, #ffb13f 44%, #f58b1f 76%, #e45a1b 100%);
+    }
+
+    .slide1::before {
+      width: 480px;
+      height: 480px;
+      right: -160px;
+      top: -120px;
+      background: rgba(255, 238, 197, 0.8);
+      transform: scale(1.05);
+    }
+
+    .slide1.is-active::before {
+      transform: scale(1);
+    }
+
+    .slide2 {
+      background:
+        linear-gradient(0deg, rgba(255, 245, 214, 0.52), rgba(255, 245, 214, 0.52)),
+        repeating-linear-gradient(-24deg, #ffd574, #ffd574 20px, #ffbe49 20px, #ffbe49 40px);
+    }
+
+    .slide2::before {
+      width: 400px;
+      height: 400px;
+      left: -140px;
+      top: -90px;
+      background: rgba(255, 109, 53, 0.17);
+    }
+
+    .slide3 {
+      background:
+        radial-gradient(circle at 14% 28%, rgba(255, 255, 255, 0.5) 0 18%, transparent 18.5%),
+        radial-gradient(circle at 89% 14%, rgba(255, 255, 255, 0.45) 0 14%, transparent 14.5%),
+        linear-gradient(150deg, #ffe8af 0%, #ffc96a 38%, #ff9a3f 68%, #ed6d2f 100%);
+    }
+
+    .slide3::after {
+      width: 460px;
+      height: 460px;
+      right: -150px;
+      bottom: -170px;
+      background: rgba(255, 246, 219, 0.5);
+    }
+
+    .slide4 {
+      background:
+        repeating-linear-gradient(26deg, #ffefc2, #ffefc2 20px, #ffd982 20px, #ffd982 40px);
+    }
+
+    .coming {
+      margin: 0;
+      text-align: center;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: clamp(3.2rem, 13vw, 10rem);
+      line-height: 0.84;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+      color: var(--red);
+      text-shadow: 0.06em 0.06em 0 #fff;
+    }
+
+    .comingSub {
+      margin: 16px auto 0;
+      width: fit-content;
+      border: 3px solid var(--ink);
       background: #fff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .workshopGate {
+      position: fixed;
+      z-index: 12;
+      right: clamp(10px, 2vw, 20px);
+      top: clamp(10px, 2vw, 20px);
+      width: min(380px, calc(100vw - 20px));
+      border: 3px solid var(--ink);
+      border-radius: 16px;
+      background: #fffdf4;
+      box-shadow: 0 12px 0 rgba(47, 18, 5, 0.18);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .gateTitle {
+      margin: 0;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+
+    .gateRow {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .gateInput {
+      border: 3px solid var(--ink);
+      border-radius: 12px;
+      background: #fff;
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+      min-width: 0;
+      outline: none;
+    }
+
+    .gateInput:focus {
+      box-shadow: 0 0 0 4px #ffe8be;
+    }
+
+    .gateBtn {
+      border: 3px solid var(--ink);
+      border-radius: 12px;
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-weight: 800;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: transform 140ms ease;
+      white-space: nowrap;
+    }
+
+    .gateBtn:hover {
       transform: translateY(-1px);
     }
 
-    .link:focus-visible {
-      outline: 3px solid rgba(255, 173, 83, 0.5);
-      outline-offset: 3px;
+    .gateHint {
+      min-height: 1.25em;
+      margin: 0;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #7f2018;
     }
 
-    footer {
-      margin-top: 24px;
-      color: rgba(95, 58, 31, 0.62);
-      font-size: 0.82rem;
-      font-weight: 600;
+    .gateHint.ok {
+      color: var(--mint-deep);
+      background: #ddf8e7;
+      border: 2px solid #5cad7d;
+      border-radius: 8px;
+      width: fit-content;
+      padding: 5px 8px;
     }
 
-    @keyframes drift {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(3vw, -2vh) scale(1.05); }
-      100% { transform: translate(0, 0) scale(1); }
+    @keyframes bounce {
+      0%,
+      100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-4px); }
     }
 
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.28; }
-      50% { opacity: 0.5; }
-    }
-
-    @keyframes ping {
-      0% { box-shadow: 0 0 0 0 rgba(255, 178, 74, 0.72); }
-      70% { box-shadow: 0 0 0 9px rgba(255, 178, 74, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 178, 74, 0); }
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translate3d(0, 0, 0) rotate(0deg);
-        opacity: 0;
-      }
-      10% { opacity: var(--o, 0.25); }
-      50% {
-        transform: translate3d(var(--drift, 18px), -56vh, 0) rotate(var(--rot, 6deg));
-      }
-      100% {
-        transform: translate3d(calc(var(--drift, 18px) * -1), -124vh, 0) rotate(calc(var(--rot, 6deg) * -1));
-        opacity: 0;
+    @media (max-width: 980px) {
+      .promptGrid {
+        grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
-      .avatarWrap { justify-self: start; }
+    @media (max-width: 760px) {
+      .workshopGate {
+        position: sticky;
+        top: 8px;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+
+      .deck {
+        height: calc(100% - 0px);
+      }
+
+      .gateRow {
+        grid-template-columns: 1fr;
+      }
+
+      .scrollCta {
+        font-size: 0.78rem;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .shape,
-      .sparkles,
-      .pill i,
-      .chibiFloat,
-      .btn,
-      .link {
-        animation: none !important;
-        transition: none !important;
+      .scene,
+      .slide::before,
+      .slide::after,
+      .scrollCta {
+        transition: none;
+        animation: none;
       }
-      #chibiCloud { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="sky" aria-hidden="true">
-    <div class="shape one"></div>
-    <div class="shape two"></div>
-    <div class="shape three"></div>
-    <div class="sparkles"></div>
-  </div>
-  <div id="chibiCloud" aria-hidden="true"></div>
+  <aside class="workshopGate" aria-label="Workshop access">
+    <h2 class="gateTitle">Stage 1 Workshop</h2>
+    <div class="gateRow">
+      <input id="workshopPw" class="gateInput" type="password" placeholder="Enter password" autocomplete="off" />
+      <button id="openWorkshopBtn" class="gateBtn" type="button">Open</button>
+    </div>
+    <p id="gateHint" class="gateHint" aria-live="polite"></p>
+  </aside>
 
-  <div class="page">
-    <main class="shell">
-      <div class="topbar">
-        <div class="brand">Jackie Foo</div>
-        <div class="pill"><i></i>Coming soon</div>
+  <main id="deck" class="deck" aria-label="Intro slides">
+    <section class="slide slide1" id="s1">
+      <div class="scene">
+        <span class="chip">Jackie Foo • Internet Corner</span>
+        <h1 class="title">Warm internet vibes,<br /><strong>big playful energy.</strong></h1>
+        <p class="lead">Scroll and explore. This page is intentionally light, fun, and bold while the full experience is still getting polished.</p>
       </div>
+      <button id="scrollDownBtn" class="scrollCta" type="button">Scroll <span>↓</span></button>
+    </section>
 
-      <section class="hero" aria-label="Intro">
-        <div class="avatarWrap" aria-hidden="true">
-          <div class="avatar">
-            <img src="/pic/chibi1.png" alt="Jackie chibi" />
+    <section class="slide slide2" id="s2">
+      <div class="scene">
+        <span class="chip">Moodboard</span>
+        <div class="words">
+          <div class="wordRow">
+            <span class="word">Sunny</span>
+            <span class="word fill">Curious</span>
+            <span class="word">Playful</span>
+          </div>
+          <div class="wordRow">
+            <span class="word fill">Loud</span>
+            <span class="word">Friendly</span>
+            <span class="word fill">Creative</span>
+          </div>
+          <div class="wordRow">
+            <span class="word">Unexpected</span>
+            <span class="word fill">Human</span>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div>
-          <h1><span class="titleAccent">Jackie Foo</span></h1>
-          <p class="lead">
-            This is my little corner of the internet. More things are coming soon, but you can enter Stage 1 from here.
-          </p>
-
-          <div class="actions">
-            <button class="btn btnPrimary" id="workshopBtn" type="button">Enter Stage 1</button>
-          </div>
-
-          <nav class="links" aria-label="Jackie links">
-            <a class="link" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a class="link" href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a class="link" href="mailto:you@email.com">Email</a>
-            <a class="link" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
-          </nav>
-
-          <footer>© <span id="year"></span> Jackie Foo</footer>
+    <section class="slide slide3" id="s3">
+      <div class="scene">
+        <span class="chip">Prompt Corner</span>
+        <h2 class="title">What do you<br /><strong>want to make?</strong></h2>
+        <div class="promptGrid">
+          <article class="promptCard">
+            <h3>One tiny experiment</h3>
+            <p>If you had one afternoon, what would you prototype just for fun?</p>
+          </article>
+          <article class="promptCard">
+            <h3>One real friction</h3>
+            <p>What pain point in feedback or workflow deserves a better design?</p>
+          </article>
+          <article class="promptCard">
+            <h3>One bold idea</h3>
+            <p>If constraints vanished for a week, what would you try first?</p>
+          </article>
         </div>
-      </section>
-    </main>
-  </div>
+      </div>
+    </section>
+
+    <section class="slide slide4" id="s4">
+      <div class="scene">
+        <h2 class="coming">Coming<br />Soon</h2>
+        <p class="comingSub">More pages landing here very soon.</p>
+      </div>
+    </section>
+  </main>
 
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    (() => {
+      const WORKSHOP_PASS = "jackiefoo.me";
+      const WORKSHOP_LINK = "/stage1/landing.html";
 
-    document.getElementById("workshopBtn").addEventListener("click", () => {
-      window.location.href = "/stage1/landing.html?room=demo&campus=upng";
-    });
+      const deck = document.getElementById("deck");
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const scrollDownBtn = document.getElementById("scrollDownBtn");
+      const pwInput = document.getElementById("workshopPw");
+      const openWorkshopBtn = document.getElementById("openWorkshopBtn");
+      const gateHint = document.getElementById("gateHint");
 
-    const cloud = document.getElementById("chibiCloud");
-    const count = Math.min(120, Math.max(48, Math.floor(window.innerWidth / 12)));
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const el = entry.target;
+            if (entry.isIntersecting) {
+              el.classList.add("is-active");
+              el.classList.add("was-active");
+            } else {
+              el.classList.remove("is-active");
+            }
+          });
+        },
+        { root: deck, threshold: 0.55 }
+      );
 
-    for (let i = 0; i < count; i += 1) {
-      const sprite = document.createElement("div");
-      sprite.className = "chibiFloat";
+      slides.forEach((slide) => observer.observe(slide));
+      slides[0].classList.add("is-active", "was-active");
 
-      const size = 24 + Math.random() * 56;
-      const left = Math.random() * 100;
-      const duration = 18 + Math.random() * 20;
-      const delay = Math.random() * -duration;
-      const opacity = 0.08 + Math.random() * 0.25;
-      const drift = -30 + Math.random() * 60;
-      const rot = -10 + Math.random() * 20;
-      const flip = Math.random() > 0.5 ? -1 : 1;
+      scrollDownBtn.addEventListener("click", () => {
+        slides[1].scrollIntoView({ behavior: "smooth", block: "start" });
+      });
 
-      sprite.style.width = `${size}px`;
-      sprite.style.left = `${left}%`;
-      sprite.style.animationDuration = `${duration}s`;
-      sprite.style.animationDelay = `${delay}s`;
-      sprite.style.setProperty("--o", opacity.toFixed(2));
-      sprite.style.setProperty("--drift", `${drift.toFixed(0)}px`);
-      sprite.style.setProperty("--rot", `${rot.toFixed(0)}deg`);
+      function openWorkshop() {
+        const value = (pwInput.value || "").trim();
+        if (!value || value !== WORKSHOP_PASS) {
+          gateHint.textContent = "Wrong password. Try again.";
+          gateHint.className = "gateHint";
+          pwInput.focus();
+          return;
+        }
 
-      const img = document.createElement("img");
-      img.src = "/pic/chibi3.png";
-      img.alt = "";
-      img.style.transform = `scaleX(${flip})`;
+        gateHint.textContent = "Unlocked. Opening workshop...";
+        gateHint.className = "gateHint ok";
 
-      sprite.appendChild(img);
-      cloud.appendChild(sprite);
-    }
+        setTimeout(() => {
+          window.location.href = WORKSHOP_LINK;
+        }, 220);
+      }
+
+      openWorkshopBtn.addEventListener("click", openWorkshop);
+      pwInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          openWorkshop();
+        }
+      });
+    })();
   </script>
 </body>
 </html>
