@@ -17,7 +17,6 @@
       --ink: #1f1f1f;
       --muted: #606060;
       --line: #dcdcdc;
-      --white: #ffffff;
       --shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
       --soft-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
     }
@@ -35,82 +34,83 @@
       font-family: "Manrope", sans-serif;
     }
 
-    .splash {
+    .loader {
       position: fixed;
       inset: 0;
-      z-index: 100;
+      z-index: 120;
       display: grid;
       place-items: center;
-      background: #fff;
-      overflow: hidden;
-      transition: opacity 720ms ease, visibility 720ms ease;
+      background:
+        radial-gradient(circle at 16% 20%, rgba(255, 223, 120, 0.45), transparent 40%),
+        radial-gradient(circle at 84% 78%, rgba(255, 153, 195, 0.34), transparent 42%),
+        #fffdf6;
+      transition: opacity 640ms ease, visibility 640ms ease;
     }
 
-    .splashInner {
-      text-align: center;
-      transition: transform 620ms ease, opacity 620ms ease;
-    }
-
-    .splash h1 {
-      margin: 0;
-      font-size: clamp(3.9rem, 14vw, 11rem);
-      line-height: 0.86;
-      letter-spacing: -0.06em;
-      color: #111;
-      animation: splashPulse 1s ease-in-out infinite alternate;
-    }
-
-    .splash p {
-      margin: 8px 0 0;
-      font-family: "Caveat", cursive;
-      font-size: clamp(1.05rem, 2.4vw, 1.5rem);
-      color: #333;
-      letter-spacing: 0.02em;
-    }
-
-    .splash::before,
-    .splash::after {
-      content: "";
-      position: absolute;
-      width: 34vmax;
-      height: 34vmax;
-      border-radius: 50%;
-      border: 8px solid #111;
-      opacity: 0.08;
-      transform: scale(0.5);
-      transition: transform 700ms ease, opacity 700ms ease;
-      pointer-events: none;
-    }
-
-    .splash::before {
-      left: -10vmax;
-      top: -8vmax;
-    }
-
-    .splash::after {
-      right: -12vmax;
-      bottom: -10vmax;
-    }
-
-    .splash.explode::before,
-    .splash.explode::after {
-      transform: scale(1.28);
-      opacity: 0.24;
-    }
-
-    .splash.explode .splashInner {
-      transform: scale(1.08) rotate(-2deg);
-    }
-
-    .splash.hide {
+    .loader.hide {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
     }
 
-    .splash.hide .splashInner {
-      transform: scale(1.22) rotate(-4deg);
-      opacity: 0;
+    .loaderCard {
+      position: relative;
+      text-align: center;
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      padding: 16px 18px 14px;
+      border: 1px solid rgba(0, 0, 0, 0.07);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 16px 28px rgba(0, 0, 0, 0.1);
+    }
+
+    .loaderCard img {
+      width: clamp(90px, 14vw, 150px);
+      height: auto;
+      animation: loadBob 1.2s ease-in-out infinite alternate;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.14));
+    }
+
+    .loaderCard h1 {
+      margin: 0;
+      font-size: clamp(1.3rem, 4vw, 2rem);
+      letter-spacing: -0.02em;
+    }
+
+    .loaderCard p {
+      margin: 0;
+      color: #555;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .dots {
+      font-family: "Caveat", cursive;
+      font-size: 1.35rem;
+      color: #333;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .loaderMeter {
+      width: min(250px, 64vw);
+      height: 8px;
+      border-radius: 999px;
+      background: #f2eee4;
+      border: 1px solid #ebdfc2;
+      overflow: hidden;
+    }
+
+    .loaderMeterBar {
+      width: 8%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ffc85d, #ff8f9e);
+      transition: width 260ms ease;
     }
 
     .topbar {
@@ -150,6 +150,8 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .activeUsers {
@@ -184,6 +186,7 @@
       display: inline-flex;
       align-items: center;
       transition: border-color 140ms ease, color 140ms ease;
+      cursor: pointer;
     }
 
     .socialFull:hover {
@@ -220,7 +223,7 @@
       z-index: 22;
     }
 
-    .tool {
+    .toolBtn {
       width: 100%;
       aspect-ratio: 1 / 1;
       border: 1px solid #e5e5e5;
@@ -231,6 +234,13 @@
       font-size: 0.76rem;
       font-weight: 800;
       color: #777;
+      cursor: pointer;
+    }
+
+    .toolBtn.active {
+      border-color: #999;
+      color: #222;
+      background: #f8f8f8;
     }
 
     .board {
@@ -310,9 +320,20 @@
     }
 
     .notes,
-    .cursorLayer {
+    .cursorLayer,
+    .doodleLayer {
       position: absolute;
       inset: 0;
+    }
+
+    .doodleLayer {
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .doodleLayer.drawing {
+      pointer-events: auto;
+      cursor: crosshair;
     }
 
     .note {
@@ -320,16 +341,32 @@
       transform: translate(-50%, -50%);
       width: clamp(170px, 20vw, 230px);
       z-index: 8;
+      touch-action: none;
+      cursor: grab;
     }
 
     .noteInner {
       position: relative;
       border-radius: 4px;
       padding: 10px;
+      background: var(--note-bg, #ffffff);
       box-shadow: var(--shadow);
       user-select: none;
       transition: box-shadow 130ms ease, transform 130ms ease, opacity 120ms ease;
       transform: rotate(var(--rot, 0deg));
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      z-index: 0;
+      isolation: isolate;
+    }
+
+    .noteInner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: var(--note-layer, #ebebeb);
+      transform: translate(5px, 5px);
+      z-index: -1;
     }
 
     .note:hover .noteInner,
@@ -342,15 +379,20 @@
       opacity: 0.52;
     }
 
+    .note.is-dragging {
+      cursor: grabbing;
+      z-index: 18;
+    }
+
     .note-sm { width: clamp(150px, 16vw, 190px); }
     .note-lg { width: clamp(210px, 23vw, 285px); }
     .note-photo { width: clamp(154px, 17vw, 200px); }
 
-    .tone-yellow { background: #f8efad; }
-    .tone-pink { background: #f8d5e7; }
-    .tone-blue { background: #cfdcfa; }
-    .tone-green { background: #d0efbe; }
-    .tone-white { background: #ffffff; }
+    .note.tone-yellow { --note-bg: #f8efad; --note-layer: #e6d98e; }
+    .note.tone-pink { --note-bg: #f8d5e7; --note-layer: #e7b9d3; }
+    .note.tone-blue { --note-bg: #cfdcfa; --note-layer: #b6c7eb; }
+    .note.tone-green { --note-bg: #d0efbe; --note-layer: #b8dca4; }
+    .note.tone-white { --note-bg: #ffffff; --note-layer: #ececec; }
 
     .pin {
       position: absolute;
@@ -545,12 +587,13 @@
     }
 
     .field,
-    .area {
+    .area,
+    .select {
       width: 100%;
       border: 1px solid #e0e0e0;
       border-radius: 8px;
       font: inherit;
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       padding: 8px 9px;
       color: #222;
       background: #fff;
@@ -644,14 +687,14 @@
       transform: scale(1.08);
     }
 
+    @keyframes loadBob {
+      from { transform: translateY(-4px) rotate(-2deg); }
+      to { transform: translateY(4px) rotate(2deg); }
+    }
+
     @keyframes drift {
       from { transform: translate3d(0, 0, 0) rotate(0deg); }
       to { transform: translate3d(var(--dx, 10px), var(--dy, -12px), 0) rotate(var(--dr, 4deg)); }
-    }
-
-    @keyframes splashPulse {
-      from { transform: scale(0.98) rotate(-1deg); }
-      to { transform: scale(1.02) rotate(1deg); }
     }
 
     @media (max-width: 980px) {
@@ -676,7 +719,7 @@
       .bgChibi,
       .noteInner,
       .zoomLabel,
-      .splash h1 {
+      .loaderCard img {
         animation: none !important;
         transition: none !important;
       }
@@ -684,10 +727,15 @@
   </style>
 </head>
 <body>
-  <div id="splash" class="splash" aria-hidden="true">
-    <div class="splashInner">
-      <h1>404</h1>
-      <p>not found... wait for it.</p>
+  <div id="loader" class="loader" aria-hidden="true">
+    <div class="loaderCard">
+      <img src="/pic/chibi3.png" alt="Loading" />
+      <h1>Loading Board</h1>
+      <p>warming up tiny sticky chaos</p>
+      <div id="dots" class="dots">.</div>
+      <div class="loaderMeter" aria-hidden="true">
+        <div id="loaderMeterBar" class="loaderMeterBar"></div>
+      </div>
     </div>
   </div>
 
@@ -703,26 +751,33 @@
       <a class="socialFull" href="#" aria-label="LinkedIn">LinkedIn</a>
       <a class="socialFull" href="#" aria-label="GitHub">GitHub</a>
       <a class="socialFull" href="mailto:you@email.com" aria-label="Email">Email</a>
-      <button id="commentToggle" class="socialFull" type="button">Comment Form</button>
+      <button id="commentToggle" class="socialFull" type="button">Comment Sticky</button>
       <button class="shareBtn" type="button">Share</button>
     </div>
   </header>
 
   <aside id="commentPanel" class="commentPanel" aria-label="Comment panel">
-    <h3>Leave A Comment</h3>
-    <p>Temporary only. Comments reset when page refreshes.</p>
+    <h3>Add Sticky Comment</h3>
+    <p>Temporary only. Resets on refresh.</p>
     <input id="commentName" class="field" type="text" placeholder="Your name" />
-    <textarea id="commentText" class="area" placeholder="Write something fun or useful..."></textarea>
-    <button id="commentSubmit" class="commentBtn" type="button">Add Comment</button>
+    <textarea id="commentText" class="area" placeholder="Write something funny/useful..."></textarea>
+    <select id="commentTone" class="select">
+      <option value="tone-yellow">Yellow</option>
+      <option value="tone-pink">Pink</option>
+      <option value="tone-blue">Blue</option>
+      <option value="tone-green">Green</option>
+      <option value="tone-white">White</option>
+    </select>
+    <button id="commentSubmit" class="commentBtn" type="button">Add As Sticky</button>
     <div id="commentList" class="commentList"></div>
   </aside>
 
   <aside class="leftTools" aria-hidden="true">
-    <div class="tool">↖</div>
-    <div class="tool">T</div>
-    <div class="tool">□</div>
-    <div class="tool">✎</div>
-    <div class="tool">⋯</div>
+    <button id="drawToggle" class="toolBtn" type="button">✎</button>
+    <button id="clearDoodle" class="toolBtn" type="button">⌫</button>
+    <div class="toolBtn">T</div>
+    <div class="toolBtn">□</div>
+    <div class="toolBtn">⋯</div>
   </aside>
 
   <main id="board" class="board">
@@ -738,6 +793,7 @@
       <div class="scribble s4">✸</div>
       <div class="scribble s5">➰</div>
 
+      <canvas id="doodleLayer" class="doodleLayer"></canvas>
       <section id="notesLayer" class="notes"></section>
       <section id="cursorLayer" class="cursorLayer"></section>
 
@@ -763,28 +819,50 @@
     (() => {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      const splash = document.getElementById("splash");
+      const loader = document.getElementById("loader");
+      const dots = document.getElementById("dots");
+      const loaderMeterBar = document.getElementById("loaderMeterBar");
+
       const board = document.getElementById("board");
       const world = document.getElementById("world");
       const notesLayer = document.getElementById("notesLayer");
       const cursorLayer = document.getElementById("cursorLayer");
+      const doodleLayer = document.getElementById("doodleLayer");
+
       const zoomLabel = document.getElementById("zoomLabel");
       const zoomIn = document.getElementById("zoomIn");
       const zoomOut = document.getElementById("zoomOut");
+
+      const drawToggle = document.getElementById("drawToggle");
+      const clearDoodle = document.getElementById("clearDoodle");
 
       const commentToggle = document.getElementById("commentToggle");
       const commentPanel = document.getElementById("commentPanel");
       const commentName = document.getElementById("commentName");
       const commentText = document.getElementById("commentText");
+      const commentTone = document.getElementById("commentTone");
       const commentSubmit = document.getElementById("commentSubmit");
       const commentList = document.getElementById("commentList");
 
+      let dotCount = 1;
+      const dotTimer = setInterval(() => {
+        dotCount = dotCount % 3 + 1;
+        dots.textContent = "✦".repeat(dotCount);
+      }, 380);
+
+      let loadPct = 8;
+      const loadTimer = setInterval(() => {
+        loadPct = Math.min(96, loadPct + 4 + Math.random() * 14);
+        loaderMeterBar.style.width = `${loadPct}%`;
+      }, 200);
+
       setTimeout(() => {
-        splash.classList.add("explode");
-      }, 700);
-      setTimeout(() => {
-        splash.classList.add("hide");
-      }, 1650);
+        loadPct = 100;
+        loaderMeterBar.style.width = "100%";
+        loader.classList.add("hide");
+        clearInterval(dotTimer);
+        clearInterval(loadTimer);
+      }, 1850);
 
       let zoom = 1;
       function applyZoom() {
@@ -793,6 +871,9 @@
         zoomLabel.classList.remove("bump");
         void zoomLabel.offsetWidth;
         zoomLabel.classList.add("bump");
+        layoutStaticNotes();
+        layoutCursors();
+        resizeCanvas();
       }
 
       zoomIn.addEventListener("click", () => {
@@ -823,7 +904,7 @@
           tag: "Project 01",
           title: "Feedback Workshop",
           text: "Interactive workshop design for reflection and action.",
-          href: "#",
+          href: "/project-view.html?project=1",
           x: 0.4,
           y: 0.15,
           rot: 3
@@ -834,7 +915,7 @@
           tag: "Project 02",
           title: "Journey Mapping Tool",
           text: "Prompt-first mapping for student/tutor friction.",
-          href: "#",
+          href: "/project-view.html?project=2",
           x: 0.64,
           y: 0.17,
           rot: -4
@@ -845,10 +926,21 @@
           tag: "Project 03",
           title: "Live Dashboard",
           text: "Multi-stage monitoring and cleaner workshop flow.",
-          href: "#",
+          href: "/project-view.html?project=3",
           x: 0.74,
           y: 0.49,
           rot: 2
+        },
+        {
+          tone: "tone-yellow",
+          size: "note-sm",
+          tag: "Project 04",
+          title: "Tutor Workflow",
+          text: "Flow-based marking map with practical constraints.",
+          href: "/project-view.html?project=4",
+          x: 0.53,
+          y: 0.69,
+          rot: 1
         },
         {
           tone: "tone-white",
@@ -862,39 +954,6 @@
           photo: "/pic/chibi2.png"
         },
         {
-          tone: "tone-yellow",
-          size: "note-sm",
-          tag: "Project 04",
-          title: "Tutor Workflow",
-          text: "Flow-based marking map with practical constraints.",
-          href: "#",
-          x: 0.53,
-          y: 0.69,
-          rot: 1
-        },
-        {
-          tone: "tone-pink",
-          size: "note-sm",
-          tag: "Project 05",
-          title: "Prompted Notes",
-          text: "Sticky-note strategy to surface deeper reflection.",
-          href: "#",
-          x: 0.8,
-          y: 0.73,
-          rot: -2
-        },
-        {
-          tone: "tone-white",
-          size: "note-photo",
-          tag: "Photo",
-          title: "Mood Frame",
-          text: "",
-          x: 0.58,
-          y: 0.35,
-          rot: 4,
-          photo: "/pic/chibi1.png"
-        },
-        {
           tone: "tone-green",
           size: "note-sm",
           tag: "Prompt",
@@ -906,7 +965,8 @@
         }
       ];
 
-      const noteStates = notesData.map((item) => {
+      const noteStates = [];
+      function createNote(item) {
         const note = document.createElement("article");
         note.className = `note ${item.tone} ${item.size || ""}`;
         note.style.left = `${item.x * 100}%`;
@@ -926,15 +986,76 @@
 
         notesLayer.appendChild(note);
 
-        return {
+        const state = {
           el: note,
+          xPct: item.x,
+          yPct: item.y,
           x: 0,
           y: 0,
           w: 0,
           h: 0,
-          collab: false
+          collab: false,
+          drag: false
         };
-      });
+
+        attachDrag(state);
+        noteStates.push(state);
+        return state;
+      }
+
+      function attachDrag(state) {
+        const note = state.el;
+        let startX = 0;
+        let startY = 0;
+        note.addEventListener("pointerdown", (event) => {
+          if (drawMode) return;
+          if (event.button !== 0) return;
+          state.drag = true;
+          startX = event.clientX;
+          startY = event.clientY;
+          note.classList.add("is-paused");
+          note.classList.add("is-dragging");
+          note.setPointerCapture(event.pointerId);
+        });
+
+        note.addEventListener("pointermove", (event) => {
+          if (!state.drag) return;
+          const travel = Math.hypot(event.clientX - startX, event.clientY - startY);
+          if (travel > 2) event.preventDefault();
+          const rect = board.getBoundingClientRect();
+          const localX = (event.clientX - rect.left) / zoom;
+          const localY = (event.clientY - rect.top) / zoom;
+          state.x = localX - state.w / 2;
+          state.y = localY - state.h / 2;
+          clamp(state, rect.width / zoom, rect.height / zoom);
+          renderNote(state);
+        });
+
+        note.addEventListener("pointerup", (event) => {
+          if (!state.drag) return;
+          state.drag = false;
+          note.classList.remove("is-paused");
+          note.classList.remove("is-dragging");
+          try { note.releasePointerCapture(event.pointerId); } catch (_) {}
+
+          const rect = board.getBoundingClientRect();
+          state.xPct = (state.x + state.w / 2) / (rect.width / zoom);
+          state.yPct = (state.y + state.h / 2) / (rect.height / zoom);
+        });
+
+        note.addEventListener("pointercancel", () => {
+          state.drag = false;
+          note.classList.remove("is-paused");
+          note.classList.remove("is-dragging");
+        });
+
+        note.addEventListener("mouseenter", () => note.classList.add("is-paused"));
+        note.addEventListener("mouseleave", () => {
+          if (!state.drag) note.classList.remove("is-paused");
+        });
+      }
+
+      notesData.forEach(createNote);
 
       const collaborators = [
         { name: "thanish", color: "#242424", x: 0.18, y: 0.3, vx: 12, vy: 10 },
@@ -963,6 +1084,11 @@
         };
       });
 
+      function renderNote(state) {
+        state.el.style.left = `${((state.x + state.w / 2) / (board.getBoundingClientRect().width / zoom)) * 100}%`;
+        state.el.style.top = `${((state.y + state.h / 2) / (board.getBoundingClientRect().height / zoom)) * 100}%`;
+      }
+
       function renderCursor(state) {
         state.el.style.transform = `translate3d(${state.x}px, ${state.y}px, 0)`;
       }
@@ -979,14 +1105,17 @@
 
       function layoutStaticNotes() {
         const rect = board.getBoundingClientRect();
+        const w = rect.width / zoom;
+        const h = rect.height / zoom;
+
         noteStates.forEach((state) => {
           const nRect = state.el.getBoundingClientRect();
           state.w = nRect.width / zoom;
           state.h = nRect.height / zoom;
-          const cx = (nRect.left - rect.left) / zoom + state.w / 2;
-          const cy = (nRect.top - rect.top) / zoom + state.h / 2;
-          state.x = cx - state.w / 2;
-          state.y = cy - state.h / 2;
+          state.x = w * state.xPct - state.w / 2;
+          state.y = h * state.yPct - state.h / 2;
+          clamp(state, w, h);
+          renderNote(state);
         });
       }
 
@@ -1006,10 +1135,11 @@
         });
       }
 
+      // Comment sticky (in-memory only)
       const comments = [];
       function renderComments() {
         if (!comments.length) {
-          commentList.innerHTML = '<div class="commentItem"><b>No comments yet</b><span>Be the first to leave something chaotic but useful.</span></div>';
+          commentList.innerHTML = '<div class="commentItem"><b>No comments yet</b><span>Drop something silly/useful and we pin it.</span></div>';
           return;
         }
         commentList.innerHTML = comments
@@ -1026,13 +1156,96 @@
       commentSubmit.addEventListener("click", () => {
         const name = (commentName.value || "Anonymous").trim() || "Anonymous";
         const text = (commentText.value || "").trim();
+        const tone = commentTone.value || "tone-yellow";
         if (!text) return;
+
         comments.push({ name, text });
-        commentText.value = "";
         renderComments();
+
+        const rect = board.getBoundingClientRect();
+        const w = rect.width / zoom;
+        const h = rect.height / zoom;
+        const x = Math.min(0.86, Math.max(0.14, 0.48 + (Math.random() * 0.22 - 0.11)));
+        const y = Math.min(0.86, Math.max(0.14, 0.5 + (Math.random() * 0.22 - 0.11)));
+
+        const sticky = {
+          tone,
+          size: "note-sm",
+          tag: "Comment",
+          title: name,
+          text,
+          x,
+          y,
+          rot: -6 + Math.random() * 12
+        };
+
+        createNote(sticky);
+        layoutStaticNotes();
+
+        commentText.value = "";
       });
 
       renderComments();
+
+      // Doodle tool
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const ctx = doodleLayer.getContext("2d");
+      let drawMode = false;
+      let drawing = false;
+      let lastX = 0;
+      let lastY = 0;
+
+      function resizeCanvas() {
+        const rect = board.getBoundingClientRect();
+        doodleLayer.width = Math.floor(rect.width * dpr);
+        doodleLayer.height = Math.floor(rect.height * dpr);
+        doodleLayer.style.width = `${rect.width}px`;
+        doodleLayer.style.height = `${rect.height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineWidth = 2.4;
+        ctx.strokeStyle = "#ff7ea8";
+      }
+
+      drawToggle.addEventListener("click", () => {
+        drawMode = !drawMode;
+        drawToggle.classList.toggle("active", drawMode);
+        doodleLayer.classList.toggle("drawing", drawMode);
+      });
+
+      clearDoodle.addEventListener("click", () => {
+        const rect = board.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+      });
+
+      doodleLayer.addEventListener("pointerdown", (event) => {
+        if (!drawMode) return;
+        drawing = true;
+        const rect = board.getBoundingClientRect();
+        lastX = event.clientX - rect.left;
+        lastY = event.clientY - rect.top;
+      });
+
+      doodleLayer.addEventListener("pointermove", (event) => {
+        if (!drawMode || !drawing) return;
+        const rect = board.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        lastX = x;
+        lastY = y;
+      });
+
+      doodleLayer.addEventListener("pointerup", () => {
+        drawing = false;
+      });
+      doodleLayer.addEventListener("pointercancel", () => {
+        drawing = false;
+      });
 
       let prev = performance.now();
       function loop(now) {
@@ -1083,6 +1296,7 @@
         requestAnimationFrame(loop);
       }
 
+      // subtle background chibi
       const bgCount = Math.min(8, Math.max(3, Math.floor(window.innerWidth / 260)));
       for (let i = 0; i < bgCount; i += 1) {
         const ghost = document.createElement("div");
@@ -1108,12 +1322,14 @@
       requestAnimationFrame(() => {
         layoutStaticNotes();
         layoutCursors();
+        resizeCanvas();
         requestAnimationFrame(loop);
       });
 
       window.addEventListener("resize", () => {
         layoutStaticNotes();
         layoutCursors();
+        resizeCanvas();
       });
     })();
   </script>

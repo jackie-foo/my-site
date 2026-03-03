@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Project Placeholder</title>
+  <meta name="description" content="Project detail placeholder." />
+  <meta name="theme-color" content="#ffffff" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #f7f7f7;
+      --ink: #1d1d1d;
+      --muted: #5f5f5f;
+      --line: #dddddd;
+      --card: #ffffff;
+      --shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    .page {
+      width: min(980px, calc(100% - 26px));
+      margin: 0 auto;
+      padding: clamp(20px, 4vw, 48px) 0 60px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .back {
+      text-decoration: none;
+      color: #2c2c2c;
+      font-size: 0.84rem;
+      font-weight: 800;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 11px;
+      background: #fff;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 11px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      padding: clamp(16px, 3vw, 30px);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.5rem, 4.3vw, 2.7rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .summary {
+      margin: 10px 0 0;
+      color: #333;
+      font-size: 0.96rem;
+      line-height: 1.68;
+      font-weight: 600;
+    }
+
+    .collabs {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .collabs img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #efefef;
+    }
+
+    .collabNames {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 0.84rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .panel p,
+    .panel li,
+    .panel a {
+      margin: 0;
+      color: #414141;
+      font-size: 0.87rem;
+      line-height: 1.58;
+      font-weight: 600;
+    }
+
+    .panel ul {
+      margin: 0;
+      padding-left: 16px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .panel a {
+      text-decoration: none;
+      border-bottom: 1px solid #b8b8b8;
+      width: fit-content;
+      padding-bottom: 2px;
+      color: #262626;
+      font-weight: 700;
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="top">
+      <a href="/index2.html" class="back">← Back to Board</a>
+      <span id="projectType" class="chip">Project</span>
+    </div>
+
+    <section class="hero">
+      <div>
+        <h1 id="projectTitle">Project Placeholder</h1>
+        <p id="projectSummary" class="summary">Project summary placeholder.</p>
+        <div id="collabAvatars" class="collabs"></div>
+        <p id="collabNames" class="collabNames"></p>
+      </div>
+
+      <aside class="panel">
+        <h2>Project Context</h2>
+        <p id="projectContext"></p>
+      </aside>
+    </section>
+
+    <section class="panel">
+      <h2>Source Links</h2>
+      <ul id="sourceList"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Placeholder Guide</h2>
+      <ul>
+        <li>Add a project screenshot, GIF, or short demo clip.</li>
+        <li>Write your exact role, team size, and timeline.</li>
+        <li>Summarize one problem, one decision, and one outcome.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const projectId = Number(new URLSearchParams(location.search).get("project") || "1");
+
+      const projects = {
+        1: {
+          type: "Workshop",
+          title: "Feedback Workshop",
+          summary: "Placeholder details for a workshop design focused on reflection and actionable feedback loops.",
+          context: "This is where you explain the problem, your approach, and why this project matters.",
+          collaborators: [
+            { name: "Thanish", avatar: "/pic/chibi1.png" },
+            { name: "Nevin", avatar: "/pic/chibi2.png" }
+          ],
+          sources: [
+            { label: "Source File A", href: "#" },
+            { label: "Source File B", href: "#" },
+            { label: "Reference Notes", href: "#" }
+          ]
+        },
+        2: {
+          type: "Mapping",
+          title: "Journey Mapping Tool",
+          summary: "Placeholder details for a mapping interface to surface friction points in feedback implementation.",
+          context: "Use this section to summarize user groups, design decisions, and outcomes.",
+          collaborators: [
+            { name: "Shen", avatar: "/pic/chibi3.png" },
+            { name: "Samantha", avatar: "/pic/chibi1.png" }
+          ],
+          sources: [
+            { label: "Design Deck", href: "#" },
+            { label: "Prototype Link", href: "#" },
+            { label: "Testing Summary", href: "#" }
+          ]
+        },
+        3: {
+          type: "Dashboard",
+          title: "Live Dashboard",
+          summary: "Placeholder details for a live monitoring dashboard supporting stage-based workshop flows.",
+          context: "Explain what data is monitored, and what decisions this dashboard supports.",
+          collaborators: [
+            { name: "Thanish", avatar: "/pic/chibi2.png" },
+            { name: "Shen", avatar: "/pic/chibi3.png" }
+          ],
+          sources: [
+            { label: "Schema Notes", href: "#" },
+            { label: "UI Specification", href: "#" },
+            { label: "Iteration Log", href: "#" }
+          ]
+        },
+        4: {
+          type: "Workflow",
+          title: "Tutor Workflow",
+          summary: "Placeholder details for tutor process mapping and workflow clarity improvements.",
+          context: "Add your workflow constraints, process steps, and key design tradeoffs here.",
+          collaborators: [
+            { name: "Nevin", avatar: "/pic/chibi2.png" },
+            { name: "Samantha", avatar: "/pic/chibi1.png" }
+          ],
+          sources: [
+            { label: "Workflow Draft", href: "#" },
+            { label: "Review Notes", href: "#" },
+            { label: "Final Export", href: "#" }
+          ]
+        }
+      };
+
+      const project = projects[projectId] || projects[1];
+
+      document.getElementById("projectType").textContent = project.type;
+      document.getElementById("projectTitle").textContent = project.title;
+      document.getElementById("projectSummary").textContent = project.summary;
+      document.getElementById("projectContext").textContent = project.context;
+
+      const avatars = document.getElementById("collabAvatars");
+      const names = document.getElementById("collabNames");
+      avatars.innerHTML = "";
+      project.collaborators.forEach((person) => {
+        const img = document.createElement("img");
+        img.src = person.avatar;
+        img.alt = person.name;
+        avatars.appendChild(img);
+      });
+      names.textContent = `Collaborators: ${project.collaborators.map((p) => p.name).join(", ")}`;
+
+      const list = document.getElementById("sourceList");
+      list.innerHTML = "";
+      project.sources.forEach((source) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = source.href;
+        a.textContent = source.label;
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    })();
+  </script>
+</body>
+</html>
