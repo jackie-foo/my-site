@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jackie Foo | Portfolio Placeholder</title>
+  <meta name="description" content="Portfolio placeholder framework for Jackie Foo." />
+  <meta name="theme-color" content="#f7b34c" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-a: #fff4dd;
+      --bg-b: #ffd48b;
+      --bg-c: #f39f35;
+      --ink: #2f1708;
+      --muted: #664124;
+      --line: rgba(47, 23, 8, 0.14);
+      --card: rgba(255, 248, 235, 0.78);
+      --card-solid: #fff7e8;
+      --accent: #d9571b;
+      --accent-soft: #ffd89f;
+      --shadow: 0 18px 40px rgba(56, 28, 10, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      color: var(--ink);
+      font-family: "Manrope", sans-serif;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(255,255,255,0.62), transparent 34%),
+        radial-gradient(circle at 90% 22%, rgba(255,238,202,0.56), transparent 32%),
+        linear-gradient(160deg, var(--bg-a) 0%, var(--bg-b) 52%, var(--bg-c) 100%);
+      overflow-x: hidden;
+    }
+
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    }
+
+    .blob {
+      position: absolute;
+      width: 38vmax;
+      height: 38vmax;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: 0.42;
+      animation: drift 14s ease-in-out infinite;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.65), rgba(255,255,255,0));
+    }
+
+    .blob.one { top: -16vmax; left: -12vmax; }
+    .blob.two { top: -10vmax; right: -10vmax; animation-delay: -4.2s; }
+    .blob.three { bottom: -18vmax; left: 22vmax; animation-delay: -7s; }
+
+    .rain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .drop {
+      position: absolute;
+      top: -160px;
+      left: 0;
+      width: var(--size, 72px);
+      opacity: var(--op, 0.15);
+      animation: fall var(--dur, 12s) linear infinite;
+      animation-delay: var(--delay, 0s);
+      mix-blend-mode: multiply;
+      filter: drop-shadow(0 6px 12px rgba(97, 56, 25, 0.15));
+    }
+
+    .drop img {
+      width: 100%;
+      display: block;
+      transform: scaleX(var(--flip, 1));
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1120px, calc(100% - 34px));
+      margin: 0 auto;
+      padding: clamp(24px, 5vw, 60px) 0 70px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--card);
+      backdrop-filter: blur(5px);
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 3.2vw, 36px);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: clamp(18px, 3vw, 32px);
+      align-items: center;
+    }
+
+    .pill {
+      width: fit-content;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: rgba(255,255,255,0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ffbf4c;
+      box-shadow: 0 0 0 0 rgba(255,191,76,0.58);
+      animation: ping 1.8s ease-out infinite;
+    }
+
+    h1 {
+      margin: 12px 0 0;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.95rem, 5.4vw, 4.1rem);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+
+    .heroLead {
+      margin: 12px 0 0;
+      max-width: 56ch;
+      color: var(--muted);
+      font-size: clamp(0.95rem, 1.8vw, 1.06rem);
+      line-height: 1.66;
+      font-weight: 600;
+    }
+
+    .heroMeta {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meta {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.68);
+      color: var(--muted);
+    }
+
+    .side {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card-solid);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .side h2 {
+      margin: 0;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .side p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.56;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--card);
+      backdrop-filter: blur(4px);
+      box-shadow: var(--shadow);
+      padding: clamp(16px, 2.6vw, 28px);
+    }
+
+    .sectionTitle {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.15rem, 2.6vw, 1.9rem);
+      letter-spacing: -0.01em;
+    }
+
+    .sectionText {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .portfolioHead {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .portfolioGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .project {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card-solid);
+      padding: 13px;
+      display: grid;
+      gap: 8px;
+      min-height: 178px;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .project:hover {
+      transform: translateY(-3px);
+      border-color: rgba(47, 23, 8, 0.26);
+      box-shadow: 0 10px 20px rgba(56, 28, 10, 0.12);
+    }
+
+    .projectKicker {
+      width: fit-content;
+      border: 1px solid rgba(47, 23, 8, 0.18);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .project h3 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .project p {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .project a {
+      margin-top: auto;
+      text-decoration: none;
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .project a::after {
+      content: "→";
+      transform: translateX(0);
+      transition: transform 150ms ease;
+    }
+
+    .project a:hover::after {
+      transform: translateX(2px);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px) scale(0.985);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .delay-1 { transition-delay: 70ms; }
+    .delay-2 { transition-delay: 140ms; }
+    .delay-3 { transition-delay: 210ms; }
+    .delay-4 { transition-delay: 280ms; }
+    .delay-5 { transition-delay: 350ms; }
+
+    @keyframes fall {
+      from { transform: translate3d(0, -20vh, 0) rotate(0deg); }
+      to { transform: translate3d(var(--drift, 20px), 128vh, 0) rotate(var(--rot, 10deg)); }
+    }
+
+    @keyframes ping {
+      from { box-shadow: 0 0 0 0 rgba(255,191,76,0.58); }
+      to { box-shadow: 0 0 0 9px rgba(255,191,76,0); }
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-12px) translateX(10px); }
+    }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .portfolioGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 660px) {
+      .page { width: min(1120px, calc(100% - 22px)); }
+      .portfolioGrid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .drop,
+      .blob,
+      .pill::before,
+      .project,
+      .reveal {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+    <div id="rain" class="rain"></div>
+  </div>
+
+  <main class="page">
+    <section class="hero reveal">
+      <div>
+        <span class="pill">Portfolio Placeholder</span>
+        <h1 id="name">Jackie Foo</h1>
+        <p id="heroLead" class="heroLead">This page is a framework for your future personal portfolio. Replace text blocks and project details as your real content is ready.</p>
+        <div class="heroMeta">
+          <span id="role" class="meta">Your Role</span>
+          <span id="location" class="meta">Your Location</span>
+          <span id="focus" class="meta">Your Focus Area</span>
+        </div>
+      </div>
+      <aside class="side">
+        <h2>Quick Notes</h2>
+        <p>Use this as your draft structure: About, selected work, outcomes, and links.</p>
+        <p>Each card below is pre-set for one portfolio piece. Replace one by one.</p>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="section reveal delay-1">
+        <h2 class="sectionTitle">About Me</h2>
+        <p class="sectionText" id="aboutText">Write your short bio here. Keep it personal and specific: what you design, why you care, and what kind of projects excite you.</p>
+      </article>
+      <article class="section reveal delay-2">
+        <h2 class="sectionTitle">How To Use This</h2>
+        <p class="sectionText">1) Replace hero info. 2) Update the six cards with real project titles and outcomes. 3) Link each card to details or case study.</p>
+      </article>
+    </section>
+
+    <section class="section reveal delay-3">
+      <div class="portfolioHead">
+        <h2 class="sectionTitle">Selected Work (6)</h2>
+        <p class="sectionText">Replace placeholder copy and links.</p>
+      </div>
+      <div id="portfolioGrid" class="portfolioGrid"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const profile = {
+        name: "Jackie Foo",
+        role: "Designer / Educator",
+        location: "Based in Melbourne",
+        focus: "Learning Experience & Systems"
+      };
+
+      const projects = [
+        { title: "Project 01", type: "Case Study", summary: "Short outcome-focused summary for this project.", href: "#" },
+        { title: "Project 02", type: "Prototype", summary: "Short outcome-focused summary for this project.", href: "#" },
+        { title: "Project 03", type: "Research", summary: "Short outcome-focused summary for this project.", href: "#" },
+        { title: "Project 04", type: "Workshop", summary: "Short outcome-focused summary for this project.", href: "#" },
+        { title: "Project 05", type: "System", summary: "Short outcome-focused summary for this project.", href: "#" },
+        { title: "Project 06", type: "Launch", summary: "Short outcome-focused summary for this project.", href: "#" }
+      ];
+
+      document.getElementById("name").textContent = profile.name;
+      document.getElementById("role").textContent = profile.role;
+      document.getElementById("location").textContent = profile.location;
+      document.getElementById("focus").textContent = profile.focus;
+
+      const grid = document.getElementById("portfolioGrid");
+      projects.forEach((project, i) => {
+        const card = document.createElement("article");
+        card.className = `project reveal delay-${Math.min(5, i)}`;
+
+        card.innerHTML = `
+          <span class="projectKicker">${project.type}</span>
+          <h3>${project.title}</h3>
+          <p>${project.summary}</p>
+          <a href="${project.href}" target="_blank" rel="noopener noreferrer">View details</a>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+      const rain = document.getElementById("rain");
+      const count = Math.min(74, Math.max(32, Math.floor(window.innerWidth / 20)));
+      for (let i = 0; i < count; i += 1) {
+        const drop = document.createElement("div");
+        drop.className = "drop";
+        drop.style.left = `${Math.random() * 100}%`;
+        drop.style.setProperty("--size", `${26 + Math.random() * 60}px`);
+        drop.style.setProperty("--dur", `${10 + Math.random() * 11}s`);
+        drop.style.setProperty("--delay", `${Math.random() * -20}s`);
+        drop.style.setProperty("--op", `${0.08 + Math.random() * 0.14}`);
+        drop.style.setProperty("--drift", `${-30 + Math.random() * 58}px`);
+        drop.style.setProperty("--rot", `${-8 + Math.random() * 16}deg`);
+        drop.style.setProperty("--flip", Math.random() > 0.5 ? "-1" : "1");
+
+        const img = document.createElement("img");
+        img.src = "/pic/chibi3.png";
+        img.alt = "";
+
+        drop.appendChild(img);
+        rain.appendChild(drop);
+      }
+    })();
+  </script>
+</body>
+</html>
