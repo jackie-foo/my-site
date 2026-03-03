@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jackie Foo | Board</title>
-  <meta name="description" content="Interactive board-style portfolio." />
+  <title>Jackie Foo | Collaboration Board</title>
+  <meta name="description" content="Interactive collaboration-style project board." />
   <meta name="theme-color" content="#f3f3f3" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,12 +13,13 @@
 
   <style>
     :root {
-      --bg: #f2f2f2;
+      --bg: #f3f3f3;
       --ink: #1f1f1f;
-      --muted: #595959;
+      --muted: #656565;
       --line: #dddddd;
       --white: #ffffff;
-      --shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+      --shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+      --soft-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
     }
 
     * { box-sizing: border-box; }
@@ -26,11 +27,12 @@
     html,
     body {
       margin: 0;
-      min-height: 100%;
-      font-family: "Manrope", sans-serif;
-      color: var(--ink);
-      background: var(--bg);
+      width: 100%;
+      height: 100%;
       overflow: hidden;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Manrope", sans-serif;
     }
 
     .splash {
@@ -45,8 +47,8 @@
 
     .splash h1 {
       margin: 0;
-      font-size: clamp(3.8rem, 14vw, 11rem);
-      line-height: 0.9;
+      font-size: clamp(3.8rem, 13vw, 10rem);
+      line-height: 0.88;
       letter-spacing: -0.06em;
       color: #111;
     }
@@ -62,15 +64,15 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 56px;
-      background: rgba(255, 255, 255, 0.94);
+      height: 58px;
       border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(3px);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 14px;
-      z-index: 20;
-      backdrop-filter: blur(3px);
+      padding: 0 12px;
+      z-index: 30;
     }
 
     .brand {
@@ -79,78 +81,102 @@
       gap: 8px;
       font-size: 0.9rem;
       font-weight: 800;
-      color: #2a2a2a;
+      color: #222;
+      letter-spacing: 0.01em;
     }
 
     .brandDot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: #ffcd59;
+      background: #ffcc57;
     }
 
-    .topHint {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #6a6a6a;
+    .rightControls {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .activeUsers {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .activeUsers img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #f0f0f0;
+    }
+
+    .tiny {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      color: #575757;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .shareBtn {
+      border: 1px solid #1f1f1f;
+      border-radius: 8px;
+      background: #1f1f1f;
+      color: #fff;
+      height: 30px;
+      padding: 0 10px;
+      font: inherit;
+      font-size: 0.76rem;
+      font-weight: 800;
       letter-spacing: 0.02em;
+      cursor: pointer;
     }
 
-    .tools {
+    .leftTools {
       position: fixed;
-      top: 74px;
+      top: 76px;
       left: 12px;
-      width: 42px;
+      width: 44px;
       border: 1px solid var(--line);
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--soft-shadow);
       padding: 8px 6px;
       display: grid;
       gap: 8px;
-      z-index: 15;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+      z-index: 22;
     }
 
     .tool {
       width: 100%;
       aspect-ratio: 1 / 1;
-      border: 1px solid #e2e2e2;
+      border: 1px solid #e5e5e5;
       border-radius: 8px;
       background: #fff;
       display: grid;
       place-items: center;
-      color: #777;
       font-size: 0.76rem;
       font-weight: 800;
-    }
-
-    .chibi-layer {
-      position: fixed;
-      inset: 56px 0 0 0;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-      opacity: 0.38;
-    }
-
-    .chibi-float {
-      position: absolute;
-      width: var(--size, 86px);
-      opacity: var(--op, 0.09);
-      animation: drift var(--dur, 20s) ease-in-out infinite alternate;
-      filter: blur(0.2px);
-    }
-
-    .chibi-float img {
-      width: 100%;
-      display: block;
-      transform: scaleX(var(--flip, 1));
+      color: #777;
     }
 
     .board {
       position: fixed;
-      inset: 56px 0 0 0;
-      z-index: 5;
+      inset: 58px 0 0 0;
+      z-index: 10;
       overflow: hidden;
       background:
         linear-gradient(transparent 97%, #e8e8e8 97%),
@@ -158,7 +184,14 @@
       background-size: 34px 34px;
     }
 
-    .centerLine {
+    .world {
+      position: absolute;
+      inset: 0;
+      transform-origin: center center;
+      transition: transform 220ms ease;
+    }
+
+    .centerCopy {
       position: absolute;
       left: 50%;
       top: 50%;
@@ -168,87 +201,90 @@
       z-index: 2;
     }
 
-    .centerLine h2 {
+    .centerCopy h2 {
       margin: 0;
       font-size: clamp(1.7rem, 4.4vw, 3rem);
       letter-spacing: -0.02em;
+      color: #2a2a2a;
     }
 
-    .centerLine span {
+    .centerCopy span {
       display: block;
-      margin-top: 5px;
+      margin-top: 6px;
       font-family: "Caveat", cursive;
-      font-size: clamp(1.1rem, 2.8vw, 1.8rem);
-      color: #ff7ea8;
+      font-size: clamp(1.2rem, 2.9vw, 2rem);
+      color: #ff80a7;
     }
 
-    .node {
+    .draw {
       position: absolute;
-      width: clamp(170px, 19vw, 230px);
+      pointer-events: none;
+      z-index: 2;
+      color: #ff88ad;
+      font-family: "Caveat", cursive;
+      font-size: 2rem;
+      transform: rotate(var(--r, 0deg));
+      opacity: 0.86;
+    }
+
+    .d1 { left: 16%; top: 18%; --r: -8deg; }
+    .d2 { right: 20%; top: 22%; --r: 7deg; }
+    .d3 { left: 28%; bottom: 16%; --r: -5deg; }
+
+    .bgChibi {
+      position: absolute;
+      width: var(--size, 82px);
+      opacity: var(--op, 0.06);
+      filter: blur(0.2px);
+      pointer-events: none;
+      z-index: 1;
+      animation: drift var(--dur, 18s) ease-in-out infinite alternate;
+    }
+
+    .bgChibi img {
+      width: 100%;
+      display: block;
+      transform: scaleX(var(--flip, 1));
+    }
+
+    .notes,
+    .cursorLayer {
+      position: absolute;
+      inset: 0;
+    }
+
+    .note {
+      position: absolute;
+      width: clamp(170px, 20vw, 230px);
       border-radius: 4px;
       padding: 10px;
       box-shadow: var(--shadow);
+      z-index: 8;
       user-select: none;
       touch-action: none;
       cursor: grab;
-      z-index: 10;
-      transition: transform 130ms ease, box-shadow 130ms ease;
+      transition: box-shadow 130ms ease, transform 130ms ease;
     }
 
-    .node:hover,
-    .node.is-paused {
+    .note:hover,
+    .note.is-paused {
       transform: scale(1.02);
-      box-shadow: 0 14px 22px rgba(0, 0, 0, 0.16);
+      box-shadow: 0 14px 24px rgba(0, 0, 0, 0.16);
     }
 
-    .sticky-yellow { background: #f7efad; }
-    .sticky-pink { background: #f8d6e7; }
-    .sticky-blue { background: #cfdcfa; }
-    .sticky-green { background: #cfeebd; }
-    .sticky-white { background: #ffffff; }
-
-    .nodeTag {
-      width: fit-content;
-      border-radius: 999px;
-      padding: 3px 8px;
-      font-size: 0.67rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      background: rgba(255, 255, 255, 0.8);
-      color: #555;
-      margin-bottom: 7px;
+    .note.is-collab {
+      opacity: 0.55;
     }
 
-    .node h3 {
-      margin: 0;
-      font-size: 1rem;
-      line-height: 1.3;
-      letter-spacing: -0.01em;
-    }
+    .note-sm { width: clamp(150px, 16vw, 190px); }
+    .note-lg { width: clamp(210px, 23vw, 285px); }
+    .note-photo { width: clamp(154px, 17vw, 200px); }
 
-    .node p {
-      margin: 8px 0 0;
-      font-size: 0.86rem;
-      line-height: 1.5;
-      color: #343434;
-      font-weight: 600;
-    }
-
-    .node a {
-      display: inline-flex;
-      margin-top: 8px;
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 800;
-      color: #1e1e1e;
-      border-bottom: 1px solid #888;
-      padding-bottom: 2px;
-    }
-
-    .node a:hover {
-      border-color: #1e1e1e;
-    }
+    .tone-yellow { background: #f8efad; }
+    .tone-pink { background: #f8d5e7; }
+    .tone-blue { background: #cfdcfa; }
+    .tone-green { background: #d0efbe; }
+    .tone-white { background: #ffffff; }
 
     .pin {
       position: absolute;
@@ -257,15 +293,54 @@
       width: 11px;
       height: 11px;
       border-radius: 50%;
-      background: #ff5a5a;
+      background: #ff5e5e;
       box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
     }
 
-    .introCard {
-      width: clamp(220px, 24vw, 280px);
+    .tag {
+      width: fit-content;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      color: #555;
+      padding: 3px 8px;
+      font-size: 0.67rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 7px;
     }
 
-    .avatar {
+    .note h3 {
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+
+    .note p {
+      margin: 8px 0 0;
+      color: #343434;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .note a {
+      display: inline-flex;
+      margin-top: 8px;
+      color: #1e1e1e;
+      font-size: 0.79rem;
+      font-weight: 800;
+      text-decoration: none;
+      border-bottom: 1px solid #888;
+      padding-bottom: 2px;
+    }
+
+    .note a:hover {
+      border-color: #1e1e1e;
+    }
+
+    .photo {
       width: 100%;
       border-radius: 3px;
       aspect-ratio: 1 / 1;
@@ -274,34 +349,156 @@
       margin-top: 6px;
     }
 
-    .draw {
+    .collabCursor {
       position: absolute;
+      z-index: 12;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       pointer-events: none;
-      z-index: 3;
-      color: #ff7ea8;
-      font-family: "Caveat", cursive;
-      font-size: 2rem;
-      transform: rotate(var(--r, 0deg));
-      opacity: 0.9;
+      transition: opacity 120ms ease;
     }
 
-    .d1 { left: 14%; top: 18%; --r: -10deg; }
-    .d2 { right: 20%; top: 22%; --r: 8deg; }
-    .d3 { left: 28%; bottom: 17%; --r: -4deg; }
+    .cursorArrow {
+      width: 12px;
+      height: 12px;
+      background: #3f3f3f;
+      clip-path: polygon(0 0, 100% 50%, 0 100%, 18% 56%, 0 0);
+      transform: rotate(-20deg);
+    }
+
+    .cursorTag {
+      border-radius: 999px;
+      background: #222;
+      color: #fff;
+      padding: 3px 8px;
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .collabCursor.over {
+      opacity: 0.28;
+    }
+
+    .zoomPanel {
+      position: absolute;
+      right: 14px;
+      top: 16px;
+      width: clamp(180px, 21vw, 250px);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--soft-shadow);
+      z-index: 14;
+      overflow: hidden;
+    }
+
+    .zoomHead {
+      padding: 8px 10px;
+      border-bottom: 1px solid #ececec;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #666;
+    }
+
+    .zoomTiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: #ececec;
+    }
+
+    .tile {
+      background: #fff;
+      aspect-ratio: 1.1 / 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tile span {
+      position: absolute;
+      left: 6px;
+      bottom: 6px;
+      background: rgba(0, 0, 0, 0.72);
+      color: #fff;
+      font-size: 0.63rem;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 2px 5px;
+    }
+
+    .zoomDock {
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 40;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: var(--soft-shadow);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px;
+    }
+
+    .zoomBtn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fff;
+      color: #494949;
+      font-size: 1rem;
+      line-height: 1;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .zoomLabel {
+      min-width: 56px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #4a4a4a;
+      padding: 0 6px;
+      transition: transform 180ms ease;
+    }
+
+    .zoomLabel.bump {
+      transform: scale(1.08);
+    }
 
     @keyframes drift {
       from { transform: translate3d(0, 0, 0) rotate(0deg); }
       to { transform: translate3d(var(--dx, 10px), var(--dy, -12px), 0) rotate(var(--dr, 4deg)); }
     }
 
-    @media (max-width: 760px) {
-      .tools { display: none; }
-      .node { width: clamp(160px, 46vw, 220px); }
+    @media (max-width: 860px) {
+      .leftTools,
+      .zoomPanel {
+        display: none;
+      }
+      .note { width: clamp(160px, 44vw, 220px); }
+      .note-sm { width: clamp(146px, 38vw, 184px); }
+      .note-lg { width: clamp(190px, 52vw, 260px); }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .chibi-float,
-      .node {
+      .bgChibi,
+      .note,
+      .zoomLabel {
         animation: none !important;
         transition: none !important;
       }
@@ -309,16 +506,24 @@
   </style>
 </head>
 <body>
-  <div id="splash" class="splash" aria-hidden="true">
-    <h1>404</h1>
-  </div>
+  <div id="splash" class="splash" aria-hidden="true"><h1>404</h1></div>
 
   <header class="topbar">
     <div class="brand"><span class="brandDot"></span>jackie board</div>
-    <div class="topHint">drag notes • hover to pause</div>
+    <div class="rightControls">
+      <div class="activeUsers" title="Active collaborators">
+        <img src="/pic/chibi1.png" alt="active 1" />
+        <img src="/pic/chibi2.png" alt="active 2" />
+        <img src="/pic/chibi3.png" alt="active 3" />
+      </div>
+      <a class="tiny" href="#" aria-label="LinkedIn">in</a>
+      <a class="tiny" href="#" aria-label="GitHub">gh</a>
+      <a class="tiny" href="mailto:you@email.com" aria-label="Email">@</a>
+      <button class="shareBtn" type="button">Share</button>
+    </div>
   </header>
 
-  <aside class="tools" aria-hidden="true">
+  <aside class="leftTools" aria-hidden="true">
     <div class="tool">↖</div>
     <div class="tool">T</div>
     <div class="tool">□</div>
@@ -326,128 +531,184 @@
     <div class="tool">⋯</div>
   </aside>
 
-  <div id="chibiLayer" class="chibi-layer" aria-hidden="true"></div>
-
   <main id="board" class="board">
-    <div class="centerLine">
-      <h2>Let&apos;s explore</h2>
-      <span>catch a card to begin</span>
+    <div id="world" class="world">
+      <div class="centerCopy">
+        <h2>Let&apos;s explore</h2>
+        <span>catch a card to start</span>
+      </div>
+      <div class="draw d1">✦</div>
+      <div class="draw d2">✋</div>
+      <div class="draw d3">↯</div>
+
+      <section id="notesLayer" class="notes"></section>
+      <section id="cursorLayer" class="cursorLayer"></section>
+
+      <aside class="zoomPanel" aria-hidden="true">
+        <div class="zoomHead">Live Collaboration</div>
+        <div class="zoomTiles">
+          <div class="tile"><img src="/pic/chibi1.png" alt="participant" /><span>Jackie</span></div>
+          <div class="tile"><img src="/pic/chibi2.png" alt="participant" /><span>Renny</span></div>
+          <div class="tile"><img src="/pic/chibi3.png" alt="participant" /><span>Maggie</span></div>
+          <div class="tile"><img src="/pic/chibi1.png" alt="participant" /><span>Emilio</span></div>
+        </div>
+      </aside>
     </div>
-    <div class="draw d1">✦</div>
-    <div class="draw d2">✋</div>
-    <div class="draw d3">↯</div>
   </main>
+
+  <div class="zoomDock">
+    <button id="zoomOut" class="zoomBtn" type="button" aria-label="Zoom out">-</button>
+    <div id="zoomLabel" class="zoomLabel">100%</div>
+    <button id="zoomIn" class="zoomBtn" type="button" aria-label="Zoom in">+</button>
+  </div>
 
   <script>
     (() => {
-      const board = document.getElementById("board");
-      const splash = document.getElementById("splash");
-      const chibiLayer = document.getElementById("chibiLayer");
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const splash = document.getElementById("splash");
+      const board = document.getElementById("board");
+      const world = document.getElementById("world");
+      const notesLayer = document.getElementById("notesLayer");
+      const cursorLayer = document.getElementById("cursorLayer");
+      const zoomLabel = document.getElementById("zoomLabel");
+      const zoomIn = document.getElementById("zoomIn");
+      const zoomOut = document.getElementById("zoomOut");
 
       setTimeout(() => {
         splash.classList.add("hide");
       }, 1500);
 
+      let zoom = 1;
+      function applyZoom() {
+        world.style.transform = `scale(${zoom})`;
+        zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
+        zoomLabel.classList.remove("bump");
+        void zoomLabel.offsetWidth;
+        zoomLabel.classList.add("bump");
+      }
+
+      zoomIn.addEventListener("click", () => {
+        zoom = Math.min(1.35, zoom + 0.05);
+        applyZoom();
+      });
+
+      zoomOut.addEventListener("click", () => {
+        zoom = Math.max(0.8, zoom - 0.05);
+        applyZoom();
+      });
+
       const notesData = [
         {
-          kind: "intro",
-          tone: "sticky-yellow",
+          tone: "tone-yellow",
+          size: "note-lg",
           tag: "About Me",
           title: "Jackie Foo",
           text: "I design learning experiences and implementation systems that help people act on feedback clearly.",
-          x: 0.14,
-          y: 0.2,
-          vx: 9,
-          vy: 12,
-          extra: "image"
+          x: 0.15,
+          y: 0.18,
+          vx: 8,
+          vy: 10,
+          photo: "/pic/chibi1.png"
         },
         {
-          kind: "project",
-          tone: "sticky-pink",
+          tone: "tone-pink",
+          size: "note",
           tag: "Project 01",
           title: "Feedback Workshop",
           text: "Interactive workshop design for reflection and action.",
           href: "#",
-          x: 0.36,
-          y: 0.13,
+          x: 0.38,
+          y: 0.12,
           vx: -13,
-          vy: 11
-        },
-        {
-          kind: "project",
-          tone: "sticky-green",
-          tag: "Project 02",
-          title: "Journey Mapping Tool",
-          text: "Prompt-first mapping tool for student/tutor friction.",
-          href: "#",
-          x: 0.63,
-          y: 0.17,
-          vx: 14,
-          vy: -8
-        },
-        {
-          kind: "project",
-          tone: "sticky-blue",
-          tag: "Project 03",
-          title: "Live Dashboard",
-          text: "Multi-stage monitoring with cleaner workshop orchestration.",
-          href: "#",
-          x: 0.72,
-          y: 0.48,
-          vx: -11,
           vy: 9
         },
         {
-          kind: "project",
-          tone: "sticky-white",
+          tone: "tone-green",
+          size: "note-sm",
+          tag: "Project 02",
+          title: "Journey Mapping Tool",
+          text: "Prompt-first mapping for student/tutor friction.",
+          href: "#",
+          x: 0.64,
+          y: 0.16,
+          vx: 11,
+          vy: -8
+        },
+        {
+          tone: "tone-blue",
+          size: "note",
+          tag: "Project 03",
+          title: "Live Dashboard",
+          text: "Multi-stage monitoring and cleaner workshop flow.",
+          href: "#",
+          x: 0.72,
+          y: 0.5,
+          vx: -10,
+          vy: 8
+        },
+        {
+          tone: "tone-white",
+          size: "note-photo",
+          tag: "Photo",
+          title: "Behind The Scenes",
+          text: "",
+          x: 0.28,
+          y: 0.58,
+          vx: 9,
+          vy: 7,
+          photo: "/pic/chibi2.png"
+        },
+        {
+          tone: "tone-yellow",
+          size: "note-sm",
           tag: "Project 04",
           title: "Tutor Workflow",
           text: "Flow-based marking map with practical constraints.",
           href: "#",
-          x: 0.23,
-          y: 0.55,
-          vx: 10,
-          vy: 8
+          x: 0.52,
+          y: 0.68,
+          vx: -8,
+          vy: -10
         },
         {
-          kind: "project",
-          tone: "sticky-yellow",
+          tone: "tone-pink",
+          size: "note-sm",
           tag: "Project 05",
           title: "Prompted Notes",
           text: "Sticky-note strategy to surface deeper reflection.",
           href: "#",
-          x: 0.52,
-          y: 0.66,
-          vx: -8,
-          vy: -12
-        },
-        {
-          kind: "project",
-          tone: "sticky-pink",
-          tag: "Project 06",
-          title: "Portfolio Narrative",
-          text: "Story-driven portfolio experiments with interaction.",
-          href: "#",
           x: 0.8,
           y: 0.72,
           vx: 8,
-          vy: -9
+          vy: -8
+        },
+        {
+          tone: "tone-white",
+          size: "note-photo",
+          tag: "Photo",
+          title: "Mood Frame",
+          text: "",
+          x: 0.58,
+          y: 0.34,
+          vx: -7,
+          vy: 9,
+          photo: "/pic/chibi1.png"
         }
       ];
 
       const states = notesData.map((item) => {
         const note = document.createElement("article");
-        note.className = `node ${item.tone}${item.kind === "intro" ? " introCard" : ""}`;
+        note.className = `note ${item.tone} ${item.size || ""}`;
         note.innerHTML = `
           <div class="pin"></div>
-          <div class="nodeTag">${item.tag}</div>
+          <div class="tag">${item.tag}</div>
           <h3>${item.title}</h3>
-          <p>${item.text}</p>
+          ${item.text ? `<p>${item.text}</p>` : ""}
           ${item.href ? `<a href="${item.href}" target="_blank" rel="noopener noreferrer">Open project</a>` : ""}
-          ${item.extra === "image" ? '<img class="avatar" src="/pic/chibi1.png" alt="Jackie" />' : ""}
+          ${item.photo ? `<img class="photo" src="${item.photo}" alt="placeholder" />` : ""}
         `;
-        board.appendChild(note);
+        notesLayer.appendChild(note);
 
         const state = {
           el: note,
@@ -459,25 +720,26 @@
           h: 0,
           vx: item.vx,
           vy: item.vy,
-          pause: false,
-          drag: false
+          paused: false,
+          drag: false,
+          collab: false
         };
 
         note.addEventListener("mouseenter", () => {
-          state.pause = true;
+          state.paused = true;
           note.classList.add("is-paused");
         });
 
         note.addEventListener("mouseleave", () => {
           if (!state.drag) {
-            state.pause = false;
+            state.paused = false;
             note.classList.remove("is-paused");
           }
         });
 
         note.addEventListener("pointerdown", (event) => {
           state.drag = true;
-          state.pause = true;
+          state.paused = true;
           note.classList.add("is-paused");
           note.setPointerCapture(event.pointerId);
         });
@@ -485,26 +747,54 @@
         note.addEventListener("pointermove", (event) => {
           if (!state.drag) return;
           const rect = board.getBoundingClientRect();
-          state.x = event.clientX - rect.left - state.w / 2;
-          state.y = event.clientY - rect.top - state.h / 2;
-          clamp(state, rect.width, rect.height);
+          const localX = (event.clientX - rect.left) / zoom;
+          const localY = (event.clientY - rect.top) / zoom;
+          state.x = localX - state.w / 2;
+          state.y = localY - state.h / 2;
+          clamp(state, rect.width / zoom, rect.height / zoom);
           render(state);
         });
 
         note.addEventListener("pointerup", (event) => {
           state.drag = false;
-          state.pause = false;
+          state.paused = false;
           note.classList.remove("is-paused");
           try { note.releasePointerCapture(event.pointerId); } catch (_) {}
         });
 
         note.addEventListener("pointercancel", () => {
           state.drag = false;
-          state.pause = false;
+          state.paused = false;
           note.classList.remove("is-paused");
         });
 
         return state;
+      });
+
+      const collaborators = [
+        { name: "renny", color: "#222", x: 0.18, y: 0.3, vx: 25, vy: 20 },
+        { name: "maggie", color: "#3a5fe8", x: 0.44, y: 0.46, vx: -22, vy: 17 },
+        { name: "emilio", color: "#d34f84", x: 0.72, y: 0.28, vx: 19, vy: -20 }
+      ];
+
+      const cursorStates = collaborators.map((item) => {
+        const el = document.createElement("div");
+        el.className = "collabCursor";
+        el.innerHTML = `<span class="cursorArrow"></span><span class="cursorTag">${item.name}</span>`;
+        el.querySelector(".cursorTag").style.background = item.color;
+        cursorLayer.appendChild(el);
+
+        return {
+          el,
+          xPct: item.x,
+          yPct: item.y,
+          x: 0,
+          y: 0,
+          vx: item.vx,
+          vy: item.vy,
+          w: 0,
+          h: 0
+        };
       });
 
       function render(state) {
@@ -517,16 +807,33 @@
         state.y = Math.max(pad, Math.min(state.y, height - state.h - pad));
       }
 
+      function intersects(a, b) {
+        return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+      }
+
       function initialLayout() {
         const rect = board.getBoundingClientRect();
+        const w = rect.width / zoom;
+        const h = rect.height / zoom;
+
         states.forEach((state) => {
           const nRect = state.el.getBoundingClientRect();
           state.w = nRect.width;
           state.h = nRect.height;
-          state.x = rect.width * state.xPct;
-          state.y = rect.height * state.yPct;
-          clamp(state, rect.width, rect.height);
+          state.x = w * state.xPct;
+          state.y = h * state.yPct;
+          clamp(state, w, h);
           render(state);
+        });
+
+        cursorStates.forEach((cursor) => {
+          const cRect = cursor.el.getBoundingClientRect();
+          cursor.w = cRect.width;
+          cursor.h = cRect.height;
+          cursor.x = w * cursor.xPct;
+          cursor.y = h * cursor.yPct;
+          clamp(cursor, w, h);
+          render(cursor);
         });
       }
 
@@ -537,53 +844,89 @@
 
         if (!reducedMotion) {
           const rect = board.getBoundingClientRect();
+          const w = rect.width / zoom;
+          const h = rect.height / zoom;
+
           states.forEach((state) => {
-            if (!state.pause && !state.drag) {
+            state.collab = false;
+            if (!state.paused && !state.drag) {
               state.x += state.vx * dt;
               state.y += state.vy * dt;
 
-              if (state.x <= 4 || state.x + state.w >= rect.width - 4) {
+              if (state.x <= 4 || state.x + state.w >= w - 4) {
                 state.vx *= -1;
-                state.x = Math.max(4, Math.min(state.x, rect.width - state.w - 4));
+                state.x = Math.max(4, Math.min(state.x, w - state.w - 4));
               }
-              if (state.y <= 4 || state.y + state.h >= rect.height - 4) {
+              if (state.y <= 4 || state.y + state.h >= h - 4) {
                 state.vy *= -1;
-                state.y = Math.max(4, Math.min(state.y, rect.height - state.h - 4));
+                state.y = Math.max(4, Math.min(state.y, h - state.h - 4));
               }
 
               render(state);
             }
+          });
+
+          cursorStates.forEach((cursor) => {
+            cursor.x += cursor.vx * dt;
+            cursor.y += cursor.vy * dt;
+
+            if (cursor.x <= 2 || cursor.x + cursor.w >= w - 2) {
+              cursor.vx *= -1;
+              cursor.x = Math.max(2, Math.min(cursor.x, w - cursor.w - 2));
+            }
+            if (cursor.y <= 2 || cursor.y + cursor.h >= h - 2) {
+              cursor.vy *= -1;
+              cursor.y = Math.max(2, Math.min(cursor.y, h - cursor.h - 2));
+            }
+
+            const cBox = { x: cursor.x, y: cursor.y, w: cursor.w, h: cursor.h };
+            let over = false;
+            states.forEach((state) => {
+              const sBox = { x: state.x, y: state.y, w: state.w, h: state.h };
+              if (intersects(cBox, sBox)) {
+                over = true;
+                state.collab = true;
+              }
+            });
+
+            cursor.el.classList.toggle("over", over);
+            render(cursor);
+          });
+
+          states.forEach((state) => {
+            state.el.classList.toggle("is-collab", state.collab);
           });
         }
 
         requestAnimationFrame(loop);
       }
 
-      initialLayout();
-      requestAnimationFrame(loop);
-      window.addEventListener("resize", initialLayout);
-
-      // Subtle chibi background (reduced count)
-      const chibiCount = Math.min(12, Math.max(5, Math.floor(window.innerWidth / 220)));
-      for (let i = 0; i < chibiCount; i += 1) {
-        const item = document.createElement("div");
-        item.className = "chibi-float";
-        item.style.left = `${Math.random() * 100}%`;
-        item.style.top = `${Math.random() * 100}%`;
-        item.style.setProperty("--size", `${52 + Math.random() * 86}px`);
-        item.style.setProperty("--op", `${0.035 + Math.random() * 0.07}`);
-        item.style.setProperty("--dur", `${14 + Math.random() * 22}s`);
-        item.style.setProperty("--dx", `${-20 + Math.random() * 40}px`);
-        item.style.setProperty("--dy", `${-24 + Math.random() * 48}px`);
-        item.style.setProperty("--dr", `${-5 + Math.random() * 10}deg`);
-        item.style.setProperty("--flip", Math.random() > 0.5 ? "-1" : "1");
+      // subtle static background chibi (reduced)
+      const bgCount = Math.min(8, Math.max(3, Math.floor(window.innerWidth / 260)));
+      for (let i = 0; i < bgCount; i += 1) {
+        const ghost = document.createElement("div");
+        ghost.className = "bgChibi";
+        ghost.style.left = `${Math.random() * 100}%`;
+        ghost.style.top = `${Math.random() * 100}%`;
+        ghost.style.setProperty("--size", `${60 + Math.random() * 90}px`);
+        ghost.style.setProperty("--op", `${0.03 + Math.random() * 0.06}`);
+        ghost.style.setProperty("--dur", `${15 + Math.random() * 18}s`);
+        ghost.style.setProperty("--dx", `${-18 + Math.random() * 36}px`);
+        ghost.style.setProperty("--dy", `${-20 + Math.random() * 40}px`);
+        ghost.style.setProperty("--dr", `${-5 + Math.random() * 10}deg`);
+        ghost.style.setProperty("--flip", Math.random() > 0.5 ? "-1" : "1");
 
         const img = document.createElement("img");
         img.src = "/pic/chibi3.png";
         img.alt = "";
-        item.appendChild(img);
-        chibiLayer.appendChild(item);
+        ghost.appendChild(img);
+        world.appendChild(ghost);
       }
+
+      applyZoom();
+      initialLayout();
+      requestAnimationFrame(loop);
+      window.addEventListener("resize", initialLayout);
     })();
   </script>
 </body>
