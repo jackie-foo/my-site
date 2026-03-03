@@ -214,91 +214,86 @@
       max-width: 62ch;
     }
 
-    .projectsShell {
-      margin-top: 14px;
-      position: relative;
-      padding: 0 clamp(0px, 5vw, 52px);
+    .projectFlow {
+      margin-top: 18px;
+      display: grid;
+      gap: 22px;
+      max-width: 1080px;
+      margin-inline: auto;
     }
 
-    .portfolioBoard {
+    .flowItem {
       position: relative;
-      max-width: 1060px;
-      margin: 0 auto;
-      border: 3px solid #37342f;
-      border-radius: 30px;
-      background: #fffef9;
-      padding: clamp(16px, 2.8vw, 28px);
-      box-shadow: 0 14px 24px rgba(35, 30, 20, 0.08);
+      display: grid;
+      grid-template-columns: minmax(260px, 0.95fr) minmax(280px, 1fr);
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 24px;
+      background: linear-gradient(130deg, #fffef9, #fffdf5);
+      border: 1px solid #e9dfc9;
+      box-shadow: 0 10px 20px rgba(56, 44, 30, 0.06);
       overflow: hidden;
     }
 
-    .boardHead {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 16px;
+    .flowItem::before {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      top: -190px;
+      right: -110px;
+      background: radial-gradient(circle at center, rgba(255, 241, 182, 0.45), rgba(255, 241, 182, 0));
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .boardHead span {
-      font-family: "Gaegu", cursive;
-      font-size: clamp(1.6rem, 3.2vw, 2.5rem);
-      font-weight: 700;
-      color: #34322e;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .flowItem:nth-child(even) {
+      grid-template-columns: minmax(280px, 1fr) minmax(260px, 0.95fr);
     }
 
-    .boardHead a {
-      border: 1px solid #2f2f2f;
-      border-radius: 999px;
-      padding: 6px 12px;
-      color: #f7f7f7;
-      background: #1f1f1f;
-      text-decoration: none;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+    .flowItem:nth-child(even) .flowArt {
+      order: 2;
     }
 
-    .featuredCard {
-      display: grid;
-      grid-template-columns: 1.06fr 1fr;
-      gap: 14px;
-      align-items: center;
-      border: 1px solid #ddd4c6;
+    .flowItem:nth-child(even) .flowBody {
+      order: 1;
+    }
+
+    .flowArt,
+    .flowBody {
+      position: relative;
+      z-index: 1;
+    }
+
+    .flowArt {
       border-radius: 18px;
-      background: #fffdf8;
-      padding: 12px;
-    }
-
-    .projectVisual {
-      border-radius: 14px;
-      background:
-        linear-gradient(160deg, rgba(243, 255, 167, 0.88) 0 56%, transparent 56% 100%),
-        #f4f1e7;
-      min-height: 246px;
+      min-height: 236px;
       display: grid;
       place-items: center;
       overflow: hidden;
+      background:
+        linear-gradient(160deg, rgba(226, 255, 136, 0.9) 0 58%, transparent 58% 100%),
+        #f4f1e7;
     }
 
-    .projectVisual img {
-      width: min(78%, 260px);
+    .flowArt img {
+      width: min(72%, 260px);
       height: auto;
       object-fit: contain;
       display: block;
       filter: saturate(1.02) contrast(1.03);
     }
 
-    .projectDetails {
+    .flowBody {
       display: grid;
       gap: 8px;
       align-content: start;
+      padding: 2px;
     }
 
-    .projectNum {
+    .flowNum {
       font-family: "Gaegu", cursive;
       font-size: 1.2rem;
       font-weight: 700;
@@ -307,21 +302,22 @@
       letter-spacing: 0.03em;
     }
 
-    .projectTitle {
+    .flowTitle {
       margin: 0;
       font-family: "Gaegu", cursive;
-      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
       line-height: 1.03;
     }
 
-    .projectDesc {
+    .flowDesc {
       margin: 0;
-      font-size: 0.92rem;
-      line-height: 1.52;
+      font-size: 0.94rem;
+      line-height: 1.55;
       color: #37342f;
+      max-width: 60ch;
     }
 
-    .projectLink {
+    .flowLink {
       width: fit-content;
       color: #242220;
       text-decoration: none;
@@ -333,78 +329,8 @@
       padding-bottom: 2px;
     }
 
-    .projectGrid {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(200px, 1fr));
-      gap: 12px;
-    }
-
-    .projectCard {
-      border: 1px solid #d4ccbc;
-      border-radius: 18px;
-      background: #fffdf7;
-      padding: 10px;
-      display: grid;
-      gap: 10px;
-      box-shadow: 0 6px 14px rgba(50, 40, 28, 0.08);
-      min-height: 240px;
-    }
-
-    .art {
-      border-radius: 14px;
-      background:
-        linear-gradient(160deg, rgba(227, 255, 142, 0.88) 0 55%, transparent 55% 100%),
-        #f2efe6;
-      min-height: 138px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-    }
-
-    .art img {
-      width: min(70%, 188px);
-      height: auto;
-      object-fit: contain;
-      display: block;
-      filter: saturate(0.98) contrast(1.04);
-    }
-
-    .projectCard .num {
-      font-family: "Gaegu", cursive;
-      font-size: 1.14rem;
-      font-weight: 700;
-      color: #5f5a52;
-    }
-
-    .projectCard h4 {
-      margin: 0;
-      font-family: "Gaegu", cursive;
-      font-size: clamp(1.35rem, 2.2vw, 1.8rem);
-      line-height: 1.02;
-    }
-
-    .projectCard p {
-      margin: 0;
-      font-size: 0.86rem;
-      line-height: 1.48;
-      color: #34322f;
-    }
-
-    .projectCard a {
-      width: fit-content;
-      color: #262422;
-      text-decoration: none;
-      border-bottom: 1px solid #76706a;
-      font-size: 0.79rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      padding-bottom: 2px;
-    }
-
     .collab {
-      margin-top: auto;
+      margin-top: 2px;
       display: inline-flex;
       align-items: center;
       gap: 5px;
@@ -422,58 +348,6 @@
       border-radius: 50%;
       object-fit: cover;
       border: 1px solid #e6dfd3;
-    }
-
-    .peekCard {
-      position: absolute;
-      top: 144px;
-      width: clamp(190px, 20vw, 240px);
-      border: 1px solid #d4ccbc;
-      border-radius: 18px;
-      background: #fffdf7;
-      padding: 10px;
-      box-shadow: 0 8px 16px rgba(42, 35, 24, 0.08);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 0;
-      transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 420ms ease;
-    }
-
-    .peekCard .num {
-      margin-top: 7px;
-      font-family: "Gaegu", cursive;
-      font-size: 1.16rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      color: #55524c;
-    }
-
-    .peekCard p {
-      margin: 2px 0 0;
-      font-size: 0.84rem;
-      line-height: 1.42;
-      color: #4a4741;
-    }
-
-    .peekCard.left {
-      left: -52px;
-      transform: translateX(-84px);
-    }
-
-    .peekCard.right {
-      right: -52px;
-      transform: translateX(84px);
-    }
-
-    .projectsShell.is-inview .peekCard.left {
-      transform: translateX(-14px);
-      opacity: 0.96;
-    }
-
-    .projectsShell.is-inview .peekCard.right {
-      transform: translateX(14px);
-      opacity: 0.96;
     }
 
     .reveal {
