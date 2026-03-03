@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -31,7 +31,7 @@
     body {
       margin: 0;
       min-height: 100%;
-      font-family: "Plus Jakarta Sans", sans-serif;
+      font-family: "Manrope", sans-serif;
       color: var(--ink);
       background:
         radial-gradient(circle at 12% 16%, rgba(255,255,255,0.6), transparent 36%),
@@ -79,19 +79,20 @@
     .hero {
       width: min(1020px, 100%);
       border: 1px solid var(--line);
-      border-radius: 24px;
+      border-radius: 20px;
       background: var(--card);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 20px 50px rgba(88, 49, 24, 0.16);
-      padding: clamp(18px, 3vw, 34px);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 12px 30px rgba(88, 49, 24, 0.1);
+      padding: clamp(16px, 2.6vw, 28px);
       display: grid;
-      grid-template-columns: 1.18fr minmax(230px, 330px);
-      gap: clamp(18px, 3vw, 36px);
+      grid-template-columns: minmax(200px, 280px) 1fr;
+      gap: clamp(18px, 2.8vw, 30px);
       align-items: center;
     }
 
     .heroCopy {
-      animation: rise 650ms ease-out both;
+      order: 2;
+      animation: rise 500ms ease-out both;
     }
 
     .tag {
@@ -109,19 +110,19 @@
 
     h1 {
       margin: 12px 0 0;
-      font-family: "Sora", sans-serif;
-      font-size: clamp(2.1rem, 6.3vw, 4.8rem);
-      line-height: 0.98;
-      letter-spacing: -0.03em;
-      max-width: 13ch;
+      font-size: clamp(1.9rem, 5.2vw, 3.8rem);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      max-width: 14ch;
+      font-weight: 800;
     }
 
     .lead {
       margin: 14px 0 0;
       max-width: 55ch;
       color: var(--muted);
-      font-size: clamp(0.98rem, 2vw, 1.08rem);
-      line-height: 1.68;
+      font-size: clamp(0.96rem, 1.8vw, 1.04rem);
+      line-height: 1.62;
       font-weight: 600;
     }
 
@@ -153,7 +154,7 @@
       margin-top: 18px;
       width: min(500px, 100%);
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 10px;
       background: rgba(255,255,255,0.72);
       display: grid;
@@ -223,20 +224,20 @@
       display: grid;
       justify-items: center;
       align-items: center;
+      order: 1;
       position: relative;
-      animation: rise 720ms ease-out both;
+      animation: rise 540ms ease-out both;
     }
 
     .picWrap {
-      width: clamp(220px, 30vw, 320px);
+      width: clamp(180px, 24vw, 250px);
       aspect-ratio: 1 / 1;
       border-radius: 50%;
       overflow: hidden;
       border: 1px solid var(--line);
       background: linear-gradient(145deg, #fff8ea, #ffe8bf);
-      box-shadow: 0 22px 42px rgba(84, 47, 22, 0.2);
+      box-shadow: 0 10px 22px rgba(84, 47, 22, 0.14);
       position: relative;
-      animation: bob 5.8s ease-in-out infinite;
     }
 
     .picWrap::before {
@@ -253,20 +254,19 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
-      transform: scale(1.08);
+      transform: scale(1.02);
       display: block;
     }
 
     .profileGlow {
-      width: clamp(180px, 24vw, 260px);
-      height: clamp(180px, 24vw, 260px);
+      width: clamp(160px, 22vw, 230px);
+      height: clamp(160px, 22vw, 230px);
       border-radius: 50%;
-      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
       position: absolute;
       z-index: -1;
       transform: translateY(8px);
       filter: blur(1px);
-      animation: pulse 4.6s ease-in-out infinite;
     }
 
     footer {
@@ -296,34 +296,17 @@
       }
     }
 
-    @keyframes bob {
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-6px);
-      }
-    }
-
-    @keyframes pulse {
-      0%,
-      100% {
-        opacity: 0.38;
-        transform: translateY(8px) scale(1);
-      }
-      50% {
-        opacity: 0.58;
-        transform: translateY(8px) scale(1.05);
-      }
-    }
-
     @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
       }
 
+      .heroCopy {
+        order: 2;
+      }
+
       .profileCol {
+        order: 1;
         justify-items: center;
       }
     }
@@ -338,7 +321,6 @@
       .drop,
       .heroCopy,
       .profileCol,
-      .picWrap,
       .profileGlow,
       .btn {
         animation: none;
@@ -421,7 +403,7 @@
         }
       });
 
-      const count = Math.min(52, Math.max(28, Math.floor(window.innerWidth / 26)));
+      const count = Math.min(40, Math.max(20, Math.floor(window.innerWidth / 34)));
       for (let i = 0; i < count; i += 1) {
         const drop = document.createElement("div");
         drop.className = "drop";
