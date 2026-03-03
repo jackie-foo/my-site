@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Jackie Foo | Collaboration Board</title>
-  <meta name="description" content="Interactive collaboration-style project board." />
-  <meta name="theme-color" content="#f3f3f3" />
+  <meta name="description" content="Interactive collaboration-style portfolio board." />
+  <meta name="theme-color" content="#f2f2f2" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,10 +13,10 @@
 
   <style>
     :root {
-      --bg: #f3f3f3;
+      --bg: #f2f2f2;
       --ink: #1f1f1f;
-      --muted: #656565;
-      --line: #dddddd;
+      --muted: #606060;
+      --line: #dcdcdc;
       --white: #ffffff;
       --shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
       --soft-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
@@ -42,8 +42,8 @@
       display: grid;
       place-items: center;
       background: #fff;
-      transition: opacity 680ms ease, visibility 680ms ease;
       overflow: hidden;
+      transition: opacity 720ms ease, visibility 720ms ease;
     }
 
     .splashInner {
@@ -53,8 +53,8 @@
 
     .splash h1 {
       margin: 0;
-      font-size: clamp(3.8rem, 13vw, 10rem);
-      line-height: 0.88;
+      font-size: clamp(3.9rem, 14vw, 11rem);
+      line-height: 0.86;
       letter-spacing: -0.06em;
       color: #111;
       animation: splashPulse 1s ease-in-out infinite alternate;
@@ -62,22 +62,44 @@
 
     .splash p {
       margin: 8px 0 0;
-      font-size: 0.82rem;
-      color: #5f5f5f;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      font-family: "Caveat", cursive;
+      font-size: clamp(1.05rem, 2.4vw, 1.5rem);
+      color: #333;
+      letter-spacing: 0.02em;
     }
 
+    .splash::before,
     .splash::after {
       content: "";
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 0;
-      background: #141414;
-      transition: height 620ms ease;
+      width: 34vmax;
+      height: 34vmax;
+      border-radius: 50%;
+      border: 8px solid #111;
+      opacity: 0.08;
+      transform: scale(0.5);
+      transition: transform 700ms ease, opacity 700ms ease;
+      pointer-events: none;
+    }
+
+    .splash::before {
+      left: -10vmax;
+      top: -8vmax;
+    }
+
+    .splash::after {
+      right: -12vmax;
+      bottom: -10vmax;
+    }
+
+    .splash.explode::before,
+    .splash.explode::after {
+      transform: scale(1.28);
+      opacity: 0.24;
+    }
+
+    .splash.explode .splashInner {
+      transform: scale(1.08) rotate(-2deg);
     }
 
     .splash.hide {
@@ -86,12 +108,8 @@
       pointer-events: none;
     }
 
-    .splash.hide::after {
-      height: 100%;
-    }
-
     .splash.hide .splashInner {
-      transform: scale(1.24) rotate(-4deg);
+      transform: scale(1.22) rotate(-4deg);
       opacity: 0;
     }
 
@@ -152,19 +170,25 @@
       border: 1px solid #f0f0f0;
     }
 
-    .tiny {
-      width: 28px;
-      height: 28px;
+    .socialFull {
+      height: 30px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #fff;
-      display: grid;
-      place-items: center;
-      color: #575757;
-      font-size: 0.72rem;
-      font-weight: 800;
+      color: #4e4e4e;
       text-decoration: none;
-      cursor: pointer;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      padding: 0 9px;
+      display: inline-flex;
+      align-items: center;
+      transition: border-color 140ms ease, color 140ms ease;
+    }
+
+    .socialFull:hover {
+      border-color: #a8a8a8;
+      color: #222;
     }
 
     .shareBtn {
@@ -252,7 +276,7 @@
       color: #ff80a7;
     }
 
-    .draw {
+    .scribble {
       position: absolute;
       pointer-events: none;
       z-index: 2;
@@ -263,9 +287,11 @@
       opacity: 0.86;
     }
 
-    .d1 { left: 16%; top: 18%; --r: -8deg; }
-    .d2 { right: 20%; top: 22%; --r: 7deg; }
-    .d3 { left: 28%; bottom: 16%; --r: -5deg; }
+    .s1 { left: 14%; top: 14%; --r: -9deg; }
+    .s2 { right: 20%; top: 22%; --r: 8deg; }
+    .s3 { left: 28%; bottom: 14%; --r: -5deg; }
+    .s4 { right: 12%; bottom: 22%; --r: 6deg; }
+    .s5 { left: 46%; top: 10%; --r: -3deg; }
 
     .bgChibi {
       position: absolute;
@@ -291,25 +317,29 @@
 
     .note {
       position: absolute;
+      transform: translate(-50%, -50%);
       width: clamp(170px, 20vw, 230px);
+      z-index: 8;
+    }
+
+    .noteInner {
+      position: relative;
       border-radius: 4px;
       padding: 10px;
       box-shadow: var(--shadow);
-      z-index: 8;
       user-select: none;
-      touch-action: none;
-      cursor: grab;
-      transition: box-shadow 130ms ease, transform 130ms ease;
+      transition: box-shadow 130ms ease, transform 130ms ease, opacity 120ms ease;
+      transform: rotate(var(--rot, 0deg));
     }
 
-    .note:hover,
-    .note.is-paused {
-      transform: scale(1.02);
+    .note:hover .noteInner,
+    .note.is-paused .noteInner {
+      transform: rotate(var(--rot, 0deg)) scale(1.02);
       box-shadow: 0 14px 24px rgba(0, 0, 0, 0.16);
     }
 
-    .note.is-collab {
-      opacity: 0.55;
+    .note.is-collab .noteInner {
+      opacity: 0.52;
     }
 
     .note-sm { width: clamp(150px, 16vw, 190px); }
@@ -474,6 +504,104 @@
       padding: 2px 5px;
     }
 
+    .commentPanel {
+      position: fixed;
+      right: 14px;
+      top: 64px;
+      width: min(300px, calc(100vw - 24px));
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.97);
+      box-shadow: var(--soft-shadow);
+      z-index: 35;
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+      transform: translateY(-10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .commentPanel.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .commentPanel h3 {
+      margin: 0;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #555;
+    }
+
+    .commentPanel p {
+      margin: 0;
+      font-size: 0.74rem;
+      color: #666;
+      font-weight: 700;
+    }
+
+    .field,
+    .area {
+      width: 100%;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 0.86rem;
+      padding: 8px 9px;
+      color: #222;
+      background: #fff;
+    }
+
+    .area {
+      resize: vertical;
+      min-height: 72px;
+      max-height: 180px;
+    }
+
+    .commentBtn {
+      border: 1px solid #222;
+      border-radius: 8px;
+      background: #222;
+      color: #fff;
+      font: inherit;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+
+    .commentList {
+      max-height: 160px;
+      overflow: auto;
+      border-top: 1px solid #eee;
+      padding-top: 8px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .commentItem {
+      border: 1px solid #efefef;
+      border-radius: 8px;
+      padding: 7px;
+      background: #fff;
+    }
+
+    .commentItem b {
+      font-size: 0.77rem;
+    }
+
+    .commentItem span {
+      display: block;
+      margin-top: 3px;
+      font-size: 0.8rem;
+      color: #424242;
+      line-height: 1.45;
+    }
+
     .zoomDock {
       position: fixed;
       right: 14px;
@@ -526,9 +654,17 @@
       to { transform: scale(1.02) rotate(1deg); }
     }
 
+    @media (max-width: 980px) {
+      .socialFull:nth-child(2),
+      .socialFull:nth-child(3) {
+        display: none;
+      }
+    }
+
     @media (max-width: 860px) {
       .leftTools,
-      .zoomPanel {
+      .zoomPanel,
+      .commentPanel {
         display: none;
       }
       .note { width: clamp(160px, 44vw, 220px); }
@@ -538,8 +674,9 @@
 
     @media (prefers-reduced-motion: reduce) {
       .bgChibi,
-      .note,
-      .zoomLabel {
+      .noteInner,
+      .zoomLabel,
+      .splash h1 {
         animation: none !important;
         transition: none !important;
       }
@@ -550,25 +687,35 @@
   <div id="splash" class="splash" aria-hidden="true">
     <div class="splashInner">
       <h1>404</h1>
-      <p>booting collaboration board...</p>
+      <p>not found... wait for it.</p>
     </div>
   </div>
 
   <header class="topbar">
     <div class="brand"><span class="brandDot"></span>jackie board</div>
-    <div class="rightControls" title="hover to pause, mouse wheel to nudge notes">
+    <div class="rightControls" title="hover cursor over notes to signal collaboration">
       <div class="activeUsers" title="Active collaborators">
         <img src="/pic/chibi1.png" alt="active 1" />
         <img src="/pic/chibi2.png" alt="active 2" />
         <img src="/pic/chibi3.png" alt="active 3" />
         <img src="/pic/chibi1.png" alt="active 4" />
       </div>
-      <a class="tiny" href="#" aria-label="LinkedIn">in</a>
-      <a class="tiny" href="#" aria-label="GitHub">gh</a>
-      <a class="tiny" href="mailto:you@email.com" aria-label="Email">@</a>
+      <a class="socialFull" href="#" aria-label="LinkedIn">LinkedIn</a>
+      <a class="socialFull" href="#" aria-label="GitHub">GitHub</a>
+      <a class="socialFull" href="mailto:you@email.com" aria-label="Email">Email</a>
+      <button id="commentToggle" class="socialFull" type="button">Comment Form</button>
       <button class="shareBtn" type="button">Share</button>
     </div>
   </header>
+
+  <aside id="commentPanel" class="commentPanel" aria-label="Comment panel">
+    <h3>Leave A Comment</h3>
+    <p>Temporary only. Comments reset when page refreshes.</p>
+    <input id="commentName" class="field" type="text" placeholder="Your name" />
+    <textarea id="commentText" class="area" placeholder="Write something fun or useful..."></textarea>
+    <button id="commentSubmit" class="commentBtn" type="button">Add Comment</button>
+    <div id="commentList" class="commentList"></div>
+  </aside>
 
   <aside class="leftTools" aria-hidden="true">
     <div class="tool">↖</div>
@@ -584,9 +731,12 @@
         <h2>Let&apos;s explore</h2>
         <span>catch a card to start</span>
       </div>
-      <div class="draw d1">✦</div>
-      <div class="draw d2">✋</div>
-      <div class="draw d3">↯</div>
+
+      <div class="scribble s1">✦</div>
+      <div class="scribble s2">✋</div>
+      <div class="scribble s3">↯</div>
+      <div class="scribble s4">✸</div>
+      <div class="scribble s5">➰</div>
 
       <section id="notesLayer" class="notes"></section>
       <section id="cursorLayer" class="cursorLayer"></section>
@@ -622,9 +772,19 @@
       const zoomIn = document.getElementById("zoomIn");
       const zoomOut = document.getElementById("zoomOut");
 
+      const commentToggle = document.getElementById("commentToggle");
+      const commentPanel = document.getElementById("commentPanel");
+      const commentName = document.getElementById("commentName");
+      const commentText = document.getElementById("commentText");
+      const commentSubmit = document.getElementById("commentSubmit");
+      const commentList = document.getElementById("commentList");
+
+      setTimeout(() => {
+        splash.classList.add("explode");
+      }, 700);
       setTimeout(() => {
         splash.classList.add("hide");
-      }, 1500);
+      }, 1650);
 
       let zoom = 1;
       function applyZoom() {
@@ -652,10 +812,9 @@
           tag: "About Me",
           title: "Jackie Foo",
           text: "I design learning experiences and implementation systems that help people act on feedback clearly.",
-          x: 0.15,
-          y: 0.18,
-          vx: 3.8,
-          vy: 4.4,
+          x: 0.18,
+          y: 0.22,
+          rot: -2,
           photo: "/pic/chibi1.png"
         },
         {
@@ -665,10 +824,9 @@
           title: "Feedback Workshop",
           text: "Interactive workshop design for reflection and action.",
           href: "#",
-          x: 0.38,
-          y: 0.12,
-          vx: -4.9,
-          vy: 3.7
+          x: 0.4,
+          y: 0.15,
+          rot: 3
         },
         {
           tone: "tone-green",
@@ -678,9 +836,8 @@
           text: "Prompt-first mapping for student/tutor friction.",
           href: "#",
           x: 0.64,
-          y: 0.16,
-          vx: 4.2,
-          vy: -3.2
+          y: 0.17,
+          rot: -4
         },
         {
           tone: "tone-blue",
@@ -689,10 +846,9 @@
           title: "Live Dashboard",
           text: "Multi-stage monitoring and cleaner workshop flow.",
           href: "#",
-          x: 0.72,
-          y: 0.5,
-          vx: -3.8,
-          vy: 3.4
+          x: 0.74,
+          y: 0.49,
+          rot: 2
         },
         {
           tone: "tone-white",
@@ -700,10 +856,9 @@
           tag: "Photo",
           title: "Behind The Scenes",
           text: "",
-          x: 0.28,
+          x: 0.27,
           y: 0.58,
-          vx: 3.1,
-          vy: 2.8,
+          rot: -3,
           photo: "/pic/chibi2.png"
         },
         {
@@ -713,10 +868,9 @@
           title: "Tutor Workflow",
           text: "Flow-based marking map with practical constraints.",
           href: "#",
-          x: 0.52,
-          y: 0.68,
-          vx: -2.9,
-          vy: -3.8
+          x: 0.53,
+          y: 0.69,
+          rot: 1
         },
         {
           tone: "tone-pink",
@@ -726,9 +880,8 @@
           text: "Sticky-note strategy to surface deeper reflection.",
           href: "#",
           x: 0.8,
-          y: 0.72,
-          vx: 3.3,
-          vy: -3
+          y: 0.73,
+          rot: -2
         },
         {
           tone: "tone-white",
@@ -737,9 +890,8 @@
           title: "Mood Frame",
           text: "",
           x: 0.58,
-          y: 0.34,
-          vx: -2.5,
-          vy: 3.4,
+          y: 0.35,
+          rot: 4,
           photo: "/pic/chibi1.png"
         },
         {
@@ -749,88 +901,43 @@
           title: "Hi you 👀",
           text: "Why are you here? Are you offering me snacks, coffee, or brilliant feedback?",
           x: 0.12,
-          y: 0.72,
-          vx: 2.8,
-          vy: -2.4
+          y: 0.73,
+          rot: -6
         }
       ];
 
-      const states = notesData.map((item) => {
+      const noteStates = notesData.map((item) => {
         const note = document.createElement("article");
         note.className = `note ${item.tone} ${item.size || ""}`;
+        note.style.left = `${item.x * 100}%`;
+        note.style.top = `${item.y * 100}%`;
+        note.style.setProperty("--rot", `${item.rot || 0}deg`);
+
         note.innerHTML = `
-          <div class="pin"></div>
-          <div class="tag">${item.tag}</div>
-          <h3>${item.title}</h3>
-          ${item.text ? `<p>${item.text}</p>` : ""}
-          ${item.href ? `<a href="${item.href}" target="_blank" rel="noopener noreferrer">Open project</a>` : ""}
-          ${item.photo ? `<img class="photo" src="${item.photo}" alt="placeholder" />` : ""}
+          <div class="noteInner">
+            <div class="pin"></div>
+            <div class="tag">${item.tag}</div>
+            <h3>${item.title}</h3>
+            ${item.text ? `<p>${item.text}</p>` : ""}
+            ${item.href ? `<a href="${item.href}" target="_blank" rel="noopener noreferrer">Open project</a>` : ""}
+            ${item.photo ? `<img class="photo" src="${item.photo}" alt="placeholder" />` : ""}
+          </div>
         `;
+
         notesLayer.appendChild(note);
 
-        const state = {
+        return {
           el: note,
-          xPct: item.x,
-          yPct: item.y,
           x: 0,
           y: 0,
           w: 0,
           h: 0,
-          vx: item.vx,
-          vy: item.vy,
-          paused: false,
-          drag: false,
           collab: false
         };
-
-        note.addEventListener("mouseenter", () => {
-          state.paused = true;
-          note.classList.add("is-paused");
-        });
-
-        note.addEventListener("mouseleave", () => {
-          if (!state.drag) {
-            state.paused = false;
-            note.classList.remove("is-paused");
-          }
-        });
-
-        note.addEventListener("pointerdown", (event) => {
-          state.drag = true;
-          state.paused = true;
-          note.classList.add("is-paused");
-          note.setPointerCapture(event.pointerId);
-        });
-
-        note.addEventListener("pointermove", (event) => {
-          if (!state.drag) return;
-          const rect = board.getBoundingClientRect();
-          const localX = (event.clientX - rect.left) / zoom;
-          const localY = (event.clientY - rect.top) / zoom;
-          state.x = localX - state.w / 2;
-          state.y = localY - state.h / 2;
-          clamp(state, rect.width / zoom, rect.height / zoom);
-          render(state);
-        });
-
-        note.addEventListener("pointerup", (event) => {
-          state.drag = false;
-          state.paused = false;
-          note.classList.remove("is-paused");
-          try { note.releasePointerCapture(event.pointerId); } catch (_) {}
-        });
-
-        note.addEventListener("pointercancel", () => {
-          state.drag = false;
-          state.paused = false;
-          note.classList.remove("is-paused");
-        });
-
-        return state;
       });
 
       const collaborators = [
-        { name: "thanish", color: "#222", x: 0.18, y: 0.3, vx: 12, vy: 10 },
+        { name: "thanish", color: "#242424", x: 0.18, y: 0.3, vx: 12, vy: 10 },
         { name: "nevin", color: "#3a5fe8", x: 0.44, y: 0.46, vx: -11, vy: 9 },
         { name: "shen", color: "#d34f84", x: 0.72, y: 0.28, vx: 10, vy: -11 },
         { name: "samantha", color: "#1f8f62", x: 0.64, y: 0.62, vx: -9, vy: -8 }
@@ -856,7 +963,7 @@
         };
       });
 
-      function render(state) {
+      function renderCursor(state) {
         state.el.style.transform = `translate3d(${state.x}px, ${state.y}px, 0)`;
       }
 
@@ -870,59 +977,62 @@
         return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
       }
 
-      function initialLayout() {
+      function layoutStaticNotes() {
+        const rect = board.getBoundingClientRect();
+        noteStates.forEach((state) => {
+          const nRect = state.el.getBoundingClientRect();
+          state.w = nRect.width / zoom;
+          state.h = nRect.height / zoom;
+          const cx = (nRect.left - rect.left) / zoom + state.w / 2;
+          const cy = (nRect.top - rect.top) / zoom + state.h / 2;
+          state.x = cx - state.w / 2;
+          state.y = cy - state.h / 2;
+        });
+      }
+
+      function layoutCursors() {
         const rect = board.getBoundingClientRect();
         const w = rect.width / zoom;
         const h = rect.height / zoom;
 
-        states.forEach((state) => {
-          const nRect = state.el.getBoundingClientRect();
-          state.w = nRect.width;
-          state.h = nRect.height;
-          state.x = w * state.xPct;
-          state.y = h * state.yPct;
-          clamp(state, w, h);
-          render(state);
-        });
-
         cursorStates.forEach((cursor) => {
           const cRect = cursor.el.getBoundingClientRect();
-          cursor.w = cRect.width;
-          cursor.h = cRect.height;
+          cursor.w = cRect.width / zoom;
+          cursor.h = cRect.height / zoom;
           cursor.x = w * cursor.xPct;
           cursor.y = h * cursor.yPct;
           clamp(cursor, w, h);
-          render(cursor);
+          renderCursor(cursor);
         });
       }
 
-      // wheel gesture: gently nudge board content, like slow collaborative scrolling
-      board.addEventListener(
-        "wheel",
-        (event) => {
-          const nudgeX = event.deltaX * 0.045;
-          const nudgeY = event.deltaY * 0.045;
-          const rect = board.getBoundingClientRect();
-          const w = rect.width / zoom;
-          const h = rect.height / zoom;
+      const comments = [];
+      function renderComments() {
+        if (!comments.length) {
+          commentList.innerHTML = '<div class="commentItem"><b>No comments yet</b><span>Be the first to leave something chaotic but useful.</span></div>';
+          return;
+        }
+        commentList.innerHTML = comments
+          .slice()
+          .reverse()
+          .map((item) => `<div class="commentItem"><b>${item.name}</b><span>${item.text}</span></div>`)
+          .join("");
+      }
 
-          states.forEach((state) => {
-            if (state.drag) return;
-            state.x -= nudgeX;
-            state.y -= nudgeY;
-            clamp(state, w, h);
-            render(state);
-          });
+      commentToggle.addEventListener("click", () => {
+        commentPanel.classList.toggle("open");
+      });
 
-          cursorStates.forEach((cursor) => {
-            cursor.x -= nudgeX * 0.35;
-            cursor.y -= nudgeY * 0.35;
-            clamp(cursor, w, h);
-            render(cursor);
-          });
-        },
-        { passive: true }
-      );
+      commentSubmit.addEventListener("click", () => {
+        const name = (commentName.value || "Anonymous").trim() || "Anonymous";
+        const text = (commentText.value || "").trim();
+        if (!text) return;
+        comments.push({ name, text });
+        commentText.value = "";
+        renderComments();
+      });
+
+      renderComments();
 
       let prev = performance.now();
       function loop(now) {
@@ -934,23 +1044,8 @@
           const w = rect.width / zoom;
           const h = rect.height / zoom;
 
-          states.forEach((state) => {
+          noteStates.forEach((state) => {
             state.collab = false;
-            if (!state.paused && !state.drag) {
-              state.x += state.vx * dt;
-              state.y += state.vy * dt;
-
-              if (state.x <= 4 || state.x + state.w >= w - 4) {
-                state.vx *= -1;
-                state.x = Math.max(4, Math.min(state.x, w - state.w - 4));
-              }
-              if (state.y <= 4 || state.y + state.h >= h - 4) {
-                state.vy *= -1;
-                state.y = Math.max(4, Math.min(state.y, h - state.h - 4));
-              }
-
-              render(state);
-            }
           });
 
           cursorStates.forEach((cursor) => {
@@ -968,7 +1063,7 @@
 
             const cBox = { x: cursor.x, y: cursor.y, w: cursor.w, h: cursor.h };
             let over = false;
-            states.forEach((state) => {
+            noteStates.forEach((state) => {
               const sBox = { x: state.x, y: state.y, w: state.w, h: state.h };
               if (intersects(cBox, sBox)) {
                 over = true;
@@ -977,10 +1072,10 @@
             });
 
             cursor.el.classList.toggle("over", over);
-            render(cursor);
+            renderCursor(cursor);
           });
 
-          states.forEach((state) => {
+          noteStates.forEach((state) => {
             state.el.classList.toggle("is-collab", state.collab);
           });
         }
@@ -988,7 +1083,6 @@
         requestAnimationFrame(loop);
       }
 
-      // subtle static background chibi (reduced)
       const bgCount = Math.min(8, Math.max(3, Math.floor(window.innerWidth / 260)));
       for (let i = 0; i < bgCount; i += 1) {
         const ghost = document.createElement("div");
@@ -1011,9 +1105,16 @@
       }
 
       applyZoom();
-      initialLayout();
-      requestAnimationFrame(loop);
-      window.addEventListener("resize", initialLayout);
+      requestAnimationFrame(() => {
+        layoutStaticNotes();
+        layoutCursors();
+        requestAnimationFrame(loop);
+      });
+
+      window.addEventListener("resize", () => {
+        layoutStaticNotes();
+        layoutCursors();
+      });
     })();
   </script>
 </body>
