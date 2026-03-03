@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Jackie Foo | Canvas Projects</title>
   <meta name="description" content="Open canvas intro with scroll-down projects." />
-  <meta name="theme-color" content="#dcd8d1" />
+  <meta name="theme-color" content="#fffdf6" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,11 +13,11 @@
 
   <style>
     :root {
-      --bg: #e8e2cf;
-      --paper: #f9f6ea;
+      --bg: #fffdf6;
+      --paper: #fffdf6;
       --ink: #161616;
       --muted: #4f4e4b;
-      --line: #ddd4c2;
+      --line: #ece4d2;
     }
 
     * { box-sizing: border-box; }
@@ -46,8 +46,7 @@
       align-items: center;
       padding: 0 16px;
       border-bottom: 1px solid var(--line);
-      background: rgba(245, 243, 238, 0.92);
-      backdrop-filter: blur(4px);
+      background: var(--paper);
       font-size: 0.83rem;
       font-weight: 600;
     }
@@ -85,7 +84,7 @@
       padding: clamp(16px, 3vw, 34px) clamp(16px, 3vw, 36px);
       position: relative;
       display: block;
-      background: linear-gradient(to bottom, rgba(255, 246, 216, 0.54), rgba(255, 248, 232, 0.08));
+      background: var(--bg);
     }
 
     .heroTitle {
@@ -195,7 +194,7 @@
       padding: clamp(34px, 5vw, 58px) clamp(16px, 3vw, 36px) 110px;
       display: grid;
       gap: 12px;
-      background: linear-gradient(to bottom, rgba(255, 248, 223, 0.88), rgba(255, 248, 233, 0.98));
+      background: var(--bg);
     }
 
     .projects h3 {
@@ -209,49 +208,48 @@
 
     .projects p {
       margin: 0;
-      color: #413f3b;
+      color: #4a4640;
       font-size: 1rem;
       line-height: 1.56;
       max-width: 62ch;
     }
 
-    .projectStageWrap {
+    .projectsShell {
       margin-top: 14px;
       position: relative;
-      padding: 0 clamp(0px, 4vw, 44px);
-      min-height: 540px;
+      padding: 0 clamp(0px, 5vw, 52px);
     }
 
-    .projectStage {
+    .portfolioBoard {
       position: relative;
-      max-width: 980px;
+      max-width: 1060px;
       margin: 0 auto;
-      border: 4px solid #3a3733;
+      border: 3px solid #37342f;
       border-radius: 30px;
-      background: #f9f4e4;
-      padding: clamp(16px, 2.6vw, 24px);
-      box-shadow: 0 18px 28px rgba(45, 36, 22, 0.1);
+      background: #fffef9;
+      padding: clamp(16px, 2.8vw, 28px);
+      box-shadow: 0 14px 24px rgba(35, 30, 20, 0.08);
       overflow: hidden;
     }
 
-    .stageHead {
+    .boardHead {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
-    .stageHead span {
+    .boardHead span {
       font-family: "Gaegu", cursive;
-      font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+      font-size: clamp(1.6rem, 3.2vw, 2.5rem);
       font-weight: 700;
       color: #34322e;
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
 
-    .stageHead a {
+    .boardHead a {
       border: 1px solid #2f2f2f;
       border-radius: 999px;
       padding: 6px 12px;
@@ -264,35 +262,101 @@
       text-transform: uppercase;
     }
 
-    .stageDeck {
+    .featuredCard {
       display: grid;
-      grid-template-columns: 1fr 1.22fr 1fr;
+      grid-template-columns: 1.06fr 1fr;
       gap: 14px;
-      align-items: stretch;
+      align-items: center;
+      border: 1px solid #ddd4c6;
+      border-radius: 18px;
+      background: #fffdf8;
+      padding: 12px;
     }
 
-    .stageCard {
+    .projectVisual {
+      border-radius: 14px;
+      background:
+        linear-gradient(160deg, rgba(243, 255, 167, 0.88) 0 56%, transparent 56% 100%),
+        #f4f1e7;
+      min-height: 246px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .projectVisual img {
+      width: min(78%, 260px);
+      height: auto;
+      object-fit: contain;
+      display: block;
+      filter: saturate(1.02) contrast(1.03);
+    }
+
+    .projectDetails {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .projectNum {
+      font-family: "Gaegu", cursive;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #57524b;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .projectTitle {
+      margin: 0;
+      font-family: "Gaegu", cursive;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      line-height: 1.03;
+    }
+
+    .projectDesc {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.52;
+      color: #37342f;
+    }
+
+    .projectLink {
+      width: fit-content;
+      color: #242220;
+      text-decoration: none;
+      border-bottom: 1px solid #6f695f;
+      font-size: 0.79rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding-bottom: 2px;
+    }
+
+    .projectGrid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .projectCard {
       border: 1px solid #d4ccbc;
       border-radius: 18px;
-      background: #fffefb;
+      background: #fffdf7;
       padding: 10px;
       display: grid;
       gap: 10px;
       box-shadow: 0 6px 14px rgba(50, 40, 28, 0.08);
-      min-height: 300px;
-    }
-
-    .stageCard.center {
-      min-height: 338px;
-      background: #fffdf7;
+      min-height: 240px;
     }
 
     .art {
       border-radius: 14px;
       background:
-        linear-gradient(162deg, rgba(201, 247, 105, 0.84) 0 54%, transparent 54% 100%),
+        linear-gradient(160deg, rgba(227, 255, 142, 0.88) 0 55%, transparent 55% 100%),
         #f2efe6;
-      min-height: 168px;
+      min-height: 138px;
       display: grid;
       place-items: center;
       overflow: hidden;
@@ -306,28 +370,28 @@
       filter: saturate(0.98) contrast(1.04);
     }
 
-    .stageCard .num {
+    .projectCard .num {
       font-family: "Gaegu", cursive;
-      font-size: 1.24rem;
+      font-size: 1.14rem;
       font-weight: 700;
-      color: #56534d;
+      color: #5f5a52;
     }
 
-    .stageCard h4 {
+    .projectCard h4 {
       margin: 0;
       font-family: "Gaegu", cursive;
-      font-size: clamp(1.5rem, 2.8vw, 2rem);
+      font-size: clamp(1.35rem, 2.2vw, 1.8rem);
       line-height: 1.02;
     }
 
-    .stageCard p {
+    .projectCard p {
       margin: 0;
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       line-height: 1.48;
       color: #34322f;
     }
 
-    .stageCard a {
+    .projectCard a {
       width: fit-content;
       color: #262422;
       text-decoration: none;
@@ -360,35 +424,22 @@
       border: 1px solid #e6dfd3;
     }
 
-    .stageWide {
-      margin-top: 14px;
-      min-height: 152px;
-      grid-template-columns: 1.1fr 1fr;
-      align-items: center;
-      gap: 14px;
-      background: #fffef9;
-    }
-
-    .stageWide .art {
-      min-height: 128px;
-    }
-
-    .projectSide {
+    .peekCard {
       position: absolute;
-      top: 90px;
-      width: clamp(190px, 21vw, 260px);
+      top: 144px;
+      width: clamp(190px, 20vw, 240px);
       border: 1px solid #d4ccbc;
       border-radius: 18px;
-      background: #fffef7;
+      background: #fffdf7;
       padding: 10px;
       box-shadow: 0 8px 16px rgba(42, 35, 24, 0.08);
-      opacity: 0.8;
+      opacity: 0;
       pointer-events: none;
       z-index: 0;
       transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 420ms ease;
     }
 
-    .projectSide .num {
+    .peekCard .num {
       margin-top: 7px;
       font-family: "Gaegu", cursive;
       font-size: 1.16rem;
@@ -398,31 +449,43 @@
       color: #55524c;
     }
 
-    .projectSide p {
+    .peekCard p {
       margin: 2px 0 0;
       font-size: 0.84rem;
       line-height: 1.42;
       color: #4a4741;
     }
 
-    .projectSide.left {
+    .peekCard.left {
       left: -52px;
-      transform: translateX(-102px);
+      transform: translateX(-84px);
     }
 
-    .projectSide.right {
+    .peekCard.right {
       right: -52px;
-      transform: translateX(102px);
+      transform: translateX(84px);
     }
 
-    .projectStageWrap.is-inview .projectSide.left {
+    .projectsShell.is-inview .peekCard.left {
       transform: translateX(-14px);
-      opacity: 1;
+      opacity: 0.96;
     }
 
-    .projectStageWrap.is-inview .projectSide.right {
+    .projectsShell.is-inview .peekCard.right {
       transform: translateX(14px);
+      opacity: 0.96;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 420ms ease;
+      transition-delay: var(--delay, 0ms);
+    }
+
+    .reveal.show {
       opacity: 1;
+      transform: translateY(0);
     }
 
     .drawCanvas {
@@ -539,20 +602,19 @@
         font-size: clamp(1.2rem, 6.2vw, 2.1rem);
       }
 
-      .projectStageWrap {
-        min-height: 0;
+      .projectsShell {
         padding: 0;
       }
 
-      .projectSide {
+      .peekCard {
         display: none;
       }
 
-      .stageDeck {
+      .featuredCard {
         grid-template-columns: 1fr;
       }
 
-      .stageWide {
+      .projectGrid {
         grid-template-columns: 1fr;
       }
     }
@@ -604,31 +666,48 @@
     <section id="projects" class="projects" aria-label="Projects">
       <h3>Projects</h3>
       <p>
-        Portfolio stage view. Center cards carry detailed context and collaborators; side cards slide inward as you enter this section.
+        Clean portfolio board with one featured project and supporting cards.
       </p>
 
-      <div id="projectStageWrap" class="projectStageWrap">
-        <article class="projectSide left" aria-hidden="true">
+      <div id="projectsShell" class="projectsShell">
+        <article class="peekCard left" aria-hidden="true">
           <div class="art"><img src="/pic/chibi2.png" alt="" /></div>
           <div class="num">side preview</div>
-          <p>This card drifts inward when the portfolio stage enters view.</p>
+          <p>Preview card moves inward when the section appears.</p>
         </article>
 
-        <article class="projectSide right" aria-hidden="true">
+        <article class="peekCard right" aria-hidden="true">
           <div class="art"><img src="/pic/chibi3.png" alt="" /></div>
           <div class="num">side preview</div>
-          <p>You can replace this with teaser copy or badges later.</p>
+          <p>Replace with highlights, tags, or upcoming work.</p>
         </article>
 
-        <div class="projectStage">
-          <div class="stageHead">
+        <div class="portfolioBoard">
+          <div class="boardHead reveal">
             <span>project / portfolio</span>
             <a href="/project-view.html?project=1">Open Detail Page</a>
           </div>
 
-          <div class="stageDeck">
-            <article class="stageCard">
-              <div class="art"><img src="/pic/chibi1.png" alt="Project visual" /></div>
+          <article class="featuredCard reveal">
+            <div class="projectVisual">
+              <img src="/pic/chibi3.png" alt="Journey Mapping Tool" />
+            </div>
+            <div class="projectDetails">
+              <div class="projectNum">Project 02</div>
+              <h4 class="projectTitle">Journey Mapping Tool</h4>
+              <p class="projectDesc">Prompt-led mapping for student and tutor constraints in one flow, with strategic reflection cues and action prompts.</p>
+              <a class="projectLink" href="/project-view.html?project=2">Open Project</a>
+              <div class="collab">
+                <img src="/pic/chibi3.png" alt="Shen" />
+                <img src="/pic/chibi1.png" alt="Samantha" />
+                <span>Shen + Samantha</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="projectGrid">
+            <article class="projectCard reveal" style="--delay: 70ms;">
+              <div class="art"><img src="/pic/chibi1.png" alt="Feedback Workshop" /></div>
               <div class="num">Project 01</div>
               <h4>Feedback Workshop</h4>
               <p>Workshop stages to surface feedback friction and implementation actions.</p>
@@ -640,21 +719,8 @@
               </div>
             </article>
 
-            <article class="stageCard center">
-              <div class="art"><img src="/pic/chibi3.png" alt="Project visual" /></div>
-              <div class="num">Project 02</div>
-              <h4>Journey Mapping Tool</h4>
-              <p>Prompt-led mapping for student and tutor constraints in one flow with strategic reflection cues.</p>
-              <a href="/project-view.html?project=2">Open Project</a>
-              <div class="collab">
-                <img src="/pic/chibi3.png" alt="Shen" />
-                <img src="/pic/chibi1.png" alt="Samantha" />
-                <span>Shen + Samantha</span>
-              </div>
-            </article>
-
-            <article class="stageCard">
-              <div class="art"><img src="/pic/chibi2.png" alt="Project visual" /></div>
+            <article class="projectCard reveal" style="--delay: 140ms;">
+              <div class="art"><img src="/pic/chibi2.png" alt="Live Dashboard" /></div>
               <div class="num">Project 03</div>
               <h4>Live Dashboard</h4>
               <p>Stage monitoring board for facilitation timing and intervention decisions.</p>
@@ -665,22 +731,20 @@
                 <span>Thanish + Shen</span>
               </div>
             </article>
-          </div>
 
-          <article class="stageCard stageWide">
-            <div class="art"><img src="/pic/chibi1.png" alt="Project visual" /></div>
-            <div>
+            <article class="projectCard reveal" style="--delay: 210ms;">
+              <div class="art"><img src="/pic/chibi1.png" alt="Tutor Workflow" /></div>
               <div class="num">Project 04</div>
               <h4>Tutor Workflow</h4>
-              <p>Flow-based constraint mapping for marking operations and communication bottlenecks in assessment pipelines.</p>
+              <p>Flow-based constraint mapping for marking operations and communication bottlenecks.</p>
               <a href="/project-view.html?project=4">Open Project</a>
               <div class="collab">
                 <img src="/pic/chibi2.png" alt="Nevin" />
                 <img src="/pic/chibi1.png" alt="Samantha" />
                 <span>Nevin + Samantha</span>
               </div>
-            </div>
-          </article>
+            </article>
+          </div>
         </div>
       </div>
     </section>
@@ -874,18 +938,30 @@
       window.addEventListener("load", setCanvasSize);
       setTimeout(setCanvasSize, 400);
 
-      const projectStageWrap = document.getElementById("projectStageWrap");
-      if (projectStageWrap) {
-        if ("IntersectionObserver" in window) {
-          const io = new IntersectionObserver((entries) => {
+      const projectsShell = document.getElementById("projectsShell");
+      const revealNodes = [...document.querySelectorAll(".reveal")];
+      if ("IntersectionObserver" in window) {
+        if (projectsShell) {
+          const stageObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
-              projectStageWrap.classList.toggle("is-inview", entry.isIntersecting);
+              projectsShell.classList.toggle("is-inview", entry.isIntersecting);
             });
           }, { threshold: 0.22 });
-          io.observe(projectStageWrap);
-        } else {
-          projectStageWrap.classList.add("is-inview");
+          stageObserver.observe(projectsShell);
         }
+
+        const revealObserver = new IntersectionObserver((entries, obs) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("show");
+            obs.unobserve(entry.target);
+          });
+        }, { threshold: 0.2 });
+
+        revealNodes.forEach((node) => revealObserver.observe(node));
+      } else {
+        if (projectsShell) projectsShell.classList.add("is-inview");
+        revealNodes.forEach((node) => node.classList.add("show"));
       }
     })();
   </script>
