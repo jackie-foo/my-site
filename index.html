@@ -89,6 +89,7 @@
       grid-template-columns: minmax(200px, 280px) 1fr;
       gap: clamp(18px, 2.8vw, 30px);
       align-items: center;
+      position: relative;
     }
 
     .heroCopy {
@@ -100,13 +101,29 @@
       width: fit-content;
       border: 1px solid var(--line);
       border-radius: 999px;
-      padding: 7px 13px;
+      padding: 7px 12px;
       background: rgba(255,255,255,0.75);
       color: var(--muted);
       font-size: 0.78rem;
       font-weight: 800;
       letter-spacing: 0.05em;
       text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      position: absolute;
+      top: 12px;
+      right: 14px;
+    }
+
+    .tag::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffc74d;
+      box-shadow: 0 0 0 0 rgba(255, 199, 77, 0.58);
+      animation: glow 1.8s ease-out infinite;
     }
 
     h1 {
@@ -312,6 +329,15 @@
       }
     }
 
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 199, 77, 0.58);
+      }
+      100% {
+        box-shadow: 0 0 0 9px rgba(255, 199, 77, 0);
+      }
+    }
+
     @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
@@ -324,6 +350,11 @@
       .profileCol {
         order: 1;
         justify-items: center;
+      }
+
+      .tag {
+        top: 10px;
+        right: 10px;
       }
     }
 
@@ -343,6 +374,10 @@
         animation: none;
         transition: none;
       }
+
+      .tag::before {
+        animation: none;
+      }
     }
   </style>
 </head>
@@ -352,7 +387,7 @@
   <div class="page">
     <main class="hero" aria-label="Intro">
       <section class="heroCopy">
-        <span class="tag">Jackie Foo</span>
+        <span class="tag">Coming Soon</span>
         <h1>Jackie Foo</h1>
         <p class="subTitle">This is my internet corner, a little piece of me.</p>
         <p class="lead">I share ideas, process notes, and small experiments here in a warm and simple space.</p>
