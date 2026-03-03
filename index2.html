@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jackie Foo | Portfolio Placeholder</title>
-  <meta name="description" content="Portfolio placeholder framework for Jackie Foo." />
-  <meta name="theme-color" content="#f7b34c" />
+  <title>Jackie Foo | Project Files</title>
+  <meta name="description" content="Interactive project file board for Jackie Foo." />
+  <meta name="theme-color" content="#f5ac43" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,17 +13,18 @@
 
   <style>
     :root {
-      --bg-a: #fff4dd;
-      --bg-b: #ffd48b;
-      --bg-c: #f39f35;
-      --ink: #2f1708;
-      --muted: #664124;
-      --line: rgba(47, 23, 8, 0.14);
-      --card: rgba(255, 248, 235, 0.78);
-      --card-solid: #fff7e8;
-      --accent: #d9571b;
-      --accent-soft: #ffd89f;
-      --shadow: 0 18px 40px rgba(56, 28, 10, 0.12);
+      --bg-a: #fff4db;
+      --bg-b: #ffd490;
+      --bg-c: #f3a03a;
+      --ink: #2e190b;
+      --muted: #6b4628;
+      --line: rgba(46, 25, 11, 0.16);
+      --surface: rgba(255, 248, 235, 0.78);
+      --file: #fff6e5;
+      --file-dark: #f5e6c6;
+      --accent: #d5531d;
+      --shadow: 0 18px 38px rgba(56, 28, 10, 0.13);
+      --radius: 18px;
     }
 
     * { box-sizing: border-box; }
@@ -32,11 +33,11 @@
     body {
       margin: 0;
       min-height: 100%;
-      color: var(--ink);
       font-family: "Manrope", sans-serif;
+      color: var(--ink);
       background:
-        radial-gradient(circle at 14% 18%, rgba(255,255,255,0.62), transparent 34%),
-        radial-gradient(circle at 90% 22%, rgba(255,238,202,0.56), transparent 32%),
+        radial-gradient(circle at 14% 15%, rgba(255,255,255,0.64), transparent 34%),
+        radial-gradient(circle at 88% 18%, rgba(255,240,206,0.58), transparent 34%),
         linear-gradient(160deg, var(--bg-a) 0%, var(--bg-b) 52%, var(--bg-c) 100%);
       overflow-x: hidden;
     }
@@ -51,38 +52,16 @@
       mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
     }
 
-    .blob {
-      position: absolute;
-      width: 38vmax;
-      height: 38vmax;
-      border-radius: 50%;
-      filter: blur(2px);
-      opacity: 0.42;
-      animation: drift 14s ease-in-out infinite;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.65), rgba(255,255,255,0));
-    }
-
-    .blob.one { top: -16vmax; left: -12vmax; }
-    .blob.two { top: -10vmax; right: -10vmax; animation-delay: -4.2s; }
-    .blob.three { bottom: -18vmax; left: 22vmax; animation-delay: -7s; }
-
-    .rain {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
     .drop {
       position: absolute;
-      top: -160px;
+      top: -170px;
       left: 0;
       width: var(--size, 72px);
-      opacity: var(--op, 0.15);
+      opacity: var(--op, 0.14);
       animation: fall var(--dur, 12s) linear infinite;
       animation-delay: var(--delay, 0s);
+      filter: drop-shadow(0 6px 12px rgba(98, 56, 26, 0.14));
       mix-blend-mode: multiply;
-      filter: drop-shadow(0 6px 12px rgba(97, 56, 25, 0.15));
     }
 
     .drop img {
@@ -96,217 +75,274 @@
     .page {
       position: relative;
       z-index: 1;
-      width: min(1120px, calc(100% - 34px));
+      width: min(1140px, calc(100% - 34px));
       margin: 0 auto;
-      padding: clamp(24px, 5vw, 60px) 0 70px;
+      padding: clamp(22px, 4.8vw, 58px) 0 70px;
       display: grid;
-      gap: 18px;
+      gap: 16px;
     }
 
     .hero {
       border: 1px solid var(--line);
       border-radius: 22px;
-      background: var(--card);
-      backdrop-filter: blur(5px);
+      background: var(--surface);
+      backdrop-filter: blur(4px);
       box-shadow: var(--shadow);
-      padding: clamp(18px, 3.2vw, 36px);
+      padding: clamp(18px, 3vw, 30px);
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: clamp(18px, 3vw, 32px);
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: clamp(16px, 2.8vw, 30px);
       align-items: center;
     }
 
-    .pill {
+    .chip {
       width: fit-content;
       border: 1px solid var(--line);
       border-radius: 999px;
+      background: rgba(255,255,255,0.7);
+      color: var(--muted);
       padding: 7px 12px;
       font-size: 0.76rem;
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--muted);
-      background: rgba(255,255,255,0.7);
       display: inline-flex;
       align-items: center;
       gap: 7px;
     }
 
-    .pill::before {
+    .chip::before {
       content: "";
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #ffbf4c;
-      box-shadow: 0 0 0 0 rgba(255,191,76,0.58);
-      animation: ping 1.8s ease-out infinite;
+      background: #ffc24f;
+      box-shadow: 0 0 0 0 rgba(255, 194, 79, 0.56);
+      animation: ping 1.9s ease-out infinite;
     }
 
     h1 {
       margin: 12px 0 0;
       font-family: "Sora", sans-serif;
-      font-size: clamp(1.95rem, 5.4vw, 4.1rem);
-      line-height: 0.98;
+      font-size: clamp(1.85rem, 5vw, 3.7rem);
       letter-spacing: -0.03em;
+      line-height: 1;
     }
 
-    .heroLead {
-      margin: 12px 0 0;
-      max-width: 56ch;
+    .lead {
+      margin: 10px 0 0;
       color: var(--muted);
-      font-size: clamp(0.95rem, 1.8vw, 1.06rem);
+      max-width: 58ch;
+      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
       line-height: 1.66;
       font-weight: 600;
     }
 
     .heroMeta {
-      margin-top: 16px;
+      margin-top: 14px;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
 
     .meta {
       border: 1px solid var(--line);
       border-radius: 999px;
       padding: 7px 11px;
-      font-size: 0.76rem;
-      font-weight: 700;
-      background: rgba(255,255,255,0.68);
+      font-size: 0.75rem;
       color: var(--muted);
+      background: rgba(255,255,255,0.66);
+      font-weight: 700;
     }
 
-    .side {
+    .sideNote {
       border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--card-solid);
-      padding: 14px;
+      border-radius: 15px;
+      background: #fff8ea;
+      padding: 13px;
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .side h2 {
+    .sideNote h2 {
       margin: 0;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--muted);
     }
 
-    .side p {
+    .sideNote p {
       margin: 0;
-      font-size: 0.92rem;
-      line-height: 1.56;
       color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.56;
       font-weight: 600;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .section {
+    .vault {
       border: 1px solid var(--line);
-      border-radius: 20px;
-      background: var(--card);
+      border-radius: 22px;
+      background: var(--surface);
       backdrop-filter: blur(4px);
       box-shadow: var(--shadow);
-      padding: clamp(16px, 2.6vw, 28px);
+      padding: clamp(16px, 2.6vw, 24px);
+      display: grid;
+      gap: 12px;
     }
 
-    .sectionTitle {
+    .vaultHead {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .vaultHead h2 {
       margin: 0;
       font-family: "Sora", sans-serif;
-      font-size: clamp(1.15rem, 2.6vw, 1.9rem);
+      font-size: clamp(1.12rem, 2.4vw, 1.78rem);
       letter-spacing: -0.01em;
     }
 
-    .sectionText {
-      margin: 8px 0 0;
+    .vaultHead p {
+      margin: 0;
       color: var(--muted);
-      font-size: 0.94rem;
-      line-height: 1.6;
+      font-size: 0.86rem;
       font-weight: 600;
     }
 
-    .portfolioHead {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-
-    .portfolioGrid {
+    .fileGrid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
     }
 
-    .project {
+    .file {
+      perspective: 1000px;
+      min-height: 216px;
+      position: relative;
+      cursor: pointer;
+      outline: none;
+      transform: translateY(0);
+      transition: transform 200ms ease;
+    }
+
+    .file:focus-visible {
+      outline: 2px solid rgba(46, 25, 11, 0.34);
+      outline-offset: 4px;
+      border-radius: 12px;
+    }
+
+    .file:hover,
+    .file.is-active {
+      transform: translateY(-4px);
+    }
+
+    .fileTab {
+      position: absolute;
+      top: -8px;
+      left: 14px;
       border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--card-solid);
-      padding: 13px;
+      border-bottom: none;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      background: var(--file-dark);
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 6px 8px 5px;
+      z-index: 3;
+    }
+
+    .fileInner {
+      position: relative;
+      min-height: 216px;
+      transform-style: preserve-3d;
+      transition: transform 450ms cubic-bezier(0.22, 0.75, 0.2, 1);
+      will-change: transform;
+    }
+
+    .file.is-flipped .fileInner {
+      transform: rotateY(180deg);
+    }
+
+    .fileFace {
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(170deg, var(--file) 0%, #ffefd0 100%);
+      box-shadow: 0 8px 16px rgba(60, 30, 12, 0.09);
+      padding: 12px;
       display: grid;
       gap: 8px;
-      min-height: 178px;
-      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+      backface-visibility: hidden;
+      transform: rotateY(0deg);
     }
 
-    .project:hover {
-      transform: translateY(-3px);
-      border-color: rgba(47, 23, 8, 0.26);
-      box-shadow: 0 10px 20px rgba(56, 28, 10, 0.12);
+    .fileFace.back {
+      transform: rotateY(180deg);
+      background: linear-gradient(170deg, #fff9eb 0%, #ffe8c0 100%);
     }
 
-    .projectKicker {
+    .fileKind {
       width: fit-content;
-      border: 1px solid rgba(47, 23, 8, 0.18);
+      border: 1px solid rgba(46, 25, 11, 0.2);
       border-radius: 999px;
-      padding: 5px 9px;
-      font-size: 0.72rem;
+      padding: 4px 8px;
+      font-size: 0.7rem;
       font-weight: 800;
-      letter-spacing: 0.04em;
       text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: var(--muted);
     }
 
-    .project h3 {
+    .fileFace h3 {
       margin: 0;
       font-size: 1rem;
       letter-spacing: -0.01em;
+      line-height: 1.3;
     }
 
-    .project p {
+    .fileFace p {
       margin: 0;
-      font-size: 0.9rem;
-      line-height: 1.55;
       color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.54;
       font-weight: 600;
     }
 
-    .project a {
+    .hint {
       margin-top: auto;
+      font-size: 0.74rem;
+      color: rgba(107, 70, 40, 0.8);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .fileFace a {
+      margin-top: auto;
+      width: fit-content;
       text-decoration: none;
       color: var(--accent);
       font-size: 0.85rem;
       font-weight: 800;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
-    .project a::after {
+    .fileFace a::after {
       content: "→";
-      transform: translateX(0);
       transition: transform 150ms ease;
     }
 
-    .project a:hover::after {
+    .fileFace a:hover::after {
       transform: translateX(2px);
     }
 
@@ -329,35 +365,29 @@
 
     @keyframes fall {
       from { transform: translate3d(0, -20vh, 0) rotate(0deg); }
-      to { transform: translate3d(var(--drift, 20px), 128vh, 0) rotate(var(--rot, 10deg)); }
+      to { transform: translate3d(var(--drift, 20px), 130vh, 0) rotate(var(--rot, 10deg)); }
     }
 
     @keyframes ping {
-      from { box-shadow: 0 0 0 0 rgba(255,191,76,0.58); }
-      to { box-shadow: 0 0 0 9px rgba(255,191,76,0); }
-    }
-
-    @keyframes drift {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      50% { transform: translateY(-12px) translateX(10px); }
+      from { box-shadow: 0 0 0 0 rgba(255, 194, 79, 0.56); }
+      to { box-shadow: 0 0 0 9px rgba(255, 194, 79, 0); }
     }
 
     @media (max-width: 980px) {
       .hero { grid-template-columns: 1fr; }
-      .portfolioGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .grid { grid-template-columns: 1fr; }
+      .fileGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
-    @media (max-width: 660px) {
-      .page { width: min(1120px, calc(100% - 22px)); }
-      .portfolioGrid { grid-template-columns: 1fr; }
+    @media (max-width: 680px) {
+      .page { width: min(1140px, calc(100% - 22px)); }
+      .fileGrid { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .drop,
-      .blob,
-      .pill::before,
-      .project,
+      .chip::before,
+      .file,
+      .fileInner,
       .reveal {
         animation: none !important;
         transition: none !important;
@@ -371,49 +401,34 @@
   </style>
 </head>
 <body>
-  <div class="backdrop" aria-hidden="true">
-    <div class="blob one"></div>
-    <div class="blob two"></div>
-    <div class="blob three"></div>
-    <div id="rain" class="rain"></div>
-  </div>
+  <div id="backdrop" class="backdrop" aria-hidden="true"></div>
 
   <main class="page">
     <section class="hero reveal">
       <div>
-        <span class="pill">Portfolio Placeholder</span>
+        <span class="chip">Interactive Concept</span>
         <h1 id="name">Jackie Foo</h1>
-        <p id="heroLead" class="heroLead">This page is a framework for your future personal portfolio. Replace text blocks and project details as your real content is ready.</p>
+        <p class="lead" id="intro">This is an interactive project file board. Hover to pull a file, click to flip it, and view details on the back.</p>
         <div class="heroMeta">
-          <span id="role" class="meta">Your Role</span>
-          <span id="location" class="meta">Your Location</span>
-          <span id="focus" class="meta">Your Focus Area</span>
+          <span id="role" class="meta">Designer / Educator</span>
+          <span id="location" class="meta">Melbourne</span>
+          <span id="focus" class="meta">Learning Experience</span>
         </div>
       </div>
-      <aside class="side">
-        <h2>Quick Notes</h2>
-        <p>Use this as your draft structure: About, selected work, outcomes, and links.</p>
-        <p>Each card below is pre-set for one portfolio piece. Replace one by one.</p>
+      <aside class="sideNote">
+        <h2>How It Works</h2>
+        <p>1) Hover a file to bring it forward.</p>
+        <p>2) Click a file to flip front/back.</p>
+        <p>3) Put your real links into each card.</p>
       </aside>
     </section>
 
-    <section class="grid">
-      <article class="section reveal delay-1">
-        <h2 class="sectionTitle">About Me</h2>
-        <p class="sectionText" id="aboutText">Write your short bio here. Keep it personal and specific: what you design, why you care, and what kind of projects excite you.</p>
-      </article>
-      <article class="section reveal delay-2">
-        <h2 class="sectionTitle">How To Use This</h2>
-        <p class="sectionText">1) Replace hero info. 2) Update the six cards with real project titles and outcomes. 3) Link each card to details or case study.</p>
-      </article>
-    </section>
-
-    <section class="section reveal delay-3">
-      <div class="portfolioHead">
-        <h2 class="sectionTitle">Selected Work (6)</h2>
-        <p class="sectionText">Replace placeholder copy and links.</p>
-      </div>
-      <div id="portfolioGrid" class="portfolioGrid"></div>
+    <section class="vault reveal delay-1">
+      <header class="vaultHead">
+        <h2>Project Files</h2>
+        <p>6 slots ready for your portfolio.</p>
+      </header>
+      <div id="fileGrid" class="fileGrid"></div>
     </section>
   </main>
 
@@ -422,35 +437,130 @@
       const profile = {
         name: "Jackie Foo",
         role: "Designer / Educator",
-        location: "Based in Melbourne",
-        focus: "Learning Experience & Systems"
+        location: "Melbourne",
+        focus: "Learning Experience & Systems",
+        intro: "This is an interactive project file board. Hover to pull a file, click to flip it, and view details on the back."
       };
 
       const projects = [
-        { title: "Project 01", type: "Case Study", summary: "Short outcome-focused summary for this project.", href: "#" },
-        { title: "Project 02", type: "Prototype", summary: "Short outcome-focused summary for this project.", href: "#" },
-        { title: "Project 03", type: "Research", summary: "Short outcome-focused summary for this project.", href: "#" },
-        { title: "Project 04", type: "Workshop", summary: "Short outcome-focused summary for this project.", href: "#" },
-        { title: "Project 05", type: "System", summary: "Short outcome-focused summary for this project.", href: "#" },
-        { title: "Project 06", type: "Launch", summary: "Short outcome-focused summary for this project.", href: "#" }
+        {
+          no: "File 01",
+          type: "Case Study",
+          title: "Project 01",
+          summary: "Short front summary of this project and what it solves.",
+          details: "Add deeper notes here: process, impact, and what changed.",
+          href: "#"
+        },
+        {
+          no: "File 02",
+          type: "Prototype",
+          title: "Project 02",
+          summary: "Short front summary of this project and what it solves.",
+          details: "Add deeper notes here: process, impact, and what changed.",
+          href: "#"
+        },
+        {
+          no: "File 03",
+          type: "Research",
+          title: "Project 03",
+          summary: "Short front summary of this project and what it solves.",
+          details: "Add deeper notes here: process, impact, and what changed.",
+          href: "#"
+        },
+        {
+          no: "File 04",
+          type: "Workshop",
+          title: "Project 04",
+          summary: "Short front summary of this project and what it solves.",
+          details: "Add deeper notes here: process, impact, and what changed.",
+          href: "#"
+        },
+        {
+          no: "File 05",
+          type: "System",
+          title: "Project 05",
+          summary: "Short front summary of this project and what it solves.",
+          details: "Add deeper notes here: process, impact, and what changed.",
+          href: "#"
+        },
+        {
+          no: "File 06",
+          type: "Launch",
+          title: "Project 06",
+          summary: "Short front summary of this project and what it solves.",
+          details: "Add deeper notes here: process, impact, and what changed.",
+          href: "#"
+        }
       ];
 
       document.getElementById("name").textContent = profile.name;
       document.getElementById("role").textContent = profile.role;
       document.getElementById("location").textContent = profile.location;
       document.getElementById("focus").textContent = profile.focus;
+      document.getElementById("intro").textContent = profile.intro;
 
-      const grid = document.getElementById("portfolioGrid");
+      const grid = document.getElementById("fileGrid");
+
       projects.forEach((project, i) => {
         const card = document.createElement("article");
-        card.className = `project reveal delay-${Math.min(5, i)}`;
-
+        card.className = `file reveal delay-${Math.min(5, i)}`;
+        card.tabIndex = 0;
+        card.setAttribute("role", "button");
+        card.setAttribute("aria-label", `${project.title} file card`);
         card.innerHTML = `
-          <span class="projectKicker">${project.type}</span>
-          <h3>${project.title}</h3>
-          <p>${project.summary}</p>
-          <a href="${project.href}" target="_blank" rel="noopener noreferrer">View details</a>
+          <span class="fileTab">${project.no}</span>
+          <div class="fileInner">
+            <section class="fileFace front">
+              <span class="fileKind">${project.type}</span>
+              <h3>${project.title}</h3>
+              <p>${project.summary}</p>
+              <div class="hint">Click to flip</div>
+            </section>
+            <section class="fileFace back">
+              <span class="fileKind">Details</span>
+              <h3>${project.title}</h3>
+              <p>${project.details}</p>
+              <a href="${project.href}" target="_blank" rel="noopener noreferrer">View project</a>
+            </section>
+          </div>
         `;
+
+        card.addEventListener("mouseenter", () => card.classList.add("is-active"));
+        card.addEventListener("mouseleave", () => card.classList.remove("is-active"));
+
+        card.addEventListener("click", () => {
+          const inner = card.querySelector(".fileInner");
+          if (inner) inner.style.transform = "";
+          card.classList.toggle("is-flipped");
+        });
+
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            const inner = card.querySelector(".fileInner");
+            if (inner) inner.style.transform = "";
+            card.classList.toggle("is-flipped");
+          }
+        });
+
+        card.addEventListener("pointermove", (event) => {
+          const inner = card.querySelector(".fileInner");
+          if (!inner || card.classList.contains("is-flipped")) return;
+          const rect = card.getBoundingClientRect();
+          const px = (event.clientX - rect.left) / rect.width;
+          const py = (event.clientY - rect.top) / rect.height;
+          const rx = (0.5 - py) * 4;
+          const ry = (px - 0.5) * 6;
+          inner.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+        });
+
+        card.addEventListener("pointerleave", () => {
+          const inner = card.querySelector(".fileInner");
+          if (!inner) return;
+          if (!card.classList.contains("is-flipped")) {
+            inner.style.transform = "";
+          }
+        });
 
         grid.appendChild(card);
       });
@@ -464,22 +574,25 @@
             }
           });
         },
-        { threshold: 0.15 }
+        { threshold: 0.16 }
       );
-
       document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 
-      const rain = document.getElementById("rain");
-      const count = Math.min(74, Math.max(32, Math.floor(window.innerWidth / 20)));
+      const backdrop = document.getElementById("backdrop");
+      const rainLayer = document.createElement("div");
+      rainLayer.className = "rain";
+      backdrop.appendChild(rainLayer);
+
+      const count = Math.min(76, Math.max(34, Math.floor(window.innerWidth / 20)));
       for (let i = 0; i < count; i += 1) {
         const drop = document.createElement("div");
         drop.className = "drop";
         drop.style.left = `${Math.random() * 100}%`;
-        drop.style.setProperty("--size", `${26 + Math.random() * 60}px`);
-        drop.style.setProperty("--dur", `${10 + Math.random() * 11}s`);
-        drop.style.setProperty("--delay", `${Math.random() * -20}s`);
+        drop.style.setProperty("--size", `${26 + Math.random() * 58}px`);
+        drop.style.setProperty("--dur", `${10 + Math.random() * 12}s`);
+        drop.style.setProperty("--delay", `${Math.random() * -22}s`);
         drop.style.setProperty("--op", `${0.08 + Math.random() * 0.14}`);
-        drop.style.setProperty("--drift", `${-30 + Math.random() * 58}px`);
+        drop.style.setProperty("--drift", `${-30 + Math.random() * 60}px`);
         drop.style.setProperty("--rot", `${-8 + Math.random() * 16}deg`);
         drop.style.setProperty("--flip", Math.random() > 0.5 ? "-1" : "1");
 
@@ -488,7 +601,7 @@
         img.alt = "";
 
         drop.appendChild(img);
-        rain.appendChild(drop);
+        rainLayer.appendChild(drop);
       }
     })();
   </script>
