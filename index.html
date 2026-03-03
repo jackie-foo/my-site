@@ -40,7 +40,7 @@
     .rain {
       position: fixed;
       inset: 0;
-      z-index: -1;
+      z-index: 0;
       pointer-events: none;
       overflow: hidden;
       mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 92%, transparent 100%);
@@ -48,13 +48,13 @@
 
     .drop {
       position: absolute;
-      top: -140px;
+      top: -180px;
       left: 0;
-      width: var(--size, 70px);
-      opacity: var(--op, 0.12);
-      animation: fall var(--dur, 13s) linear infinite;
+      width: var(--size, 80px);
+      opacity: var(--op, 0.18);
+      animation: fall var(--dur, 14s) linear infinite;
       animation-delay: var(--delay, 0s);
-      filter: drop-shadow(0 8px 14px rgba(110, 62, 30, 0.14));
+      filter: drop-shadow(0 6px 12px rgba(110, 62, 30, 0.16));
     }
 
     .drop img {
@@ -68,6 +68,8 @@
 
     .page {
       min-height: 100vh;
+      position: relative;
+      z-index: 1;
       display: grid;
       place-items: center;
       padding: clamp(22px, 4.6vw, 56px);
@@ -217,31 +219,6 @@
       animation: rise 540ms ease-out both;
     }
 
-    .profileRain {
-      position: absolute;
-      inset: -22px;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-      border-radius: 50%;
-    }
-
-    .profileDrop {
-      position: absolute;
-      top: -46px;
-      width: var(--p-size, 34px);
-      opacity: var(--p-op, 0.22);
-      animation: profileFall var(--p-dur, 6.5s) linear infinite;
-      animation-delay: var(--p-delay, 0s);
-      filter: drop-shadow(0 4px 8px rgba(88, 49, 24, 0.1));
-    }
-
-    .profileDrop img {
-      width: 100%;
-      display: block;
-      transform: scaleX(var(--p-flip, 1));
-    }
-
     .picWrap {
       width: clamp(180px, 24vw, 250px);
       aspect-ratio: 1 / 1;
@@ -292,19 +269,10 @@
 
     @keyframes fall {
       from {
-        transform: translate3d(0, -14vh, 0) rotate(0deg);
+        transform: translate3d(0, -20vh, 0) rotate(0deg);
       }
       to {
-        transform: translate3d(var(--drift, 16px), 120vh, 0) rotate(var(--rot, 10deg));
-      }
-    }
-
-    @keyframes profileFall {
-      from {
-        transform: translate3d(0, -30px, 0) rotate(0deg);
-      }
-      to {
-        transform: translate3d(var(--p-drift, 8px), 130%, 0) rotate(var(--p-rot, 8deg));
+        transform: translate3d(var(--drift, 20px), 128vh, 0) rotate(var(--rot, 9deg));
       }
     }
 
@@ -342,7 +310,6 @@
 
     @media (prefers-reduced-motion: reduce) {
       .drop,
-      .profileDrop,
       .heroCopy,
       .profileCol,
       .profileGlow,
@@ -381,7 +348,6 @@
       </section>
 
       <section class="profileCol" aria-label="Profile image">
-        <div id="profileRain" class="profileRain" aria-hidden="true"></div>
         <div class="profileGlow" aria-hidden="true"></div>
         <figure class="picWrap">
           <img src="/pic/chibi1.png" alt="Jackie chibi portrait" />
@@ -397,7 +363,6 @@
       const year = document.getElementById("year");
       const openBtn = document.getElementById("openBtn");
       const rain = document.getElementById("rain");
-      const profileRain = document.getElementById("profileRain");
 
       year.textContent = String(new Date().getFullYear());
 
@@ -407,19 +372,19 @@
 
       openBtn.addEventListener("click", openStage);
 
-      const count = Math.min(40, Math.max(20, Math.floor(window.innerWidth / 34)));
+      const count = Math.min(86, Math.max(44, Math.floor(window.innerWidth / 18)));
       for (let i = 0; i < count; i += 1) {
         const drop = document.createElement("div");
         drop.className = "drop";
 
-        const size = 26 + Math.random() * 54;
+        const size = 30 + Math.random() * 64;
         drop.style.setProperty("--size", `${size}px`);
         drop.style.left = `${Math.random() * 100}%`;
-        drop.style.setProperty("--dur", `${9 + Math.random() * 11}s`);
-        drop.style.setProperty("--delay", `${Math.random() * -20}s`);
-        drop.style.setProperty("--op", `${0.06 + Math.random() * 0.1}`);
-        drop.style.setProperty("--drift", `${-24 + Math.random() * 48}px`);
-        drop.style.setProperty("--rot", `${-10 + Math.random() * 20}deg`);
+        drop.style.setProperty("--dur", `${10 + Math.random() * 12}s`);
+        drop.style.setProperty("--delay", `${Math.random() * -24}s`);
+        drop.style.setProperty("--op", `${0.1 + Math.random() * 0.16}`);
+        drop.style.setProperty("--drift", `${-34 + Math.random() * 68}px`);
+        drop.style.setProperty("--rot", `${-8 + Math.random() * 16}deg`);
         drop.style.setProperty("--flip", Math.random() > 0.5 ? "-1" : "1");
 
         const img = document.createElement("img");
@@ -428,26 +393,6 @@
 
         drop.appendChild(img);
         rain.appendChild(drop);
-      }
-
-      const localCount = 10;
-      for (let i = 0; i < localCount; i += 1) {
-        const drop = document.createElement("div");
-        drop.className = "profileDrop";
-        drop.style.left = `${Math.random() * 100}%`;
-        drop.style.setProperty("--p-size", `${20 + Math.random() * 28}px`);
-        drop.style.setProperty("--p-op", `${0.16 + Math.random() * 0.2}`);
-        drop.style.setProperty("--p-dur", `${4.2 + Math.random() * 3.6}s`);
-        drop.style.setProperty("--p-delay", `${Math.random() * -6}s`);
-        drop.style.setProperty("--p-drift", `${-12 + Math.random() * 24}px`);
-        drop.style.setProperty("--p-rot", `${-8 + Math.random() * 16}deg`);
-        drop.style.setProperty("--p-flip", Math.random() > 0.5 ? "-1" : "1");
-
-        const img = document.createElement("img");
-        img.src = "/pic/chibi3.png";
-        img.alt = "";
-        drop.appendChild(img);
-        profileRain.appendChild(drop);
       }
     })();
   </script>
