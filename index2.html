@@ -13,11 +13,11 @@
 
   <style>
     :root {
-      --bg: #dcd8d1;
-      --paper: #f5f3ee;
+      --bg: #e8e2cf;
+      --paper: #f9f6ea;
       --ink: #161616;
       --muted: #4f4e4b;
-      --line: #d7d1c7;
+      --line: #ddd4c2;
     }
 
     * { box-sizing: border-box; }
@@ -85,7 +85,7 @@
       padding: clamp(16px, 3vw, 34px) clamp(16px, 3vw, 36px);
       position: relative;
       display: block;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.26), rgba(255,255,255,0));
+      background: linear-gradient(to bottom, rgba(255, 246, 216, 0.54), rgba(255, 248, 232, 0.08));
     }
 
     .heroTitle {
@@ -194,14 +194,14 @@
     .projects {
       padding: clamp(34px, 5vw, 58px) clamp(16px, 3vw, 36px) 110px;
       display: grid;
-      gap: 18px;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.56));
+      gap: 12px;
+      background: linear-gradient(to bottom, rgba(255, 248, 223, 0.88), rgba(255, 248, 233, 0.98));
     }
 
     .projects h3 {
       margin: 0;
       font-family: "Gaegu", cursive;
-      font-size: clamp(1.8rem, 4.3vw, 3.3rem);
+      font-size: clamp(2.1rem, 5vw, 4rem);
       line-height: 1;
       letter-spacing: 0.03em;
       text-transform: uppercase;
@@ -209,69 +209,220 @@
 
     .projects p {
       margin: 0;
-      color: #383734;
-      font-size: 0.94rem;
+      color: #413f3b;
+      font-size: 1rem;
       line-height: 1.56;
       max-width: 62ch;
     }
 
-    .projectGrid {
-      margin-top: 6px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(240px, 1fr));
-      gap: 16px;
+    .projectStageWrap {
+      margin-top: 14px;
+      position: relative;
+      padding: 0 clamp(0px, 4vw, 44px);
+      min-height: 540px;
     }
 
-    .project {
-      border: 1px solid #d7cfc4;
-      background: #fdfaf5;
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 10px 20px rgba(36, 31, 24, 0.08);
-      display: grid;
+    .projectStage {
+      position: relative;
+      max-width: 980px;
+      margin: 0 auto;
+      border: 4px solid #3a3733;
+      border-radius: 30px;
+      background: #f9f4e4;
+      padding: clamp(16px, 2.6vw, 24px);
+      box-shadow: 0 18px 28px rgba(45, 36, 22, 0.1);
+      overflow: hidden;
+    }
+
+    .stageHead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 8px;
-      transition: transform 180ms ease, box-shadow 180ms ease;
+      margin-bottom: 14px;
     }
 
-    .project:nth-child(1) { background: #fff5ef; }
-    .project:nth-child(2) { background: #f4f9ff; }
-    .project:nth-child(3) { background: #f5fff6; }
-    .project:nth-child(4) { background: #fff9ee; }
-
-    .project:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 24px rgba(36, 31, 24, 0.1);
-    }
-
-    .project .num {
+    .stageHead span {
       font-family: "Gaegu", cursive;
-      font-size: 1.18rem;
+      font-size: clamp(1.5rem, 2.8vw, 2.2rem);
       font-weight: 700;
-      color: #4e4c48;
+      color: #34322e;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
-    .project h4 {
+    .stageHead a {
+      border: 1px solid #2f2f2f;
+      border-radius: 999px;
+      padding: 6px 12px;
+      color: #f7f7f7;
+      background: #1f1f1f;
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .stageDeck {
+      display: grid;
+      grid-template-columns: 1fr 1.22fr 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .stageCard {
+      border: 1px solid #d4ccbc;
+      border-radius: 18px;
+      background: #fffefb;
+      padding: 10px;
+      display: grid;
+      gap: 10px;
+      box-shadow: 0 6px 14px rgba(50, 40, 28, 0.08);
+      min-height: 300px;
+    }
+
+    .stageCard.center {
+      min-height: 338px;
+      background: #fffdf7;
+    }
+
+    .art {
+      border-radius: 14px;
+      background:
+        linear-gradient(162deg, rgba(201, 247, 105, 0.84) 0 54%, transparent 54% 100%),
+        #f2efe6;
+      min-height: 168px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .art img {
+      width: min(70%, 188px);
+      height: auto;
+      object-fit: contain;
+      display: block;
+      filter: saturate(0.98) contrast(1.04);
+    }
+
+    .stageCard .num {
+      font-family: "Gaegu", cursive;
+      font-size: 1.24rem;
+      font-weight: 700;
+      color: #56534d;
+    }
+
+    .stageCard h4 {
       margin: 0;
       font-family: "Gaegu", cursive;
-      font-size: 1.58rem;
-      line-height: 1.04;
+      font-size: clamp(1.5rem, 2.8vw, 2rem);
+      line-height: 1.02;
     }
 
-    .project p {
-      font-size: 0.88rem;
-      max-width: none;
+    .stageCard p {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.48;
+      color: #34322f;
     }
 
-    .project a {
+    .stageCard a {
       width: fit-content;
-      color: #2d2b2a;
+      color: #262422;
       text-decoration: none;
-      border-bottom: 1px solid #6f6a64;
+      border-bottom: 1px solid #76706a;
       font-size: 0.79rem;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       padding-bottom: 2px;
+    }
+
+    .collab {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      color: #5f5a53;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .collab img {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e6dfd3;
+    }
+
+    .stageWide {
+      margin-top: 14px;
+      min-height: 152px;
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+      gap: 14px;
+      background: #fffef9;
+    }
+
+    .stageWide .art {
+      min-height: 128px;
+    }
+
+    .projectSide {
+      position: absolute;
+      top: 90px;
+      width: clamp(190px, 21vw, 260px);
+      border: 1px solid #d4ccbc;
+      border-radius: 18px;
+      background: #fffef7;
+      padding: 10px;
+      box-shadow: 0 8px 16px rgba(42, 35, 24, 0.08);
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 0;
+      transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 420ms ease;
+    }
+
+    .projectSide .num {
+      margin-top: 7px;
+      font-family: "Gaegu", cursive;
+      font-size: 1.16rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: #55524c;
+    }
+
+    .projectSide p {
+      margin: 2px 0 0;
+      font-size: 0.84rem;
+      line-height: 1.42;
+      color: #4a4741;
+    }
+
+    .projectSide.left {
+      left: -52px;
+      transform: translateX(-102px);
+    }
+
+    .projectSide.right {
+      right: -52px;
+      transform: translateX(102px);
+    }
+
+    .projectStageWrap.is-inview .projectSide.left {
+      transform: translateX(-14px);
+      opacity: 1;
+    }
+
+    .projectStageWrap.is-inview .projectSide.right {
+      transform: translateX(14px);
+      opacity: 1;
     }
 
     .drawCanvas {
@@ -371,10 +522,6 @@
     }
 
     @media (max-width: 860px) {
-      .projectGrid {
-        grid-template-columns: 1fr;
-      }
-
       .topRight {
         gap: 7px;
       }
@@ -390,6 +537,23 @@
 
       .heroTitle {
         font-size: clamp(1.2rem, 6.2vw, 2.1rem);
+      }
+
+      .projectStageWrap {
+        min-height: 0;
+        padding: 0;
+      }
+
+      .projectSide {
+        display: none;
+      }
+
+      .stageDeck {
+        grid-template-columns: 1fr;
+      }
+
+      .stageWide {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -440,37 +604,84 @@
     <section id="projects" class="projects" aria-label="Projects">
       <h3>Projects</h3>
       <p>
-        Pick one to open the placeholder page. I can map your final illustrations directly into each case study next.
+        Portfolio stage view. Center cards carry detailed context and collaborators; side cards slide inward as you enter this section.
       </p>
 
-      <div class="projectGrid">
-        <article class="project">
-          <div class="num">Project 01</div>
-          <h4>Feedback Workshop</h4>
-          <p>Workshop stages to surface feedback friction and implementation actions.</p>
-          <a href="/project-view.html?project=1">Open Project</a>
+      <div id="projectStageWrap" class="projectStageWrap">
+        <article class="projectSide left" aria-hidden="true">
+          <div class="art"><img src="/pic/chibi2.png" alt="" /></div>
+          <div class="num">side preview</div>
+          <p>This card drifts inward when the portfolio stage enters view.</p>
         </article>
 
-        <article class="project">
-          <div class="num">Project 02</div>
-          <h4>Journey Mapping Tool</h4>
-          <p>Prompt-led mapping for student and tutor constraints in one flow.</p>
-          <a href="/project-view.html?project=2">Open Project</a>
+        <article class="projectSide right" aria-hidden="true">
+          <div class="art"><img src="/pic/chibi3.png" alt="" /></div>
+          <div class="num">side preview</div>
+          <p>You can replace this with teaser copy or badges later.</p>
         </article>
 
-        <article class="project">
-          <div class="num">Project 03</div>
-          <h4>Live Dashboard</h4>
-          <p>Stage monitoring board for workshop facilitation and intervention timing.</p>
-          <a href="/project-view.html?project=3">Open Project</a>
-        </article>
+        <div class="projectStage">
+          <div class="stageHead">
+            <span>project / portfolio</span>
+            <a href="/project-view.html?project=1">Open Detail Page</a>
+          </div>
 
-        <article class="project">
-          <div class="num">Project 04</div>
-          <h4>Tutor Workflow</h4>
-          <p>Flow-based constraint mapping for marking and communication bottlenecks.</p>
-          <a href="/project-view.html?project=4">Open Project</a>
-        </article>
+          <div class="stageDeck">
+            <article class="stageCard">
+              <div class="art"><img src="/pic/chibi1.png" alt="Project visual" /></div>
+              <div class="num">Project 01</div>
+              <h4>Feedback Workshop</h4>
+              <p>Workshop stages to surface feedback friction and implementation actions.</p>
+              <a href="/project-view.html?project=1">Open Project</a>
+              <div class="collab">
+                <img src="/pic/chibi1.png" alt="Thanish" />
+                <img src="/pic/chibi2.png" alt="Nevin" />
+                <span>Thanish + Nevin</span>
+              </div>
+            </article>
+
+            <article class="stageCard center">
+              <div class="art"><img src="/pic/chibi3.png" alt="Project visual" /></div>
+              <div class="num">Project 02</div>
+              <h4>Journey Mapping Tool</h4>
+              <p>Prompt-led mapping for student and tutor constraints in one flow with strategic reflection cues.</p>
+              <a href="/project-view.html?project=2">Open Project</a>
+              <div class="collab">
+                <img src="/pic/chibi3.png" alt="Shen" />
+                <img src="/pic/chibi1.png" alt="Samantha" />
+                <span>Shen + Samantha</span>
+              </div>
+            </article>
+
+            <article class="stageCard">
+              <div class="art"><img src="/pic/chibi2.png" alt="Project visual" /></div>
+              <div class="num">Project 03</div>
+              <h4>Live Dashboard</h4>
+              <p>Stage monitoring board for facilitation timing and intervention decisions.</p>
+              <a href="/project-view.html?project=3">Open Project</a>
+              <div class="collab">
+                <img src="/pic/chibi2.png" alt="Thanish" />
+                <img src="/pic/chibi3.png" alt="Shen" />
+                <span>Thanish + Shen</span>
+              </div>
+            </article>
+          </div>
+
+          <article class="stageCard stageWide">
+            <div class="art"><img src="/pic/chibi1.png" alt="Project visual" /></div>
+            <div>
+              <div class="num">Project 04</div>
+              <h4>Tutor Workflow</h4>
+              <p>Flow-based constraint mapping for marking operations and communication bottlenecks in assessment pipelines.</p>
+              <a href="/project-view.html?project=4">Open Project</a>
+              <div class="collab">
+                <img src="/pic/chibi2.png" alt="Nevin" />
+                <img src="/pic/chibi1.png" alt="Samantha" />
+                <span>Nevin + Samantha</span>
+              </div>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
   </main>
@@ -662,6 +873,20 @@
       window.addEventListener("resize", setCanvasSize);
       window.addEventListener("load", setCanvasSize);
       setTimeout(setCanvasSize, 400);
+
+      const projectStageWrap = document.getElementById("projectStageWrap");
+      if (projectStageWrap) {
+        if ("IntersectionObserver" in window) {
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              projectStageWrap.classList.toggle("is-inview", entry.isIntersecting);
+            });
+          }, { threshold: 0.22 });
+          io.observe(projectStageWrap);
+        } else {
+          projectStageWrap.classList.add("is-inview");
+        }
+      }
     })();
   </script>
 </body>
