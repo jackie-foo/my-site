@@ -20,9 +20,6 @@
       --muted: #6f482a;
       --card: rgba(255, 249, 238, 0.82);
       --line: rgba(74, 42, 18, 0.16);
-      --focus: rgba(231, 133, 36, 0.22);
-      --ok: #1f6c44;
-      --okbg: #d8f2e3;
     }
 
     * { box-sizing: border-box; }
@@ -110,84 +107,84 @@
 
     h1 {
       margin: 12px 0 0;
-      font-size: clamp(1.9rem, 5.2vw, 3.8rem);
+      font-size: clamp(1.8rem, 4.8vw, 3.1rem);
       line-height: 1.02;
       letter-spacing: -0.02em;
       max-width: 14ch;
       font-weight: 800;
     }
 
-    .lead {
-      margin: 14px 0 0;
-      max-width: 55ch;
+    .subTitle {
+      margin: 10px 0 0;
+      max-width: 50ch;
       color: var(--muted);
-      font-size: clamp(0.96rem, 1.8vw, 1.04rem);
-      line-height: 1.62;
+      font-size: clamp(0.98rem, 1.8vw, 1.06rem);
+      line-height: 1.66;
       font-weight: 600;
     }
 
+    .lead {
+      margin: 10px 0 0;
+      max-width: 55ch;
+      color: var(--muted);
+      font-size: clamp(0.9rem, 1.55vw, 0.98rem);
+      line-height: 1.62;
+      font-weight: 500;
+    }
+
     .links {
-      margin-top: 18px;
+      margin-top: 20px;
       display: flex;
       flex-wrap: wrap;
-      gap: 9px;
+      gap: 14px;
     }
 
     .link {
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: rgba(255,255,255,0.78);
       color: var(--ink);
       text-decoration: none;
-      font-size: 0.86rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      transition: transform 120ms ease, border-color 120ms ease;
+      position: relative;
+      transition: color 140ms ease, transform 140ms ease;
+      animation: rise 500ms ease-out both;
+    }
+
+    .link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -3px;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0.2);
+      transform-origin: left;
+      opacity: 0.45;
+      transition: transform 160ms ease, opacity 160ms ease;
     }
 
     .link:hover {
+      color: #2e1709;
       transform: translateY(-1px);
-      border-color: rgba(74, 42, 18, 0.32);
     }
 
-    .gate {
-      margin-top: 18px;
-      width: min(500px, 100%);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 10px;
-      background: rgba(255,255,255,0.72);
-      display: grid;
-      gap: 8px;
+    .link:hover::after {
+      transform: scaleX(1);
+      opacity: 1;
     }
 
-    .gateRow {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-    }
-
-    .pw {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font: inherit;
-      font-size: 0.94rem;
-      font-weight: 700;
-      color: var(--ink);
-      outline: none;
-      background: #fff;
-    }
-
-    .pw:focus {
-      border-color: rgba(231,133,36,0.5);
-      box-shadow: 0 0 0 3px var(--focus);
+    .workshopWrap {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .btn {
       border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
+      border-radius: 999px;
+      padding: 10px 16px;
       font: inherit;
       font-size: 0.92rem;
       font-weight: 800;
@@ -203,21 +200,11 @@
       box-shadow: 0 8px 16px rgba(50, 26, 12, 0.2);
     }
 
-    .hint {
+    .redirectNote {
       margin: 0;
-      min-height: 1.2em;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #8e2d1d;
-    }
-
-    .hint.ok {
-      width: fit-content;
-      border: 1px solid #90c9aa;
-      border-radius: 8px;
-      background: var(--okbg);
-      color: var(--ok);
-      padding: 4px 8px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 600;
     }
 
     .profileCol {
@@ -226,7 +213,33 @@
       align-items: center;
       order: 1;
       position: relative;
+      z-index: 0;
       animation: rise 540ms ease-out both;
+    }
+
+    .profileRain {
+      position: absolute;
+      inset: -22px;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: 50%;
+    }
+
+    .profileDrop {
+      position: absolute;
+      top: -46px;
+      width: var(--p-size, 34px);
+      opacity: var(--p-op, 0.22);
+      animation: profileFall var(--p-dur, 6.5s) linear infinite;
+      animation-delay: var(--p-delay, 0s);
+      filter: drop-shadow(0 4px 8px rgba(88, 49, 24, 0.1));
+    }
+
+    .profileDrop img {
+      width: 100%;
+      display: block;
+      transform: scaleX(var(--p-flip, 1));
     }
 
     .picWrap {
@@ -238,6 +251,7 @@
       background: linear-gradient(145deg, #fff8ea, #ffe8bf);
       box-shadow: 0 10px 22px rgba(84, 47, 22, 0.14);
       position: relative;
+      z-index: 2;
     }
 
     .picWrap::before {
@@ -264,7 +278,7 @@
       border-radius: 50%;
       background: radial-gradient(circle at center, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
       position: absolute;
-      z-index: -1;
+      z-index: 0;
       transform: translateY(8px);
       filter: blur(1px);
     }
@@ -282,6 +296,15 @@
       }
       to {
         transform: translate3d(var(--drift, 16px), 120vh, 0) rotate(var(--rot, 10deg));
+      }
+    }
+
+    @keyframes profileFall {
+      from {
+        transform: translate3d(0, -30px, 0) rotate(0deg);
+      }
+      to {
+        transform: translate3d(var(--p-drift, 8px), 130%, 0) rotate(var(--p-rot, 8deg));
       }
     }
 
@@ -312,16 +335,18 @@
     }
 
     @media (max-width: 760px) {
-      .gateRow {
-        grid-template-columns: 1fr;
+      .workshopWrap {
+        align-items: flex-start;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .drop,
+      .profileDrop,
       .heroCopy,
       .profileCol,
       .profileGlow,
+      .link,
       .btn {
         animation: none;
         transition: none;
@@ -336,8 +361,9 @@
     <main class="hero" aria-label="Intro">
       <section class="heroCopy">
         <span class="tag">Jackie Foo</span>
-        <h1>This is my internet corner, a little piece of me.</h1>
-        <p class="lead">A cute minimal space for now. If you are here for the workshop, you can unlock Stage 1 below.</p>
+        <h1>Jackie Foo</h1>
+        <p class="subTitle">This is my internet corner, a little piece of me.</p>
+        <p class="lead">I share ideas, process notes, and small experiments here in a warm and simple space.</p>
 
         <nav class="links" aria-label="Profile links">
           <a class="link" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -346,18 +372,16 @@
           <a class="link" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
         </nav>
 
-        <section class="gate" aria-label="Workshop gate">
-          <div class="gateRow">
-            <input id="pwInput" class="pw" type="password" placeholder="Enter workshop password" autocomplete="off" />
-            <button id="openBtn" class="btn" type="button">Open Stage 1</button>
-          </div>
-          <p id="hint" class="hint" aria-live="polite"></p>
+        <section class="workshopWrap" aria-label="Workshop redirect">
+          <button id="openBtn" class="btn" type="button">Go To Workshop</button>
+          <p class="redirectNote">Redirects to the Stage 1 workshop page.</p>
         </section>
 
         <footer>© <span id="year"></span> Jackie Foo</footer>
       </section>
 
       <section class="profileCol" aria-label="Profile image">
+        <div id="profileRain" class="profileRain" aria-hidden="true"></div>
         <div class="profileGlow" aria-hidden="true"></div>
         <figure class="picWrap">
           <img src="/pic/chibi1.png" alt="Jackie chibi portrait" />
@@ -368,40 +392,20 @@
 
   <script>
     (() => {
-      const WORKSHOP_PASS = "jackiefoo.me";
       const WORKSHOP_LINK = "/stage1/landing.html";
 
       const year = document.getElementById("year");
-      const pwInput = document.getElementById("pwInput");
       const openBtn = document.getElementById("openBtn");
-      const hint = document.getElementById("hint");
       const rain = document.getElementById("rain");
+      const profileRain = document.getElementById("profileRain");
 
       year.textContent = String(new Date().getFullYear());
 
       function openStage() {
-        const value = (pwInput.value || "").trim();
-        if (value !== WORKSHOP_PASS) {
-          hint.textContent = "Wrong password. Please try again.";
-          hint.className = "hint";
-          pwInput.focus();
-          return;
-        }
-
-        hint.textContent = "Unlocked. Opening Stage 1...";
-        hint.className = "hint ok";
-        setTimeout(() => {
-          window.location.href = WORKSHOP_LINK;
-        }, 220);
+        window.location.href = WORKSHOP_LINK;
       }
 
       openBtn.addEventListener("click", openStage);
-      pwInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          openStage();
-        }
-      });
 
       const count = Math.min(40, Math.max(20, Math.floor(window.innerWidth / 34)));
       for (let i = 0; i < count; i += 1) {
@@ -424,6 +428,26 @@
 
         drop.appendChild(img);
         rain.appendChild(drop);
+      }
+
+      const localCount = 10;
+      for (let i = 0; i < localCount; i += 1) {
+        const drop = document.createElement("div");
+        drop.className = "profileDrop";
+        drop.style.left = `${Math.random() * 100}%`;
+        drop.style.setProperty("--p-size", `${20 + Math.random() * 28}px`);
+        drop.style.setProperty("--p-op", `${0.16 + Math.random() * 0.2}`);
+        drop.style.setProperty("--p-dur", `${4.2 + Math.random() * 3.6}s`);
+        drop.style.setProperty("--p-delay", `${Math.random() * -6}s`);
+        drop.style.setProperty("--p-drift", `${-12 + Math.random() * 24}px`);
+        drop.style.setProperty("--p-rot", `${-8 + Math.random() * 16}deg`);
+        drop.style.setProperty("--p-flip", Math.random() > 0.5 ? "-1" : "1");
+
+        const img = document.createElement("img");
+        img.src = "/pic/chibi3.png";
+        img.alt = "";
+        drop.appendChild(img);
+        profileRain.appendChild(drop);
       }
     })();
   </script>
