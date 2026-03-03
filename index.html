@@ -85,9 +85,13 @@
       box-shadow: 0 20px 50px rgba(88, 49, 24, 0.16);
       padding: clamp(18px, 3vw, 34px);
       display: grid;
-      grid-template-columns: 1fr minmax(220px, 320px);
+      grid-template-columns: 1.18fr minmax(230px, 330px);
       gap: clamp(18px, 3vw, 36px);
       align-items: center;
+    }
+
+    .heroCopy {
+      animation: rise 650ms ease-out both;
     }
 
     .tag {
@@ -190,6 +194,12 @@
       background: #2e1709;
       cursor: pointer;
       white-space: nowrap;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(50, 26, 12, 0.2);
     }
 
     .hint {
@@ -209,14 +219,33 @@
       padding: 4px 8px;
     }
 
+    .profileCol {
+      display: grid;
+      justify-items: center;
+      align-items: center;
+      position: relative;
+      animation: rise 720ms ease-out both;
+    }
+
     .picWrap {
-      width: 100%;
+      width: clamp(220px, 30vw, 320px);
       aspect-ratio: 1 / 1;
-      border-radius: 22px;
+      border-radius: 50%;
       overflow: hidden;
       border: 1px solid var(--line);
       background: linear-gradient(145deg, #fff8ea, #ffe8bf);
-      box-shadow: 0 18px 40px rgba(84, 47, 22, 0.2);
+      box-shadow: 0 22px 42px rgba(84, 47, 22, 0.2);
+      position: relative;
+      animation: bob 5.8s ease-in-out infinite;
+    }
+
+    .picWrap::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      pointer-events: none;
     }
 
     .picWrap img {
@@ -224,8 +253,20 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
-      transform: scale(1.04);
+      transform: scale(1.08);
       display: block;
+    }
+
+    .profileGlow {
+      width: clamp(180px, 24vw, 260px);
+      height: clamp(180px, 24vw, 260px);
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+      position: absolute;
+      z-index: -1;
+      transform: translateY(8px);
+      filter: blur(1px);
+      animation: pulse 4.6s ease-in-out infinite;
     }
 
     footer {
@@ -244,13 +285,46 @@
       }
     }
 
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bob {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 0.38;
+        transform: translateY(8px) scale(1);
+      }
+      50% {
+        opacity: 0.58;
+        transform: translateY(8px) scale(1.05);
+      }
+    }
+
     @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
       }
 
-      .picWrap {
-        max-width: 320px;
+      .profileCol {
+        justify-items: center;
       }
     }
 
@@ -261,8 +335,14 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .drop {
+      .drop,
+      .heroCopy,
+      .profileCol,
+      .picWrap,
+      .profileGlow,
+      .btn {
         animation: none;
+        transition: none;
       }
     }
   </style>
@@ -272,7 +352,7 @@
 
   <div class="page">
     <main class="hero" aria-label="Intro">
-      <section>
+      <section class="heroCopy">
         <span class="tag">Jackie Foo</span>
         <h1>This is my internet corner, a little piece of me.</h1>
         <p class="lead">A cute minimal space for now. If you are here for the workshop, you can unlock Stage 1 below.</p>
@@ -295,9 +375,12 @@
         <footer>© <span id="year"></span> Jackie Foo</footer>
       </section>
 
-      <figure class="picWrap" aria-label="Profile image">
-        <img src="/pic/chibi1.png" alt="Jackie chibi portrait" />
-      </figure>
+      <section class="profileCol" aria-label="Profile image">
+        <div class="profileGlow" aria-hidden="true"></div>
+        <figure class="picWrap">
+          <img src="/pic/chibi1.png" alt="Jackie chibi portrait" />
+        </figure>
+      </section>
     </main>
   </div>
 
