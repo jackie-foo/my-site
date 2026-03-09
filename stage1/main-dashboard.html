@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Stage 1 • Main Dashboard</title>
+  <title>Stage 1 Main Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -11,568 +11,879 @@
     :root{
       --bg:#060b16;
       --panel:#11182d;
-      --panel2:#0c1222;
-      --border:#31406a;
-      --text:#e9ecff;
-      --muted:#aab4de;
+      --panel2:#0b1120;
+      --panel3:#141d37;
+      --border:#2d3b63;
+      --text:#edf1ff;
+      --muted:#a9b4db;
       --accent:#35d8ff;
       --accent2:#ff9f4a;
       --ok:#47ff87;
       --warn:#ffe44d;
       --bad:#ff6b77;
-      --r:18px;
-      --shadow:0 20px 46px rgba(0,0,0,.44);
+      --shadow:0 28px 56px rgba(0,0,0,.34);
+      --r:24px;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
+      min-height:100vh;
       font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(900px 520px at 18% 14%, rgba(53,216,255,.11), transparent 56%),
-        radial-gradient(740px 460px at 84% 72%, rgba(255,159,74,.10), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
+        radial-gradient(900px 560px at 12% 12%, rgba(53,216,255,.11), transparent 58%),
+        radial-gradient(860px 520px at 86% 18%, rgba(255,159,74,.11), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.03), transparent 38%),
         var(--bg);
-      min-height:100vh;
     }
-    .wrap{max-width:1260px;margin:0 auto;padding:18px 14px 90px}
-    .top{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      flex-wrap:wrap;
+    button,input,select{
+      font:inherit;
+    }
+    .wrap{
+      max-width:1480px;
+      margin:0 auto;
+      padding:24px 18px 72px;
+    }
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:18px;
+      align-items:start;
+      margin-bottom:16px;
+    }
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr}
     }
     .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      border:1px solid rgba(255,255,255,.12);
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
       border-radius:999px;
-      background:rgba(17,24,45,.8);
-      padding:7px 11px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(17,24,45,.78);
       font-size:12px;
       font-weight:1000;
+      letter-spacing:.2px;
     }
-    .dot{width:10px;height:10px;border-radius:3px;background:var(--accent)}
-    .subtitle{margin-top:8px;font-size:13px;font-weight:800;line-height:1.4;color:var(--muted)}
-    .mono{
-      font-family:ui-monospace,Menlo,Consolas,monospace;
-      font-size:12px;font-weight:900;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:999px;padding:3px 8px;
-      background:rgba(255,255,255,.05);
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:3px;
+      background:var(--accent);
+      box-shadow:0 0 24px rgba(53,216,255,.42);
     }
-    .toolbar{
-      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;
-      min-width:320px;
+    h1{
+      margin:14px 0 8px;
+      font-size:clamp(28px, 3vw, 44px);
+      line-height:1;
+      letter-spacing:-.04em;
     }
-    .tabs{
-      margin-top:12px;
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      font-weight:800;
+      line-height:1.55;
+      max-width:860px;
+    }
+    .metaRow{
+      margin-top:14px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      align-items:center;
     }
-    .tabGroup{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
+    .mono{
+      font-family:ui-monospace,Menlo,Consolas,monospace;
+      font-size:12px;
+      font-weight:1000;
       border:1px solid rgba(255,255,255,.12);
       border-radius:999px;
-      padding:6px;
-      background:rgba(17,24,45,.72);
-    }
-    .tabLabel{
-      font-size:10px;
-      letter-spacing:.25px;
-      text-transform:uppercase;
-      color:var(--muted);
-      font-weight:1000;
-      padding:0 4px 0 6px;
-    }
-    .tabBtn{
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:999px;
-      background:rgba(255,255,255,.03);
-      padding:7px 11px;
-      font-size:11px;
-      font-weight:1000;
-      box-shadow:none;
-    }
-    .tabBtn.active{
-      border-color:color-mix(in srgb,var(--accent) 64%, rgba(255,255,255,.15));
-      background:linear-gradient(180deg, rgba(53,216,255,.16), rgba(255,255,255,.04));
-    }
-    .field{
-      border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.04);
-      color:var(--text);
-      border-radius:14px;
-      padding:10px 12px;
-      min-width:230px;
-      font-weight:900;
-      outline:none;
+      padding:5px 9px;
+    }
+    .heroActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .stagePill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(17,24,45,.82);
+      font-size:12px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      text-transform:uppercase;
     }
     button{
       appearance:none;
       border:1px solid rgba(255,255,255,.14);
-      border-radius:14px;
-      padding:10px 12px;
-      background:rgba(17,24,45,.82);
+      border-radius:16px;
+      padding:11px 14px;
+      background:rgba(17,24,45,.86);
       color:var(--text);
       font-weight:1000;
       cursor:pointer;
-      box-shadow:0 10px 26px rgba(0,0,0,.26);
+      box-shadow:0 12px 28px rgba(0,0,0,.22);
+      transition:transform .14s ease,border-color .14s ease,box-shadow .14s ease,background .14s ease;
     }
-    button:hover{border-color:color-mix(in srgb,var(--accent) 62%, rgba(255,255,255,.14))}
+    button:hover{
+      transform:translateY(-1px);
+      border-color:color-mix(in srgb, var(--accent) 62%, rgba(255,255,255,.18));
+      box-shadow:0 16px 32px rgba(0,0,0,.28);
+    }
+    button:disabled{
+      opacity:.42;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
     .btnPrimary{
-      border-color:color-mix(in srgb,var(--accent) 75%, rgba(255,255,255,.14));
-      background:linear-gradient(180deg, rgba(53,216,255,.14), rgba(17,24,45,.82));
+      border-color:color-mix(in srgb, var(--accent) 70%, rgba(255,255,255,.16));
+      background:linear-gradient(180deg, rgba(53,216,255,.18), rgba(17,24,45,.88));
     }
     .btnAccent{
-      border-color:color-mix(in srgb,var(--accent2) 70%, rgba(255,255,255,.14));
-      background:linear-gradient(180deg, rgba(255,159,74,.16), rgba(17,24,45,.82));
+      border-color:color-mix(in srgb, var(--accent2) 70%, rgba(255,255,255,.16));
+      background:linear-gradient(180deg, rgba(255,159,74,.18), rgba(17,24,45,.88));
     }
     .card{
-      margin-top:14px;
       border:1px solid rgba(255,255,255,.12);
       border-radius:var(--r);
       background:
-        linear-gradient(110deg, rgba(53,216,255,.04), transparent 34%),
-        linear-gradient(0deg, rgba(12,18,34,.92), rgba(17,24,45,.92));
+        linear-gradient(135deg, rgba(53,216,255,.06), transparent 30%),
+        linear-gradient(180deg, rgba(20,29,55,.96), rgba(11,17,32,.96));
       box-shadow:var(--shadow);
       overflow:hidden;
     }
+    .card + .card{
+      margin-top:14px;
+    }
     .cardHead{
-      padding:14px;
+      padding:16px 18px;
       border-bottom:1px solid rgba(255,255,255,.08);
-      display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-end;
+      flex-wrap:wrap;
     }
     .cardHead h2{
-      margin:0;font-size:14px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase;
+      margin:0;
+      font-size:16px;
+      font-weight:1000;
+      letter-spacing:.02em;
     }
-    .cardBody{padding:14px}
+    .kicker{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      line-height:1.45;
+    }
+    .cardBody{
+      padding:18px;
+    }
+    .setupGrid{
+      display:grid;
+      grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+      gap:14px;
+    }
+    @media (max-width:1080px){
+      .setupGrid{grid-template-columns:1fr}
+    }
+    .fieldRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .field{
+      flex:1 1 220px;
+      min-width:0;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      padding:11px 13px;
+      font-weight:900;
+      outline:none;
+    }
+    .field::placeholder{
+      color:#90a0cf;
+    }
+    .linkCard{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      padding:12px;
+      display:grid;
+      gap:10px;
+    }
+    .linkLabel{
+      margin:0;
+      font-size:11px;
+      color:var(--muted);
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.22px;
+    }
+    .linkValue{
+      margin:0;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(5,10,20,.42);
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--text);
+      font-size:12px;
+      font-weight:850;
+      line-height:1.45;
+      word-break:break-all;
+    }
     .stats{
       display:grid;
       grid-template-columns:repeat(5,minmax(0,1fr));
-      gap:10px;
-    }
-    @media (max-width:980px){ .stats{grid-template-columns:repeat(2,minmax(0,1fr));} }
-    @media (max-width:560px){ .stats{grid-template-columns:1fr;} }
-    .stat{
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:16px;
-      padding:12px;
-      background:rgba(255,255,255,.03);
-    }
-    .stat h3{margin:0;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.25px}
-    .stat p{margin:8px 0 0;font-size:28px;font-weight:1000;line-height:1}
-    .progressWrap{
-      border:1px solid rgba(255,255,255,.1);
-      background:rgba(255,255,255,.03);
-      border-radius:16px;
-      padding:12px;
-      margin-top:10px;
-      display:grid;
-      gap:8px;
-    }
-    .progRow{display:grid;grid-template-columns:120px 1fr 60px;gap:10px;align-items:center}
-    .bar{
-      height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid rgba(255,255,255,.10);
-    }
-    .bar > div{height:100%;border-radius:999px}
-    .b1{background:linear-gradient(90deg,#35d8ff,#6ae6ff)}
-    .b2{background:linear-gradient(90deg,#47ff87,#8dfbb2)}
-    .b3{background:linear-gradient(90deg,#ff9f4a,#ffd08d)}
-    .grid2{
-      display:grid;
-      grid-template-columns:1.25fr .95fr;
       gap:12px;
     }
-    @media (max-width:1020px){ .grid2{grid-template-columns:1fr;} }
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
+    @media (max-width:1120px){
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
-    th,td{
-      text-align:left;
-      border-bottom:1px solid rgba(255,255,255,.09);
-      padding:8px 6px;
-      vertical-align:top;
+    @media (max-width:620px){
+      .stats{grid-template-columns:1fr}
     }
-    th{
+    .stat{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:20px;
+      background:rgba(255,255,255,.03);
+      padding:16px;
+      min-height:116px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .stat h3{
+      margin:0;
       color:var(--muted);
+      font-size:11px;
+      font-weight:1000;
       text-transform:uppercase;
+      letter-spacing:.24px;
+    }
+    .stat p{
+      margin:12px 0 0;
+      font-size:34px;
+      font-weight:1000;
+      line-height:1;
+    }
+    .stat span{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      line-height:1.4;
+    }
+    .stageShell{
+      margin-top:16px;
+    }
+    .stageNav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:14px;
+    }
+    .stageNode{
+      flex:1 1 180px;
+      min-width:0;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      padding:12px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .stageNode.active{
+      border-color:color-mix(in srgb, var(--accent) 68%, rgba(255,255,255,.14));
+      background:linear-gradient(180deg, rgba(53,216,255,.14), rgba(255,255,255,.04));
+      box-shadow:0 16px 36px rgba(53,216,255,.12);
+    }
+    .stageNodeNum{
       font-size:10px;
+      font-weight:1000;
       letter-spacing:.25px;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .stageNodeTitle{
+      font-size:16px;
+      font-weight:1000;
+    }
+    .stageNodeText{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      line-height:1.45;
+    }
+    .stageView{
+      display:none;
+    }
+    .stageView.active{
+      display:block;
+    }
+    .rosterCols{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    @media (max-width:980px){
+      .rosterCols{grid-template-columns:1fr}
+    }
+    .sectionPanel{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:20px;
+      background:rgba(255,255,255,.03);
+      padding:16px;
+    }
+    .sectionTitle{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    .sectionTitle h3{
+      margin:0;
+      font-size:15px;
+      font-weight:1000;
     }
     .pill{
-      display:inline-flex;align-items:center;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 8px;
+      border-radius:999px;
       border:1px solid rgba(255,255,255,.12);
-      border-radius:999px;padding:3px 7px;
-      font-size:10px;font-weight:1000;letter-spacing:.2px;
+      font-size:10px;
+      font-weight:1000;
       text-transform:uppercase;
+      letter-spacing:.2px;
     }
-    .ok{background:rgba(71,255,135,.14);border-color:rgba(71,255,135,.35);color:#9dfcc1}
-    .warn{background:rgba(255,228,77,.12);border-color:rgba(255,228,77,.35);color:#fff0a3}
-    .bad{background:rgba(255,107,119,.12);border-color:rgba(255,107,119,.35);color:#ffc3c9}
-    .feed{
-      max-height:420px;
-      overflow:auto;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
+    .pill.ok{
+      background:rgba(71,255,135,.14);
+      border-color:rgba(71,255,135,.34);
+      color:#9dfcc1;
     }
-    .laneList{
-      max-height:420px;
-      overflow:auto;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
+    .pill.warn{
+      background:rgba(255,228,77,.10);
+      border-color:rgba(255,228,77,.32);
+      color:#fff0a3;
     }
-    .laneCard{
+    .pill.info{
+      background:rgba(53,216,255,.12);
+      border-color:rgba(53,216,255,.32);
+      color:#aeeeff;
+    }
+    .rosterGrid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+    @media (max-width:720px){
+      .rosterGrid{grid-template-columns:1fr}
+    }
+    .playerCard{
       border:1px solid rgba(255,255,255,.12);
-      border-radius:12px;
-      padding:9px;
-      background:rgba(255,255,255,.03);
+      border-radius:18px;
+      background:rgba(5,10,20,.36);
+      padding:14px;
+      display:grid;
+      gap:10px;
+      min-height:174px;
+    }
+    .playerTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .playerName{
+      margin:0;
+      font-size:16px;
+      font-weight:1000;
+      line-height:1.15;
+    }
+    .playerMeta{
+      margin:0;
+      color:var(--muted);
       font-size:12px;
-      line-height:1.4;
       font-weight:850;
+      line-height:1.5;
+    }
+    .playerStatus{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .empty{
+      border:1px dashed rgba(255,255,255,.2);
+      border-radius:18px;
+      padding:22px;
+      color:var(--muted);
+      text-align:center;
+      font-size:13px;
+      font-weight:850;
+      line-height:1.55;
+    }
+    .stickyBoardWrap{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 300px;
+      gap:14px;
+    }
+    @media (max-width:1180px){
+      .stickyBoardWrap{grid-template-columns:1fr}
+    }
+    .stickyBoard{
+      position:relative;
+      min-height:680px;
+      border:1px dashed rgba(255,255,255,.16);
+      border-radius:24px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 14% 14%, rgba(53,216,255,.08), transparent 28%),
+        radial-gradient(circle at 80% 18%, rgba(255,159,74,.08), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)),
+        rgba(5,10,20,.42);
+    }
+    .stickyBoard::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size:56px 56px;
+      pointer-events:none;
+    }
+    .stickyNote{
+      position:absolute;
+      width:248px;
+      min-height:176px;
+      padding:14px 14px 18px;
+      border-radius:18px;
+      color:#141414;
+      box-shadow:0 18px 30px rgba(0,0,0,.24);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      transform-origin:center;
+    }
+    .stickyMeta{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:flex-start;
+      font-size:10px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+      color:rgba(0,0,0,.72);
+    }
+    .stickyRole{
+      padding:4px 7px;
+      border-radius:999px;
+      background:rgba(255,255,255,.45);
+      border:1px solid rgba(0,0,0,.08);
+    }
+    .stickyText{
+      margin:0;
+      font-size:15px;
+      line-height:1.5;
+      font-weight:900;
+      color:rgba(0,0,0,.84);
       white-space:pre-wrap;
       word-break:break-word;
     }
-    .playerGrid{
+    .stickyAside{
       display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:10px;
+      gap:12px;
+      align-content:start;
     }
-    @media (max-width:980px){ .playerGrid{grid-template-columns:repeat(2,minmax(0,1fr));} }
-    @media (max-width:600px){ .playerGrid{grid-template-columns:1fr;} }
-    .playerCard{
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:14px;
+    .miniPanel{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:18px;
       background:rgba(255,255,255,.03);
-      padding:10px;
+      padding:14px;
+      display:grid;
+      gap:8px;
+    }
+    .miniPanel h4{
+      margin:0;
+      font-size:12px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+    .miniList{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      line-height:1.55;
+    }
+    .workflowGrid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    @media (max-width:1180px){
+      .workflowGrid{grid-template-columns:1fr}
+    }
+    .workflowCard{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:22px;
+      background:rgba(255,255,255,.03);
+      overflow:hidden;
+      min-height:360px;
+    }
+    .workflowHead{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+    }
+    .workflowHead h3{
+      margin:0;
+      font-size:16px;
+      font-weight:1000;
+    }
+    .workflowMeta{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      line-height:1.5;
+    }
+    .workflowBoard{
+      position:relative;
+      height:300px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(53,216,255,.08), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,.03), transparent 46%),
+        rgba(5,10,20,.44);
+    }
+    .workflowBoard svg{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+    }
+    .workflowNode{
+      position:absolute;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.1);
+      padding:10px 12px;
       display:flex;
       flex-direction:column;
       gap:6px;
+      box-shadow:0 14px 24px rgba(0,0,0,.18);
+      overflow:hidden;
     }
-    .playerName{
-      font-size:13px;
+    .workflowNode.system{
+      background:rgba(53,216,255,.2);
+      color:#dff8ff;
+    }
+    .workflowNode.process{
+      background:rgba(71,255,135,.16);
+      color:#e9ffee;
+    }
+    .workflowNode.issue{
+      background:rgba(255,107,119,.18);
+      color:#ffe8eb;
+    }
+    .workflowTone{
+      font-size:10px;
       font-weight:1000;
-      line-height:1.25;
+      letter-spacing:.22px;
+      text-transform:uppercase;
+      opacity:.75;
     }
-    .playerMeta{
+    .workflowText{
+      font-size:12px;
+      font-weight:900;
+      line-height:1.35;
+      color:inherit;
+      display:-webkit-box;
+      -webkit-line-clamp:3;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    .workflowTime{
       font-size:11px;
       font-weight:900;
-      color:var(--muted);
-      line-height:1.35;
+      opacity:.82;
     }
-    .miniDanger{
-      border:1px solid rgba(255,107,119,.45);
-      background:rgba(255,107,119,.14);
-      color:#ffd8dd;
-      border-radius:10px;
-      padding:6px 8px;
-      font-size:10px;
-      font-weight:1000;
-      text-transform:uppercase;
-      letter-spacing:.2px;
-      cursor:pointer;
-    }
-    .laneMeta{
-      margin-bottom:5px;
-      font-size:10px;
-      font-weight:1000;
-      text-transform:uppercase;
-      letter-spacing:.2px;
-      color:var(--muted);
-    }
-    .feedItem{
+    .footStatus{
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:18px;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.03);
-      border-radius:14px;
-      padding:10px;
+      color:var(--muted);
       font-size:12px;
-      line-height:1.4;
-    }
-    .feedTop{
-      display:flex;justify-content:space-between;gap:10px;
-      font-size:10px;font-weight:1000;color:var(--muted);text-transform:uppercase;
-      letter-spacing:.2px;
-      margin-bottom:6px;
-    }
-    .promptGrid{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:10px;
-    }
-    @media (max-width:980px){ .promptGrid{grid-template-columns:1fr;} }
-    .promptCard{
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:16px;
-      padding:12px;
-      background:rgba(255,255,255,.03);
-    }
-    .promptCard h3{
-      margin:0 0 8px;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.25px;
-    }
-    .promptList{
-      margin:0;
-      padding-left:18px;
+      font-weight:850;
       line-height:1.45;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:800;
     }
-    .empty{
-      border:1px dashed rgba(255,255,255,.24);
-      border-radius:14px;
-      padding:14px;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:800;
-      text-align:center;
-    }
-    .diag{
-      margin-top:10px;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:14px;
-      padding:10px;
-      background:rgba(255,255,255,.03);
-      font-size:12px;
-      line-height:1.45;
-      font-weight:800;
-      color:var(--muted);
-    }
-    .diag.bad{
-      border-color:rgba(255,107,119,.42);
+    .footStatus.bad{
+      border-color:rgba(255,107,119,.36);
       background:rgba(255,107,119,.10);
-      color:#ffd3d8;
+      color:#ffd2d8;
     }
     .overlay{
-      position:fixed; inset:0; z-index:200;
-      background:rgba(0,0,0,.72);
-      display:flex; align-items:center; justify-content:center; padding:14px;
+      position:fixed;
+      inset:0;
+      z-index:200;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(0,0,0,.74);
+      backdrop-filter:blur(10px);
     }
     .modal{
-      width:min(520px,100%);
+      width:min(520px, 100%);
       border:1px solid rgba(255,255,255,.14);
-      border-radius:20px;
-      background:linear-gradient(0deg, rgba(12,18,34,.95), rgba(17,24,45,.95));
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(20,29,55,.96), rgba(11,17,32,.96));
       box-shadow:var(--shadow);
-      padding:16px;
+      padding:18px;
     }
-    .modal h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.3px}
-    .kicker{font-size:12px;color:var(--muted);font-weight:800;line-height:1.4}
-    .modalRow{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-
+    .modal h3{
+      margin:0 0 10px;
+      font-size:18px;
+      font-weight:1000;
+    }
+    .modalRow{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
   </style>
 </head>
 <body>
   <div class="overlay" id="pwOverlay" aria-hidden="false">
     <div class="modal">
       <h3>Dashboard Access</h3>
-      <div class="kicker">Enter facilitator password to open live monitoring.</div>
+      <p class="subtitle" style="margin:0">Enter the facilitator password to open the live workshop dashboard.</p>
       <div class="modalRow">
         <input id="pwInput" class="field" type="password" placeholder="Dashboard password" autocomplete="one-time-code"/>
         <button id="btnUnlock" class="btnPrimary">Unlock</button>
       </div>
-      <div class="kicker" style="margin-top:10px">This gate is client-side and intended for lightweight workshop control.</div>
+      <p class="kicker" style="margin:12px 0 0">This gate is client-side and intended for lightweight workshop control.</p>
     </div>
   </div>
 
   <div class="wrap">
-    <div class="top">
+    <header class="hero">
       <div>
-        <div class="badge" id="dashboardBadge"><span class="dot"></span> Stage 1 Main Dashboard</div>
-        <div class="subtitle">
-          Room: <span class="mono" id="roomOut">demo</span> • Campus: <span class="mono" id="campusOut">UPNG</span> • Live monitor for Step 1 → Step 3.<br/>
-          <span id="dashboardDetail">Facilitator screen: monitor participation, friction signals, workflow snapshots, and stage progress in one place.</span>
+        <div class="badge"><span class="dot"></span> Stage 1 Main Dashboard</div>
+        <h1>Live workshop dashboard</h1>
+        <p class="subtitle">
+          Shared-screen view for tracking player selections, published sticky notes, and tutor workflow maps in one room.
+          Refresh anytime to pull the latest updates from participants.
+        </p>
+        <div class="metaRow">
+          <span class="mono">Room <span id="roomOut">demo</span></span>
+          <span class="mono">Campus <span id="campusOut">UPNG</span></span>
+          <span class="mono">Group <span id="groupOut">core</span></span>
+          <span class="mono" id="lastUpdated">Last update: --</span>
         </div>
       </div>
-      <div class="toolbar">
+      <div class="heroActions">
+        <button id="btnPrevStage">← Prev</button>
+        <span class="stagePill" id="stagePill">Stage 1 • Player selections</span>
+        <button id="btnNextStage" class="btnPrimary">Next →</button>
         <button id="btnRefresh">Refresh</button>
-        <button id="btnTutorDash">Tutor Dashboard</button>
-        <button id="btnStep1">Step 1</button>
-        <button id="btnStep2">Step 2</button>
-        <button id="btnStep3">Step 3 Student</button>
-        <button id="btnStep3Tutor">Step 3 Tutor</button>
         <button id="btnIndex" class="btnAccent">Home</button>
       </div>
-    </div>
-    <div class="tabs">
-      <div class="tabGroup" id="audienceTabs">
-        <span class="tabLabel">Audience</span>
-        <button class="tabBtn active" data-audience-tab="all">All</button>
-        <button class="tabBtn" data-audience-tab="student">Students</button>
-        <button class="tabBtn" data-audience-tab="tutor">Tutors</button>
-      </div>
-      <div class="tabGroup" id="stageTabs">
-        <span class="tabLabel">Stage</span>
-        <button class="tabBtn active" data-stage-tab="all">All</button>
-        <button class="tabBtn" data-stage-tab="1">Stage 1</button>
-        <button class="tabBtn" data-stage-tab="2">Stage 2</button>
-        <button class="tabBtn" data-stage-tab="3">Stage 3</button>
-      </div>
-    </div>
+    </header>
 
     <section class="card">
       <div class="cardHead">
-        <h2>Room Control + Share Links</h2>
-        <span class="mono">Facilitator Tools</span>
-      </div>
-      <div class="cardBody">
-        <div class="toolbar" style="justify-content:flex-start;min-width:0">
-          <input id="roomInput" class="field" type="text" placeholder="room id (e.g. demo)" />
-          <select id="campusSelect" class="field" style="min-width:180px">
-            <option value="upng">UPNG</option>
-            <option value="monash">Monash</option>
-          </select>
-          <input id="groupInput" class="field" type="text" placeholder="tutor group (e.g. g1)" style="min-width:170px" />
-          <button id="btnOpenRoom" class="btnPrimary">Open Room</button>
+        <div>
+          <h2>Room Control + Share Links</h2>
+          <div class="kicker">Open a room, then copy the participant links you want to send out.</div>
         </div>
-        <div class="promptGrid" style="margin-top:10px">
-          <article class="promptCard">
-            <h3>Student Link</h3>
-            <div class="kicker mono" id="studentLinkOut">-</div>
-            <div style="margin-top:8px"><button id="btnCopyStudent">Copy Student Link</button></div>
-          </article>
-          <article class="promptCard">
-            <h3>Tutor Link</h3>
-            <div class="kicker mono" id="tutorLinkOut">-</div>
-            <div style="margin-top:8px"><button id="btnCopyTutor">Copy Tutor Link</button></div>
-          </article>
+      </div>
+      <div class="cardBody setupGrid">
+        <div>
+          <div class="fieldRow">
+            <input id="roomInput" class="field" type="text" placeholder="room id (e.g. demo)"/>
+            <select id="campusSelect" class="field" style="max-width:180px">
+              <option value="upng">UPNG</option>
+              <option value="monash">Monash</option>
+            </select>
+            <input id="groupInput" class="field" type="text" placeholder="tutor group (e.g. core)" style="max-width:220px"/>
+            <button id="btnOpenRoom" class="btnPrimary">Open Room</button>
+          </div>
+        </div>
+        <div class="linkCard">
+          <div>
+            <p class="linkLabel">Student Link</p>
+            <p class="linkValue" id="studentLinkOut">-</p>
+            <button id="btnCopyStudent">Copy Student Link</button>
+          </div>
+          <div>
+            <p class="linkLabel">Tutor Link</p>
+            <p class="linkValue" id="tutorLinkOut">-</p>
+            <button id="btnCopyTutor">Copy Tutor Link</button>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="card">
       <div class="cardHead">
-        <h2>Live Stage Health</h2>
-        <span class="mono" id="lastUpdated">Last update: --</span>
+        <div>
+          <h2>Live Health</h2>
+          <div class="kicker">Quick counts for what has already been submitted into this room.</div>
+        </div>
       </div>
       <div class="cardBody">
         <div class="stats">
-          <div class="stat"><h3>Total Participants</h3><p id="totalParticipants">0</p></div>
-          <div class="stat"><h3>Step 1 Ready</h3><p id="step1Ready">0</p></div>
-          <div class="stat"><h3>Step 2 Active</h3><p id="step2Active">0</p></div>
-          <div class="stat"><h3>Step 3 Active</h3><p id="step3Active">0</p></div>
-          <div class="stat"><h3>Journey + Workflow</h3><p id="journeyCount">0</p></div>
-        </div>
-        <div class="progressWrap">
-          <div class="progRow">
-            <span class="mono">Step 1</span>
-            <div class="bar"><div id="p1" class="b1" style="width:0%"></div></div>
-            <span class="mono" id="p1Text">0%</span>
-          </div>
-          <div class="progRow">
-            <span class="mono">Step 2</span>
-            <div class="bar"><div id="p2" class="b2" style="width:0%"></div></div>
-            <span class="mono" id="p2Text">0%</span>
-          </div>
-          <div class="progRow">
-            <span class="mono">Step 3</span>
-            <div class="bar"><div id="p3" class="b3" style="width:0%"></div></div>
-            <span class="mono" id="p3Text">0%</span>
-          </div>
-        </div>
-        <div class="diag" id="diagBox">Waiting for data...</div>
-      </div>
-    </section>
-
-    <section class="card" id="viewStage1">
-      <div class="cardHead">
-        <h2>Player + Character Map (Step 1)</h2>
-        <span class="mono" id="playerCount">0 players</span>
-      </div>
-      <div class="cardBody">
-        <div id="playerMapList" class="playerGrid"></div>
-      </div>
-    </section>
-
-    <div class="grid2" id="viewStage2">
-      <section class="card">
-        <div class="cardHead">
-          <h2>Shared Sticky Prompts (Step 2)</h2>
-          <span class="mono" id="sharedPromptCount">0 prompts</span>
-        </div>
-        <div class="cardBody">
-          <div id="sharedPromptsList" class="laneList"></div>
-        </div>
-      </section>
-    </div>
-
-    <div class="grid2" id="viewStage3">
-      <section class="card">
-        <div class="cardHead">
-          <h2>Constraint Map By Week (Step 3)</h2>
-          <span class="mono" id="constraintCount">0 constraints</span>
-        </div>
-        <div class="cardBody">
-          <div id="constraintWeekList" class="laneList"></div>
-        </div>
-      </section>
-      <section class="card">
-        <div class="cardHead">
-          <h2>Tutor Workflow Snapshots</h2>
-          <span class="mono" id="workflowCount">0 workflow nodes</span>
-        </div>
-        <div class="cardBody">
-          <div id="workflowWeekList" class="laneList"></div>
-        </div>
-      </section>
-    </div>
-
-    <div class="grid2" id="viewStage3Support">
-      <section class="card">
-        <div class="cardHead">
-          <h2>Parking Lot Notes</h2>
-          <span class="mono" id="notesCountPill">0 notes</span>
-        </div>
-        <div class="cardBody">
-          <div id="parkingNotesList" class="laneList"></div>
-        </div>
-      </section>
-    </div>
-
-    <section class="card">
-      <div class="cardHead">
-        <h2>Realtime Activity</h2>
-        <span class="mono" id="eventCount">0 events</span>
-      </div>
-      <div class="cardBody">
-        <div id="feed" class="feed"></div>
-      </div>
-    </section>
-
-
-    <section class="card">
-      <div class="cardHead">
-        <h2>Facilitator Prompt Questions</h2>
-        <span class="mono">Adaptive Guidance</span>
-      </div>
-      <div class="cardBody">
-        <div class="promptGrid">
-          <article class="promptCard">
-            <h3>Stage 1 Questions</h3>
-            <ul class="promptList" id="qStep1"></ul>
+          <article class="stat">
+            <h3>Total Players</h3>
+            <p id="totalPlayers">0</p>
+            <span id="playerSplit">0 students • 0 tutors</span>
           </article>
-          <article class="promptCard">
-            <h3>Stage 2 Questions</h3>
-            <ul class="promptList" id="qStep2"></ul>
+          <article class="stat">
+            <h3>Stage 1 Ready</h3>
+            <p id="stage1Ready">0</p>
+            <span>Players with name + persona selected</span>
           </article>
-          <article class="promptCard">
-            <h3>Stage 3 Questions</h3>
-            <ul class="promptList" id="qStep3"></ul>
+          <article class="stat">
+            <h3>Shared Stickies</h3>
+            <p id="sharedStickies">0</p>
+            <span id="stickySplit">0 student • 0 tutor</span>
+          </article>
+          <article class="stat">
+            <h3>Tutor Boards</h3>
+            <p id="tutorBoards">0</p>
+            <span id="workflowSplit">0 workflow boxes</span>
+          </article>
+          <article class="stat">
+            <h3>Student Constraints</h3>
+            <p id="studentConstraints">0</p>
+            <span>Week-based student mapping items</span>
           </article>
         </div>
       </div>
     </section>
+
+    <div class="stageShell">
+      <div class="stageNav">
+        <article class="stageNode" data-stage-node="1">
+          <span class="stageNodeNum">Stage 1</span>
+          <span class="stageNodeTitle">Player selections</span>
+          <span class="stageNodeText">Show the live roster with student and tutor personas.</span>
+        </article>
+        <article class="stageNode" data-stage-node="2">
+          <span class="stageNodeNum">Stage 2</span>
+          <span class="stageNodeTitle">Shared sticky board</span>
+          <span class="stageNodeText">Published notes appear here as sticky notes on a board.</span>
+        </article>
+        <article class="stageNode" data-stage-node="3">
+          <span class="stageNodeNum">Stage 3</span>
+          <span class="stageNodeTitle">Tutor workflow boards</span>
+          <span class="stageNodeText">Each tutor workflow is shown as its own mini-board.</span>
+        </article>
+      </div>
+
+      <section class="stageView active" data-stage-view="1">
+        <section class="card">
+          <div class="cardHead">
+            <div>
+              <h2>Live Participant Roster</h2>
+              <div class="kicker">Refresh to see who has entered a name and chosen a persona card.</div>
+            </div>
+          </div>
+          <div class="cardBody rosterCols">
+            <section class="sectionPanel">
+              <div class="sectionTitle">
+                <h3>Students</h3>
+                <span class="pill info" id="studentCountPill">0 students</span>
+              </div>
+              <div class="rosterGrid" id="studentRoster"></div>
+            </section>
+            <section class="sectionPanel">
+              <div class="sectionTitle">
+                <h3>Tutors</h3>
+                <span class="pill info" id="tutorCountPill">0 tutors</span>
+              </div>
+              <div class="rosterGrid" id="tutorRoster"></div>
+            </section>
+          </div>
+        </section>
+      </section>
+
+      <section class="stageView" data-stage-view="2">
+        <section class="card">
+          <div class="cardHead">
+            <div>
+              <h2>Published Sticky Notes</h2>
+              <div class="kicker">Published prompts are duplicated here as sticky notes for the shared screen.</div>
+            </div>
+            <span class="mono" id="stickyBoardCount">0 notes</span>
+          </div>
+          <div class="cardBody stickyBoardWrap">
+            <div class="stickyBoard" id="stickyBoard"></div>
+            <aside class="stickyAside">
+              <section class="miniPanel">
+                <h4>What shows here</h4>
+                <ul class="miniList">
+                  <li>Only published shared stickies appear here.</li>
+                  <li>Each note keeps its own author and role label.</li>
+                  <li>The dashboard presents them as sticky notes instead of a text log.</li>
+                </ul>
+              </section>
+              <section class="miniPanel">
+                <h4>Counts</h4>
+                <ul class="miniList" id="stickySummaryList"></ul>
+              </section>
+            </aside>
+          </div>
+        </section>
+      </section>
+
+      <section class="stageView" data-stage-view="3">
+        <section class="card">
+          <div class="cardHead">
+            <div>
+              <h2>Tutor Workflow Boards</h2>
+              <div class="kicker">Each tutor workflow is shown separately, based on that tutor’s own private workflow canvas.</div>
+            </div>
+            <span class="mono" id="workflowBoardCount">0 boards</span>
+          </div>
+          <div class="cardBody">
+            <div class="workflowGrid" id="workflowBoards"></div>
+          </div>
+        </section>
+      </section>
+    </div>
+
+    <div class="footStatus" id="statusBox">Waiting for data…</div>
   </div>
 
   <script src="/stage1/shared.js"></script>
@@ -583,193 +894,142 @@
     const supabase = window.supabase.createClient(shared.SUPABASE_URL, shared.SUPABASE_ANON_KEY);
     const DASHBOARD_PASS = "jackiefoo.me";
     const DASH_AUTH_KEY = "stage1_dashboard_authed";
+    const STAGES = ["1","2","3"];
+    const STAGE_META = {
+      "1": { pill: "Stage 1 • Player selections" },
+      "2": { pill: "Stage 2 • Shared sticky board" },
+      "3": { pill: "Stage 3 • Tutor workflow boards" }
+    };
 
     const $ = (q, el=document) => el.querySelector(q);
     const params = new URLSearchParams(location.search);
     let room = (params.get("room") || "demo").trim() || "demo";
     let campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     let group = (params.get("group") || "core").trim() || "core";
+    let activeStage = "1";
+    let pollTimer = null;
     let subs = [];
-    let feedItems = [];
+
+    const cache = { participants: [], stickies: [], journey: [], notes: [] };
+    const escapeHtml = shared.escapeHtml;
 
     const roomOut = $("#roomOut");
     const campusOut = $("#campusOut");
-    const dashboardBadge = $("#dashboardBadge");
-    const dashboardDetail = $("#dashboardDetail");
-    const pwOverlay = $("#pwOverlay");
-    const pwInput = $("#pwInput");
-    const btnUnlock = $("#btnUnlock");
+    const groupOut = $("#groupOut");
     const lastUpdated = $("#lastUpdated");
-    const totalParticipants = $("#totalParticipants");
-    const step1Ready = $("#step1Ready");
-    const step2Active = $("#step2Active");
-    const step3Active = $("#step3Active");
-    const journeyCount = $("#journeyCount");
-    const p1 = $("#p1"), p2 = $("#p2"), p3 = $("#p3");
-    const p1Text = $("#p1Text"), p2Text = $("#p2Text"), p3Text = $("#p3Text");
-    const playerCount = $("#playerCount");
-    const playerMapList = $("#playerMapList");
-    const sharedPromptCount = $("#sharedPromptCount");
-    const sharedPromptsList = $("#sharedPromptsList");
-    const constraintCount = $("#constraintCount");
-    const constraintWeekList = $("#constraintWeekList");
-    const workflowCount = $("#workflowCount");
-    const workflowWeekList = $("#workflowWeekList");
-    const notesCountPill = $("#notesCountPill");
-    const parkingNotesList = $("#parkingNotesList");
-    const feed = $("#feed");
-    const eventCount = $("#eventCount");
-    const diagBox = $("#diagBox");
-    const qStep1 = $("#qStep1"), qStep2 = $("#qStep2"), qStep3 = $("#qStep3");
+    const stagePill = $("#stagePill");
+    const btnPrevStage = $("#btnPrevStage");
+    const btnNextStage = $("#btnNextStage");
     const roomInput = $("#roomInput");
     const campusSelect = $("#campusSelect");
     const groupInput = $("#groupInput");
     const studentLinkOut = $("#studentLinkOut");
     const tutorLinkOut = $("#tutorLinkOut");
-    const audienceTabs = $("#audienceTabs");
-    const stageTabs = $("#stageTabs");
-    const viewStage1 = $("#viewStage1");
-    const viewStage2 = $("#viewStage2");
-    const viewStage3 = $("#viewStage3");
-    const viewStage3Support = $("#viewStage3Support");
+    const totalPlayers = $("#totalPlayers");
+    const playerSplit = $("#playerSplit");
+    const stage1Ready = $("#stage1Ready");
+    const sharedStickies = $("#sharedStickies");
+    const stickySplit = $("#stickySplit");
+    const tutorBoards = $("#tutorBoards");
+    const workflowSplit = $("#workflowSplit");
+    const studentConstraints = $("#studentConstraints");
+    const studentCountPill = $("#studentCountPill");
+    const tutorCountPill = $("#tutorCountPill");
+    const studentRoster = $("#studentRoster");
+    const tutorRoster = $("#tutorRoster");
+    const stickyBoard = $("#stickyBoard");
+    const stickyBoardCount = $("#stickyBoardCount");
+    const stickySummaryList = $("#stickySummaryList");
+    const workflowBoardCount = $("#workflowBoardCount");
+    const workflowBoards = $("#workflowBoards");
+    const statusBox = $("#statusBox");
+    const stageNodes = [...document.querySelectorAll("[data-stage-node]")];
+    const stageViews = [...document.querySelectorAll("[data-stage-view]")];
+    const pwOverlay = $("#pwOverlay");
+    const pwInput = $("#pwInput");
+    const btnUnlock = $("#btnUnlock");
 
-    function sanitizeAudience(raw){
-      const value = String(raw || "").trim().toLowerCase();
-      return value === "student" || value === "tutor" ? value : "all";
+    function setStatus(message, bad=false){
+      statusBox.textContent = message;
+      statusBox.classList.toggle("bad", !!bad);
     }
-
-    const view = { audience: sanitizeAudience(params.get("audience")), stage: "all" };
-    const cache = { participants: [], stickies: [], journey: [], notes: [], workflow: [] };
 
     function withCampus(path){
       return `${path}?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
     }
-    function buildDashboardHref(nextRoom = room, nextCampus = campus, nextGroup = group, nextAudience = view.audience){
-      const qs = new URLSearchParams({
-        room: nextRoom,
-        campus: nextCampus,
-        group: nextGroup
-      });
-      if (nextAudience && nextAudience !== "all") qs.set("audience", nextAudience);
-      return `${shared.BASE_PATH}/main-dashboard.html?${qs.toString()}`;
+
+    function dashboardHref(nextRoom = room, nextCampus = campus, nextGroup = group){
+      return `${shared.BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(nextRoom)}&campus=${encodeURIComponent(nextCampus)}&group=${encodeURIComponent(nextGroup)}`;
     }
-    function buildShareLinks(){
+
+    function fmtTime(value){
+      const dt = new Date(value);
+      if (Number.isNaN(dt.getTime())) return "--";
+      return dt.toLocaleTimeString([], { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+    }
+
+    function applyRoomUI(){
+      roomOut.textContent = room;
+      campusOut.textContent = campus === "monash" ? "Monash" : "UPNG";
+      groupOut.textContent = group;
+      roomInput.value = room;
+      campusSelect.value = campus;
+      groupInput.value = group;
+
       const origin = location.origin || "https://www.jackiefoo.me";
       const student = `${origin}${withCampus(`${shared.BASE_PATH}/step1.html`)}&track=student`;
       const tutor = `${origin}${withCampus(`${shared.BASE_PATH}/step1-tutor.html`)}&group=${encodeURIComponent(group)}`;
       studentLinkOut.textContent = student;
       tutorLinkOut.textContent = tutor;
-      return { student, tutor };
     }
-    function applyRoomCampusUI(){
-      roomOut.textContent = room;
-      campusOut.textContent = campus === "monash" ? "Monash" : "UPNG";
-      roomInput.value = room;
-      campusSelect.value = campus;
-      groupInput.value = group;
-      if (dashboardBadge){
-        dashboardBadge.innerHTML = `<span class="dot"></span> ${view.audience === "tutor" ? "Stage 1 Tutor Dashboard" : view.audience === "student" ? "Stage 1 Student Dashboard" : "Stage 1 Main Dashboard"}`;
-      }
-      if (dashboardDetail){
-        dashboardDetail.textContent = view.audience === "tutor"
-          ? "Tutor-only live monitor: use Refresh anytime to consolidate tutor personas, shared stickies, and tutor workflow updates in one place."
-          : view.audience === "student"
-            ? "Student-only live monitor: check student personas, shared stickies, and constraint maps without tutor rows mixed in."
-            : "Facilitator screen: monitor participation, friction signals, workflow snapshots, and stage progress in one place.";
-      }
-      buildShareLinks();
-    }
+
     async function copyText(text){
       try{
         await navigator.clipboard.writeText(text);
-        addFeed("action", "Link copied to clipboard");
+        setStatus("Link copied to clipboard.", false);
       } catch {
-        addFeed("error", "Clipboard blocked by browser");
+        setStatus("Clipboard blocked by browser.", true);
       }
     }
 
-    function fmtTime(d){
-      const dt = new Date(d);
-      return Number.isNaN(dt.getTime()) ? "unknown" : dt.toLocaleTimeString([], { hour:"2-digit", minute:"2-digit", second:"2-digit" });
-    }
-    function pct(val, total){
-      if (!total) return 0;
-      return Math.max(0, Math.min(100, Math.round((val / total) * 100)));
-    }
-    function addFeed(kind, message, ts = Date.now()){
-      feedItems.unshift({ kind, message, ts });
-      feedItems = feedItems.slice(0, 60);
-      renderFeed();
-    }
-    function renderFeed(){
-      eventCount.textContent = `${feedItems.length} events`;
-      if (!feedItems.length){
-        feed.innerHTML = `<div class="empty">No activity yet for this room.</div>`;
-        return;
-      }
-      feed.innerHTML = feedItems.map(item => `
-        <div class="feedItem">
-          <div class="feedTop"><span>${shared.escapeHtml(item.kind)}</span><span>${fmtTime(item.ts)}</span></div>
-          <div>${shared.escapeHtml(item.message)}</div>
-        </div>
-      `).join("");
-    }
-    function statusPill(label, cls){
-      return `<span class="pill ${cls}">${shared.escapeHtml(label)}</span>`;
-    }
-    function setDiag(message, isBad=false){
-      diagBox.textContent = message;
-      diagBox.classList.toggle("bad", !!isBad);
+    function clamp(v, min, max){
+      return Math.max(min, Math.min(max, v));
     }
 
-    function computePrompts(summary){
-      const { total, readyStep1, activeStep2, activeStep3, workflowNodes } = summary;
-      const q1 = [];
-      const q2 = [];
-      const q3 = [];
-
-      if (readyStep1 < total){
-        q1.push("Who still needs to choose a role and personality card?");
-        q1.push("Do they understand why card choice matters for later reflection?");
-      } else {
-        q1.push("Which roles/cards are over-represented in this room?");
-        q1.push("How might that bias the type of feedback participants value?");
+    function hashString(str){
+      let h = 0;
+      const text = String(str || "");
+      for (let i = 0; i < text.length; i += 1){
+        h = ((h << 5) - h + text.charCodeAt(i)) | 0;
       }
-
-      if (activeStep2 < total){
-        q2.push("Who has not added a sticky yet, and what blocker are they facing?");
-        q2.push("Are stickies written as actions, not vague statements?");
-      } else {
-        q2.push("Which sticky clusters indicate shared goals or tensions?");
-        q2.push("What sticky should be carried into Week 9 reaction planning?");
-      }
-
-      if (campus === "monash"){
-        q3.push("Before Week 4, what friction appears in Assessment 1 preparation?");
-        q3.push("What support is missing before Week 6 Assessment 2A submission?");
-        q3.push("Near Week 11, what pressure patterns appear for Assessment 2B + Task 3?");
-        q3.push("After feedback return, what minimum action do students commit to next?");
-      } else {
-        q3.push("In Week 2 release, what was misunderstood in Assignment 1 brief?");
-        q3.push("In Week 4 release, what changed in Assignment 2 expectations?");
-        q3.push("In Week 7 due week, what friction peaked before submission?");
-        q3.push("In Week 8 return week, which first feedback point changed behavior?");
-        q3.push("In Week 9 reaction week, what minimum action follows instructions 2/3?");
-      }
-      q3.push("Which tutor workflow node is missing between major due and feedback moments?");
-      if (activeStep3 < Math.max(1, Math.floor(total * 0.6))){
-        q3.push("Who needs help turning story details into week-specific cards?");
-      }
-      if (!workflowNodes){
-        q3.push("Ask tutors to map at least 3 workflow nodes (release, feedback, reaction).");
-      }
-
-      qStep1.innerHTML = q1.map(x => `<li>${shared.escapeHtml(x)}</li>`).join("");
-      qStep2.innerHTML = q2.map(x => `<li>${shared.escapeHtml(x)}</li>`).join("");
-      qStep3.innerHTML = q3.map(x => `<li>${shared.escapeHtml(x)}</li>`).join("");
+      return Math.abs(h);
     }
 
-    function parseSharedPrompt(row){
+    function stageIndex(stage){
+      return Math.max(0, STAGES.indexOf(stage));
+    }
+
+    function updateStageUI(){
+      const meta = STAGE_META[activeStage] || STAGE_META["1"];
+      stagePill.textContent = meta.pill;
+      btnPrevStage.disabled = activeStage === "1";
+      btnNextStage.disabled = activeStage === "3";
+
+      stageNodes.forEach(node => {
+        node.classList.toggle("active", node.getAttribute("data-stage-node") === activeStage);
+      });
+      stageViews.forEach(view => {
+        view.classList.toggle("active", view.getAttribute("data-stage-view") === activeStage);
+      });
+    }
+
+    function goToStage(nextStage){
+      if (!STAGE_META[nextStage]) return;
+      activeStage = nextStage;
+      updateStageUI();
+    }
+
+    function parseSharedSticky(row){
       const raw = String(row?.text || "");
       const marker = "[SHARED] ";
       const content = raw.startsWith(marker) ? raw.slice(marker.length) : raw;
@@ -782,382 +1042,355 @@
         body: content.slice(idx + 1).trim()
       };
     }
-    function renderSharedPrompts(stickies, roleByParticipant, audience){
-      const sharedOnly = (stickies || []).filter(s => String(s.text || "").startsWith("[SHARED] "));
-      const scoped = sharedOnly.filter(s => {
-        if (audience === "all") return true;
-        const role = String(roleByParticipant.get(String(s.participant_id || "")) || "");
-        return role === audience;
-      });
-      sharedPromptCount.textContent = `${scoped.length} prompts`;
-      if (!scoped.length){
-        sharedPromptsList.innerHTML = `<div class="empty">No shared prompts in this filter.</div>`;
-        return;
-      }
-      sharedPromptsList.innerHTML = scoped.map(s => {
-        const parsed = parseSharedPrompt(s);
-        return `
-          <article class="laneCard" style="border-left:4px solid ${shared.escapeHtml(s.color || "#47ff87")}">
-            <div class="laneMeta">Shared by ${shared.escapeHtml(parsed.author)}</div>
-            <div>${shared.escapeHtml(parsed.body || "(empty)")}</div>
-            <div style="margin-top:8px;display:flex;justify-content:flex-end">
-              <button class="miniDanger" data-remove-sticky="${shared.escapeHtml(s.id)}">Delete Sticky</button>
-            </div>
-          </article>
-        `;
-      }).join("");
+
+    function isSharedSticky(row){
+      return String(row?.text || "").startsWith("[SHARED] ");
     }
-    function renderPlayerMap(participants, stickyAuthors, journeyAuthors){
-      playerCount.textContent = `${participants.length} players`;
-      if (!participants.length){
-        playerMapList.innerHTML = `<div class="empty">No participants in this room yet.</div>`;
+
+    function parseWorkflowNode(row){
+      const fallback = { text: String(row?.label || "(untitled)"), x: 180, y: 120, w: 260, h: 128, time: "15m", tone: "process" };
+      try{
+        const obj = JSON.parse(String(row?.label || ""));
+        if (!obj || typeof obj !== "object") return fallback;
+        return {
+          text: String(obj.text || fallback.text),
+          x: Number(obj.x) || fallback.x,
+          y: Number(obj.y) || fallback.y,
+          w: Math.max(220, Number(obj.w) || fallback.w),
+          h: Math.max(112, Number(obj.h) || fallback.h),
+          time: String(obj.time || fallback.time),
+          tone: ["system","process","issue"].includes(String(obj.tone || "")) ? String(obj.tone) : fallback.tone
+        };
+      } catch {
+        return fallback;
+      }
+    }
+
+    function parseWorkflowEdge(row){
+      try{
+        const obj = JSON.parse(String(row?.label || "{}"));
+        return {
+          from: String(obj.from || ""),
+          to: String(obj.to || ""),
+          fromSide: String(obj.fromSide || "right"),
+          toSide: String(obj.toSide || "left")
+        };
+      } catch {
+        return { from:"", to:"", fromSide:"right", toSide:"left" };
+      }
+    }
+
+    function nodeAnchor(node, side){
+      if (side === "top") return { x: node.x + node.w / 2, y: node.y };
+      if (side === "bottom") return { x: node.x + node.w / 2, y: node.y + node.h };
+      if (side === "left") return { x: node.x, y: node.y + node.h / 2 };
+      return { x: node.x + node.w, y: node.y + node.h / 2 };
+    }
+
+    function bezierPath(a, b){
+      const dx = Math.max(30, Math.abs(b.x - a.x) * 0.35);
+      const dy = Math.max(24, Math.abs(b.y - a.y) * 0.24);
+      const c1 = {
+        x: a.x + (a.side === "right" ? dx : a.side === "left" ? -dx : 0),
+        y: a.y + (a.side === "bottom" ? dy : a.side === "top" ? -dy : 0)
+      };
+      const c2 = {
+        x: b.x + (b.side === "right" ? dx : b.side === "left" ? -dx : 0),
+        y: b.y + (b.side === "bottom" ? dy : b.side === "top" ? -dy : 0)
+      };
+      return `M ${a.x} ${a.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${b.x} ${b.y}`;
+    }
+
+    function participantName(row){
+      return shared.cleanDisplayName(row?.display_name) || String(row?.id || "").slice(0, 8) || "Unknown";
+    }
+
+    function renderRoster(players, target, emptyText, sharedByAuthor, workflowByAuthor){
+      if (!players.length){
+        target.innerHTML = `<div class="empty">${escapeHtml(emptyText)}</div>`;
         return;
       }
-      playerMapList.innerHTML = participants.map(p => {
-        const name = shared.cleanDisplayName(p.display_name) || p.id.slice(0, 8);
-        const role = p.role === "tutor" ? "Tutor" : "Student";
-        const card = shared.personaTitle(p.persona_id);
-        const s1Done = !!(shared.cleanDisplayName(p.display_name) && p.persona_id);
-        const s2Done = stickyAuthors.has(p.id);
-        const s3Done = journeyAuthors.has(p.id);
+      target.innerHTML = players.map(player => {
+        const id = String(player.id || "");
+        const role = player.role === "tutor" ? "Tutor" : "Student";
+        const hasName = !!shared.cleanDisplayName(player.display_name);
+        const hasPersona = !!player.persona_id;
+        const ready = hasName && hasPersona;
+        const sharedDone = sharedByAuthor.has(id);
+        const workflowDone = workflowByAuthor.has(id);
         return `
           <article class="playerCard">
-            <div class="playerName">${shared.escapeHtml(name)}</div>
-            <div class="playerMeta">Role: ${shared.escapeHtml(role)}<br/>Persona: ${shared.escapeHtml(card)}</div>
-            <div>${[
-              s1Done ? statusPill("S1 Ready", "ok") : statusPill("S1 Pending", "warn"),
-              s2Done ? statusPill("S2 Active", "ok") : statusPill("S2 Idle", "warn"),
-              s3Done ? statusPill("S3 Active", "ok") : statusPill("S3 Idle", "bad")
-            ].join(" ")}</div>
-            <div style="display:flex;justify-content:flex-end">
-              <button class="miniDanger" data-remove-player="${shared.escapeHtml(p.id)}">Remove Player</button>
+            <div class="playerTop">
+              <div>
+                <p class="playerName">${escapeHtml(participantName(player))}</p>
+                <p class="playerMeta">
+                  ${escapeHtml(role)}<br/>
+                  Persona: ${escapeHtml(shared.personaTitle(player.persona_id))}
+                </p>
+              </div>
+              <span class="pill ${ready ? "ok" : "warn"}">${ready ? "Ready" : "Pending"}</span>
             </div>
-          </article>
-        `;
-      }).join("");
-    }
-    function renderConstraintsByWeek(journey, roleByParticipant, audience){
-      const constraints = (journey || []).filter(j => {
-        if (j.type !== "constraint") return false;
-        if (audience === "all") return true;
-        const role = String(roleByParticipant.get(String(j.participant_id || "")) || "");
-        return role === audience;
-      });
-      constraintCount.textContent = `${constraints.length} constraints`;
-      if (!constraints.length){
-        constraintWeekList.innerHTML = `<div class="empty">No constraints in this filter.</div>`;
-        return;
-      }
-      const byWeek = new Map();
-      constraints.forEach(c => {
-        const w = Number(c.week) || 0;
-        if (!byWeek.has(w)) byWeek.set(w, []);
-        byWeek.get(w).push(c);
-      });
-      const weeks = [...byWeek.keys()].sort((a,b)=>a-b);
-      constraintWeekList.innerHTML = weeks.map(w => {
-        const cards = byWeek.get(w) || [];
-        return `
-          <article class="laneCard">
-            <div class="laneMeta">Week ${w} • ${cards.length} constraint${cards.length > 1 ? "s" : ""}</div>
-            <div>${cards.map(x => `• ${shared.escapeHtml(x.label || "(no label)")}`).join("<br/>")}</div>
-          </article>
-        `;
-      }).join("");
-    }
-    function workflowLabel(row){
-      const raw = String(row?.label || "");
-      if (String(row?.type || "") === "workflow_edge") return "(edge)";
-      try{
-        const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed === "object" && parsed.text) return String(parsed.text);
-      } catch {}
-      return raw || "(no label)";
-    }
-    function renderWorkflowByWeek(journey, roleByParticipant, audience){
-      const flows = (journey || []).filter(j => {
-        if (!String(j.type || "").startsWith("workflow_")) return false;
-        if (String(j.type || "") === "workflow_edge") return false;
-        if (audience === "all") return true;
-        const role = String(roleByParticipant.get(String(j.participant_id || "")) || "");
-        return role === audience;
-      });
-      workflowCount.textContent = `${flows.length} workflow boxes`;
-      if (!flows.length){
-        workflowWeekList.innerHTML = `<div class="empty">No workflow boxes in this filter.</div>`;
-        return;
-      }
-      const byTutor = new Map();
-      flows.forEach(f => {
-        const pid = String(f.participant_id || "unknown");
-        if (!byTutor.has(pid)) byTutor.set(pid, []);
-        byTutor.get(pid).push(f);
-      });
-      const tutors = [...byTutor.keys()].sort((a,b) => a.localeCompare(b));
-      workflowWeekList.innerHTML = tutors.map(pid => {
-        const cards = byTutor.get(pid) || [];
-        const preview = cards.slice(0, 4).map(x => `• ${shared.escapeHtml(workflowLabel(x))}`).join("<br/>");
-        return `
-          <article class="laneCard">
-            <div class="laneMeta">Tutor ${shared.escapeHtml(pid.slice(0,8))} • ${cards.length} workflow box${cards.length > 1 ? "es" : ""}</div>
-            <div>${preview || "(empty)"}</div>
-          </article>
-        `;
-      }).join("");
-    }
-    function renderParkingNotes(notes, roleByParticipant, audience){
-      const scoped = (notes || []).filter(n => {
-        if (audience === "all") return true;
-        const role = String(roleByParticipant.get(String(n.participant_id || "")) || "");
-        return role === audience;
-      });
-      const rows = scoped.slice().sort((a,b) => String(b.updated_at || "").localeCompare(String(a.updated_at || "")));
-      notesCountPill.textContent = `${rows.length} notes`;
-      if (!rows.length){
-        parkingNotesList.innerHTML = `<div class="empty">No parking-lot notes in this filter.</div>`;
-        return;
-      }
-      parkingNotesList.innerHTML = rows.map(n => {
-        const snippet = String(n.body || "").trim();
-        const preview = snippet.length > 260 ? `${snippet.slice(0, 260)}...` : snippet;
-        const author = n.participant_id ? n.participant_id.slice(0,8) : "shared";
-        return `
-          <article class="laneCard">
-            <div class="laneMeta">Author ${shared.escapeHtml(author)} • ${shared.escapeHtml(fmtTime(n.updated_at || Date.now()))}</div>
-            <div>${shared.escapeHtml(preview || "(empty note)")}</div>
+            <div class="playerStatus">
+              <span class="pill ${ready ? "ok" : "warn"}">Stage 1</span>
+              <span class="pill ${sharedDone ? "ok" : "warn"}">Stage 2</span>
+              <span class="pill ${workflowDone ? "ok" : "warn"}">Stage 3</span>
+            </div>
+            <p class="playerMeta">
+              ${sharedDone ? "Has published at least one shared sticky." : "No published shared sticky yet."}<br/>
+              ${workflowDone ? "Has workflow items in Stage 3." : "No Stage 3 workflow items yet."}
+            </p>
           </article>
         `;
       }).join("");
     }
 
-    function applyTabState(){
-      if (audienceTabs){
-        audienceTabs.querySelectorAll("[data-audience-tab]").forEach(btn => {
-          btn.classList.toggle("active", btn.getAttribute("data-audience-tab") === view.audience);
+    function renderStickyBoard(sharedRows, roleByParticipant){
+      stickyBoardCount.textContent = `${sharedRows.length} notes`;
+      if (!sharedRows.length){
+        stickyBoard.innerHTML = `<div class="empty" style="position:absolute;inset:24px">No shared sticky notes yet. Publish from Step 2 and refresh this dashboard.</div>`;
+        stickyBoard.style.minHeight = "680px";
+        stickySummaryList.innerHTML = `<li>No published prompts yet.</li>`;
+        return;
+      }
+
+      const counts = { student:0, tutor:0 };
+      const cols = Math.max(2, Math.min(4, Math.ceil(Math.sqrt(sharedRows.length))));
+      const noteW = 248;
+      const noteH = 180;
+      const gapX = 26;
+      const gapY = 28;
+      const rows = Math.ceil(sharedRows.length / cols);
+      const boardHeight = Math.max(680, (rows * (noteH + gapY)) + 56);
+      stickyBoard.style.minHeight = `${boardHeight}px`;
+
+      stickyBoard.innerHTML = sharedRows.map((row, idx) => {
+        const parsed = parseSharedSticky(row);
+        const role = String(roleByParticipant.get(String(row.participant_id || "")) || "student") === "tutor" ? "Tutor" : "Student";
+        if (role === "Tutor") counts.tutor += 1;
+        else counts.student += 1;
+
+        const hash = hashString(row.id || `${idx}`);
+        const col = idx % cols;
+        const rowIdx = Math.floor(idx / cols);
+        const jitterX = (hash % 17) - 8;
+        const jitterY = (Math.floor(hash / 17) % 17) - 8;
+        const rotate = ((Math.floor(hash / 37) % 7) - 3) * 1.6;
+        const left = 24 + (col * (noteW + gapX)) + jitterX;
+        const top = 24 + (rowIdx * (noteH + gapY)) + jitterY;
+        return `
+          <article
+            class="stickyNote"
+            style="left:${left}px;top:${top}px;background:${escapeHtml(row.color || "#f8ef77")};transform:rotate(${rotate}deg)"
+          >
+            <div class="stickyMeta">
+              <span>${escapeHtml(parsed.author || "unknown")}</span>
+              <span class="stickyRole">${escapeHtml(role)}</span>
+            </div>
+            <p class="stickyText">${escapeHtml(parsed.body || "(empty)")}</p>
+          </article>
+        `;
+      }).join("");
+
+      stickySummaryList.innerHTML = [
+        `<li>${counts.student} student sticky note${counts.student === 1 ? "" : "s"}</li>`,
+        `<li>${counts.tutor} tutor sticky note${counts.tutor === 1 ? "" : "s"}</li>`,
+        `<li>${sharedRows.length} total published sticky note${sharedRows.length === 1 ? "" : "s"}</li>`
+      ].join("");
+    }
+
+    function buildWorkflowPreview(rows){
+      const nodeRows = rows.filter(row => String(row.type || "") !== "workflow_edge");
+      const edgeRows = rows.filter(row => String(row.type || "") === "workflow_edge");
+      if (!nodeRows.length){
+        return `<div class="empty" style="margin:14px">No workflow boxes yet for this tutor.</div>`;
+      }
+
+      const nodes = nodeRows.map(row => ({ id: row.id, ...parseWorkflowNode(row) }));
+      const minX = Math.min(...nodes.map(node => node.x));
+      const minY = Math.min(...nodes.map(node => node.y));
+      const maxX = Math.max(...nodes.map(node => node.x + node.w));
+      const maxY = Math.max(...nodes.map(node => node.y + node.h));
+      const baseW = Math.max(560, (maxX - minX) + 120);
+      const baseH = Math.max(360, (maxY - minY) + 120);
+      const targetW = 820;
+      const targetH = 300;
+      const scale = Math.min((targetW - 48) / baseW, (targetH - 44) / baseH, 1);
+
+      const scaledMap = new Map();
+      nodes.forEach(node => {
+        scaledMap.set(node.id, {
+          ...node,
+          x: 24 + ((node.x - minX) + 36) * scale,
+          y: 20 + ((node.y - minY) + 34) * scale,
+          w: node.w * scale,
+          h: node.h * scale
         });
-      }
-      stageTabs.querySelectorAll("[data-stage-tab]").forEach(btn => {
-        btn.classList.toggle("active", btn.getAttribute("data-stage-tab") === view.stage);
       });
 
-      viewStage1.style.display = (view.stage === "all" || view.stage === "1") ? "" : "none";
-      viewStage2.style.display = (view.stage === "all" || view.stage === "2") ? "" : "none";
-      const show3 = (view.stage === "all" || view.stage === "3");
-      viewStage3.style.display = show3 ? "" : "none";
-      viewStage3Support.style.display = show3 ? "" : "none";
+      const edgeMarkup = edgeRows.map(row => {
+        const edge = parseWorkflowEdge(row);
+        const from = scaledMap.get(edge.from);
+        const to = scaledMap.get(edge.to);
+        if (!from || !to) return "";
+        const a = { ...nodeAnchor(from, edge.fromSide), side: edge.fromSide };
+        const b = { ...nodeAnchor(to, edge.toSide), side: edge.toSide };
+        return `<path d="${escapeHtml(bezierPath(a, b))}" fill="none" stroke="rgba(140,218,255,.9)" stroke-width="2.2" stroke-linecap="round"/>`;
+      }).join("");
+
+      const nodeMarkup = [...scaledMap.values()].map(node => `
+        <article class="workflowNode ${escapeHtml(node.tone)}" style="left:${node.x}px;top:${node.y}px;width:${node.w}px;min-height:${node.h}px">
+          <span class="workflowTone">${escapeHtml(node.tone)}</span>
+          <span class="workflowText">${escapeHtml(node.text)}</span>
+          <span class="workflowTime">${escapeHtml(node.time)}</span>
+        </article>
+      `).join("");
+
+      return `
+        <div class="workflowBoard">
+          <svg viewBox="0 0 820 300" preserveAspectRatio="none">${edgeMarkup}</svg>
+          ${nodeMarkup}
+        </div>
+      `;
+    }
+
+    function renderWorkflowBoards(workflowRows, participantsById){
+      const tutorRows = workflowRows.filter(row => {
+        const participant = participantsById.get(String(row.participant_id || ""));
+        return participant && participant.role === "tutor";
+      });
+
+      const boards = new Map();
+      tutorRows.forEach(row => {
+        const pid = String(row.participant_id || "");
+        if (!boards.has(pid)) boards.set(pid, []);
+        boards.get(pid).push(row);
+      });
+
+      workflowBoardCount.textContent = `${boards.size} board${boards.size === 1 ? "" : "s"}`;
+
+      if (!boards.size){
+        workflowBoards.innerHTML = `<div class="empty">No tutor workflow boards yet. Tutors need to create boxes in Step 3 first.</div>`;
+        return { boardCount:0, boxCount:0 };
+      }
+
+      const entries = [...boards.entries()].sort((a, b) => {
+        const aName = participantName(participantsById.get(a[0]));
+        const bName = participantName(participantsById.get(b[0]));
+        return aName.localeCompare(bName);
+      });
+
+      let totalBoxes = 0;
+      workflowBoards.innerHTML = entries.map(([pid, rows]) => {
+        const participant = participantsById.get(pid) || {};
+        const name = participantName(participant);
+        const persona = shared.personaTitle(participant.persona_id);
+        const boxCount = rows.filter(row => String(row.type || "") !== "workflow_edge").length;
+        totalBoxes += boxCount;
+        return `
+          <article class="workflowCard">
+            <div class="workflowHead">
+              <div>
+                <h3>${escapeHtml(name)}</h3>
+                <p class="workflowMeta">
+                  Tutor workflow copy<br/>
+                  Persona: ${escapeHtml(persona)}
+                </p>
+              </div>
+              <span class="pill info">${boxCount} box${boxCount === 1 ? "" : "es"}</span>
+            </div>
+            ${buildWorkflowPreview(rows)}
+          </article>
+        `;
+      }).join("");
+
+      return { boardCount: boards.size, boxCount: totalBoxes };
     }
 
     function renderAll(){
       const participants = cache.participants || [];
       const stickies = cache.stickies || [];
       const journey = cache.journey || [];
-      const notes = cache.notes || [];
-      const workflowJourney = cache.workflow || [];
-      const studentJourney = journey.filter(j => !String(j.type || "").startsWith("workflow_"));
-      const roleByParticipant = new Map((participants || []).map(p => [String(p.id || ""), String(p.role || "")]));
 
-      const visibleParticipants = participants.filter(p => view.audience === "all" || String(p.role || "") === view.audience);
-      const visibleIds = new Set(visibleParticipants.map(p => p.id));
-      const stickyAuthors = new Set(stickies.map(s => s.participant_id).filter(id => visibleIds.has(id)));
-      const journeyAuthors = new Set(studentJourney.map(j => j.participant_id).filter(id => visibleIds.has(id)));
-      const workflowNodes = workflowJourney.filter(j => {
-        if (!String(j.type || "").startsWith("workflow_") || String(j.type || "") === "workflow_edge") return false;
-        if (view.audience === "all") return true;
-        const role = String(roleByParticipant.get(String(j.participant_id || "")) || "");
-        return role === view.audience;
-      }).length;
-      const step1ReadyCount = visibleParticipants.filter(p => shared.cleanDisplayName(p.display_name) && p.persona_id).length;
-      const step2Count = stickyAuthors.size;
-      const step3Count = journeyAuthors.size;
+      const participantsById = new Map(participants.map(row => [String(row.id || ""), row]));
+      const roleByParticipant = new Map(participants.map(row => [String(row.id || ""), String(row.role || "student")]));
 
-      totalParticipants.textContent = String(visibleParticipants.length);
-      step1Ready.textContent = String(step1ReadyCount);
-      step2Active.textContent = String(step2Count);
-      step3Active.textContent = String(step3Count);
-      journeyCount.textContent = String(studentJourney.filter(j => visibleIds.has(j.participant_id)).length);
+      const students = participants.filter(row => row.role !== "tutor").sort((a, b) => participantName(a).localeCompare(participantName(b)));
+      const tutors = participants.filter(row => row.role === "tutor").sort((a, b) => participantName(a).localeCompare(participantName(b)));
+      const sharedRows = stickies.filter(isSharedSticky);
+      const workflowRows = journey.filter(row => String(row.type || "").startsWith("workflow_"));
+      const studentConstraintRows = journey.filter(row => String(row.type || "") === "constraint");
 
-      const p1v = pct(step1ReadyCount, visibleParticipants.length);
-      const p2v = pct(step2Count, visibleParticipants.length);
-      const p3v = pct(step3Count, visibleParticipants.length);
-      p1.style.width = `${p1v}%`; p2.style.width = `${p2v}%`; p3.style.width = `${p3v}%`;
-      p1Text.textContent = `${p1v}%`; p2Text.textContent = `${p2v}%`; p3Text.textContent = `${p3v}%`;
-      lastUpdated.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
+      const step1ReadyCount = participants.filter(row => shared.cleanDisplayName(row.display_name) && row.persona_id).length;
+      const sharedByAuthor = new Set(sharedRows.map(row => String(row.participant_id || "")));
+      const workflowByAuthor = new Set(workflowRows.map(row => String(row.participant_id || "")));
+      const tutorSharedCount = sharedRows.filter(row => roleByParticipant.get(String(row.participant_id || "")) === "tutor").length;
+      const studentSharedCount = sharedRows.length - tutorSharedCount;
 
-      renderPlayerMap(visibleParticipants, stickyAuthors, journeyAuthors);
-      renderSharedPrompts(stickies, roleByParticipant, view.audience);
-      renderConstraintsByWeek(studentJourney, roleByParticipant, view.audience);
-      renderWorkflowByWeek(workflowJourney, roleByParticipant, view.audience);
-      renderParkingNotes(notes, roleByParticipant, view.audience);
-      computePrompts({
-        total: visibleParticipants.length,
-        readyStep1: step1ReadyCount,
-        activeStep2: step2Count,
-        activeStep3: step3Count,
-        workflowNodes,
-        notesCount: notes.length
-      });
-      applyTabState();
+      totalPlayers.textContent = String(participants.length);
+      playerSplit.textContent = `${students.length} students • ${tutors.length} tutors`;
+      stage1Ready.textContent = String(step1ReadyCount);
+      sharedStickies.textContent = String(sharedRows.length);
+      stickySplit.textContent = `${studentSharedCount} student • ${tutorSharedCount} tutor`;
+      studentConstraints.textContent = String(studentConstraintRows.length);
+      studentCountPill.textContent = `${students.length} student${students.length === 1 ? "" : "s"}`;
+      tutorCountPill.textContent = `${tutors.length} tutor${tutors.length === 1 ? "" : "s"}`;
+
+      renderRoster(
+        students,
+        studentRoster,
+        "No students have joined this room yet.",
+        sharedByAuthor,
+        workflowByAuthor
+      );
+      renderRoster(
+        tutors,
+        tutorRoster,
+        "No tutors have joined this room yet.",
+        sharedByAuthor,
+        workflowByAuthor
+      );
+      renderStickyBoard(sharedRows, roleByParticipant);
+      const workflowStats = renderWorkflowBoards(workflowRows, participantsById);
+      tutorBoards.textContent = String(workflowStats.boardCount);
+      workflowSplit.textContent = `${workflowStats.boxCount} workflow box${workflowStats.boxCount === 1 ? "" : "es"}`;
+      lastUpdated.textContent = `Last update: ${fmtTime(Date.now())}`;
+      updateStageUI();
     }
 
-    async function loadData(){
-      const queries = {
-        participants: supabase.from("workshop_participants").select("*").eq("session_id", room),
-        stickies: supabase.from("workshop_stickies").select("*").eq("session_id", room),
-        journey: supabase.from("workshop_journey_items").select("*").eq("session_id", room),
-        notes: supabase.from("workshop_journey_notes").select("*").eq("session_id", room),
-        workflow: supabase.from("workshop_journey_items").select("*").eq("session_id", room).like("type", "workflow_%")
-      };
-      const settled = await Promise.allSettled([
-        queries.participants,
-        queries.stickies,
-        queries.journey,
-        queries.notes,
-        queries.workflow
-      ]);
-      const keys = ["participants","stickies","journey","notes","workflow"];
-      const errors = [];
-      const payload = { participants:[], stickies:[], journey:[], notes:[], workflow:[] };
+    async function loadData({ silent=false } = {}){
+      const queries = [
+        supabase.from("workshop_participants").select("*").eq("session_id", room),
+        supabase.from("workshop_stickies").select("*").eq("session_id", room),
+        supabase.from("workshop_journey_items").select("*").eq("session_id", room),
+        supabase.from("workshop_journey_notes").select("*").eq("session_id", room)
+      ];
 
-      settled.forEach((res, idx) => {
-        const k = keys[idx];
-        if (res.status !== "fulfilled"){
-          errors.push(`${k}: request failed`);
+      const results = await Promise.allSettled(queries);
+      const keys = ["participants","stickies","journey","notes"];
+      const errors = [];
+
+      results.forEach((result, idx) => {
+        const key = keys[idx];
+        if (result.status !== "fulfilled"){
+          errors.push(`${key}: request failed`);
           return;
         }
-        const row = res.value;
-        if (row.error){
-          errors.push(`${k}: ${row.error.message || "query error"}`);
+        if (result.value.error){
+          errors.push(`${key}: ${result.value.error.message || "query error"}`);
           return;
         }
-        payload[k] = row.data || [];
+        cache[key] = result.value.data || [];
       });
 
-      cache.participants = payload.participants;
-      cache.stickies = payload.stickies;
-      cache.journey = payload.journey;
-      cache.notes = payload.notes;
-      cache.workflow = payload.workflow;
       renderAll();
 
       if (errors.length){
-        const hint = "Supabase checks: RLS SELECT policy for anon role, tables in realtime publication, correct session_id column.";
-        setDiag(
-          `Partial data loaded. ${hint} Errors: ${errors.slice(0,2).join(" | ")}`,
-          true
-        );
-        addFeed("diag", errors[0]);
+        setStatus(`Partial data loaded. ${errors.slice(0, 2).join(" | ")}`, true);
+      } else if (!silent){
+        setStatus("Dashboard refreshed. Live participant, sticky, and tutor workflow data is up to date.", false);
       } else {
-        setDiag("Connected. Live polling + realtime active.", false);
+        setStatus("Realtime update received.", false);
       }
-    }
-
-    function wireNav(){
-      applyRoomCampusUI();
-      applyTabState();
-      $("#btnRefresh").addEventListener("click", () => loadData().catch(err => addFeed("error", err.message || String(err))));
-      $("#btnTutorDash").addEventListener("click", () => {
-        location.href = buildDashboardHref(room, campus, group, "tutor");
-      });
-      $("#btnStep1").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step1.html`));
-      $("#btnStep2").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step2.html`));
-      $("#btnStep3").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step3.html`));
-      $("#btnStep3Tutor").addEventListener("click", () => location.href = `${withCampus(`${shared.BASE_PATH}/step3-tutor.html`)}&group=${encodeURIComponent(group)}`);
-      $("#btnIndex").addEventListener("click", () => location.href = "/index.html");
-      $("#btnOpenRoom").addEventListener("click", () => {
-        const nextRoom = (roomInput.value || "").trim() || "demo";
-        const nextCampus = (campusSelect.value || "upng").trim().toLowerCase() === "monash" ? "monash" : "upng";
-        const nextGroup = (groupInput.value || "core").trim() || "core";
-        location.href = buildDashboardHref(nextRoom, nextCampus, nextGroup, view.audience);
-      });
-      $("#btnCopyStudent").addEventListener("click", () => {
-        const links = buildShareLinks();
-        copyText(links.student);
-      });
-      $("#btnCopyTutor").addEventListener("click", () => {
-        const links = buildShareLinks();
-        copyText(links.tutor);
-      });
-      if (audienceTabs){
-        audienceTabs.addEventListener("click", (e) => {
-          const btn = e.target.closest("[data-audience-tab]");
-          if (!btn) return;
-          view.audience = sanitizeAudience(btn.getAttribute("data-audience-tab") || "all");
-          const nextUrl = new URL(location.href);
-          if (view.audience === "all") nextUrl.searchParams.delete("audience");
-          else nextUrl.searchParams.set("audience", view.audience);
-          history.replaceState({}, "", nextUrl.toString());
-          applyRoomCampusUI();
-          renderAll();
-        });
-      }
-      stageTabs.addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-stage-tab]");
-        if (!btn) return;
-        view.stage = btn.getAttribute("data-stage-tab") || "all";
-        applyTabState();
-      });
-      sharedPromptsList.addEventListener("click", async (e) => {
-        const btn = e.target.closest("[data-remove-sticky]");
-        if (!btn) return;
-        const id = btn.getAttribute("data-remove-sticky");
-        if (!id) return;
-        const ok = confirm("Delete this shared sticky from the room?");
-        if (!ok) return;
-        const { error } = await supabase.from("workshop_stickies").delete().eq("id", id).eq("session_id", room);
-        if (error){
-          addFeed("error", error.message || "failed deleting sticky");
-          return;
-        }
-        addFeed("action", `Sticky ${id} deleted`);
-        await loadData().catch(err => addFeed("error", err.message || String(err)));
-      });
-      playerMapList.addEventListener("click", async (e) => {
-        const btn = e.target.closest("[data-remove-player]");
-        if (!btn) return;
-        const id = btn.getAttribute("data-remove-player");
-        if (!id) return;
-        const ok = confirm("Remove this player and their workshop data from this room?");
-        if (!ok) return;
-        const ops = await Promise.all([
-          supabase.from("workshop_stickies").delete().eq("participant_id", id).eq("session_id", room),
-          supabase.from("workshop_journey_items").delete().eq("participant_id", id).eq("session_id", room),
-          supabase.from("workshop_journey_notes").delete().eq("participant_id", id).eq("session_id", room),
-          supabase.from("workshop_participants").delete().eq("id", id).eq("session_id", room)
-        ]);
-        const bad = ops.find(x => x.error);
-        if (bad){
-          addFeed("error", bad.error.message || "failed removing player");
-          return;
-        }
-        addFeed("action", `Player ${id.slice(0,8)} removed`);
-        await loadData().catch(err => addFeed("error", err.message || String(err)));
-      });
-    }
-
-    function subscribeRealtime(){
-      const defs = [
-        { table:"workshop_participants", label:"participant" },
-        { table:"workshop_stickies", label:"sticky" },
-        { table:"workshop_journey_items", label:"journey" },
-        { table:"workshop_journey_notes", label:"notes" }
-      ];
-      defs.forEach(def => {
-        const filterSession = room;
-        const ch = supabase
-          .channel(`dash:${room}:${def.table}:${def.label}`)
-          .on("postgres_changes", { event:"*", schema:"public", table:def.table, filter:`session_id=eq.${filterSession}` }, (payload) => {
-            const id = payload.new?.id || payload.old?.id || "unknown";
-            addFeed(def.label, `${payload.eventType} • id=${id}`);
-            loadData().catch(err => addFeed("error", err.message || String(err)));
-          })
-          .subscribe((status) => {
-            if (status === "CHANNEL_ERROR" || status === "TIMED_OUT"){
-              addFeed("diag", `Realtime issue on ${def.table}. Polling still active.`);
-              setDiag("Realtime degraded. Polling active; check Supabase Realtime settings.", true);
-            }
-          });
-        subs.push(ch);
-      });
     }
 
     function clearSubs(){
@@ -1165,40 +1398,100 @@
       subs = [];
     }
 
+    function subscribeRealtime(){
+      clearSubs();
+      const defs = ["workshop_participants","workshop_stickies","workshop_journey_items","workshop_journey_notes"];
+      defs.forEach(table => {
+        const ch = supabase
+          .channel(`stage1-dashboard:${room}:${table}`)
+          .on("postgres_changes", { event:"*", schema:"public", table, filter:`session_id=eq.${room}` }, () => {
+            loadData({ silent:true }).catch(err => setStatus(err.message || "Realtime refresh failed.", true));
+          })
+          .subscribe((status) => {
+            if (status === "CHANNEL_ERROR" || status === "TIMED_OUT"){
+              setStatus("Realtime degraded. Manual refresh still works.", true);
+            }
+          });
+        subs.push(ch);
+      });
+    }
+
+    function startPolling(){
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(() => {
+        loadData({ silent:true }).catch(() => {});
+      }, 5000);
+    }
+
     function openDashboard(){
       pwOverlay.style.display = "none";
       pwOverlay.setAttribute("aria-hidden", "true");
-      loadData()
-        .then(() => addFeed("system", `Dashboard ready for room "${room}"`))
-        .catch(err => addFeed("error", err.message || String(err)));
+      applyRoomUI();
+      updateStageUI();
+      loadData().catch(err => setStatus(err.message || "Initial load failed.", true));
       subscribeRealtime();
-      setInterval(() => loadData().catch(()=>{}), 5000);
+      startPolling();
     }
 
-    wireNav();
+    function wireUI(){
+      applyRoomUI();
+
+      btnPrevStage.addEventListener("click", () => {
+        const idx = stageIndex(activeStage);
+        goToStage(STAGES[Math.max(0, idx - 1)]);
+      });
+      btnNextStage.addEventListener("click", () => {
+        const idx = stageIndex(activeStage);
+        goToStage(STAGES[Math.min(STAGES.length - 1, idx + 1)]);
+      });
+      $("#btnRefresh").addEventListener("click", () => {
+        loadData().catch(err => setStatus(err.message || "Refresh failed.", true));
+      });
+      $("#btnIndex").addEventListener("click", () => {
+        location.href = "/index.html";
+      });
+      $("#btnOpenRoom").addEventListener("click", () => {
+        const nextRoom = (roomInput.value || "").trim() || "demo";
+        const nextCampus = (campusSelect.value || "upng").trim().toLowerCase() === "monash" ? "monash" : "upng";
+        const nextGroup = (groupInput.value || "core").trim() || "core";
+        location.href = dashboardHref(nextRoom, nextCampus, nextGroup);
+      });
+      $("#btnCopyStudent").addEventListener("click", () => copyText(studentLinkOut.textContent || ""));
+      $("#btnCopyTutor").addEventListener("click", () => copyText(tutorLinkOut.textContent || ""));
+
+      stageNodes.forEach(node => {
+        node.addEventListener("click", () => {
+          goToStage(node.getAttribute("data-stage-node") || "1");
+        });
+      });
+
+      btnUnlock.addEventListener("click", () => {
+        const pass = (pwInput.value || "").trim();
+        if (pass !== DASHBOARD_PASS){
+          pwInput.value = "";
+          pwInput.placeholder = "Wrong password";
+          pwInput.focus();
+          pwInput.select?.();
+          return;
+        }
+        localStorage.setItem(DASH_AUTH_KEY, "1");
+        openDashboard();
+      });
+      pwInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") btnUnlock.click();
+      });
+    }
+
+    wireUI();
     if (localStorage.getItem(DASH_AUTH_KEY) === "1"){
       openDashboard();
     } else {
-      pwOverlay.style.display = "flex";
-      pwOverlay.setAttribute("aria-hidden", "false");
       setTimeout(() => pwInput.focus(), 0);
     }
-    btnUnlock.addEventListener("click", () => {
-      const pass = (pwInput.value || "").trim();
-      if (pass !== DASHBOARD_PASS){
-        pwInput.value = "";
-        pwInput.placeholder = "Wrong password";
-        pwInput.focus();
-        pwInput.select?.();
-        return;
-      }
-      localStorage.setItem(DASH_AUTH_KEY, "1");
-      openDashboard();
+    window.addEventListener("beforeunload", () => {
+      clearSubs();
+      if (pollTimer) clearInterval(pollTimer);
     });
-    pwInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") btnUnlock.click();
-    });
-    window.addEventListener("beforeunload", clearSubs);
   })();
   </script>
 </body>
