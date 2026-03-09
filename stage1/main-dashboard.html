@@ -389,14 +389,15 @@
   <div class="wrap">
     <div class="top">
       <div>
-        <div class="badge"><span class="dot"></span> Stage 1 Main Dashboard</div>
+        <div class="badge" id="dashboardBadge"><span class="dot"></span> Stage 1 Main Dashboard</div>
         <div class="subtitle">
           Room: <span class="mono" id="roomOut">demo</span> • Campus: <span class="mono" id="campusOut">UPNG</span> • Live monitor for Step 1 → Step 3.<br/>
-          Facilitator screen: monitor participation, friction signals, workflow snapshots, and stage progress in one place.
+          <span id="dashboardDetail">Facilitator screen: monitor participation, friction signals, workflow snapshots, and stage progress in one place.</span>
         </div>
       </div>
       <div class="toolbar">
         <button id="btnRefresh">Refresh</button>
+        <button id="btnTutorDash">Tutor Dashboard</button>
         <button id="btnStep1">Step 1</button>
         <button id="btnStep2">Step 2</button>
         <button id="btnStep3">Step 3 Student</button>
@@ -405,6 +406,12 @@
       </div>
     </div>
     <div class="tabs">
+      <div class="tabGroup" id="audienceTabs">
+        <span class="tabLabel">Audience</span>
+        <button class="tabBtn active" data-audience-tab="all">All</button>
+        <button class="tabBtn" data-audience-tab="student">Students</button>
+        <button class="tabBtn" data-audience-tab="tutor">Tutors</button>
+      </div>
       <div class="tabGroup" id="stageTabs">
         <span class="tabLabel">Stage</span>
         <button class="tabBtn active" data-stage-tab="all">All</button>
@@ -587,6 +594,8 @@
 
     const roomOut = $("#roomOut");
     const campusOut = $("#campusOut");
+    const dashboardBadge = $("#dashboardBadge");
+    const dashboardDetail = $("#dashboardDetail");
     const pwOverlay = $("#pwOverlay");
     const pwInput = $("#pwInput");
     const btnUnlock = $("#btnUnlock");
@@ -624,11 +633,25 @@
     const viewStage3 = $("#viewStage3");
     const viewStage3Support = $("#viewStage3Support");
 
-    const view = { audience: "all", stage: "all" };
+    function sanitizeAudience(raw){
+      const value = String(raw || "").trim().toLowerCase();
+      return value === "student" || value === "tutor" ? value : "all";
+    }
+
+    const view = { audience: sanitizeAudience(params.get("audience")), stage: "all" };
     const cache = { participants: [], stickies: [], journey: [], notes: [], workflow: [] };
 
     function withCampus(path){
       return `${path}?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
+    }
+    function buildDashboardHref(nextRoom = room, nextCampus = campus, nextGroup = group, nextAudience = view.audience){
+      const qs = new URLSearchParams({
+        room: nextRoom,
+        campus: nextCampus,
+        group: nextGroup
+      });
+      if (nextAudience && nextAudience !== "all") qs.set("audience", nextAudience);
+      return `${shared.BASE_PATH}/main-dashboard.html?${qs.toString()}`;
     }
     function buildShareLinks(){
       const origin = location.origin || "https://www.jackiefoo.me";
@@ -644,6 +667,16 @@
       roomInput.value = room;
       campusSelect.value = campus;
       groupInput.value = group;
+      if (dashboardBadge){
+        dashboardBadge.innerHTML = `<span class="dot"></span> ${view.audience === "tutor" ? "Stage 1 Tutor Dashboard" : view.audience === "student" ? "Stage 1 Student Dashboard" : "Stage 1 Main Dashboard"}`;
+      }
+      if (dashboardDetail){
+        dashboardDetail.textContent = view.audience === "tutor"
+          ? "Tutor-only live monitor: use Refresh anytime to consolidate tutor personas, shared stickies, and tutor workflow updates in one place."
+          : view.audience === "student"
+            ? "Student-only live monitor: check student personas, shared stickies, and constraint maps without tutor rows mixed in."
+            : "Facilitator screen: monitor participation, friction signals, workflow snapshots, and stage progress in one place.";
+      }
       buildShareLinks();
     }
     async function copyText(text){
@@ -1022,6 +1055,9 @@
       applyRoomCampusUI();
       applyTabState();
       $("#btnRefresh").addEventListener("click", () => loadData().catch(err => addFeed("error", err.message || String(err))));
+      $("#btnTutorDash").addEventListener("click", () => {
+        location.href = buildDashboardHref(room, campus, group, "tutor");
+      });
       $("#btnStep1").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step1.html`));
       $("#btnStep2").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step2.html`));
       $("#btnStep3").addEventListener("click", () => location.href = withCampus(`${shared.BASE_PATH}/step3.html`));
@@ -1031,7 +1067,7 @@
         const nextRoom = (roomInput.value || "").trim() || "demo";
         const nextCampus = (campusSelect.value || "upng").trim().toLowerCase() === "monash" ? "monash" : "upng";
         const nextGroup = (groupInput.value || "core").trim() || "core";
-        location.href = `${shared.BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(nextRoom)}&campus=${encodeURIComponent(nextCampus)}&group=${encodeURIComponent(nextGroup)}`;
+        location.href = buildDashboardHref(nextRoom, nextCampus, nextGroup, view.audience);
       });
       $("#btnCopyStudent").addEventListener("click", () => {
         const links = buildShareLinks();
@@ -1045,7 +1081,12 @@
         audienceTabs.addEventListener("click", (e) => {
           const btn = e.target.closest("[data-audience-tab]");
           if (!btn) return;
-          view.audience = btn.getAttribute("data-audience-tab") || "all";
+          view.audience = sanitizeAudience(btn.getAttribute("data-audience-tab") || "all");
+          const nextUrl = new URL(location.href);
+          if (view.audience === "all") nextUrl.searchParams.delete("audience");
+          else nextUrl.searchParams.set("audience", view.audience);
+          history.replaceState({}, "", nextUrl.toString());
+          applyRoomCampusUI();
           renderAll();
         });
       }
