@@ -9,23 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#fffaf6;
-      --panel:#ffffff;
-      --panel2:#fff5ee;
-      --border:#eadde7;
-      --text:#241a2f;
-      --muted:#756a7c;
+      --bg:#070a14;
+      --panel:#11172a;
+      --panel2:#0c1120;
+      --border:#2f3a60;
+      --text:#e9ecff;
+      --muted:#aab0d6;
 
-      --accent:#7de8ff;
-      --accent2:#ffb1d7;
-      --bad:#ff9aa9;
-      --softPurple:#d3c0ff;
-      --softYellow:#ffe68a;
-      --softOrange:#ffc8a8;
+      --accent:#00e5ff;
+      --accent2:#ff2bd6;
+      --bad:#ff4d4d;
 
       --r:18px;
-      --shadow:0 20px 44px rgba(214,153,127,.14);
-      --focus: 0 0 0 4px rgba(125,232,255,.22);
+      --shadow:0 20px 44px rgba(2,8,22,.46);
+      --focus: 0 0 0 4px rgba(0,229,255,.18);
     }
 
     *{box-sizing:border-box}
@@ -42,11 +39,10 @@
     .bg{
       position:fixed; inset:0; z-index:-1;
       background:
-        radial-gradient(900px 520px at 15% 18%, rgba(125,232,255,.18), transparent 58%),
-        radial-gradient(820px 480px at 85% 72%, rgba(255,177,215,.18), transparent 58%),
-        radial-gradient(640px 360px at 62% 22%, rgba(255,200,168,.16), transparent 60%),
-        radial-gradient(760px 420px at 48% 100%, rgba(211,192,255,.14), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,247,240,.96)),
+        radial-gradient(900px 520px at 15% 18%, rgba(0,229,255,.12), transparent 58%),
+        radial-gradient(820px 480px at 85% 72%, rgba(255,43,214,.12), transparent 58%),
+        radial-gradient(600px 360px at 62% 22%, rgba(71,255,135,.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
         var(--bg);
       filter:saturate(1.05);
     }
@@ -794,7 +790,7 @@
     const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     const group = (params.get("group") || "core").trim() || "core";
     if (!room) {
-      document.body.innerHTML = "<div style='padding:24px;color:#241a2f;background:#fffaf6;font-family:system-ui'>Missing room code in URL.</div>";
+      document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room code in URL.</div>";
       throw new Error("Missing room");
     }
 
@@ -906,14 +902,14 @@
 
     // ✅ persona cards now include an imgSrc per card
     const personaCards = [
-      { id:"mentor_architect", title:"Mentor Architect", text:"I structure feedback so students can act in sequence.", imgSrc: CARD_IMG_CLARIFIER, accent:"#7de8ff" },
-      { id:"rubric_guardian", title:"Rubric Guardian", text:"I anchor comments to criteria and learning outcomes.", imgSrc: CARD_IMG_VALIDATOR, accent:"#ffe68a" },
-      { id:"workload_balancer", title:"Workload Balancer", text:"I calibrate effort so revisions stay realistic.", imgSrc: CARD_IMG_OPTIMIZER, accent:"#d3c0ff" },
-      { id:"empathy_coach", title:"Empathy Coach", text:"I protect motivation and confidence while being honest.", imgSrc: CARD_IMG_STORYBUILDER, accent:"#ffb1d7" },
-      { id:"evidence_hunter", title:"Evidence Hunter", text:"I ask for proof, examples, and observable improvements.", imgSrc: CARD_IMG_PERFECTIONIST, accent:"#ffc8a8" },
-      { id:"systems_planner", title:"Systems Planner", text:"I map checkpoints, dependencies, and handoff moments.", imgSrc: CARD_IMG_STRATEGIST, accent:"#cbb9ff" },
-      { id:"deadline_pacer", title:"Deadline Pacer", text:"I pace milestones around due dates and release windows.", imgSrc: CARD_IMG_INDEPENDENT, accent:"#9deeff" },
-      { id:"clarity_editor", title:"Clarity Editor", text:"I rewrite vague comments into precise instructions.", imgSrc: CARD_IMG_OVERWHELMED, accent:"#ffb2bf" }
+      { id:"mentor_architect", title:"Mentor Architect", text:"I structure feedback so students can act in sequence.", imgSrc: CARD_IMG_CLARIFIER, accent:"#00e5ff" },
+      { id:"rubric_guardian", title:"Rubric Guardian", text:"I anchor comments to criteria and learning outcomes.", imgSrc: CARD_IMG_VALIDATOR, accent:"#ffd36a" },
+      { id:"workload_balancer", title:"Workload Balancer", text:"I calibrate effort so revisions stay realistic.", imgSrc: CARD_IMG_OPTIMIZER, accent:"#47ff87" },
+      { id:"empathy_coach", title:"Empathy Coach", text:"I protect motivation and confidence while being honest.", imgSrc: CARD_IMG_STORYBUILDER, accent:"#ff9ae9" },
+      { id:"evidence_hunter", title:"Evidence Hunter", text:"I ask for proof, examples, and observable improvements.", imgSrc: CARD_IMG_PERFECTIONIST, accent:"#ff9a6f" },
+      { id:"systems_planner", title:"Systems Planner", text:"I map checkpoints, dependencies, and handoff moments.", imgSrc: CARD_IMG_STRATEGIST, accent:"#9ab2ff" },
+      { id:"deadline_pacer", title:"Deadline Pacer", text:"I pace milestones around due dates and release windows.", imgSrc: CARD_IMG_INDEPENDENT, accent:"#7ee6ff" },
+      { id:"clarity_editor", title:"Clarity Editor", text:"I rewrite vague comments into precise instructions.", imgSrc: CARD_IMG_OVERWHELMED, accent:"#ff7a7a" }
     ];
 
     const state = {
