@@ -229,9 +229,8 @@
     .btnGhost{background:rgba(255,255,255,.03)}
 
     /* Persona grid */
-    .personaGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-    @media (max-width:1040px){.personaGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media (max-width:520px){.personaGrid{grid-template-columns:repeat(1,minmax(0,1fr))}}
+    .personaGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    @media (max-width:720px){.personaGrid{grid-template-columns:repeat(1,minmax(0,1fr))}}
 
     .persona{
       border:1px solid rgba(255,255,255,.10);
@@ -244,7 +243,7 @@
       display:flex;
       flex-direction:column;
       gap:10px;
-      min-height:268px;
+      min-height:100%;
       position:relative;
       transition: transform .14s ease, border-color .14s ease, background .14s ease, box-shadow .14s ease;
     }
@@ -277,7 +276,46 @@
       justify-content:space-between;
     }
     .pTitle{margin:0;font-size:12px;font-weight:1000;letter-spacing:.2px;text-transform:uppercase}
+    .pSummary{
+      margin:0;
+      color:var(--text);
+      font-weight:900;
+      font-size:13px;
+      line-height:1.5;
+    }
     .pText{margin:0;color:var(--muted);font-weight:780;font-size:12px;line-height:1.48}
+    .pSection{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .pLabel{
+      margin:0;
+      font-size:11px;
+      font-weight:1000;
+      letter-spacing:.24px;
+      text-transform:uppercase;
+      color:color-mix(in srgb, var(--persona-accent, var(--accent2)) 64%, #fff);
+    }
+    .pList{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      font-weight:820;
+      font-size:12px;
+      line-height:1.52;
+    }
+    .pPrompt{
+      margin:0;
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      font-weight:820;
+      font-size:12px;
+      line-height:1.52;
+    }
 
     /* static chibi thumbnail on each card */
     .thumbWrap{
@@ -292,7 +330,7 @@
       justify-content:center;
       overflow:hidden;
       width:100%;
-      aspect-ratio:16/11;
+      aspect-ratio:16/10;
     }
     .thumb{
       width:100%;
@@ -698,16 +736,12 @@
     // Loading screen image
     const CHIBI3_SRC = "/pic/chibi3.png";
 
-    // ✅ Card thumbnail placeholders:
-    // Each card has its own line so you can change them later.
-    const CARD_IMG_CLARIFIER     = "/pic/chibi1.png";
-    const CARD_IMG_OPTIMIZER     = "/pic/chibi2.png";
-    const CARD_IMG_VALIDATOR     = "/pic/chibi3.png";
-    const CARD_IMG_OVERWHELMED   = "/pic/chibi2.png";
-    const CARD_IMG_INDEPENDENT   = "/pic/chibi1.png";
-    const CARD_IMG_STORYBUILDER  = "/pic/chibi3.png";
-    const CARD_IMG_PERFECTIONIST = "/pic/chibi2.png";
-    const CARD_IMG_STRATEGIST    = "/pic/chibi1.png";
+    const CARD_IMG_TUTOR_PERSONA_1 = "/pic/tutor-persona-1.png";
+    const CARD_IMG_TUTOR_PERSONA_2 = "/pic/tutor-persona-2.png";
+    const CARD_IMG_TUTOR_PERSONA_3 = "/pic/tutor-persona-3.png";
+    const CARD_IMG_TUTOR_PERSONA_4 = "/pic/tutor-persona-4.png";
+    const CARD_IMG_TUTOR_PERSONA_5 = "/pic/tutor-persona-5.png";
+    const CARD_IMG_TUTOR_PERSONA_6 = "/pic/tutor-persona-6.png";
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();
@@ -824,16 +858,127 @@
       if (pwOverlay.style.display === "flex") closeOverlay(pwOverlay);
     });
 
-    // ✅ persona cards now include an imgSrc per card
     const personaCards = [
-      { id:"mentor_architect", title:"Mentor Architect", text:"I structure feedback so students can act in sequence.", imgSrc: CARD_IMG_CLARIFIER, accent:"#00e5ff" },
-      { id:"rubric_guardian", title:"Rubric Guardian", text:"I anchor comments to criteria and learning outcomes.", imgSrc: CARD_IMG_VALIDATOR, accent:"#ffd36a" },
-      { id:"workload_balancer", title:"Workload Balancer", text:"I calibrate effort so revisions stay realistic.", imgSrc: CARD_IMG_OPTIMIZER, accent:"#47ff87" },
-      { id:"empathy_coach", title:"Empathy Coach", text:"I protect motivation and confidence while being honest.", imgSrc: CARD_IMG_STORYBUILDER, accent:"#ff9ae9" },
-      { id:"evidence_hunter", title:"Evidence Hunter", text:"I ask for proof, examples, and observable improvements.", imgSrc: CARD_IMG_PERFECTIONIST, accent:"#ff9a6f" },
-      { id:"systems_planner", title:"Systems Planner", text:"I map checkpoints, dependencies, and handoff moments.", imgSrc: CARD_IMG_STRATEGIST, accent:"#9ab2ff" },
-      { id:"deadline_pacer", title:"Deadline Pacer", text:"I pace milestones around due dates and release windows.", imgSrc: CARD_IMG_INDEPENDENT, accent:"#7ee6ff" },
-      { id:"clarity_editor", title:"Clarity Editor", text:"I rewrite vague comments into precise instructions.", imgSrc: CARD_IMG_OVERWHELMED, accent:"#ff7a7a" }
+      {
+        id:"scale_thinkers",
+        title:"Scale Thinkers",
+        summary:"I think about what works for large cohorts.",
+        prompt:"For today, think at cohort level.",
+        relate:[
+          "Teaches or marks large classes",
+          "Sees patterns across many submissions",
+          "Feels one-by-one interactions do not scale",
+          "Values summaries and prioritisation"
+        ],
+        play:[
+          "Would this scale to 200+ students?",
+          "Does this reduce repetition?",
+          "Does it help me see patterns, not just cases?",
+          "If it only works one-by-one, redesign it for scale."
+        ],
+        imgSrc: CARD_IMG_TUTOR_PERSONA_1,
+        accent:"#00e5ff"
+      },
+      {
+        id:"workflow_organisers",
+        title:"Workflow Organisers",
+        summary:"I think in steps, sequences, and handoffs.",
+        prompt:"For today, focus on the workflow, not the feature.",
+        relate:[
+          "Thinks clearly about before / during / after marking",
+          "Gets frustrated by switching between tools or tabs",
+          "Cares about where a tool sits in the workflow",
+          "Notices when work gets duplicated"
+        ],
+        play:[
+          "Where does this step belong?",
+          "What happens before and after it?",
+          "Does this reduce switching or duplication?",
+          "If the workflow feels messy, redesign it until it flows."
+        ],
+        imgSrc: CARD_IMG_TUTOR_PERSONA_2,
+        accent:"#7ee6ff"
+      },
+      {
+        id:"time_bound_markers",
+        title:"Time-Bound Markers",
+        summary:"Feedback should fit within marking time.",
+        prompt:"For today, step into this tutor's shoes and stay realistic.",
+        relate:[
+          "Often works to tight marking deadlines",
+          "Needs to finish marking within allocated hours",
+          "Feels stressed when small extras accumulate",
+          "Prefers changes that replace steps, not add new ones"
+        ],
+        play:[
+          "Would this fit inside marking time?",
+          "What step does this replace?",
+          "Would I actually keep doing this in Week 10?",
+          "If not, simplify the idea until it fits real marking conditions."
+        ],
+        imgSrc: CARD_IMG_TUTOR_PERSONA_3,
+        accent:"#ffd36a"
+      },
+      {
+        id:"student_sense_makers",
+        title:"Student Sense-Makers",
+        summary:"I want students to know what to do next.",
+        prompt:"For today, prioritise clarity that students can act on straight away.",
+        relate:[
+          "Wants feedback to point to a clear next step",
+          "Notices when students leave unsure what to fix",
+          "Prefers guidance that is specific, direct, and usable",
+          "Values comments that turn into action, not confusion"
+        ],
+        play:[
+          "Would a student know what to do next?",
+          "Is the action clear without extra explanation?",
+          "Does this reduce confusion instead of adding more?",
+          "If the advice feels vague, rewrite it until the next step is obvious."
+        ],
+        imgSrc: CARD_IMG_TUTOR_PERSONA_4,
+        accent:"#ff9ae9"
+      },
+      {
+        id:"consistency_builders",
+        title:"Consistency Builders",
+        summary:"I want consistent feedback across tutors.",
+        prompt:"For today, think beyond your own marking.",
+        relate:[
+          "Cares about consistency across a teaching team",
+          "Worries students get mixed messages",
+          "Likes shared structures or reference points",
+          "Thinks about fairness at cohort level"
+        ],
+        play:[
+          "Would this work for all tutors?",
+          "Would students get the same message?",
+          "Does this support alignment or drift?",
+          "If it increases variation, adjust it to support consistency."
+        ],
+        imgSrc: CARD_IMG_TUTOR_PERSONA_5,
+        accent:"#9ab2ff"
+      },
+      {
+        id:"boundary_keepers",
+        title:"Boundary Keepers",
+        summary:"I need clarity on what is internal vs visible.",
+        prompt:"For today, prioritise clarity and safety.",
+        relate:[
+          "Is careful about professional boundaries",
+          "Wants clarity about what students can see",
+          "Feels uneasy with ambiguous text boxes or actions",
+          "Prefers predictable system behaviour"
+        ],
+        play:[
+          "Is it obvious who can see this?",
+          "Could this be misinterpreted?",
+          "Would I feel comfortable using this every time?",
+          "If there is any ambiguity, redesign until the boundary is clear."
+        ],
+        imgSrc: CARD_IMG_TUTOR_PERSONA_6,
+        accent:"#ff9a6f"
+      }
     ];
 
     const state = {
@@ -852,6 +997,10 @@
     }
     function titleFromPersonaId(id){
       return personaCards.find(p => p.id === id)?.title || null;
+    }
+
+    function normalizePersonaSelection(personaId){
+      return personaCards.some(card => card.id === personaId) ? personaId : null;
     }
 
     const escapeHtml = shared.escapeHtml;
@@ -968,7 +1117,6 @@
         el.className = "persona" + (state.persona_id === c.id ? " selected" : "");
         el.style.setProperty("--persona-accent", c.accent);
 
-        // ✅ Static chibi thumbnail (no shimmer / no placeholder animation)
         el.innerHTML = `
           <div class="pTop">
             <p class="pTitle">${escapeHtml(c.title)}</p>
@@ -977,7 +1125,20 @@
           <div class="thumbWrap">
             <img class="thumb" src="${escapeHtml(c.imgSrc)}" alt="${escapeHtml(c.title)} preview"/>
           </div>
-          <p class="pText">${escapeHtml(c.text)}</p>
+          <p class="pSummary">${escapeHtml(c.summary)}</p>
+          <div class="pSection">
+            <p class="pLabel">You might relate if…</p>
+            <ul class="pList">
+              ${c.relate.map(item => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </div>
+          <div class="pSection">
+            <p class="pLabel">Play as this character</p>
+            <p class="pPrompt">${escapeHtml(c.prompt)}</p>
+            <ul class="pList">
+              ${c.play.map(item => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </div>
         `;
 
         el.addEventListener("click", async () => {
@@ -1037,9 +1198,10 @@
       if (data){
         state.role = "tutor";
 
-        state.persona_id = data.persona_id || null;
+        state.persona_id = normalizePersonaSelection(data.persona_id || null);
         state.persona_title = state.persona_id ? titleFromPersonaId(state.persona_id) : null;
         if (state.persona_id) localStorage.setItem(PERSONA_KEY, state.persona_id);
+        else localStorage.removeItem(PERSONA_KEY);
 
         const dbName = cleanName(data.display_name);
         if (dbName){
@@ -1048,9 +1210,10 @@
         }
         localStorage.setItem(ROLE_KEY, state.role);
       } else {
-        state.persona_id = localStorage.getItem(PERSONA_KEY) || null;
+        state.persona_id = normalizePersonaSelection(localStorage.getItem(PERSONA_KEY) || null);
         state.persona_title = state.persona_id ? titleFromPersonaId(state.persona_id) : null;
         state.role = "tutor";
+        if (!state.persona_id) localStorage.removeItem(PERSONA_KEY);
       }
 
       localStorage.setItem(ROLE_KEY, "tutor");
@@ -1103,7 +1266,7 @@
             Cards create a shared language fast (without long surveys).
           </div>
           <ul class="list">
-            <li>Turns “make it better” into a clearer need (e.g., “Clarifier”, “Optimizer”).</li>
+            <li>Turns “make it better” into a clearer tutor lens (for example scale, workflow, time, clarity, consistency, or boundaries).</li>
             <li>Helps structure later prompts in Step 2 / Step 3.</li>
           </ul>
         `
