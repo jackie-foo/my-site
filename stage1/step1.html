@@ -9,23 +9,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
+<<<<<<< HEAD
       --bg:#fcfbf9;
       --panel:#ffffff;
       --panel2:#faf7f4;
       --border:#ddd7d1;
       --text:#171717;
       --muted:#5f5a56;
+=======
+      --bg:#070a14;
+      --panel:#11172a;
+      --panel2:#0c1120;
+      --border:#2f3a60;
+      --text:#e9ecff;
+      --muted:#aab0d6;
+>>>>>>> parent of c3b9e1b (hi)
 
-      --accent:#7de8ff;
-      --accent2:#ffb1d7;
-      --bad:#ff9aa9;
-      --softPurple:#d3c0ff;
-      --softYellow:#ffe68a;
-      --softOrange:#ffc8a8;
+      --accent:#00e5ff;
+      --accent2:#ff2bd6;
+      --bad:#ff4d4d;
 
       --r:18px;
+<<<<<<< HEAD
       --shadow:0 20px 44px rgba(0,0,0,.06);
       --focus: 0 0 0 4px rgba(125,232,255,.14);
+=======
+      --shadow:0 20px 44px rgba(2,8,22,.46);
+      --focus: 0 0 0 4px rgba(0,229,255,.18);
+>>>>>>> parent of c3b9e1b (hi)
     }
 
     *{box-sizing:border-box}
@@ -42,11 +53,18 @@
     .bg{
       position:fixed; inset:0; z-index:-1;
       background:
+<<<<<<< HEAD
         radial-gradient(900px 520px at 15% 18%, rgba(125,232,255,.10), transparent 58%),
         radial-gradient(820px 480px at 85% 72%, rgba(255,177,215,.09), transparent 58%),
         radial-gradient(640px 360px at 62% 22%, rgba(255,200,168,.08), transparent 60%),
         radial-gradient(760px 420px at 48% 100%, rgba(211,192,255,.08), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,.98), rgba(250,247,244,.98)),
+=======
+        radial-gradient(900px 520px at 15% 18%, rgba(0,229,255,.12), transparent 58%),
+        radial-gradient(820px 480px at 85% 72%, rgba(255,43,214,.12), transparent 58%),
+        radial-gradient(600px 360px at 62% 22%, rgba(71,255,135,.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
+>>>>>>> parent of c3b9e1b (hi)
         var(--bg);
       filter:saturate(1.05);
     }
@@ -508,83 +526,6 @@
       background:rgba(255,255,255,.08);
       margin:2px 0 4px;
     }
-
-    .badge,
-    .mono,
-    .field,
-    .select,
-    input,
-    button,
-    .persona,
-    .thumbWrap,
-    .toast,
-    .modal,
-    .loadingCard,
-    .pill,
-    .guideCard,
-    .callout{
-      border-color:rgba(117,106,124,.16);
-      color:var(--text);
-    }
-    .badge,
-    .mono,
-    .field,
-    .select,
-    input,
-    .persona,
-    .thumbWrap,
-    .pill,
-    .guideCard{
-      background:rgba(255,255,255,.84);
-      box-shadow:none;
-      backdrop-filter:none;
-    }
-    .card,
-    .modal,
-    .loadingCard{
-      border-color:rgba(117,106,124,.16);
-      background:
-        linear-gradient(145deg, rgba(125,232,255,.12), transparent 32%),
-        linear-gradient(165deg, rgba(255,200,168,.12), transparent 62%),
-        linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,245,238,.94));
-      backdrop-filter:none;
-    }
-    .badge{background:rgba(255,255,255,.88);box-shadow:0 10px 24px rgba(214,153,127,.10)}
-    .dot{box-shadow:0 0 0 3px rgba(125,232,255,.24)}
-    button{
-      background:rgba(255,255,255,.92);
-      box-shadow:0 10px 22px rgba(214,153,127,.12);
-    }
-    button:hover{box-shadow:0 14px 28px rgba(214,153,127,.16)}
-    .btnPrimary{
-      background:linear-gradient(180deg, rgba(125,232,255,.22), rgba(255,255,255,.96));
-      box-shadow:0 14px 30px rgba(125,232,255,.16);
-    }
-    .btnDanger{
-      background:linear-gradient(180deg, rgba(255,154,169,.20), rgba(255,255,255,.96));
-    }
-    .btnGhost{background:rgba(255,255,255,.72)}
-    .field.focusActive,
-    .guideCard.active{
-      background:rgba(125,232,255,.16);
-      box-shadow:0 10px 24px rgba(125,232,255,.12);
-    }
-    .field.focusDone,
-    .guideCard.done{
-      border-color:rgba(255,230,138,.46);
-      background:rgba(255,230,138,.18);
-    }
-    .toast{background:rgba(255,255,255,.94)}
-    .overlay{background:rgba(255,250,246,.78);backdrop-filter:blur(8px)}
-    .loading{
-      background:
-        radial-gradient(1200px 600px at 30% 20%, rgba(125,232,255,.18), transparent 55%),
-        radial-gradient(900px 500px at 80% 70%, rgba(255,177,215,.16), transparent 55%),
-        rgba(255,250,246,.82);
-    }
-    .bar{border-color:rgba(117,106,124,.14);background:rgba(255,255,255,.84)}
-    .bar > div{background:linear-gradient(90deg, rgba(125,232,255,.9), rgba(255,177,215,.9))}
-    .callout{background:rgba(255,200,168,.14)}
   </style>
 </head>
 <body>
@@ -793,7 +734,7 @@
     const room = (params.get("room") || "").trim();
     const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     if (!room) {
-      document.body.innerHTML = "<div style='padding:24px;color:#241a2f;background:#fffaf6;font-family:system-ui'>Missing room code in URL.</div>";
+      document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room code in URL.</div>";
       throw new Error("Missing room");
     }
 
@@ -905,14 +846,14 @@
 
     // ✅ persona cards now include an imgSrc per card
     const personaCards = [
-      { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want examples.", imgSrc: CARD_IMG_CLARIFIER, accent:"#7de8ff" },
-      { id:"optimizer", title:"Optimizer", text:"Give me actions. I iterate. I care about efficiency.", imgSrc: CARD_IMG_OPTIMIZER, accent:"#d3c0ff" },
-      { id:"validator", title:"Validator", text:"I check fairness and rubric alignment.", imgSrc: CARD_IMG_VALIDATOR, accent:"#ffe68a" },
-      { id:"overwhelmed", title:"Overwhelmed", text:"Too vague or too much makes me shut down.", imgSrc: CARD_IMG_OVERWHELMED, accent:"#ffb2bf" },
-      { id:"independent", title:"Independent", text:"I’ll figure it out, but I need a direction.", imgSrc: CARD_IMG_INDEPENDENT, accent:"#9deeff" },
-      { id:"storybuilder", title:"Story Builder", text:"I want the ‘why’ to connect the picture.", imgSrc: CARD_IMG_STORYBUILDER, accent:"#ffb1d7" },
-      { id:"perfectionist", title:"Perfectionist", text:"I fix everything. Tell me what matters most.", imgSrc: CARD_IMG_PERFECTIONIST, accent:"#ffc8a8" },
-      { id:"strategist", title:"Strategist", text:"I plan ahead with checkpoints and timelines.", imgSrc: CARD_IMG_STRATEGIST, accent:"#cbb9ff" }
+      { id:"clarifier", title:"Clarifier", text:"I ask questions until things make sense. I want examples.", imgSrc: CARD_IMG_CLARIFIER, accent:"#00e5ff" },
+      { id:"optimizer", title:"Optimizer", text:"Give me actions. I iterate. I care about efficiency.", imgSrc: CARD_IMG_OPTIMIZER, accent:"#47ff87" },
+      { id:"validator", title:"Validator", text:"I check fairness and rubric alignment.", imgSrc: CARD_IMG_VALIDATOR, accent:"#ffce4f" },
+      { id:"overwhelmed", title:"Overwhelmed", text:"Too vague or too much makes me shut down.", imgSrc: CARD_IMG_OVERWHELMED, accent:"#ff7a7a" },
+      { id:"independent", title:"Independent", text:"I’ll figure it out, but I need a direction.", imgSrc: CARD_IMG_INDEPENDENT, accent:"#7ee6ff" },
+      { id:"storybuilder", title:"Story Builder", text:"I want the ‘why’ to connect the picture.", imgSrc: CARD_IMG_STORYBUILDER, accent:"#ff9ae9" },
+      { id:"perfectionist", title:"Perfectionist", text:"I fix everything. Tell me what matters most.", imgSrc: CARD_IMG_PERFECTIONIST, accent:"#ff9a6f" },
+      { id:"strategist", title:"Strategist", text:"I plan ahead with checkpoints and timelines.", imgSrc: CARD_IMG_STRATEGIST, accent:"#9ab2ff" }
     ];
 
     const state = {

@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
+<<<<<<< HEAD
       --bg:#fcfbf9;
       --panel:#ffffff;
       --panel2:#faf7f4;
@@ -22,6 +23,20 @@
       --r:22px;
       --shadow:0 24px 54px rgba(0,0,0,.06);
       --focus:0 0 0 4px rgba(125,232,255,.14);
+=======
+      --bg:#070b17;
+      --panel:#121a32;
+      --panel2:#0d1428;
+      --border:#31406b;
+      --text:#e9ecff;
+      --muted:#aab0d6;
+      --accent:#00e5ff;
+      --mint:#59f0c5;
+      --sun:#ffd46e;
+      --r:22px;
+      --shadow:0 24px 54px rgba(0,0,0,.44);
+      --focus:0 0 0 4px rgba(0,229,255,.2);
+>>>>>>> parent of c3b9e1b (hi)
     }
     *{box-sizing:border-box}
     body{
@@ -29,39 +44,43 @@
       font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
       background:
+<<<<<<< HEAD
         radial-gradient(900px 500px at 12% 12%, rgba(125,232,255,.10), transparent 60%),
         radial-gradient(760px 420px at 84% 20%, rgba(255,198,161,.10), transparent 58%),
         radial-gradient(980px 560px at 88% 82%, rgba(205,184,255,.09), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,.98), rgba(250,247,244,.98)),
+=======
+        radial-gradient(900px 500px at 12% 12%, rgba(0,229,255,.11), transparent 60%),
+        radial-gradient(980px 560px at 88% 82%, rgba(89,240,197,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
+>>>>>>> parent of c3b9e1b (hi)
         var(--bg);
       min-height:100vh;
     }
     .wrap{max-width:1160px;margin:0 auto;padding:24px 14px 80px}
     .badge{
       display:inline-flex;gap:8px;align-items:center;
-      border:1px solid var(--border);
+      border:1px solid rgba(255,255,255,.13);
       border-radius:999px;
       padding:7px 12px;
-      background:rgba(255,255,255,.88);
+      background:rgba(18,26,50,.76);
       font-size:12px;
       font-weight:1000;
       letter-spacing:.2px;
-      box-shadow:0 12px 28px rgba(214,153,127,.12);
     }
-    .dot{width:10px;height:10px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 3px rgba(125,232,255,.26)}
+    .dot{width:10px;height:10px;border-radius:3px;background:var(--mint);box-shadow:0 0 0 3px rgba(89,240,197,.2)}
 
     .hero{
       margin-top:12px;
-      border:1px solid var(--border);
+      border:1px solid rgba(255,255,255,.12);
       border-radius:var(--r);
       background:
-        linear-gradient(120deg, rgba(125,232,255,.12), transparent 40%),
-        linear-gradient(160deg, rgba(255,198,161,.08), transparent 62%),
+        linear-gradient(120deg, rgba(0,229,255,.05), transparent 40%),
         linear-gradient(0deg,var(--panel2),var(--panel));
       box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .heroHead{padding:18px;border-bottom:1px solid rgba(118,106,124,.12)}
+    .heroHead{padding:18px;border-bottom:1px solid rgba(255,255,255,.08)}
     .heroHead h1{margin:0;font-size:32px;line-height:1.05;letter-spacing:-.02em}
     .heroSub{margin-top:10px;color:var(--muted);font-size:13px;font-weight:800;line-height:1.5;max-width:72ch}
 
@@ -73,8 +92,8 @@
       align-items:center;
     }
     .field{
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
       color:var(--text);
       border-radius:14px;
       padding:11px 12px;
@@ -83,7 +102,7 @@
       min-width:220px;
     }
     .field:focus{border-color:color-mix(in srgb,var(--accent) 64%, rgba(255,255,255,.15));box-shadow:var(--focus)}
-    .field::placeholder{color:rgba(117,106,124,.58)}
+    .field::placeholder{color:rgba(233,236,255,.58)}
 
     .grid{
       margin-top:14px;
@@ -94,13 +113,12 @@
     @media (max-width:900px){.grid{grid-template-columns:1fr}}
 
     .card{
-      border:1px solid var(--border);
+      border:1px solid rgba(255,255,255,.12);
       border-radius:18px;
-      background:linear-gradient(160deg, rgba(255,255,255,.96), rgba(255,245,238,.92));
+      background:rgba(255,255,255,.03);
       padding:14px;
       display:grid;
       gap:12px;
-      box-shadow:0 18px 34px rgba(214,153,127,.10);
     }
     .card h2{margin:0;font-size:14px;text-transform:uppercase;letter-spacing:.24px}
     .kicker{font-size:12px;color:var(--muted);font-weight:800;line-height:1.45}
@@ -114,29 +132,29 @@
 
     button{
       appearance:none;
-      border:1px solid var(--border);
+      border:1px solid rgba(255,255,255,.14);
       border-radius:14px;
       padding:12px 14px;
-      background:rgba(255,255,255,.92);
+      background:rgba(18,26,50,.88);
       color:var(--text);
       font-weight:1000;
       cursor:pointer;
-      box-shadow:0 10px 22px rgba(214,153,127,.12);
+      box-shadow:0 10px 22px rgba(0,0,0,.25);
       text-align:left;
     }
-    button:hover{border-color:color-mix(in srgb,var(--accent) 62%, var(--border))}
-    .studentBtn{border-color:color-mix(in srgb,var(--accent) 70%, var(--border));background:linear-gradient(180deg, rgba(125,232,255,.22), rgba(255,255,255,.94))}
-    .tutorBtn{border-color:color-mix(in srgb,var(--mint) 68%, var(--border));background:linear-gradient(180deg, rgba(205,184,255,.18), rgba(255,255,255,.94))}
-    .adminBtn{border-color:color-mix(in srgb,var(--sun) 72%, var(--border));background:linear-gradient(180deg, rgba(255,230,138,.22), rgba(255,255,255,.94));text-align:center}
+    button:hover{border-color:color-mix(in srgb,var(--accent) 62%, rgba(255,255,255,.14))}
+    .studentBtn{border-color:color-mix(in srgb,var(--accent) 70%, rgba(255,255,255,.14));background:linear-gradient(180deg, rgba(0,229,255,.16), rgba(18,26,50,.88))}
+    .tutorBtn{border-color:color-mix(in srgb,var(--mint) 70%, rgba(255,255,255,.14));background:linear-gradient(180deg, rgba(89,240,197,.15), rgba(18,26,50,.88))}
+    .adminBtn{border-color:color-mix(in srgb,var(--sun) 70%, rgba(255,255,255,.14));background:linear-gradient(180deg, rgba(255,212,110,.14), rgba(18,26,50,.88));text-align:center}
     .homeBtn{text-align:center}
 
     .label{display:block;font-size:13px}
     .subLabel{display:block;margin-top:4px;font-size:11px;color:var(--muted);font-weight:800}
 
     .purpose{
-      border:1px solid var(--border);
+      border:1px solid rgba(255,255,255,.14);
       border-radius:16px;
-      background:linear-gradient(180deg, rgba(255,198,161,.12), rgba(255,255,255,.84));
+      background:rgba(255,255,255,.03);
       padding:12px;
       font-size:12px;
       color:var(--muted);

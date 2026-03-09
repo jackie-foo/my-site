@@ -9,20 +9,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
+<<<<<<< HEAD
       --bg:#fcfbf9; --panel:#ffffff; --panel2:#faf7f4; --border:#ddd7d1;
       --text:#171717; --muted:#5f5a56; --accent:#7de8ff; --accent2:#ffb1d7;
       --good:#ffe68a; --bad:#ff9aa9;
       --r:18px; --shadow:0 18px 44px rgba(0,0,0,.06);
+=======
+      --bg:#070b17; --panel:#121a32; --panel2:#0d1428; --border:#31406b;
+      --text:#e9ecff; --muted:#aab0d6; --accent:#00e5ff; --accent2:#ff2bd6;
+      --good:#47ff87; --bad:#ff4d4d;
+      --r:18px; --shadow:0 18px 44px rgba(0,0,0,.42);
+>>>>>>> parent of c3b9e1b (hi)
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       background:
+<<<<<<< HEAD
         radial-gradient(860px 420px at 12% 14%, rgba(125,232,255,.10), transparent 62%),
         radial-gradient(960px 520px at 86% 78%, rgba(255,177,215,.08), transparent 60%),
         radial-gradient(760px 420px at 60% 100%, rgba(255,200,168,.08), transparent 58%),
         linear-gradient(180deg, rgba(255,255,255,.98), rgba(250,247,244,.98)),
+=======
+        radial-gradient(860px 420px at 12% 14%, rgba(0,229,255,.11), transparent 62%),
+        radial-gradient(960px 520px at 86% 78%, rgba(255,43,214,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 38%),
+>>>>>>> parent of c3b9e1b (hi)
         var(--bg);
       color:var(--text)
     }
@@ -421,77 +434,6 @@
       outline:none;
       min-width:240px;
     }
-
-    .badge,
-    .mono,
-    button,
-    .card,
-    .guideCard,
-    .stickyArea,
-    .sidePanel,
-    .sharedCard,
-    .emptyPanel,
-    .toast,
-    .loadingCard,
-    .modal,
-    .pill,
-    .callout,
-    .field{
-      border-color:rgba(117,106,124,.16);
-      color:var(--text);
-    }
-    .badge,
-    .mono,
-    button,
-    .guideCard,
-    .sidePanel,
-    .sharedCard,
-    .toast,
-    .loadingCard,
-    .modal,
-    .pill,
-    .field{
-      background:rgba(255,255,255,.88);
-      box-shadow:none;
-    }
-    .card{
-      background:
-        linear-gradient(145deg, rgba(125,232,255,.12), transparent 30%),
-        linear-gradient(170deg, rgba(255,177,215,.10), transparent 58%),
-        linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,245,238,.94));
-    }
-    .badge{box-shadow:0 10px 24px rgba(214,153,127,.10)}
-    .dot{box-shadow:0 0 0 3px rgba(125,232,255,.24)}
-    button{box-shadow:0 10px 22px rgba(214,153,127,.12)}
-    button:hover{box-shadow:0 14px 28px rgba(214,153,127,.16)}
-    .btnPrimary{background:linear-gradient(180deg, rgba(125,232,255,.22), rgba(255,255,255,.96))}
-    .btnDanger{background:linear-gradient(180deg, rgba(255,154,169,.18), rgba(255,255,255,.96))}
-    .btnGhost{background:rgba(255,255,255,.72)}
-    .guideCard.active,
-    .sidePanel.focusActive{
-      background:rgba(125,232,255,.16);
-      box-shadow:0 10px 24px rgba(125,232,255,.12);
-    }
-    .guideCard.done{border-color:rgba(255,230,138,.46);background:rgba(255,230,138,.18)}
-    .stickyArea{
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,246,239,.88)),
-        rgba(255,255,255,.9);
-    }
-    .emptyPanel{background:rgba(255,255,255,.62)}
-    .toast{background:rgba(255,255,255,.94)}
-    .loading{
-      background:
-        radial-gradient(1200px 600px at 30% 20%, rgba(125,232,255,.18), transparent 55%),
-        radial-gradient(900px 500px at 80% 70%, rgba(255,177,215,.16), transparent 55%),
-        rgba(255,250,246,.82);
-    }
-    .overlay{background:rgba(255,250,246,.78);backdrop-filter:blur(8px)}
-    .loadingCard,
-    .modal{background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,245,238,.94))}
-    .bar{border-color:rgba(117,106,124,.14);background:rgba(255,255,255,.84)}
-    .bar > div{background:linear-gradient(90deg, rgba(125,232,255,.9), rgba(255,177,215,.9))}
-    .callout{background:rgba(255,200,168,.14)}
   </style>
 </head>
 <body>
@@ -633,7 +575,7 @@
   (() => {
     // ===== crash overlay =====
     const ERROR_BOX = document.createElement("div");
-    ERROR_BOX.style.cssText = "position:fixed;inset:0;padding:16px;background:#fffaf6;color:#241a2f;font-family:ui-monospace,Menlo,Consolas,monospace;z-index:99999;display:none;overflow:auto";
+    ERROR_BOX.style.cssText = "position:fixed;inset:0;padding:16px;background:#0b0d12;color:#e9ecff;font-family:ui-monospace,Menlo,Consolas,monospace;z-index:99999;display:none;overflow:auto";
     document.body.appendChild(ERROR_BOX);
     function showFatal(title, err){
       ERROR_BOX.style.display = "block";
@@ -972,7 +914,7 @@
     }
 
     function randomStickyColor(){
-      const options = ["#d3c0ff","#7de8ff","#ffe68a","#ffb1d7","#ffc8a8"];
+      const options = ["#47ff87","#00e5ff","#ffe44d","#ff2bd6","#ff884d"];
       return options[Math.floor(Math.random()*options.length)];
     }
 
@@ -1089,7 +1031,7 @@
         sharedList.innerHTML = state.shared.map((s) => {
           const parsed = parseSharedSticky(s);
           return `
-            <article class="sharedCard" style="border-left:4px solid ${escapeHtml(s.color || "#d3c0ff")}">
+            <article class="sharedCard" style="border-left:4px solid ${escapeHtml(s.color || "#47ff87")}">
               <div class="sharedMeta">Published by ${escapeHtml(parsed.author)}</div>
               <div>${escapeHtml(parsed.body || "(no content)")}</div>
             </article>
