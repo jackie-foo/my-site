@@ -576,7 +576,7 @@
     // ===== NOTES MODE =====
     // true  = everyone in same room shares ONE note
     // false = each participant has their own private note (still stored in Supabase)
-    const NOTES_SHARED = true;
+    const NOTES_SHARED = false;
 
     const params = new URLSearchParams(location.search);
     const room = (params.get("room") || "").trim();

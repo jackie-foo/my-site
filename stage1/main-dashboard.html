@@ -189,62 +189,6 @@
     .cardBody{
       padding:18px;
     }
-    .setupGrid{
-      display:grid;
-      grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
-      gap:14px;
-    }
-    @media (max-width:1080px){
-      .setupGrid{grid-template-columns:1fr}
-    }
-    .fieldRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .field{
-      flex:1 1 220px;
-      min-width:0;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:16px;
-      background:rgba(255,255,255,.05);
-      color:var(--text);
-      padding:11px 13px;
-      font-weight:900;
-      outline:none;
-    }
-    .field::placeholder{
-      color:#90a0cf;
-    }
-    .linkCard{
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:18px;
-      background:rgba(255,255,255,.03);
-      padding:12px;
-      display:grid;
-      gap:10px;
-    }
-    .linkLabel{
-      margin:0;
-      font-size:11px;
-      color:var(--muted);
-      font-weight:1000;
-      text-transform:uppercase;
-      letter-spacing:.22px;
-    }
-    .linkValue{
-      margin:0;
-      padding:10px 12px;
-      border-radius:14px;
-      background:rgba(5,10,20,.42);
-      border:1px solid rgba(255,255,255,.08);
-      color:var(--text);
-      font-size:12px;
-      font-weight:850;
-      line-height:1.45;
-      word-break:break-all;
-    }
     .stats{
       display:grid;
       grid-template-columns:repeat(5,minmax(0,1fr));
@@ -295,6 +239,24 @@
       flex-wrap:wrap;
       align-items:center;
       margin-bottom:14px;
+    }
+    .filterBar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin:0 0 14px;
+    }
+    .filterLabel{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:1000;
+      letter-spacing:.22px;
+      text-transform:uppercase;
+    }
+    .filterBtn.active{
+      border-color:color-mix(in srgb, var(--accent) 70%, rgba(255,255,255,.16));
+      background:linear-gradient(180deg, rgba(53,216,255,.18), rgba(17,24,45,.88));
     }
     .stageNode{
       flex:1 1 180px;
@@ -348,6 +310,9 @@
       border-radius:20px;
       background:rgba(255,255,255,.03);
       padding:16px;
+    }
+    .sectionPanel.hidden{
+      display:none;
     }
     .sectionTitle{
       display:flex;
@@ -403,7 +368,7 @@
       background:rgba(5,10,20,.36);
       padding:14px;
       display:grid;
-      gap:10px;
+      gap:12px;
       min-height:174px;
     }
     .playerTop{
@@ -429,6 +394,49 @@
       display:flex;
       flex-wrap:wrap;
       gap:8px;
+    }
+    .personaMini{
+      display:grid;
+      grid-template-columns:64px minmax(0,1fr);
+      gap:10px;
+      align-items:center;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      padding:10px;
+    }
+    .personaThumb{
+      width:64px;
+      height:64px;
+      object-fit:contain;
+      object-position:center;
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      padding:4px;
+    }
+    .personaThumb.isFallback{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+    .personaMiniTitle{
+      margin:0;
+      font-size:12px;
+      font-weight:1000;
+      line-height:1.3;
+    }
+    .personaMiniText{
+      margin:3px 0 0;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:850;
+      line-height:1.45;
     }
     .empty{
       border:1px dashed rgba(255,255,255,.2);
@@ -508,6 +516,24 @@
       color:rgba(0,0,0,.84);
       white-space:pre-wrap;
       word-break:break-word;
+      flex:1;
+    }
+    .stickyActions{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+    }
+    .stickyDelete{
+      border:1px solid rgba(0,0,0,.12);
+      background:rgba(255,255,255,.46);
+      color:rgba(0,0,0,.76);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:10px;
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.2px;
+      box-shadow:none;
     }
     .stickyAside{
       display:grid;
@@ -550,7 +576,7 @@
       border-radius:22px;
       background:rgba(255,255,255,.03);
       overflow:hidden;
-      min-height:360px;
+      min-height:460px;
     }
     .workflowHead{
       padding:14px 16px;
@@ -575,12 +601,17 @@
     }
     .workflowBoard{
       position:relative;
-      height:300px;
-      overflow:hidden;
+      height:430px;
+      overflow:auto;
       background:
         radial-gradient(circle at 18% 18%, rgba(53,216,255,.08), transparent 28%),
         linear-gradient(180deg, rgba(255,255,255,.03), transparent 46%),
         rgba(5,10,20,.44);
+    }
+    .workflowScene{
+      position:relative;
+      min-width:100%;
+      min-height:100%;
     }
     .workflowBoard svg{
       position:absolute;
@@ -680,6 +711,37 @@
       gap:10px;
       flex-wrap:wrap;
     }
+    .notesBox{
+      width:100%;
+      min-height:160px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:20px;
+      background:rgba(5,10,20,.38);
+      color:var(--text);
+      padding:14px 16px;
+      resize:vertical;
+      outline:none;
+      font:inherit;
+      line-height:1.55;
+      font-weight:850;
+    }
+    .notesBox::placeholder{
+      color:#90a0cf;
+    }
+    .notesRow{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:10px;
+    }
+    .workflowToolbar{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
   </style>
 </head>
 <body>
@@ -719,40 +781,6 @@
         <button id="btnIndex" class="btnAccent">Home</button>
       </div>
     </header>
-
-    <section class="card">
-      <div class="cardHead">
-        <div>
-          <h2>Room Control + Share Links</h2>
-          <div class="kicker">Open a room, then copy the participant links you want to send out.</div>
-        </div>
-      </div>
-      <div class="cardBody setupGrid">
-        <div>
-          <div class="fieldRow">
-            <input id="roomInput" class="field" type="text" placeholder="room id (e.g. demo)"/>
-            <select id="campusSelect" class="field" style="max-width:180px">
-              <option value="upng">UPNG</option>
-              <option value="monash">Monash</option>
-            </select>
-            <input id="groupInput" class="field" type="text" placeholder="tutor group (e.g. core)" style="max-width:220px"/>
-            <button id="btnOpenRoom" class="btnPrimary">Open Room</button>
-          </div>
-        </div>
-        <div class="linkCard">
-          <div>
-            <p class="linkLabel">Student Link</p>
-            <p class="linkValue" id="studentLinkOut">-</p>
-            <button id="btnCopyStudent">Copy Student Link</button>
-          </div>
-          <div>
-            <p class="linkLabel">Tutor Link</p>
-            <p class="linkValue" id="tutorLinkOut">-</p>
-            <button id="btnCopyTutor">Copy Tutor Link</button>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <section class="card">
       <div class="cardHead">
@@ -810,6 +838,12 @@
           <span class="stageNodeText">Each tutor workflow is shown as its own mini-board.</span>
         </article>
       </div>
+      <div class="filterBar">
+        <span class="filterLabel">Filter</span>
+        <button class="filterBtn active" data-role-filter="all">All</button>
+        <button class="filterBtn" data-role-filter="student">Students</button>
+        <button class="filterBtn" data-role-filter="tutor">Tutors</button>
+      </div>
 
       <section class="stageView active" data-stage-view="1">
         <section class="card">
@@ -820,14 +854,14 @@
             </div>
           </div>
           <div class="cardBody rosterCols">
-            <section class="sectionPanel">
+            <section class="sectionPanel" id="studentSection">
               <div class="sectionTitle">
                 <h3>Students</h3>
                 <span class="pill info" id="studentCountPill">0 students</span>
               </div>
               <div class="rosterGrid" id="studentRoster"></div>
             </section>
-            <section class="sectionPanel">
+            <section class="sectionPanel" id="tutorSection">
               <div class="sectionTitle">
                 <h3>Tutors</h3>
                 <span class="pill info" id="tutorCountPill">0 tutors</span>
@@ -874,7 +908,12 @@
               <h2>Tutor Workflow Boards</h2>
               <div class="kicker">Each tutor workflow is shown separately, based on that tutor’s own private workflow canvas.</div>
             </div>
-            <span class="mono" id="workflowBoardCount">0 boards</span>
+            <div class="workflowToolbar">
+              <button id="btnZoomOut">−</button>
+              <span class="mono" id="workflowZoomLabel">110%</span>
+              <button id="btnZoomIn">+</button>
+              <span class="mono" id="workflowBoardCount">0 boards</span>
+            </div>
           </div>
           <div class="cardBody">
             <div class="workflowGrid" id="workflowBoards"></div>
@@ -882,6 +921,23 @@
         </section>
       </section>
     </div>
+
+    <section class="card">
+      <div class="cardHead">
+        <div>
+          <h2>My Facilitator Parking Notes</h2>
+          <div class="kicker">Private notes for this browser only. These are not shared back to participants.</div>
+        </div>
+        <span class="mono" id="facilitatorNoteStatus">Saved locally</span>
+      </div>
+      <div class="cardBody">
+        <textarea id="facilitatorNotes" class="notesBox" placeholder="Write anything you want to keep for yourself during the session…"></textarea>
+        <div class="notesRow">
+          <span class="kicker">Saved to local storage for this room and group.</span>
+          <button id="btnClearFacilitatorNotes">Clear Notes</button>
+        </div>
+      </div>
+    </section>
 
     <div class="footStatus" id="statusBox">Waiting for data…</div>
   </div>
@@ -900,6 +956,22 @@
       "2": { pill: "Stage 2 • Shared sticky board" },
       "3": { pill: "Stage 3 • Tutor workflow boards" }
     };
+    const PERSONA_VISUALS = {
+      clarifier: { img:"/pic/chibi1.png", blurb:"Clarifier" },
+      optimizer: { img:"/pic/chibi2.png", blurb:"Optimizer" },
+      validator: { img:"/pic/chibi3.png", blurb:"Validator" },
+      overwhelmed: { img:"/pic/chibi2.png", blurb:"Overwhelmed" },
+      independent: { img:"/pic/chibi1.png", blurb:"Independent" },
+      storybuilder: { img:"/pic/chibi3.png", blurb:"Story Builder" },
+      perfectionist: { img:"/pic/chibi2.png", blurb:"Perfectionist" },
+      strategist: { img:"/pic/chibi1.png", blurb:"Strategist" },
+      scale_thinkers: { img:"/pic/tutor-persona-1.png", blurb:"Scale Thinkers" },
+      workflow_organisers: { img:"/pic/tutor-persona-2.png", blurb:"Workflow Organisers" },
+      time_bound_markers: { img:"/pic/tutor-persona-3.png", blurb:"Time-Bound Markers" },
+      student_sense_makers: { img:"/pic/tutor-persona-4.png", blurb:"Student Sense-Makers" },
+      consistency_builders: { img:"/pic/tutor-persona-5.png", blurb:"Consistency Builders" },
+      boundary_keepers: { img:"/pic/tutor-persona-6.png", blurb:"Boundary Keepers" }
+    };
 
     const $ = (q, el=document) => el.querySelector(q);
     const params = new URLSearchParams(location.search);
@@ -907,6 +979,8 @@
     let campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     let group = (params.get("group") || "core").trim() || "core";
     let activeStage = "1";
+    let roleFilter = "all";
+    let workflowZoom = 1.1;
     let pollTimer = null;
     let subs = [];
 
@@ -920,11 +994,6 @@
     const stagePill = $("#stagePill");
     const btnPrevStage = $("#btnPrevStage");
     const btnNextStage = $("#btnNextStage");
-    const roomInput = $("#roomInput");
-    const campusSelect = $("#campusSelect");
-    const groupInput = $("#groupInput");
-    const studentLinkOut = $("#studentLinkOut");
-    const tutorLinkOut = $("#tutorLinkOut");
     const totalPlayers = $("#totalPlayers");
     const playerSplit = $("#playerSplit");
     const stage1Ready = $("#stage1Ready");
@@ -935,13 +1004,22 @@
     const studentConstraints = $("#studentConstraints");
     const studentCountPill = $("#studentCountPill");
     const tutorCountPill = $("#tutorCountPill");
+    const studentSection = $("#studentSection");
+    const tutorSection = $("#tutorSection");
     const studentRoster = $("#studentRoster");
     const tutorRoster = $("#tutorRoster");
     const stickyBoard = $("#stickyBoard");
     const stickyBoardCount = $("#stickyBoardCount");
     const stickySummaryList = $("#stickySummaryList");
+    const roleFilterButtons = [...document.querySelectorAll("[data-role-filter]")];
     const workflowBoardCount = $("#workflowBoardCount");
     const workflowBoards = $("#workflowBoards");
+    const workflowZoomLabel = $("#workflowZoomLabel");
+    const btnZoomOut = $("#btnZoomOut");
+    const btnZoomIn = $("#btnZoomIn");
+    const facilitatorNotes = $("#facilitatorNotes");
+    const facilitatorNoteStatus = $("#facilitatorNoteStatus");
+    const btnClearFacilitatorNotes = $("#btnClearFacilitatorNotes");
     const statusBox = $("#statusBox");
     const stageNodes = [...document.querySelectorAll("[data-stage-node]")];
     const stageViews = [...document.querySelectorAll("[data-stage-view]")];
@@ -954,14 +1032,6 @@
       statusBox.classList.toggle("bad", !!bad);
     }
 
-    function withCampus(path){
-      return `${path}?room=${encodeURIComponent(room)}&campus=${encodeURIComponent(campus)}`;
-    }
-
-    function dashboardHref(nextRoom = room, nextCampus = campus, nextGroup = group){
-      return `${shared.BASE_PATH}/main-dashboard.html?room=${encodeURIComponent(nextRoom)}&campus=${encodeURIComponent(nextCampus)}&group=${encodeURIComponent(nextGroup)}`;
-    }
-
     function fmtTime(value){
       const dt = new Date(value);
       if (Number.isNaN(dt.getTime())) return "--";
@@ -972,15 +1042,6 @@
       roomOut.textContent = room;
       campusOut.textContent = campus === "monash" ? "Monash" : "UPNG";
       groupOut.textContent = group;
-      roomInput.value = room;
-      campusSelect.value = campus;
-      groupInput.value = group;
-
-      const origin = location.origin || "https://www.jackiefoo.me";
-      const student = `${origin}${withCampus(`${shared.BASE_PATH}/step1.html`)}&track=student`;
-      const tutor = `${origin}${withCampus(`${shared.BASE_PATH}/step1-tutor.html`)}&group=${encodeURIComponent(group)}`;
-      studentLinkOut.textContent = student;
-      tutorLinkOut.textContent = tutor;
     }
 
     async function copyText(text){
@@ -1027,6 +1088,15 @@
       if (!STAGE_META[nextStage]) return;
       activeStage = nextStage;
       updateStageUI();
+    }
+
+    function updateRoleFilterUI(){
+      roleFilterButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-role-filter") === roleFilter);
+      });
+      studentSection.classList.toggle("hidden", roleFilter === "tutor");
+      tutorSection.classList.toggle("hidden", roleFilter === "student");
+      workflowZoomLabel.textContent = `${Math.round(workflowZoom * 100)}%`;
     }
 
     function parseSharedSticky(row){
@@ -1105,6 +1175,10 @@
       return shared.cleanDisplayName(row?.display_name) || String(row?.id || "").slice(0, 8) || "Unknown";
     }
 
+    function personaVisual(personaId){
+      return PERSONA_VISUALS[String(personaId || "")] || null;
+    }
+
     function renderRoster(players, target, emptyText, sharedByAuthor, workflowByAuthor){
       if (!players.length){
         target.innerHTML = `<div class="empty">${escapeHtml(emptyText)}</div>`;
@@ -1118,6 +1192,24 @@
         const ready = hasName && hasPersona;
         const sharedDone = sharedByAuthor.has(id);
         const workflowDone = workflowByAuthor.has(id);
+        const visual = personaVisual(player.persona_id);
+        const personaMarkup = visual ? `
+          <div class="personaMini">
+            <img class="personaThumb" src="${escapeHtml(visual.img)}" alt="${escapeHtml(shared.personaTitle(player.persona_id))}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'personaThumb isFallback',textContent:'card'}))"/>
+            <div>
+              <p class="personaMiniTitle">${escapeHtml(shared.personaTitle(player.persona_id))}</p>
+              <p class="personaMiniText">Character card selected</p>
+            </div>
+          </div>
+        ` : `
+          <div class="personaMini">
+            <div class="personaThumb isFallback">card</div>
+            <div>
+              <p class="personaMiniTitle">${escapeHtml(shared.personaTitle(player.persona_id))}</p>
+              <p class="personaMiniText">No image available</p>
+            </div>
+          </div>
+        `;
         return `
           <article class="playerCard">
             <div class="playerTop">
@@ -1135,6 +1227,7 @@
               <span class="pill ${sharedDone ? "ok" : "warn"}">Stage 2</span>
               <span class="pill ${workflowDone ? "ok" : "warn"}">Stage 3</span>
             </div>
+            ${personaMarkup}
             <p class="playerMeta">
               ${sharedDone ? "Has published at least one shared sticky." : "No published shared sticky yet."}<br/>
               ${workflowDone ? "Has workflow items in Stage 3." : "No Stage 3 workflow items yet."}
@@ -1187,6 +1280,9 @@
               <span class="stickyRole">${escapeHtml(role)}</span>
             </div>
             <p class="stickyText">${escapeHtml(parsed.body || "(empty)")}</p>
+            <div class="stickyActions">
+              <button class="stickyDelete" data-delete-sticky="${escapeHtml(row.id)}">Delete</button>
+            </div>
           </article>
         `;
       }).join("");
@@ -1212,9 +1308,12 @@
       const maxY = Math.max(...nodes.map(node => node.y + node.h));
       const baseW = Math.max(560, (maxX - minX) + 120);
       const baseH = Math.max(360, (maxY - minY) + 120);
-      const targetW = 820;
-      const targetH = 300;
-      const scale = Math.min((targetW - 48) / baseW, (targetH - 44) / baseH, 1);
+      const targetW = 900;
+      const targetH = 420;
+      const fitScale = Math.min((targetW - 56) / baseW, (targetH - 50) / baseH, 1);
+      const scale = fitScale * workflowZoom;
+      const sceneW = Math.max(targetW, Math.round(baseW * scale) + 64);
+      const sceneH = Math.max(targetH, Math.round(baseH * scale) + 64);
 
       const scaledMap = new Map();
       nodes.forEach(node => {
@@ -1247,8 +1346,10 @@
 
       return `
         <div class="workflowBoard">
-          <svg viewBox="0 0 820 300" preserveAspectRatio="none">${edgeMarkup}</svg>
-          ${nodeMarkup}
+          <div class="workflowScene" style="width:${sceneW}px;height:${sceneH}px">
+            <svg viewBox="0 0 ${sceneW} ${sceneH}" preserveAspectRatio="none">${edgeMarkup}</svg>
+            ${nodeMarkup}
+          </div>
         </div>
       `;
     }
@@ -1316,7 +1417,10 @@
 
       const students = participants.filter(row => row.role !== "tutor").sort((a, b) => participantName(a).localeCompare(participantName(b)));
       const tutors = participants.filter(row => row.role === "tutor").sort((a, b) => participantName(a).localeCompare(participantName(b)));
-      const sharedRows = stickies.filter(isSharedSticky);
+      const sharedRows = stickies.filter(isSharedSticky).filter(row => {
+        if (roleFilter === "all") return true;
+        return (roleByParticipant.get(String(row.participant_id || "")) || "student") === roleFilter;
+      });
       const workflowRows = journey.filter(row => String(row.type || "").startsWith("workflow_"));
       const studentConstraintRows = journey.filter(row => String(row.type || "") === "constraint");
 
@@ -1355,6 +1459,7 @@
       workflowSplit.textContent = `${workflowStats.boxCount} workflow box${workflowStats.boxCount === 1 ? "" : "es"}`;
       lastUpdated.textContent = `Last update: ${fmtTime(Date.now())}`;
       updateStageUI();
+      updateRoleFilterUI();
     }
 
     async function loadData({ silent=false } = {}){
@@ -1428,6 +1533,7 @@
       pwOverlay.setAttribute("aria-hidden", "true");
       applyRoomUI();
       updateStageUI();
+      updateRoleFilterUI();
       loadData().catch(err => setStatus(err.message || "Initial load failed.", true));
       subscribeRealtime();
       startPolling();
@@ -1450,19 +1556,51 @@
       $("#btnIndex").addEventListener("click", () => {
         location.href = "/index.html";
       });
-      $("#btnOpenRoom").addEventListener("click", () => {
-        const nextRoom = (roomInput.value || "").trim() || "demo";
-        const nextCampus = (campusSelect.value || "upng").trim().toLowerCase() === "monash" ? "monash" : "upng";
-        const nextGroup = (groupInput.value || "core").trim() || "core";
-        location.href = dashboardHref(nextRoom, nextCampus, nextGroup);
-      });
-      $("#btnCopyStudent").addEventListener("click", () => copyText(studentLinkOut.textContent || ""));
-      $("#btnCopyTutor").addEventListener("click", () => copyText(tutorLinkOut.textContent || ""));
 
       stageNodes.forEach(node => {
         node.addEventListener("click", () => {
           goToStage(node.getAttribute("data-stage-node") || "1");
         });
+      });
+      roleFilterButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          roleFilter = btn.getAttribute("data-role-filter") || "all";
+          renderAll();
+        });
+      });
+      stickyBoard.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-delete-sticky]");
+        if (!btn) return;
+        const id = btn.getAttribute("data-delete-sticky");
+        if (!id) return;
+        const ok = confirm("Delete this shared sticky note from the dashboard and room?");
+        if (!ok) return;
+        const { error } = await supabase.from("workshop_stickies").delete().eq("id", id).eq("session_id", room);
+        if (error){
+          setStatus(error.message || "Delete failed.", true);
+          return;
+        }
+        setStatus("Sticky note deleted.", false);
+        await loadData({ silent:true });
+      });
+      btnZoomOut.addEventListener("click", () => {
+        workflowZoom = clamp(Number((workflowZoom - 0.1).toFixed(2)), 0.7, 1.8);
+        renderAll();
+      });
+      btnZoomIn.addEventListener("click", () => {
+        workflowZoom = clamp(Number((workflowZoom + 0.1).toFixed(2)), 0.7, 1.8);
+        renderAll();
+      });
+      const facilitatorNoteKey = `stage1_facilitator_notes_${room}_${group}`;
+      facilitatorNotes.value = localStorage.getItem(facilitatorNoteKey) || "";
+      facilitatorNotes.addEventListener("input", () => {
+        localStorage.setItem(facilitatorNoteKey, facilitatorNotes.value || "");
+        facilitatorNoteStatus.textContent = "Saved locally";
+      });
+      btnClearFacilitatorNotes.addEventListener("click", () => {
+        facilitatorNotes.value = "";
+        localStorage.removeItem(facilitatorNoteKey);
+        facilitatorNoteStatus.textContent = "Cleared";
       });
 
       btnUnlock.addEventListener("click", () => {
