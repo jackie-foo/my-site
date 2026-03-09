@@ -9,17 +9,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#070b17;
-      --panel:#121a32;
-      --panel2:#0d1428;
-      --border:#31406b;
-      --text:#e9ecff;
-      --muted:#aab0d6;
-      --accent:#00e5ff;
-      --accent2:#59f0c5;
-      --bad:#ff8390;
+      --bg:#fffaf6;
+      --panel:#ffffff;
+      --panel2:#fff5ee;
+      --border:#eadde7;
+      --text:#241a2f;
+      --muted:#756a7c;
+      --accent:#7de8ff;
+      --accent2:#d3c0ff;
+      --bad:#ff9aa9;
       --r:18px;
-      --shadow:0 18px 44px rgba(0,0,0,.42);
+      --shadow:0 18px 44px rgba(214,153,127,.14);
     }
     *{box-sizing:border-box}
     body{
@@ -27,9 +27,10 @@
       font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(860px 420px at 12% 14%, rgba(0,229,255,.11), transparent 62%),
-        radial-gradient(960px 520px at 86% 78%, rgba(89,240,197,.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.02), transparent 38%),
+        radial-gradient(860px 420px at 12% 14%, rgba(125,232,255,.18), transparent 62%),
+        radial-gradient(960px 520px at 86% 78%, rgba(211,192,255,.16), transparent 60%),
+        radial-gradient(760px 420px at 60% 100%, rgba(255,200,168,.14), transparent 58%),
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,247,240,.96)),
         var(--bg);
     }
     .wrap{max-width:1260px;margin:0 auto;padding:18px 14px 88px}
@@ -190,6 +191,79 @@
     .toneChip.system{border-color:rgba(109,182,255,.58);background:rgba(109,182,255,.16)}
     .toneChip.process{border-color:rgba(89,240,197,.58);background:rgba(89,240,197,.15)}
     .toneChip.issue{border-color:rgba(255,131,144,.58);background:rgba(255,131,144,.16)}
+
+    .badge,
+    .mono,
+    button,
+    .card,
+    .panel,
+    .diag,
+    .boardWrap,
+    .edgeTag,
+    .node,
+    .timePill,
+    .tonePill,
+    .toast,
+    .modal,
+    .pill,
+    .callout{
+      border-color:rgba(117,106,124,.16);
+      color:var(--text);
+    }
+    .badge,
+    .mono,
+    button,
+    .panel,
+    .diag,
+    .edgeTag,
+    .timePill,
+    .tonePill,
+    .toast,
+    .modal,
+    .pill{
+      background:rgba(255,255,255,.88);
+      box-shadow:none;
+    }
+    .card{
+      background:
+        linear-gradient(145deg, rgba(125,232,255,.12), transparent 32%),
+        linear-gradient(170deg, rgba(211,192,255,.12), transparent 58%),
+        linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,245,238,.94));
+    }
+    .badge{box-shadow:0 10px 24px rgba(214,153,127,.10)}
+    .dot{box-shadow:0 0 0 3px rgba(211,192,255,.24)}
+    button{box-shadow:0 10px 22px rgba(214,153,127,.12)}
+    .btnPrimary{background:linear-gradient(180deg, rgba(125,232,255,.22), rgba(255,255,255,.96))}
+    .panel{background:rgba(255,255,255,.82)}
+    .diag.bad{background:rgba(255,178,191,.16);color:#7d3551}
+    .boardWrap{
+      background:
+        linear-gradient(rgba(125,232,255,.12) 1px, transparent 1px) 0 0 / 24px 24px,
+        linear-gradient(90deg, rgba(255,177,215,.10) 1px, transparent 1px) 0 0 / 24px 24px,
+        rgba(255,255,255,.82);
+    }
+    .edgeTag{background:rgba(255,255,255,.92);color:#7d3551}
+    .node{
+      background:rgba(255,255,255,.88);
+      box-shadow:0 10px 24px rgba(214,153,127,.12);
+    }
+    .node.tone-system{
+      background:linear-gradient(170deg, rgba(125,232,255,.24), rgba(255,255,255,.86) 44%), rgba(255,255,255,.82);
+      border-color:rgba(125,232,255,.58);
+    }
+    .node.tone-process{
+      background:linear-gradient(170deg, rgba(211,192,255,.24), rgba(255,255,255,.86) 44%), rgba(255,255,255,.82);
+      border-color:rgba(211,192,255,.58);
+    }
+    .node.tone-issue{
+      background:linear-gradient(170deg, rgba(255,178,191,.24), rgba(255,255,255,.86) 44%), rgba(255,255,255,.82);
+      border-color:rgba(255,178,191,.58);
+    }
+    .miniDanger{background:rgba(255,178,191,.16);color:#7d3551}
+    .node.selected{outline:2px solid rgba(211,192,255,.72)}
+    .toast{background:rgba(255,255,255,.94)}
+    .overlay{background:rgba(255,250,246,.78);backdrop-filter:blur(8px)}
+    .modal{background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,245,238,.94))}
   </style>
 </head>
 <body>
@@ -223,7 +297,7 @@
           <div class="hint">Click connector label <b>Issue?</b> to set/edit friction. Type <b>/delete</b> there to remove a connector.</div>
           <div class="toneLegend">
             <div class="toneChip system">System (Blue)</div>
-            <div class="toneChip process">Process (Green)</div>
+            <div class="toneChip process">Process (Purple)</div>
             <div class="toneChip issue">Issue (Red)</div>
           </div>
           <div id="diag" class="diag">Ready.</div>
@@ -276,7 +350,7 @@
     const group = (params.get("group") || "core").trim() || "core";
     const campus = ((params.get("campus") || "upng").trim().toLowerCase() === "monash") ? "monash" : "upng";
     if (!room){
-      document.body.innerHTML = "<div style='padding:24px;color:#fff;background:#0b0d12;font-family:system-ui'>Missing room code in URL.</div>";
+      document.body.innerHTML = "<div style='padding:24px;color:#241a2f;background:#fffaf6;font-family:system-ui'>Missing room code in URL.</div>";
       throw new Error("Missing room");
     }
 

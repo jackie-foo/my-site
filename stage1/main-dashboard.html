@@ -9,19 +9,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#060b16;
-      --panel:#11182d;
-      --panel2:#0c1222;
-      --border:#31406a;
-      --text:#e9ecff;
-      --muted:#aab4de;
-      --accent:#35d8ff;
-      --accent2:#ff9f4a;
-      --ok:#47ff87;
-      --warn:#ffe44d;
-      --bad:#ff6b77;
+      --bg:#fffaf6;
+      --panel:#ffffff;
+      --panel2:#fff5ee;
+      --border:#eadde7;
+      --text:#241a2f;
+      --muted:#756a7c;
+      --accent:#7de8ff;
+      --accent2:#ffc6a1;
+      --ok:#d3c0ff;
+      --warn:#ffe68a;
+      --bad:#ff9aa9;
       --r:18px;
-      --shadow:0 20px 46px rgba(0,0,0,.44);
+      --shadow:0 20px 46px rgba(214,153,127,.14);
     }
     *{box-sizing:border-box}
     body{
@@ -29,9 +29,10 @@
       font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(900px 520px at 18% 14%, rgba(53,216,255,.11), transparent 56%),
-        radial-gradient(740px 460px at 84% 72%, rgba(255,159,74,.10), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%),
+        radial-gradient(900px 520px at 18% 14%, rgba(125,232,255,.18), transparent 56%),
+        radial-gradient(740px 460px at 84% 72%, rgba(255,198,161,.18), transparent 55%),
+        radial-gradient(760px 420px at 52% 100%, rgba(211,192,255,.14), transparent 58%),
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,247,240,.96)),
         var(--bg);
       min-height:100vh;
     }
@@ -182,7 +183,7 @@
     }
     .bar > div{height:100%;border-radius:999px}
     .b1{background:linear-gradient(90deg,#35d8ff,#6ae6ff)}
-    .b2{background:linear-gradient(90deg,#47ff87,#8dfbb2)}
+    .b2{background:linear-gradient(90deg,#d3c0ff,#eee2ff)}
     .b3{background:linear-gradient(90deg,#ff9f4a,#ffd08d)}
     .grid2{
       display:grid;
@@ -370,6 +371,64 @@
     .modal h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.3px}
     .kicker{font-size:12px;color:var(--muted);font-weight:800;line-height:1.4}
     .modalRow{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+
+    .badge,
+    .mono,
+    .tabGroup,
+    .tabBtn,
+    .field,
+    button,
+    .card,
+    .stat,
+    .progressWrap,
+    .pill,
+    .laneCard,
+    .playerCard,
+    .feedItem,
+    .promptCard,
+    .empty,
+    .diag,
+    .modal{
+      border-color:rgba(117,106,124,.16);
+      color:var(--text);
+    }
+    .badge,
+    .mono,
+    .tabGroup,
+    .tabBtn,
+    .field,
+    button,
+    .stat,
+    .progressWrap,
+    .pill,
+    .laneCard,
+    .playerCard,
+    .feedItem,
+    .promptCard,
+    .empty,
+    .diag,
+    .modal{
+      background:rgba(255,255,255,.88);
+      box-shadow:none;
+    }
+    .badge{box-shadow:0 10px 24px rgba(214,153,127,.10)}
+    .tabBtn.active,
+    .btnPrimary{background:linear-gradient(180deg, rgba(125,232,255,.22), rgba(255,255,255,.96))}
+    .btnAccent{background:linear-gradient(180deg, rgba(255,198,161,.22), rgba(255,255,255,.96))}
+    .card{
+      background:
+        linear-gradient(145deg, rgba(125,232,255,.12), transparent 32%),
+        linear-gradient(170deg, rgba(255,198,161,.12), transparent 58%),
+        linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,245,238,.94));
+    }
+    .bar{background:rgba(255,255,255,.84);border-color:rgba(117,106,124,.14)}
+    th,td{border-bottom-color:rgba(117,106,124,.10)}
+    .ok{background:rgba(211,192,255,.16);border-color:rgba(211,192,255,.36);color:#584883}
+    .warn{background:rgba(255,230,138,.20);border-color:rgba(255,230,138,.38);color:#6e5900}
+    .bad{background:rgba(255,154,169,.18);border-color:rgba(255,154,169,.36);color:#7d3551}
+    .diag.bad{background:rgba(255,154,169,.18);color:#7d3551}
+    .overlay{background:rgba(255,250,246,.78);backdrop-filter:blur(8px)}
+    .modal{background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,245,238,.94))}
   </style>
 </head>
 <body>
@@ -763,7 +822,7 @@
       sharedPromptsList.innerHTML = scoped.map(s => {
         const parsed = parseSharedPrompt(s);
         return `
-          <article class="laneCard" style="border-left:4px solid ${shared.escapeHtml(s.color || "#47ff87")}">
+          <article class="laneCard" style="border-left:4px solid ${shared.escapeHtml(s.color || "#d3c0ff")}">
             <div class="laneMeta">Shared by ${shared.escapeHtml(parsed.author)}</div>
             <div>${shared.escapeHtml(parsed.body || "(empty)")}</div>
             <div style="margin-top:8px;display:flex;justify-content:flex-end">
