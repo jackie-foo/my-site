@@ -377,6 +377,13 @@
       gap:10px;
       align-items:flex-start;
     }
+    .playerActions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
     .playerName{
       margin:0;
       font-size:16px;
@@ -535,6 +542,12 @@
       letter-spacing:.2px;
       box-shadow:none;
     }
+    .dangerLite{
+      border:1px solid rgba(255,107,119,.34);
+      background:rgba(255,107,119,.14);
+      color:#ffdce2;
+      box-shadow:none;
+    }
     .stickyAside{
       display:grid;
       gap:12px;
@@ -577,6 +590,13 @@
       background:rgba(255,255,255,.03);
       overflow:hidden;
       min-height:460px;
+      cursor:pointer;
+      transition:transform .14s ease,border-color .14s ease,box-shadow .14s ease;
+    }
+    .workflowCard:hover{
+      transform:translateY(-1px);
+      border-color:color-mix(in srgb, var(--accent) 62%, rgba(255,255,255,.16));
+      box-shadow:0 18px 34px rgba(0,0,0,.22);
     }
     .workflowHead{
       padding:14px 16px;
@@ -612,6 +632,27 @@
       position:relative;
       min-width:100%;
       min-height:100%;
+    }
+    .workflowEdgeLayer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+    .workflowEdgeTag{
+      position:absolute;
+      transform:translate(-50%, -50%);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      background:rgba(12,19,36,.88);
+      color:#ffd9df;
+      font-size:10px;
+      font-weight:900;
+      line-height:1.2;
+      padding:4px 8px;
+      max-width:240px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
     .workflowBoard svg{
       position:absolute;
@@ -665,6 +706,13 @@
       font-weight:900;
       opacity:.82;
     }
+    .workflowCardOpen{
+      box-shadow:none;
+    }
+    .workflowBoardLarge{
+      height:min(72vh, 820px);
+      border-radius:20px;
+    }
     .footStatus{
       margin-top:16px;
       padding:14px 16px;
@@ -704,6 +752,23 @@
       margin:0 0 10px;
       font-size:18px;
       font-weight:1000;
+    }
+    .boardModal{
+      width:min(1480px, 100%);
+      padding:0;
+      overflow:hidden;
+    }
+    .boardModalHead{
+      padding:18px 20px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .boardModalBody{
+      padding:16px 18px 18px;
     }
     .modalRow{
       margin-top:14px;
@@ -942,6 +1007,19 @@
     <div class="footStatus" id="statusBox">Waiting for data…</div>
   </div>
 
+  <div class="overlay" id="workflowOverlay" aria-hidden="true" style="display:none">
+    <div class="modal boardModal" role="dialog" aria-modal="true" aria-labelledby="workflowModalTitle">
+      <div class="boardModalHead">
+        <div>
+          <h3 id="workflowModalTitle">Tutor workflow board</h3>
+          <p class="subtitle" id="workflowModalMeta" style="margin:0">Expanded board view.</p>
+        </div>
+        <button id="btnCloseWorkflow">Close</button>
+      </div>
+      <div class="boardModalBody" id="workflowModalBoard"></div>
+    </div>
+  </div>
+
   <script src="/stage1/shared.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -1026,6 +1104,11 @@
     const pwOverlay = $("#pwOverlay");
     const pwInput = $("#pwInput");
     const btnUnlock = $("#btnUnlock");
+    const workflowOverlay = $("#workflowOverlay");
+    const workflowModalTitle = $("#workflowModalTitle");
+    const workflowModalMeta = $("#workflowModalMeta");
+    const workflowModalBoard = $("#workflowModalBoard");
+    const btnCloseWorkflow = $("#btnCloseWorkflow");
 
     function setStatus(message, bad=false){
       statusBox.textContent = message;
@@ -1143,10 +1226,11 @@
           from: String(obj.from || ""),
           to: String(obj.to || ""),
           fromSide: String(obj.fromSide || "right"),
-          toSide: String(obj.toSide || "left")
+          toSide: String(obj.toSide || "left"),
+          issue: String(obj.issue || "")
         };
       } catch {
-        return { from:"", to:"", fromSide:"right", toSide:"left" };
+        return { from:"", to:"", fromSide:"right", toSide:"left", issue:"" };
       }
     }
 
@@ -1220,7 +1304,10 @@
                   Persona: ${escapeHtml(shared.personaTitle(player.persona_id))}
                 </p>
               </div>
-              <span class="pill ${ready ? "ok" : "warn"}">${ready ? "Ready" : "Pending"}</span>
+              <div class="playerActions">
+                <span class="pill ${ready ? "ok" : "warn"}">${ready ? "Ready" : "Pending"}</span>
+                <button class="dangerLite" type="button" data-delete-player="${escapeHtml(id)}" data-player-name="${escapeHtml(participantName(player))}">Delete player</button>
+              </div>
             </div>
             <div class="playerStatus">
               <span class="pill ${ready ? "ok" : "warn"}">Stage 1</span>
@@ -1273,7 +1360,7 @@
         return `
           <article
             class="stickyNote"
-            style="left:${left}px;top:${top}px;background:${escapeHtml(row.color || "#f8ef77")};transform:rotate(${rotate}deg)"
+            style="left:${left}px;top:${top}px;background:${escapeHtml(shared.normalizeStickyColor(row.color || "#f8ecb4"))};transform:rotate(${rotate}deg)"
           >
             <div class="stickyMeta">
               <span>${escapeHtml(parsed.author || "unknown")}</span>
@@ -1295,6 +1382,10 @@
     }
 
     function buildWorkflowPreview(rows){
+      return buildWorkflowMarkup(rows, { targetW: 900, targetH: 420, scaleMultiplier: 1 });
+    }
+
+    function buildWorkflowMarkup(rows, { targetW = 900, targetH = 420, scaleMultiplier = 1 } = {}){
       const nodeRows = rows.filter(row => String(row.type || "") !== "workflow_edge");
       const edgeRows = rows.filter(row => String(row.type || "") === "workflow_edge");
       if (!nodeRows.length){
@@ -1308,10 +1399,8 @@
       const maxY = Math.max(...nodes.map(node => node.y + node.h));
       const baseW = Math.max(560, (maxX - minX) + 120);
       const baseH = Math.max(360, (maxY - minY) + 120);
-      const targetW = 900;
-      const targetH = 420;
       const fitScale = Math.min((targetW - 56) / baseW, (targetH - 50) / baseH, 1);
-      const scale = fitScale * workflowZoom;
+      const scale = fitScale * workflowZoom * scaleMultiplier;
       const sceneW = Math.max(targetW, Math.round(baseW * scale) + 64);
       const sceneH = Math.max(targetH, Math.round(baseH * scale) + 64);
 
@@ -1326,6 +1415,7 @@
         });
       });
 
+      const edgeLabelMarkup = [];
       const edgeMarkup = edgeRows.map(row => {
         const edge = parseWorkflowEdge(row);
         const from = scaledMap.get(edge.from);
@@ -1333,6 +1423,9 @@
         if (!from || !to) return "";
         const a = { ...nodeAnchor(from, edge.fromSide), side: edge.fromSide };
         const b = { ...nodeAnchor(to, edge.toSide), side: edge.toSide };
+        if (edge.issue){
+          edgeLabelMarkup.push(`<div class="workflowEdgeTag" style="left:${(a.x + b.x) / 2}px;top:${(a.y + b.y) / 2}px">${escapeHtml(edge.issue)}</div>`);
+        }
         return `<path d="${escapeHtml(bezierPath(a, b))}" fill="none" stroke="rgba(140,218,255,.9)" stroke-width="2.2" stroke-linecap="round"/>`;
       }).join("");
 
@@ -1345,9 +1438,10 @@
       `).join("");
 
       return `
-        <div class="workflowBoard">
+        <div class="workflowBoard ${targetH > 500 ? "workflowBoardLarge" : ""}">
           <div class="workflowScene" style="width:${sceneW}px;height:${sceneH}px">
             <svg viewBox="0 0 ${sceneW} ${sceneH}" preserveAspectRatio="none">${edgeMarkup}</svg>
+            <div class="workflowEdgeLayer">${edgeLabelMarkup.join("")}</div>
             ${nodeMarkup}
           </div>
         </div>
@@ -1388,7 +1482,7 @@
         const boxCount = rows.filter(row => String(row.type || "") !== "workflow_edge").length;
         totalBoxes += boxCount;
         return `
-          <article class="workflowCard">
+          <article class="workflowCard" data-open-workflow="${escapeHtml(pid)}">
             <div class="workflowHead">
               <div>
                 <h3>${escapeHtml(name)}</h3>
@@ -1397,7 +1491,10 @@
                   Persona: ${escapeHtml(persona)}
                 </p>
               </div>
-              <span class="pill info">${boxCount} box${boxCount === 1 ? "" : "es"}</span>
+              <div class="playerActions">
+                <span class="pill info">${boxCount} box${boxCount === 1 ? "" : "es"}</span>
+                <button class="workflowCardOpen" type="button" data-open-workflow="${escapeHtml(pid)}">Open board</button>
+              </div>
             </div>
             ${buildWorkflowPreview(rows)}
           </article>
@@ -1460,6 +1557,52 @@
       lastUpdated.textContent = `Last update: ${fmtTime(Date.now())}`;
       updateStageUI();
       updateRoleFilterUI();
+    }
+
+    function openWorkflowModal(pid){
+      const rows = (cache.journey || []).filter(row => String(row.participant_id || "") === String(pid) && String(row.type || "").startsWith("workflow_"));
+      const participant = (cache.participants || []).find(row => String(row.id || "") === String(pid)) || {};
+      workflowModalTitle.textContent = participantName(participant);
+      workflowModalMeta.textContent = `Tutor workflow board • Persona: ${shared.personaTitle(participant.persona_id)}`;
+      workflowModalBoard.innerHTML = buildWorkflowMarkup(rows, { targetW: 1400, targetH: 760, scaleMultiplier: 1.15 });
+      workflowOverlay.style.display = "flex";
+      workflowOverlay.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeWorkflowModal(){
+      workflowOverlay.style.display = "none";
+      workflowOverlay.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    async function deletePlayer(playerId){
+      const pid = String(playerId || "");
+      if (!pid) return;
+      const participant = (cache.participants || []).find(row => String(row.id || "") === pid) || {};
+      const label = participantName(participant);
+      const ok = confirm(`Delete ${label} and remove that player’s sticky notes, workflow items, and notes from this room?`);
+      if (!ok) return;
+
+      const deletions = await Promise.all([
+        supabase.from("workshop_stickies").delete().eq("session_id", room).eq("participant_id", pid),
+        supabase.from("workshop_journey_items").delete().eq("session_id", room).eq("participant_id", pid),
+        supabase.from("workshop_journey_notes").delete().eq("session_id", room).eq("participant_id", pid)
+      ]);
+      const failed = deletions.find(result => result.error);
+      if (failed?.error){
+        setStatus(failed.error.message || "Related data delete failed.", true);
+        return;
+      }
+
+      const participantDelete = await supabase.from("workshop_participants").delete().eq("session_id", room).eq("id", pid);
+      if (participantDelete.error){
+        setStatus(participantDelete.error.message || "Player delete failed.", true);
+        return;
+      }
+
+      setStatus(`${label} removed from the room.`, false);
+      await loadData({ silent:true });
     }
 
     async function loadData({ silent=false } = {}){
@@ -1583,6 +1726,18 @@
         setStatus("Sticky note deleted.", false);
         await loadData({ silent:true });
       });
+      [studentRoster, tutorRoster].forEach((root) => {
+        root.addEventListener("click", async (e) => {
+          const btn = e.target.closest("[data-delete-player]");
+          if (!btn) return;
+          await deletePlayer(btn.getAttribute("data-delete-player"));
+        });
+      });
+      workflowBoards.addEventListener("click", (e) => {
+        const trigger = e.target.closest("[data-open-workflow]");
+        if (!trigger) return;
+        openWorkflowModal(trigger.getAttribute("data-open-workflow"));
+      });
       btnZoomOut.addEventListener("click", () => {
         workflowZoom = clamp(Number((workflowZoom - 0.1).toFixed(2)), 0.7, 1.8);
         renderAll();
@@ -1617,6 +1772,15 @@
       });
       pwInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") btnUnlock.click();
+      });
+      btnCloseWorkflow.addEventListener("click", closeWorkflowModal);
+      workflowOverlay.addEventListener("mousedown", (e) => {
+        if (e.target === workflowOverlay) closeWorkflowModal();
+      });
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && workflowOverlay.style.display === "flex"){
+          closeWorkflowModal();
+        }
       });
     }
 

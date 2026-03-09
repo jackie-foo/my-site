@@ -21,6 +21,14 @@ window.Stage1Shared = (() => {
     consistency_builders: "Consistency Builders",
     boundary_keepers: "Boundary Keepers"
   };
+  const CUSTOM_PERSONA_PREFIX = "custom::";
+  const STICKY_PASTEL_MAP = {
+    "#47ff87": "#cfeecd",
+    "#00e5ff": "#cfefff",
+    "#ffe44d": "#f8ecb4",
+    "#ff2bd6": "#f3d1ea",
+    "#ff884d": "#ffd9bf"
+  };
 
   function getKeys(room){
     return {
@@ -73,7 +81,45 @@ window.Stage1Shared = (() => {
   }
 
   function personaTitle(id){
+    const custom = parseCustomPersona(id);
+    if (custom?.title) return custom.title;
     return PERSONA_MAP[id] || "None";
+  }
+
+  function isCustomPersonaId(id){
+    return String(id || "").startsWith(CUSTOM_PERSONA_PREFIX);
+  }
+
+  function createCustomPersonaId({ title, summary } = {}){
+    const cleanTitle = String(title || "").trim().replace(/\s+/g, " ").slice(0, 40);
+    const cleanSummary = String(summary || "").trim().replace(/\s+/g, " ").slice(0, 160);
+    if (!cleanTitle) return null;
+    return `${CUSTOM_PERSONA_PREFIX}${encodeURIComponent(cleanTitle)}::${encodeURIComponent(cleanSummary)}`;
+  }
+
+  function parseCustomPersona(id){
+    const raw = String(id || "");
+    if (!raw.startsWith(CUSTOM_PERSONA_PREFIX)) return null;
+    const body = raw.slice(CUSTOM_PERSONA_PREFIX.length);
+    const [titlePart = "", summaryPart = ""] = body.split("::");
+    let title = "";
+    let summary = "";
+    try {
+      title = decodeURIComponent(titlePart || "").trim();
+      summary = decodeURIComponent(summaryPart || "").trim();
+    } catch {
+      title = titlePart.trim();
+      summary = summaryPart.trim();
+    }
+    if (!title) return null;
+    return { title, summary };
+  }
+
+  function normalizeStickyColor(color){
+    const raw = String(color || "").trim();
+    if (!raw) return "#f8ecb4";
+    const mapped = STICKY_PASTEL_MAP[raw.toLowerCase()];
+    return mapped || raw;
   }
 
   async function hydrateIdentity({ supabase, participantId, keys }){
@@ -111,11 +157,17 @@ window.Stage1Shared = (() => {
     SUPABASE_ANON_KEY,
     BASE_PATH,
     PERSONA_MAP,
+    CUSTOM_PERSONA_PREFIX,
+    STICKY_PASTEL_MAP,
     getKeys,
     escapeHtml,
     cleanDisplayName,
     getOrCreateParticipantId,
     personaTitle,
+    isCustomPersonaId,
+    createCustomPersonaId,
+    parseCustomPersona,
+    normalizeStickyColor,
     hydrateIdentity
   };
 })();

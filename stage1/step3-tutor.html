@@ -190,6 +190,67 @@
     .toneChip.system{border-color:rgba(109,182,255,.58);background:rgba(109,182,255,.16)}
     .toneChip.process{border-color:rgba(89,240,197,.58);background:rgba(89,240,197,.15)}
     .toneChip.issue{border-color:rgba(255,131,144,.58);background:rgba(255,131,144,.16)}
+    .stickyRefPanel{
+      margin-top:8px;
+      border-top:1px solid rgba(255,255,255,.10);
+      padding-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .stickyRefList{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      max-height:300px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .stickyRefCard{
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:12px;
+      background:rgba(255,255,255,.04);
+      padding:9px;
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+    }
+    .stickyRefMeta{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      font-size:10px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .stickyRefType{
+      border-radius:999px;
+      padding:3px 8px;
+      color:#0b0d12;
+    }
+    .stickyRefType.draft{background:#cfefff}
+    .stickyRefType.shared{background:#f8ecb4}
+    .stickyRefText{
+      margin:0;
+      font-size:12px;
+      font-weight:850;
+      line-height:1.45;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .stickyRefEmpty{
+      border:1px dashed rgba(255,255,255,.2);
+      border-radius:12px;
+      padding:10px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
 
   </style>
 </head>
@@ -227,6 +288,14 @@
             <div class="toneChip process">Process (Green)</div>
             <div class="toneChip issue">Issue (Red)</div>
           </div>
+          <section class="stickyRefPanel" aria-labelledby="stickyRefTitle">
+            <div class="panelHead" style="padding:0">
+              <h3 id="stickyRefTitle" style="margin:0">Step 2 Sticky Reference</h3>
+              <span class="mono" id="stickyRefCount">0 notes</span>
+            </div>
+            <div class="hint">Your Step 2 tutor stickies stay visible here while you map the workflow.</div>
+            <div class="stickyRefList" id="stickyRefList"></div>
+          </section>
           <div id="diag" class="diag">Ready.</div>
         </aside>
 
@@ -294,6 +363,8 @@
     const diag = $("#diag");
     const toast = $("#toast");
     const nodeCount = $("#nodeCount");
+    const stickyRefList = $("#stickyRefList");
+    const stickyRefCount = $("#stickyRefCount");
     const tutOverlay = $("#tutOverlay");
     const tutSteps = $("#tutSteps");
     const tutContent = $("#tutContent");
@@ -301,6 +372,7 @@
     const state = {
       nodes: [],
       edges: [],
+      stickyRefs: [],
       selectedId: null,
       drag: null,
       resize: null,
@@ -389,6 +461,65 @@
       } catch {
         return { from:"", to:"", fromSide:"right", toSide:"left", issue:"" };
       }
+    }
+
+    function isSharedSticky(row){
+      return String(row?.text || "").startsWith("[SHARED] ");
+    }
+
+    function stripDraftPrefix(raw){
+      const txt = String(raw || "");
+      if (!txt.startsWith("[DRAFT:")) return txt;
+      const end = txt.indexOf("]");
+      if (end === -1) return txt;
+      const rest = txt.slice(end + 1);
+      return rest.startsWith(" ") ? rest.slice(1) : rest;
+    }
+
+    function parseSharedSticky(row){
+      const raw = String(row?.text || "");
+      const content = raw.startsWith("[SHARED] ") ? raw.slice("[SHARED] ".length) : raw;
+      const idx = content.indexOf("\n");
+      if (idx === -1){
+        return { author: "unknown", body: content.trim() };
+      }
+      return {
+        author: content.slice(0, idx).trim() || "unknown",
+        body: content.slice(idx + 1).trim()
+      };
+    }
+
+    function hydrateStickyReferences(rows){
+      state.stickyRefs = (rows || [])
+        .map((row, idx) => {
+          const sharedSticky = isSharedSticky(row);
+          const parsed = sharedSticky ? parseSharedSticky(row) : null;
+          return {
+            id: String(row.id || idx),
+            kind: sharedSticky ? "shared" : "draft",
+            color: shared.normalizeStickyColor(row.color),
+            text: sharedSticky ? String(parsed?.body || "").trim() : String(stripDraftPrefix(row.text || "")).trim(),
+            updatedAt: row.updated_at || ""
+          };
+        })
+        .filter(row => row.text);
+      renderStickyReferences();
+    }
+
+    function renderStickyReferences(){
+      stickyRefCount.textContent = `${state.stickyRefs.length} note${state.stickyRefs.length === 1 ? "" : "s"}`;
+      if (!state.stickyRefs.length){
+        stickyRefList.innerHTML = `<div class="stickyRefEmpty">No Step 2 stickies yet. Add or publish notes in Step 2 to keep them visible here.</div>`;
+        return;
+      }
+      stickyRefList.innerHTML = state.stickyRefs.map((row) => `
+        <article class="stickyRefCard" style="border-left:4px solid ${shared.escapeHtml(row.color || "#f8ecb4")}">
+          <div class="stickyRefMeta">
+            <span class="stickyRefType ${shared.escapeHtml(row.kind)}">${row.kind === "shared" ? "Published" : "Draft"}</span>
+          </div>
+          <p class="stickyRefText">${shared.escapeHtml(row.text)}</p>
+        </article>
+      `).join("");
     }
 
     function edgePayload(from, to, fromSide, toSide, issue=""){
@@ -684,6 +815,16 @@
         .like("type", "workflow_%");
       if (error) throw error;
       hydrateRows(data || []);
+    }
+
+    async function loadStickyReferences(){
+      const { data, error } = await supabase
+        .from("workshop_stickies")
+        .select("*")
+        .eq("session_id", room)
+        .eq("participant_id", participantId);
+      if (error) throw error;
+      hydrateStickyReferences(data || []);
     }
 
     async function ensureScopeSession(){
@@ -1094,6 +1235,11 @@
         .on("postgres_changes", { event:"*", schema:"public", table:"workshop_journey_items", filter:`session_id=eq.${room}` }, () => {
           loadAll().catch(() => {});
         })
+        .on("postgres_changes", { event:"*", schema:"public", table:"workshop_stickies", filter:`session_id=eq.${room}` }, (payload) => {
+          const nextPid = String(payload?.new?.participant_id || payload?.old?.participant_id || "");
+          if (nextPid && nextPid !== participantId) return;
+          loadStickyReferences().catch(() => {});
+        })
         .subscribe((status) => {
           if (status === "SUBSCRIBED") setDiag("Connected. Private tutor canvas active.", false);
           if (status === "TIMED_OUT" || status === "CHANNEL_ERROR") setDiag("Realtime degraded. Manual refresh still works.", true);
@@ -1101,8 +1247,9 @@
     }
 
     wireActions();
+    renderStickyReferences();
     ensureScopeSession()
-      .then(() => loadAll())
+      .then(() => Promise.all([loadAll(), loadStickyReferences()]))
       .then(() => {
         const msg = !state.nodes.length
           ? "Canvas ready. Add first box -> set color -> connect -> label friction."

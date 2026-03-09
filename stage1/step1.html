@@ -421,6 +421,31 @@
       font-weight:850;
       color:var(--muted);
     }
+    .personaActionBar{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .modalTextarea{
+      width:100%;
+      min-height:120px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:14px;
+      padding:11px 12px;
+      font-weight:900;
+      resize:vertical;
+      outline:none;
+      font:inherit;
+      line-height:1.45;
+    }
+    .modalTextarea:focus{
+      border-color:color-mix(in srgb, var(--accent) 70%, rgba(255,255,255,.10));
+      box-shadow:var(--focus);
+    }
     .personaGrid.locked{
       opacity:.42;
       pointer-events:none;
@@ -585,6 +610,10 @@
 
         <div class="field focusDim" id="personaField" style="min-width:100%">
           <label class="label">Pick your card lens</label>
+          <div class="personaActionBar">
+            <div class="hint">If none of these fit you, make your own short card.</div>
+            <button id="btnCustomPersona" class="btnGhost" type="button">Create my own card</button>
+          </div>
           <div class="personaGrid locked" id="personaGrid"></div>
         </div>
 
@@ -686,6 +715,35 @@
     </div>
   </div>
 
+  <div class="overlay" id="customPersonaOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="customPersonaTitle">
+      <div class="modalHead">
+        <div>
+          <h3 id="customPersonaTitle">Create Your Own Card</h3>
+          <div class="kicker">Keep it short: a title plus one or two lines is enough.</div>
+        </div>
+        <button id="btnCloseCustomPersona" class="btnGhost" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="field" style="min-width:100%">
+          <label class="label" for="customPersonaName">Card title</label>
+          <input id="customPersonaName" type="text" maxlength="40" placeholder="e.g., Big-picture learner"/>
+        </div>
+        <div class="field" style="min-width:100%">
+          <label class="label" for="customPersonaSummary">Brief description</label>
+          <textarea id="customPersonaSummary" class="modalTextarea" maxlength="160" placeholder="1-2 lines about what kind of feedback or learning approach fits you best."></textarea>
+        </div>
+      </div>
+      <div class="modalFoot">
+        <div class="kicker">This custom card becomes your Step 1 selection.</div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btnCancelCustomPersona" class="btnGhost">Cancel</button>
+          <button id="btnSaveCustomPersona" class="btnPrimary">Save Card</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="/stage1/shared.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -734,6 +792,7 @@
     const personaField = $("#personaField");
     const guideCards = [...document.querySelectorAll("#inlineGuide [data-guide-step]")];
     const personaGrid = $("#personaGrid");
+    const btnCustomPersona = $("#btnCustomPersona");
     const selPersona = $("#selPersona");
     const selName = $("#selName");
     const selCode = $("#selCode");
@@ -746,6 +805,7 @@
     const pwOverlay = $("#pwOverlay");
     const lockedOverlay = $("#lockedOverlay");
     const tutOverlay = $("#tutOverlay");
+    const customPersonaOverlay = $("#customPersonaOverlay");
 
     // loading
     const loading = $("#loading");
@@ -756,6 +816,11 @@
     // buttons
     const btnExit = $("#btnExit");
     const btnReset = $("#btnReset");
+    const customPersonaName = $("#customPersonaName");
+    const customPersonaSummary = $("#customPersonaSummary");
+    const btnCloseCustomPersona = $("#btnCloseCustomPersona");
+    const btnCancelCustomPersona = $("#btnCancelCustomPersona");
+    const btnSaveCustomPersona = $("#btnSaveCustomPersona");
 
     // password modal controls
     const btnOpenPw = $("#btnOpenPw");
@@ -809,7 +874,7 @@
     }
 
     // Close overlays on outside click
-    [pwOverlay, lockedOverlay, tutOverlay].forEach(ov => {
+    [pwOverlay, lockedOverlay, tutOverlay, customPersonaOverlay].forEach(ov => {
       ov.addEventListener("mousedown", (e) => {
         if (e.target === ov) closeOverlay(ov);
       });
@@ -818,6 +883,7 @@
     // Esc closes whichever is open (NOT loading)
     window.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
+      if (customPersonaOverlay.style.display === "flex") closeOverlay(customPersonaOverlay);
       if (tutOverlay.style.display === "flex") closeOverlay(tutOverlay);
       if (lockedOverlay.style.display === "flex") closeOverlay(lockedOverlay);
       if (pwOverlay.style.display === "flex") closeOverlay(pwOverlay);
@@ -850,7 +916,26 @@
       selName.textContent = state.display_name ? state.display_name : "—";
     }
     function titleFromPersonaId(id){
-      return personaCards.find(p => p.id === id)?.title || null;
+      return shared.personaTitle(id) !== "None" ? shared.personaTitle(id) : null;
+    }
+    function normalizePersonaSelection(personaId){
+      if (personaCards.some(card => card.id === personaId)) return personaId;
+      return shared.isCustomPersonaId(personaId) ? personaId : null;
+    }
+    function buildPersonaList(){
+      const items = [...personaCards];
+      const custom = shared.parseCustomPersona(state.persona_id);
+      if (custom){
+        items.push({
+          id: state.persona_id,
+          title: custom.title,
+          text: custom.summary || "Custom card",
+          imgSrc: CARD_IMG_STRATEGIST,
+          accent: "#f3d1ea",
+          isCustom: true
+        });
+      }
+      return items;
     }
 
     const escapeHtml = shared.escapeHtml;
@@ -962,7 +1047,7 @@
 
     function renderPersonas(){
       personaGrid.innerHTML = "";
-      personaCards.forEach(c => {
+      buildPersonaList().forEach(c => {
         const el = document.createElement("div");
         el.className = "persona" + (state.persona_id === c.id ? " selected" : "");
         el.style.setProperty("--persona-accent", c.accent);
@@ -971,7 +1056,7 @@
         el.innerHTML = `
           <div class="pTop">
             <p class="pTitle">${escapeHtml(c.title)}</p>
-            <span class="mono">Card</span>
+            <span class="mono">${c.isCustom ? "Custom" : "Card"}</span>
           </div>
           <div class="thumbWrap">
             <img class="thumb" src="${escapeHtml(c.imgSrc)}" alt="${escapeHtml(c.title)} preview"/>
@@ -1009,6 +1094,48 @@
       updateNextEnabled();
     }
 
+    function openCustomPersonaModal(){
+      const custom = shared.parseCustomPersona(state.persona_id);
+      customPersonaName.value = custom?.title || "";
+      customPersonaSummary.value = custom?.summary || "";
+      openOverlay(customPersonaOverlay);
+      setTimeout(() => customPersonaName.focus(), 0);
+    }
+
+    async function saveCustomPersona(){
+      const title = (customPersonaName.value || "").trim().replace(/\s+/g, " ");
+      const summary = (customPersonaSummary.value || "").trim().replace(/\s+/g, " ");
+      if (title.length < 2){
+        showToast("Custom card title needs at least 2 characters");
+        customPersonaName.focus();
+        return;
+      }
+
+      const personaId = shared.createCustomPersonaId({ title, summary });
+      if (!personaId){
+        showToast("Couldn’t build custom card");
+        return;
+      }
+
+      state.persona_id = personaId;
+      state.persona_title = title;
+      localStorage.setItem(PERSONA_KEY, personaId);
+      selPersona.textContent = title;
+      renderPersonas();
+      closeOverlay(customPersonaOverlay);
+
+      showLoading("Saving your card…", "Syncing your custom selection.");
+      try{
+        await saveParticipant({ persona_id: state.persona_id });
+        showToast("Custom card saved");
+      } catch (err){
+        console.error(err);
+        showToast("Couldn’t save custom card (network?)");
+      } finally {
+        hideLoading();
+      }
+    }
+
     async function ensureSession(){
       const { error } = await supabase.from("workshop_sessions").upsert({ id: room }, { onConflict: "id" });
       if (error) throw error;
@@ -1036,9 +1163,10 @@
       if (data){
         state.role = "student";
 
-        state.persona_id = data.persona_id || null;
+        state.persona_id = normalizePersonaSelection(data.persona_id || null);
         state.persona_title = state.persona_id ? titleFromPersonaId(state.persona_id) : null;
         if (state.persona_id) localStorage.setItem(PERSONA_KEY, state.persona_id);
+        else localStorage.removeItem(PERSONA_KEY);
 
         const dbName = cleanName(data.display_name);
         if (dbName){
@@ -1047,9 +1175,10 @@
         }
         localStorage.setItem(ROLE_KEY, "student");
       } else {
-        state.persona_id = localStorage.getItem(PERSONA_KEY) || null;
+        state.persona_id = normalizePersonaSelection(localStorage.getItem(PERSONA_KEY) || null);
         state.persona_title = state.persona_id ? titleFromPersonaId(state.persona_id) : null;
         state.role = "student";
+        if (!state.persona_id) localStorage.removeItem(PERSONA_KEY);
       }
 
       if (nameInput) nameInput.value = state.display_name || "";
@@ -1149,6 +1278,23 @@
       }
       tutIndex = Math.min(tutorialSlides.length - 1, tutIndex + 1);
       renderTutorial();
+    });
+
+    btnCustomPersona.addEventListener("click", openCustomPersonaModal);
+    btnCloseCustomPersona.addEventListener("click", () => closeOverlay(customPersonaOverlay));
+    btnCancelCustomPersona.addEventListener("click", () => closeOverlay(customPersonaOverlay));
+    btnSaveCustomPersona.addEventListener("click", saveCustomPersona);
+    customPersonaName.addEventListener("keydown", (e) => {
+      if (e.key === "Enter"){
+        e.preventDefault();
+        saveCustomPersona();
+      }
+    });
+    customPersonaSummary.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter"){
+        e.preventDefault();
+        saveCustomPersona();
+      }
     });
 
     btnCloseTut.addEventListener("click", () => closeOverlay(tutOverlay));
