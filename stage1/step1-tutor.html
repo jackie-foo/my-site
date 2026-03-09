@@ -1391,6 +1391,7 @@
       const ok = confirm("Clear local workshop storage and reload?");
       if(!ok) return;
       localStorage.removeItem(PID_KEY);
+      try{ sessionStorage.removeItem(PID_KEY); } catch {}
       localStorage.removeItem(AUTH_KEY);
       localStorage.removeItem(TUT_KEY);
       localStorage.removeItem(NAME_KEY);

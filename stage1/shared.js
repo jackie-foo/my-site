@@ -24,7 +24,7 @@ window.Stage1Shared = (() => {
 
   function getKeys(room){
     return {
-      PID_KEY: "stage1_participant_id",
+      PID_KEY: `stage1_participant_id_${room}`,
       AUTH_KEY: `stage1_authed_${room}`,
       TUT_KEY: `stage1_tut_seen_${room}`,
       NAME_KEY: `stage1_name_${room}`,
@@ -55,12 +55,21 @@ window.Stage1Shared = (() => {
 
   function getOrCreateParticipantId(storageKey){
     const key = storageKey || "stage1_participant_id";
-    let participantId = localStorage.getItem(key);
-    if (!participantId){
-      participantId = crypto.randomUUID();
-      localStorage.setItem(key, participantId);
+    try{
+      let participantId = sessionStorage.getItem(key);
+      if (!participantId){
+        participantId = crypto.randomUUID();
+        sessionStorage.setItem(key, participantId);
+      }
+      return participantId;
+    } catch {
+      let participantId = localStorage.getItem(key);
+      if (!participantId){
+        participantId = crypto.randomUUID();
+        localStorage.setItem(key, participantId);
+      }
+      return participantId;
     }
-    return participantId;
   }
 
   function personaTitle(id){
