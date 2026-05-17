@@ -827,27 +827,164 @@
       color: var(--blue);
     }
 
-    .showcaseBoard {
+    .portfolioFeature {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: minmax(280px, 0.88fr) minmax(0, 1.12fr);
       gap: 18px;
-      align-items: start;
+      align-items: stretch;
     }
 
-    .module {
-      display: grid;
-      gap: 14px;
+    .portfolioCopy,
+    .portfolioViewer {
       position: relative;
       overflow: hidden;
     }
 
-    .module::before {
+    .portfolioCopy::before,
+    .portfolioViewer::before {
       content: "";
       position: absolute;
       inset: 12px;
       border: 1px solid rgba(17, 70, 216, 0.18);
       border-radius: 18px;
       pointer-events: none;
+    }
+
+    .portfolioCopy {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+      padding: 24px;
+      background:
+        linear-gradient(160deg, rgba(17, 70, 216, 0.08), transparent 58%),
+        rgba(255, 253, 247, 0.76);
+    }
+
+    .portfolioLabel,
+    .slideEyebrow {
+      margin: 0;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-dark);
+    }
+
+    .portfolioSummary {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.65;
+      max-width: 34ch;
+    }
+
+    .portfolioNotes {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+      line-height: 1.55;
+    }
+
+    .portfolioControls {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .portfolioNav {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--blue);
+      font: inherit;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .portfolioNav:hover,
+    .portfolioNav:focus-visible {
+      transform: translateY(-2px);
+      background: var(--blue);
+      color: var(--paper);
+      outline: none;
+    }
+
+    .portfolioHint {
+      margin: 0;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: rgba(18, 51, 138, 0.8);
+    }
+
+    .portfolioDots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .portfolioDots button {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--blue);
+      padding: 7px 10px;
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .portfolioDots button.is-active {
+      background: var(--blue);
+      color: var(--paper);
+      box-shadow: 0 10px 20px rgba(17, 70, 216, 0.14);
+    }
+
+    .portfolioViewer {
+      padding: 12px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)),
+        rgba(255, 253, 247, 0.72);
+    }
+
+    .portfolioViewport {
+      overflow: hidden;
+      border-radius: 22px;
+      min-height: 100%;
+      touch-action: pan-y;
+    }
+
+    .portfolioTrack {
+      display: flex;
+      transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    .portfolioSlide {
+      min-width: 100%;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      padding: 14px;
+      opacity: 0.66;
+      transition: opacity 260ms ease;
+    }
+
+    .portfolioSlide.is-active {
+      opacity: 1;
+    }
+
+    .slideBoard {
+      display: grid;
+      gap: 12px;
+      min-height: 100%;
     }
 
     .cardArena {
@@ -1261,28 +1398,6 @@
       line-height: 1.45;
     }
 
-    .moduleLink {
-      width: fit-content;
-      border: 2px solid var(--blue);
-      border-radius: 999px;
-      padding: 8px 12px;
-      color: var(--blue);
-      text-decoration: none;
-      font-size: 0.75rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
-    }
-
-    .moduleLink:hover,
-    .moduleLink:focus-visible {
-      transform: translateY(-2px);
-      background: var(--blue);
-      color: var(--paper);
-      outline: none;
-    }
-
     .cvPanel {
       display: grid;
       grid-template-columns: minmax(0, 1.12fr) auto;
@@ -1411,7 +1526,7 @@
     @media (max-width: 980px) {
       .hero,
       .workGrid,
-      .showcaseBoard,
+      .portfolioFeature,
       .experienceGrid,
       .cvPanel {
         grid-template-columns: 1fr;
@@ -1432,6 +1547,10 @@
       }
 
       .workPanel {
+        order: -1;
+      }
+
+      .portfolioViewer {
         order: -1;
       }
 
@@ -1593,6 +1712,29 @@
       .expBullets,
       .videoMeta li {
         font-size: 0.94rem;
+      }
+
+      .portfolioCopy {
+        padding: 18px;
+      }
+
+      .portfolioControls {
+        grid-template-columns: 1fr;
+      }
+
+      .portfolioNav {
+        width: 100%;
+      }
+
+      .portfolioDots {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+      }
+
+      .portfolioDots::-webkit-scrollbar {
+        display: none;
       }
 
       .cardArena {
@@ -1762,6 +1904,11 @@
               <p class="workName">Web Development</p>
               <p class="workText">Interactive systems, dashboards, and research-facing frontend work.</p>
             </button>
+            <button class="workCard" type="button" data-work="4" aria-label="Show DIS Reviewer">
+              <p class="workDate">2025 - 2026</p>
+              <p class="workName">DIS Reviewer</p>
+              <p class="workText">HCI reviewing, contribution framing, and research standards.</p>
+            </button>
           </div>
 
           <aside class="detailCard reveal workPanel" aria-live="polite">
@@ -1787,7 +1934,7 @@
         <div class="sectionHeader">
           <h2 class="sectionTitle reveal">Industry</h2>
           <p class="sectionLead reveal">
-            Selected roles and academic service.
+            Selected roles from practice, reporting, and transformation work.
           </p>
         </div>
 
@@ -1828,193 +1975,165 @@
             </div>
           </article>
 
-          <article class="experienceLog reveal">
-            <div class="expMeta">
-              <span>2025 - 2026</span>
-              <span>Academic Service</span>
-            </div>
-            <h3 class="expRole">DIS Reviewer</h3>
-            <p class="detailMeta">ACM Designing Interactive Systems / Academic Service</p>
-            <ul class="expBullets">
-              <li>Reviewed HCI submissions and built stronger familiarity with contribution framing and methodological clarity.</li>
-              <li>Developed a sharper sense of what makes research arguments credible, clear, and publishable.</li>
-            </ul>
-            <div class="tagRow">
-              <span class="tag">Reviewing</span>
-              <span class="tag">HCI</span>
-              <span class="tag">Research Standards</span>
-            </div>
-          </article>
         </div>
       </div>
     </section>
 
     <section id="portfolio" class="section">
-      <h2 class="sectionTitle reveal">Portfolio</h2>
-      <p class="sectionLead reveal">
-        Thesis cards, mascot development, and looped demos.
-      </p>
+      <div class="sectionStack">
+        <div class="sectionHeader">
+          <h2 class="sectionTitle reveal">Portfolio</h2>
+          <p class="sectionLead reveal">
+            One featured piece at a time, with swipe-first viewing for phone and a larger media stage for desktop.
+          </p>
+        </div>
 
-      <div class="showcaseBoard">
-        <article class="module reveal">
-          <p class="moduleEyebrow">Thesis Deck / Select a card</p>
-          <h3 class="moduleTitle">Card Showcase</h3>
-          <div class="cardArena" aria-label="Animated thesis card preview">
-            <button class="thesisCard is-active is-center" type="button" data-card="0">
-              <div class="cardTop">
-                <span class="cardSuit">Persona</span>
-                <span class="cardRank">01</span>
-              </div>
-              <div class="cardVisual">
-                <img src="pic/tutor-persona-2.png" alt="Student Sense-Makers card preview" />
-              </div>
-              <div class="cardFooter">
-                <p class="cardName">Student Sense-Makers</p>
-                <p class="cardFlavor">Persona card</p>
-              </div>
-            </button>
-
-            <button class="thesisCard is-right" type="button" data-card="1">
-              <div class="cardTop">
-                <span class="cardSuit">Persona</span>
-                <span class="cardRank">02</span>
-              </div>
-              <div class="cardVisual">
-                <img src="pic/tutor-persona-1.png" alt="Scale Thinkers card preview" />
-              </div>
-              <div class="cardFooter">
-                <p class="cardName">Scale Thinkers</p>
-                <p class="cardFlavor">Persona card</p>
-              </div>
-            </button>
-
-            <button class="thesisCard is-left" type="button" data-card="2">
-              <div class="cardTop">
-                <span class="cardSuit">Instruction</span>
-                <span class="cardRank">03</span>
-              </div>
-              <div class="cardVisual">
-                <img src="pic/tutor-persona-5.png" alt="What's my motivation card preview" />
-              </div>
-              <div class="cardFooter">
-                <p class="cardName">What’s My Motivation</p>
-                <p class="cardFlavor">Instruction card</p>
-              </div>
-            </button>
-          </div>
-
-          <div class="deckDetail" id="deckDetail" aria-live="polite">
-            <p class="detailTitle">Student Sense-Makers</p>
-            <p class="bodyText">
-              A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.
+        <div class="portfolioFeature">
+          <article class="portfolioCopy detailCard reveal">
+            <p class="portfolioLabel" id="portfolioLabel">01 / Thesis Deck</p>
+            <h3 class="moduleTitle" id="portfolioTitle">Thesis Card System</h3>
+            <p class="portfolioSummary" id="portfolioSummary">
+              A card-based showcase for thesis materials, combining persona and instruction cards into a more visual and game-like research artefact.
             </p>
-            <div class="tagRow">
-              <span class="tag">Persona card</span>
-              <span class="tag">Next steps</span>
-              <span class="tag">Consistency</span>
+            <ul class="portfolioNotes" id="portfolioNotes">
+              <li>Persona and instruction cards designed for workshop discussion.</li>
+              <li>Visual system that helps abstract feedback ideas feel more tangible.</li>
+            </ul>
+            <div class="tagRow" id="portfolioTags">
+              <span class="tag">Research artefact</span>
+              <span class="tag">Card design</span>
+              <span class="tag">Workshop material</span>
             </div>
-          </div>
-        </article>
+            <div class="portfolioControls">
+              <button class="portfolioNav" type="button" id="portfolioPrev" aria-label="Previous portfolio piece">Prev</button>
+              <p class="portfolioHint">Swipe the viewer left or right to move through the portfolio.</p>
+              <button class="portfolioNav" type="button" id="portfolioNext" aria-label="Next portfolio piece">Next</button>
+            </div>
+            <div class="portfolioDots" id="portfolioDots" aria-label="Portfolio selector"></div>
+          </article>
 
-        <article class="module reveal">
-          <p class="moduleEyebrow">Mascot Development / Use arrows</p>
-          <h3 class="moduleTitle">Mascot Select</h3>
-          <div class="galleryShell">
-            <div class="galleryStage">
-              <div class="galleryPortrait" id="galleryPortrait">
-                <div class="galleryFigure">
-                  <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
-                  <img
-                    id="galleryImage"
-                    class="galleryImage"
-                    src="pic/Mascot/1.png"
-                    alt="Mascot development concept"
-                    draggable="false"
-                  />
-                  <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
-                </div>
+          <article class="portfolioViewer reveal">
+            <div class="portfolioViewport" id="portfolioViewport">
+              <div class="portfolioTrack" id="portfolioTrack">
+                <section class="portfolioSlide is-active" data-portfolio-slide="0" aria-label="Thesis deck">
+                  <div class="slideBoard">
+                    <p class="slideEyebrow">Thesis Deck</p>
+                    <div class="cardArena" aria-label="Animated thesis card preview">
+                      <button class="thesisCard is-active is-center" type="button" data-card="0">
+                        <div class="cardTop">
+                          <span class="cardSuit">Persona</span>
+                          <span class="cardRank">01</span>
+                        </div>
+                        <div class="cardVisual">
+                          <img src="pic/tutor-persona-2.png" alt="Student Sense-Makers card preview" />
+                        </div>
+                        <div class="cardFooter">
+                          <p class="cardName">Student Sense-Makers</p>
+                          <p class="cardFlavor">Persona card</p>
+                        </div>
+                      </button>
+
+                      <button class="thesisCard is-right" type="button" data-card="1">
+                        <div class="cardTop">
+                          <span class="cardSuit">Persona</span>
+                          <span class="cardRank">02</span>
+                        </div>
+                        <div class="cardVisual">
+                          <img src="pic/tutor-persona-1.png" alt="Scale Thinkers card preview" />
+                        </div>
+                        <div class="cardFooter">
+                          <p class="cardName">Scale Thinkers</p>
+                          <p class="cardFlavor">Persona card</p>
+                        </div>
+                      </button>
+
+                      <button class="thesisCard is-left" type="button" data-card="2">
+                        <div class="cardTop">
+                          <span class="cardSuit">Instruction</span>
+                          <span class="cardRank">03</span>
+                        </div>
+                        <div class="cardVisual">
+                          <img src="pic/tutor-persona-5.png" alt="What's my motivation card preview" />
+                        </div>
+                        <div class="cardFooter">
+                          <p class="cardName">What’s My Motivation</p>
+                          <p class="cardFlavor">Instruction card</p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="portfolioSlide" data-portfolio-slide="1" aria-label="Mascot development">
+                  <div class="slideBoard">
+                    <p class="slideEyebrow">Mascot Development</p>
+                    <div class="galleryStage">
+                      <div class="galleryPortrait" id="galleryPortrait">
+                        <div class="galleryFigure">
+                          <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
+                          <img
+                            id="galleryImage"
+                            class="galleryImage"
+                            src="pic/Mascot/1.png"
+                            alt="Mascot development concept"
+                            draggable="false"
+                          />
+                          <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
+                  </div>
+                </section>
+
+                <section class="portfolioSlide" data-portfolio-slide="2" aria-label="Website demo">
+                  <div class="slideBoard">
+                    <p class="slideEyebrow">Website Loop</p>
+                    <div class="videoModule" data-video-wrapper data-video-src="Loop-website.mov">
+                      <div class="videoStage">
+                        <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
+                        <div class="fallbackVisual">
+                          <img src="pic/Mascot/2.png" alt="Fallback for website loop" />
+                        </div>
+                        <div class="playPulse" aria-hidden="true"></div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="portfolioSlide" data-portfolio-slide="3" aria-label="Participant demo">
+                  <div class="slideBoard">
+                    <p class="slideEyebrow">Participant Website Loop</p>
+                    <div class="videoModule" data-video-wrapper data-video-src="Participant website.mov">
+                      <div class="videoStage">
+                        <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
+                        <div class="fallbackVisual">
+                          <img src="pic/tutor-persona-2.png" alt="Placeholder for participant website loop" />
+                        </div>
+                        <div class="playPulse" aria-hidden="true"></div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="portfolioSlide" data-portfolio-slide="4" aria-label="Schema loop">
+                  <div class="slideBoard">
+                    <p class="slideEyebrow">Schema Loop</p>
+                    <div class="videoModule" data-video-wrapper data-video-src="Schema_video.mov">
+                      <div class="videoStage">
+                        <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
+                        <div class="fallbackVisual">
+                          <img src="pic/tutor-persona-1.png" alt="Placeholder for schema loop" />
+                        </div>
+                        <div class="playPulse" aria-hidden="true"></div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
               </div>
             </div>
-            <div class="galleryInfo">
-              <p class="galleryName" id="galleryName">Reader Cat</p>
-              <p class="bodyText" id="galleryText">
-                A softer research-facing mascot direction built around reading, study, and early exploration.
-              </p>
-              <p class="miniNote">Use the arrows to move between mascot states.</p>
-              <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
-            </div>
-          </div>
-        </article>
-
-        <article class="module reveal">
-          <p class="moduleEyebrow">Website Loop</p>
-          <h3 class="moduleTitle">Website Demo</h3>
-          <div class="videoModule" data-video-wrapper data-video-src="Loop-website.mov">
-            <div class="videoStage">
-              <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-              <div class="fallbackVisual">
-                <img src="pic/Mascot/2.png" alt="Fallback for website loop" />
-              </div>
-              <div class="playPulse" aria-hidden="true"></div>
-            </div>
-            <div class="videoMeta">
-              <p class="bodyText">
-                Looping walkthrough of the current website direction.
-              </p>
-              <ul>
-                <li>Main site flow and visual direction</li>
-                <li>Autoplay, muted, and looping in the page</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <article class="module reveal">
-          <p class="moduleEyebrow">Participant Website Loop</p>
-          <h3 class="moduleTitle">Participant Demo</h3>
-          <div class="videoModule" data-video-wrapper data-video-src="Participant website.mov">
-            <div class="videoStage">
-              <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-              <div class="fallbackVisual">
-                <img src="pic/tutor-persona-2.png" alt="Placeholder for participant website loop" />
-              </div>
-              <div class="playPulse" aria-hidden="true"></div>
-            </div>
-            <div class="videoMeta">
-              <p class="bodyText">
-                Participant-facing website flow and interaction screens.
-              </p>
-              <ul>
-                <li>Shows the participant-side interface and flow</li>
-                <li>Loops in the same way as the other demo modules</li>
-              </ul>
-              <a class="moduleLink" href="index3.html" target="_blank" rel="noreferrer">Open chatbot concept</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="module reveal">
-          <p class="moduleEyebrow">Schema Loop Video</p>
-          <h3 class="moduleTitle">Schema Loop</h3>
-          <div class="videoModule" data-video-wrapper data-video-src="Schema_video.mov">
-            <div class="videoStage">
-              <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-              <div class="fallbackVisual">
-                <img src="pic/tutor-persona-1.png" alt="Placeholder for schema loop" />
-              </div>
-              <div class="playPulse" aria-hidden="true"></div>
-            </div>
-            <div class="videoMeta">
-              <p class="bodyText">
-                Schema structure, content model, and dashboard logic walkthrough.
-              </p>
-              <ul>
-                <li>Uses the real schema video already in the project</li>
-                <li>Separate from the website demos so it can stand on its own</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -2035,15 +2154,24 @@
   <script>
     (() => {
       const workDetail = document.getElementById("workDetail");
+      const workGrid = document.querySelector(".workGrid");
       const workButtons = [...document.querySelectorAll("[data-work]")];
       const thesisCards = [...document.querySelectorAll("[data-card]")];
       const cardArena = document.querySelector(".cardArena");
-      const deckDetail = document.getElementById("deckDetail");
       const revealNodes = [...document.querySelectorAll(".reveal")];
+      const portfolioViewport = document.getElementById("portfolioViewport");
+      const portfolioTrack = document.getElementById("portfolioTrack");
+      const portfolioSlides = [...document.querySelectorAll("[data-portfolio-slide]")];
+      const portfolioLabel = document.getElementById("portfolioLabel");
+      const portfolioTitle = document.getElementById("portfolioTitle");
+      const portfolioSummary = document.getElementById("portfolioSummary");
+      const portfolioNotes = document.getElementById("portfolioNotes");
+      const portfolioTags = document.getElementById("portfolioTags");
+      const portfolioDots = document.getElementById("portfolioDots");
+      const portfolioPrev = document.getElementById("portfolioPrev");
+      const portfolioNext = document.getElementById("portfolioNext");
       const galleryPortrait = document.getElementById("galleryPortrait");
       const galleryImage = document.getElementById("galleryImage");
-      const galleryName = document.getElementById("galleryName");
-      const galleryText = document.getElementById("galleryText");
       const galleryDots = document.getElementById("galleryDots");
       const galleryPrev = document.getElementById("galleryPrev");
       const galleryNext = document.getElementById("galleryNext");
@@ -2073,6 +2201,12 @@
           meta: "Ongoing / software engineering track",
           body: "Web-facing builds that connect interface design, structured content, dashboards, and implementation-minded frontend work.",
           tags: ["Frontend", "Dashboards", "Implementation"]
+        },
+        {
+          title: "DIS Reviewer",
+          meta: "ACM Designing Interactive Systems / 2025 - 2026",
+          body: "Academic reviewing work that sharpened contribution framing, methodological clarity, and a stronger sense of what makes HCI research arguments feel credible and publishable.",
+          tags: ["Reviewing", "HCI", "Research standards"]
         }
       ];
 
@@ -2122,8 +2256,62 @@
         }
       ];
 
+      const portfolioItems = [
+        {
+          label: "Thesis Deck",
+          title: "Thesis Card System",
+          body: "A card-based showcase for thesis materials, combining persona and instruction cards into a more visual and game-like research artefact.",
+          notes: [
+            "Persona and instruction cards designed for workshop discussion.",
+            "Visual system that helps abstract feedback ideas feel more tangible."
+          ],
+          tags: ["Research artefact", "Card design", "Workshop material"]
+        },
+        {
+          label: "Mascot Development",
+          title: "Mascot Select",
+          body: "A mascot family explored as a more playful visual layer for the project world, with multiple states that can be cycled like a character screen.",
+          notes: [
+            "Five mascot variants shown through a single glowing selector stage.",
+            "Built to feel more alive without breaking the blue and cream poster aesthetic."
+          ],
+          tags: ["Mascot system", "Character screen", "Visual identity"]
+        },
+        {
+          label: "Website Demo",
+          title: "Main Website Loop",
+          body: "A looping walkthrough of the current website direction, focusing on the visual system, overall flow, and how the mascot and layout work together.",
+          notes: [
+            "Autoplaying loop embedded directly into the portfolio viewer.",
+            "Framed consistently with the other media pieces for a cleaner reading rhythm."
+          ],
+          tags: ["Website", "Loop video", "Visual direction"]
+        },
+        {
+          label: "Participant Demo",
+          title: "Participant Website Flow",
+          body: "A participant-facing interface demo that shows how the project can translate into a cleaner, more guided interaction flow for real users.",
+          notes: [
+            "Separate from the main site so it reads as its own interface direction.",
+            "Uses the same viewer system so it stays consistent with the rest of the portfolio."
+          ],
+          tags: ["Participant flow", "Interaction design", "Prototype"]
+        },
+        {
+          label: "Schema Loop",
+          title: "Schema Structure Walkthrough",
+          body: "A looping view of the schema and content structure behind the project, showing how materials and logic are organised under the surface.",
+          notes: [
+            "Makes the backend structure part of the portfolio rather than hiding it.",
+            "Useful for showing systems thinking alongside the visual work."
+          ],
+          tags: ["Schema", "Systems thinking", "Content model"]
+        }
+      ];
+
       let workIndex = 0;
       let deckIndex = 0;
+      let portfolioIndex = 0;
       let mascotIndex = 0;
       let deckSwipeLockUntil = 0;
 
@@ -2148,16 +2336,8 @@
 
       function renderDeck(index) {
         const item = thesisItems[index];
-        if (!item || !deckDetail) return;
+        if (!item) return;
         deckIndex = index;
-
-        deckDetail.innerHTML = `
-          <p class="detailTitle">${item.title}</p>
-          <p class="bodyText">${item.body}</p>
-          <div class="tagRow">
-            ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
-          </div>
-        `;
 
         thesisCards.forEach((card, cardIndex) => {
           const relativeIndex = (cardIndex - index + thesisCards.length) % thesisCards.length;
@@ -2169,17 +2349,37 @@
         });
       }
 
+      function renderPortfolio(index) {
+        const item = portfolioItems[index];
+        if (!item || !portfolioTrack || !portfolioLabel || !portfolioTitle || !portfolioSummary || !portfolioNotes || !portfolioTags || !portfolioDots) return;
+
+        portfolioIndex = index;
+        portfolioLabel.textContent = `${String(index + 1).padStart(2, "0")} / ${item.label}`;
+        portfolioTitle.textContent = item.title;
+        portfolioSummary.textContent = item.body;
+        portfolioNotes.innerHTML = item.notes.map((note) => `<li>${note}</li>`).join("");
+        portfolioTags.innerHTML = item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+        portfolioTrack.style.transform = `translateX(-${index * 100}%)`;
+
+        portfolioSlides.forEach((slide, slideIndex) => {
+          slide.classList.toggle("is-active", slideIndex === index);
+        });
+
+        [...portfolioDots.querySelectorAll("button")].forEach((dot, dotIndex) => {
+          dot.classList.toggle("is-active", dotIndex === index);
+          dot.setAttribute("aria-pressed", String(dotIndex === index));
+        });
+      }
+
       function renderMascot(index) {
         const item = mascotItems[index];
-        if (!item || !galleryImage || !galleryName || !galleryText || !galleryDots || !galleryPortrait) return;
+        if (!item || !galleryImage || !galleryDots || !galleryPortrait) return;
 
         galleryPortrait.classList.add("is-changing");
 
         setTimeout(() => {
           galleryImage.src = item.image;
           galleryImage.alt = item.name;
-          galleryName.textContent = item.name;
-          galleryText.textContent = item.text;
           galleryPortrait.classList.remove("is-changing");
         }, 120);
 
@@ -2197,6 +2397,11 @@
       function moveDeck(direction) {
         deckIndex = (deckIndex + direction + thesisItems.length) % thesisItems.length;
         renderDeck(deckIndex);
+      }
+
+      function movePortfolio(direction) {
+        portfolioIndex = (portfolioIndex + direction + portfolioItems.length) % portfolioItems.length;
+        renderPortfolio(portfolioIndex);
       }
 
       function bindSwipe(target, onPrev, onNext, ignoreSelector) {
@@ -2253,6 +2458,18 @@
         galleryDots.appendChild(dot);
       });
 
+      portfolioItems.forEach((item, index) => {
+        if (!portfolioDots) return;
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.textContent = item.label;
+        dot.setAttribute("aria-label", `Show ${item.title}`);
+        dot.setAttribute("aria-pressed", String(index === 0));
+        dot.classList.toggle("is-active", index === 0);
+        dot.addEventListener("click", () => renderPortfolio(index));
+        portfolioDots.appendChild(dot);
+      });
+
       workButtons.forEach((button) => {
         button.addEventListener("click", () => {
           renderWork(Number(button.dataset.work));
@@ -2274,6 +2491,14 @@
         galleryNext.addEventListener("click", () => moveMascot(1));
       }
 
+      if (portfolioPrev) {
+        portfolioPrev.addEventListener("click", () => movePortfolio(-1));
+      }
+
+      if (portfolioNext) {
+        portfolioNext.addEventListener("click", () => movePortfolio(1));
+      }
+
       if (galleryImage) {
         galleryImage.addEventListener("dragstart", (event) => event.preventDefault());
       }
@@ -2285,6 +2510,18 @@
         deckSwipeLockUntil = Date.now() + 180;
         moveDeck(1);
       });
+
+      bindSwipe(workGrid, () => {
+        renderWork((workIndex - 1 + workItems.length) % workItems.length);
+      }, () => {
+        renderWork((workIndex + 1) % workItems.length);
+      }, ".workCard, .tag");
+
+      bindSwipe(portfolioViewport, () => {
+        movePortfolio(-1);
+      }, () => {
+        movePortfolio(1);
+      }, ".galleryCursor, .galleryDots button, .thesisCard");
 
       videoWrappers.forEach((wrapper) => {
         const video = wrapper.querySelector(".loopVideo");
@@ -2314,6 +2551,7 @@
 
       renderWork(workIndex);
       renderDeck(0);
+      renderPortfolio(0);
       renderMascot(mascotIndex);
 
       if ("IntersectionObserver" in window) {
