@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jackie Foo | CV Poster</title>
+  <title>Jackie Foo | Portfolio</title>
   <meta
     name="description"
-    content="Single-page CV poster for Jackie Foo with a research timeline, mascot selector, thesis card showcase, and looping media placeholders."
+    content="Single-page portfolio for Jackie Foo with research work, mascot showcase, thesis cards, and looping media."
   />
   <meta name="theme-color" content="#0d47d9" />
 
@@ -189,7 +189,6 @@
     }
 
     .panel,
-    .portraitCard,
     .detailCard,
     .module,
     .skillCol,
@@ -209,25 +208,48 @@
     }
 
     .portraitCard {
-      padding: 18px;
-      min-height: 340px;
+      padding: 0;
+      min-height: auto;
       position: relative;
-      overflow: hidden;
+      background: transparent;
+      border: 0;
     }
 
     .portraitCard::before {
+      display: none;
+    }
+
+    .portraitOrbit {
+      position: relative;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+    }
+
+    .portraitOrbit::before,
+    .portraitOrbit::after {
       content: "";
       position: absolute;
-      inset: 18px;
-      border: 2px solid rgba(17, 70, 216, 0.18);
       border-radius: 50%;
       pointer-events: none;
+    }
+
+    .portraitOrbit::before {
+      width: min(94%, 520px);
+      aspect-ratio: 1 / 1;
+      border: 2px solid rgba(17, 70, 216, 0.16);
+    }
+
+    .portraitOrbit::after {
+      width: min(72%, 380px);
+      aspect-ratio: 1 / 1;
+      border: 2px solid rgba(17, 70, 216, 0.22);
     }
 
     .portraitWrap {
       position: relative;
       aspect-ratio: 1 / 1;
-      max-width: 320px;
+      width: min(72%, 290px);
       margin: 0 auto;
       display: grid;
       place-items: center;
@@ -235,17 +257,22 @@
 
     .portraitRing {
       position: absolute;
-      inset: 7%;
-      border: 2px solid var(--blue);
+      inset: -10%;
+      border: 2px solid rgba(17, 70, 216, 0.16);
       border-radius: 50%;
     }
 
     .portraitImg {
       position: relative;
       z-index: 1;
-      width: min(82%, 270px);
-      filter: saturate(0) contrast(1.06) brightness(1.1);
-      mix-blend-mode: multiply;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid var(--blue);
+      filter: none;
+      mix-blend-mode: normal;
+      background: #fff;
     }
 
     .portraitBadge {
@@ -344,6 +371,51 @@
       font-weight: 800;
     }
 
+    .heroIntro {
+      margin: 0;
+      max-width: 48ch;
+      font-size: clamp(1rem, 1.75vw, 1.16rem);
+      line-height: 1.58;
+      text-wrap: pretty;
+    }
+
+    .metaRail {
+      position: relative;
+      display: grid;
+      gap: 16px;
+      max-width: 38rem;
+      padding-left: 22px;
+    }
+
+    .metaRail::before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      border-radius: 999px;
+      background: rgba(17, 70, 216, 0.26);
+    }
+
+    .metaLine {
+      position: relative;
+      display: grid;
+      gap: 5px;
+    }
+
+    .metaLine::before {
+      content: "";
+      position: absolute;
+      left: -21px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      background: var(--paper);
+    }
+
     .factCard {
       display: grid;
       gap: 12px;
@@ -411,6 +483,97 @@
       max-width: 64ch;
       font-size: 0.96rem;
       line-height: 1.6;
+    }
+
+    .workGrid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .workPicker {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .workCard {
+      position: relative;
+      border: 2px solid var(--blue);
+      border-radius: 24px;
+      background: rgba(255, 253, 247, 0.72);
+      padding: 16px;
+      text-align: left;
+      display: grid;
+      gap: 10px;
+      transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+      overflow: hidden;
+    }
+
+    .workCard::before {
+      content: "";
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(17, 70, 216, 0.22);
+      border-radius: 50%;
+    }
+
+    .workCard:hover,
+    .workCard:focus-visible,
+    .workCard.is-active {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 34px rgba(17, 70, 216, 0.1);
+      outline: none;
+    }
+
+    .workCard.is-active {
+      background: var(--blue);
+      color: var(--paper);
+    }
+
+    .workCard.is-active::before {
+      border-color: rgba(248, 236, 217, 0.58);
+      background: rgba(248, 236, 217, 0.16);
+    }
+
+    .workDate,
+    .workName,
+    .workText {
+      margin: 0;
+    }
+
+    .workDate {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .workName {
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(1rem, 2vw, 1.36rem);
+      line-height: 0.96;
+      text-transform: uppercase;
+    }
+
+    .workText {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      max-width: 26ch;
+    }
+
+    .workCard.is-active .workDate,
+    .workCard.is-active .workName,
+    .workCard.is-active .workText {
+      color: inherit;
+    }
+
+    .workPanel {
+      min-height: 100%;
     }
 
     .timelineGrid {
@@ -593,16 +756,13 @@
     }
 
     .experienceHeaderRow {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 18px;
-      flex-wrap: wrap;
+      display: grid;
+      gap: 8px;
     }
 
     .experienceHeaderRow .sectionLead {
       margin: 0;
-      max-width: 56ch;
+      max-width: 32ch;
     }
 
     .experienceGrid {
@@ -799,12 +959,18 @@
       place-items: center;
     }
 
-    .cardVisual img,
     .galleryImage,
     .fallbackVisual img {
       width: 100%;
-      filter: saturate(0) contrast(1.04) brightness(1.06);
-      mix-blend-mode: multiply;
+    }
+
+    .cardVisual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: none;
+      mix-blend-mode: normal;
     }
 
     .cardName,
@@ -858,12 +1024,19 @@
       cursor: ew-resize;
     }
 
+    .galleryFigure.is-dragging,
+    .cardArena.is-dragging {
+      cursor: grabbing;
+    }
+
     .galleryImage {
       width: min(82%, 238px);
       transition: opacity 180ms ease, transform 220ms ease;
       user-select: none;
       -webkit-user-drag: none;
       pointer-events: none;
+      filter: none;
+      mix-blend-mode: normal;
     }
 
     .galleryPortrait.is-changing .galleryImage {
@@ -1177,7 +1350,7 @@
 
     @media (max-width: 980px) {
       .hero,
-      .introRow,
+      .workGrid,
       .showcaseBoard,
       .experienceGrid,
       .twoCol,
@@ -1185,9 +1358,14 @@
         grid-template-columns: 1fr;
       }
 
+      .workPicker,
       .factGrid,
       .timelineLine {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .portraitOrbit {
+        min-height: 360px;
       }
 
       .thesisCard {
@@ -1252,14 +1430,32 @@
       .heroTitle {
         font-size: clamp(2.25rem, 13vw, 3.3rem);
         line-height: 0.98;
+        white-space: normal;
       }
 
+      .workPicker,
       .factGrid,
       .toolGrid,
       .timelineLine,
       .experienceGrid,
       .contactGrid {
         grid-template-columns: 1fr;
+      }
+
+      .portraitOrbit {
+        min-height: 304px;
+      }
+
+      .portraitWrap {
+        width: min(74vw, 248px);
+      }
+
+      .heroIntro {
+        max-width: none;
+      }
+
+      .metaRail {
+        padding-left: 18px;
       }
 
       .timelineLine::before {
@@ -1331,6 +1527,7 @@
       .cardArena {
         min-height: 352px;
         padding-top: 22px;
+        touch-action: pan-y;
       }
 
       .thesisCard {
@@ -1400,10 +1597,10 @@
 <body>
   <main class="page">
     <header class="masthead">
-      <div class="brand">Jackie Foo / CV Poster</div>
+      <div class="brand">Jackie Foo / Portfolio</div>
       <nav class="nav" aria-label="Section navigation">
         <a href="#profile">Profile</a>
-        <a href="#timeline">Timeline</a>
+        <a href="#work">Work</a>
         <a href="#experience">Experience</a>
         <a href="#showcase">Showcase</a>
         <a href="#skills">Skills</a>
@@ -1414,13 +1611,15 @@
     <section id="profile" class="section hero">
       <div class="heroLeft reveal">
         <div class="portraitCard">
-          <div class="portraitWrap">
-            <div class="portraitRing" aria-hidden="true"></div>
-            <img
-              class="portraitImg"
-              src="pic/chibi5.png"
-              alt="Profile image"
-            />
+          <div class="portraitOrbit">
+            <div class="portraitWrap">
+              <div class="portraitRing" aria-hidden="true"></div>
+              <img
+                class="portraitImg"
+                src="pic/Profile photo.jpeg"
+                alt="Portrait of Jackie Foo"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -1431,103 +1630,76 @@
           <h1 class="heroTitle">Jackie Foo</h1>
         </div>
 
-        <div class="introRow">
-          <div class="panel reveal">
-            <p class="introText">
-              Student researcher interested in how technology can better support learning,
-              communication, and feedback in real-world settings. I have worked on
-              feedback analytics and co-design research, assistive technology projects
-              involving local AI experimentation, and implementation work with different
-              stakeholders. I am interested in human-centred research that turns real
-              user needs into practical and sustainable tools.
-            </p>
-          </div>
+        <p class="heroIntro reveal">
+          Student researcher interested in how technology can better support learning,
+          communication, and feedback in real-world settings. I have worked on
+          feedback analytics and co-design research, assistive technology projects
+          involving local AI experimentation, and implementation work with different
+          stakeholders. I am interested in human-centred research that turns real
+          user needs into practical and sustainable tools.
+        </p>
 
-          <div class="panel factCard reveal">
-            <div class="factGrid">
-              <div class="statCard">
-                <div class="statToken">01</div>
-                <p class="factLabel">Base</p>
-                <p class="factValue">Melbourne / Malaysia</p>
-              </div>
-              <div class="statCard">
-                <div class="statToken">02</div>
-                <p class="factLabel">Current Study</p>
-                <p class="factValue">Master of Data Science, Monash</p>
-              </div>
-              <div class="statCard">
-                <div class="statToken">03</div>
-                <p class="factLabel">Research Focus</p>
-                <p class="factValue">Feedback analytics, HCI, co-design</p>
-              </div>
-            </div>
+        <div class="metaRail reveal" aria-label="Profile details">
+          <div class="metaLine">
+            <p class="factLabel">Base</p>
+            <p class="factValue">Melbourne / Malaysia</p>
+          </div>
+          <div class="metaLine">
+            <p class="factLabel">Current Study</p>
+            <p class="factValue">Master of Data Science, Monash</p>
+          </div>
+          <div class="metaLine">
+            <p class="factLabel">Research Focus</p>
+            <p class="factValue">Feedback analytics, HCI, co-design</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="timeline" class="section">
-      <h2 class="sectionTitle reveal">Research / Project Timeline</h2>
+    <section id="work" class="section">
+      <h2 class="sectionTitle reveal">Current Work</h2>
       <p class="sectionLead reveal">
-        A snapshot of the research, implementation, and project threads shaping my current work. Click each stop or use the panel controls to move through it.
+        Pick a track to swap the main panel.
       </p>
 
-      <div class="timelineGrid">
-        <div class="timelineRail reveal">
-          <div class="timelineLine">
-            <article class="timelineStop is-active">
-              <button class="timelineBtn" type="button" data-timeline="0" aria-label="Show PolyFeed Thesis"></button>
-              <p class="timelineDate">Jun 2025 - Present</p>
-              <p class="timelineLabel">PolyFeed Thesis</p>
-              <p class="timelineText">Feedback analytics and co-design</p>
-            </article>
-            <article class="timelineStop">
-              <button class="timelineBtn" type="button" data-timeline="1" aria-label="Show More Than Words"></button>
-              <p class="timelineDate">Mar 2025 - Present</p>
-              <p class="timelineLabel">More Than Words</p>
-              <p class="timelineText">Assistive communication research</p>
-            </article>
-            <article class="timelineStop">
-              <button class="timelineBtn" type="button" data-timeline="2" aria-label="Show Action Lab Malaysia"></button>
-              <p class="timelineDate">Nov 2024 - Present</p>
-              <p class="timelineLabel">Action Lab Malaysia</p>
-              <p class="timelineText">HCI literature and research prep</p>
-            </article>
-            <article class="timelineStop">
-              <button class="timelineBtn" type="button" data-timeline="3" aria-label="Show Casual Web Development"></button>
-              <p class="timelineDate">2024 - Present</p>
-              <p class="timelineLabel">Web Development</p>
-              <p class="timelineText">Frontend systems and dashboards</p>
-            </article>
-          </div>
+      <div class="workGrid">
+        <div class="workPicker reveal">
+          <button class="workCard is-active" type="button" data-work="0" aria-label="Show PolyFeed Thesis">
+            <p class="workDate">Jun 2025 - Present</p>
+            <p class="workName">PolyFeed Thesis</p>
+            <p class="workText">Feedback analytics, co-design, and implementation strategy.</p>
+          </button>
+          <button class="workCard" type="button" data-work="1" aria-label="Show More Than Words">
+            <p class="workDate">Mar 2025 - Present</p>
+            <p class="workName">More Than Words</p>
+            <p class="workText">Assistive communication research and local AI experimentation.</p>
+          </button>
+          <button class="workCard" type="button" data-work="2" aria-label="Show Action Lab Malaysia">
+            <p class="workDate">Nov 2024 - Present</p>
+            <p class="workName">Action Lab Malaysia</p>
+            <p class="workText">HCI literature review, synthesis, and collaborator prep.</p>
+          </button>
+          <button class="workCard" type="button" data-work="3" aria-label="Show Web Development">
+            <p class="workDate">2024 - Present</p>
+            <p class="workName">Web Development</p>
+            <p class="workText">Interactive systems, dashboards, and research-facing frontend work.</p>
+          </button>
         </div>
 
-        <div class="timelineSide">
-          <aside class="detailCard reveal" aria-live="polite">
-            <div id="timelineDetail">
-              <p class="detailTitle">PolyFeed Thesis</p>
-              <p class="detailMeta">Monash University / Jun 2025 - Present</p>
-              <p class="bodyText">
-                Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with emphasis on what makes feedback analytics useful, difficult to engage with, or meaningful in practice.
-              </p>
-              <div class="tagRow">
-                <span class="tag">Feedback analytics</span>
-                <span class="tag">Co-design</span>
-                <span class="tag">Implementation tensions</span>
-              </div>
+        <aside class="detailCard reveal workPanel" aria-live="polite">
+          <div id="workDetail">
+            <p class="detailTitle">PolyFeed Thesis</p>
+            <p class="detailMeta">Monash University / Jun 2025 - Present</p>
+            <p class="bodyText">
+              Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with attention to feedback analytics uptake, co-design, and implementation strategy.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Feedback analytics</span>
+              <span class="tag">Co-design</span>
+              <span class="tag">Implementation</span>
             </div>
-            <div class="timelineControls" aria-label="Timeline controls">
-              <button class="timelineNav" type="button" id="timelinePrev">Prev</button>
-              <div class="timelineMeter">
-                <p class="timelineCount" id="timelineCount">01 / 04</p>
-                <div class="timelineProgress" aria-hidden="true">
-                  <span id="timelineProgress"></span>
-                </div>
-              </div>
-              <button class="timelineNav" type="button" id="timelineNext">Next</button>
-            </div>
-          </aside>
-        </div>
+          </div>
+        </aside>
       </div>
     </section>
 
@@ -1535,11 +1707,11 @@
       <div class="experienceSectionWrap">
         <div class="experienceHeaderRow">
           <div>
-            <p class="moduleEyebrow reveal">Professional Experience / Separate Track</p>
-            <h2 class="sectionTitle reveal">Experience Log</h2>
+            <p class="moduleEyebrow reveal">Professional Experience</p>
+            <h2 class="sectionTitle reveal">Experience</h2>
           </div>
           <p class="sectionLead reveal">
-            A lighter web version of my experience: short impact cards instead of full resume blocks, so the page stays easier to scan.
+            Selected roles and academic service.
           </p>
         </div>
 
@@ -1604,73 +1776,73 @@
     <section id="showcase" class="section">
       <h2 class="sectionTitle reveal">Showcase</h2>
       <p class="sectionLead reveal">
-        The page now leans harder into the artifact side of your work: strategy cards, mascot development, and separate media loops for the MATT website and schema-based material.
+        Cards, mascot development, and looped demos.
       </p>
 
       <div class="showcaseBoard">
         <article class="module reveal">
-          <p class="moduleEyebrow">Thesis Deck / Click a card</p>
+          <p class="moduleEyebrow">Thesis Deck / Swipe or tap</p>
           <h3 class="moduleTitle">Card Showcase</h3>
           <div class="cardArena" aria-label="Animated thesis card preview">
             <button class="thesisCard is-active" type="button" data-card="0">
               <div class="cardTop">
-                <span class="cardSuit">A</span>
-                <span class="cardRank">Insight</span>
+                <span class="cardSuit">Persona</span>
+                <span class="cardRank">01</span>
               </div>
               <div class="cardVisual">
-                <img src="pic/tutor-persona-1.png" alt="Placeholder thesis card art" />
+                <img src="pic/cards/persona-scale-thinkers.png" alt="Scale Thinkers card preview" />
               </div>
               <div>
-                <p class="cardName">Signal Card</p>
-                <p class="cardFlavor">A quick entry point into one implementation strategy.</p>
+                <p class="cardName">Scale Thinkers</p>
+                <p class="cardFlavor">I think about what works for large cohorts.</p>
               </div>
             </button>
 
             <button class="thesisCard" type="button" data-card="1">
               <div class="cardTop">
-                <span class="cardSuit">K</span>
-                <span class="cardRank">Pattern</span>
+                <span class="cardSuit">Persona</span>
+                <span class="cardRank">02</span>
               </div>
               <div class="cardVisual">
-                <img src="pic/tutor-persona-4.png" alt="Placeholder thesis card art" />
+                <img src="pic/cards/persona-student-sense-makers.png" alt="Student Sense-Makers card preview" />
               </div>
               <div>
-                <p class="cardName">System Card</p>
-                <p class="cardFlavor">For relationships, structures, and trade-offs.</p>
+                <p class="cardName">Student Sense-Makers</p>
+                <p class="cardFlavor">I want students to know what to do next.</p>
               </div>
             </button>
 
             <button class="thesisCard" type="button" data-card="2">
               <div class="cardTop">
-                <span class="cardSuit">Q</span>
-                <span class="cardRank">Prompt</span>
+                <span class="cardSuit">Instruction</span>
+                <span class="cardRank">03</span>
               </div>
               <div class="cardVisual">
-                <img src="pic/tutor-persona-6.png" alt="Placeholder thesis card art" />
+                <img src="pic/cards/instruction-what-is-my-motivation.png" alt="What's my motivation instruction card preview" />
               </div>
               <div>
-                <p class="cardName">Action Card</p>
-                <p class="cardFlavor">For stakeholder discussion and iteration.</p>
+                <p class="cardName">What’s My Motivation</p>
+                <p class="cardFlavor">What are you hoping feedback does here?</p>
               </div>
             </button>
           </div>
 
           <div class="deckDetail" id="deckDetail" aria-live="polite">
-            <p class="detailTitle">Signal Card</p>
+            <p class="detailTitle">Scale Thinkers</p>
             <p class="bodyText">
-              These cards now stay in a cleaner fan layout on both desktop and mobile, while the active card lifts without dragging the whole stack out of place.
+              A persona card for tutors or educators thinking at cohort level, with prompts about scale, repetition, and patterns across many submissions.
             </p>
             <div class="tagRow">
-              <span class="tag">PolyFeed strategy cards</span>
-              <span class="tag">Stable fan layout</span>
-              <span class="tag">Game-like exploration</span>
+              <span class="tag">Persona card</span>
+              <span class="tag">Cohort thinking</span>
+              <span class="tag">Feedback design</span>
             </div>
           </div>
         </article>
 
         <article class="module reveal">
           <p class="moduleEyebrow">Mascot Development / Swipe or click</p>
-          <h3 class="moduleTitle">Character Select</h3>
+          <h3 class="moduleTitle">Mascot Select</h3>
           <div class="galleryShell">
             <div class="galleryStage">
               <div class="galleryPortrait" id="galleryPortrait">
@@ -1679,7 +1851,7 @@
                   <img
                     id="galleryImage"
                     class="galleryImage"
-                    src="pic/tutor-persona-1.png"
+                    src="pic/Mascot/1.png"
                     alt="Mascot development concept"
                     draggable="false"
                   />
@@ -1688,35 +1860,35 @@
               </div>
             </div>
             <div class="galleryInfo">
-              <p class="galleryName" id="galleryName">Mascot 01</p>
+              <p class="galleryName" id="galleryName">Reader Cat</p>
               <p class="bodyText" id="galleryText">
-                A more open and welcoming mascot pose that reads clearly as a front-facing character option.
+                A softer research-facing mascot direction built around reading, study, and early exploration.
               </p>
-              <p class="miniNote">Swipe left or right on mobile.</p>
+              <p class="miniNote">Drag or swipe across the mascot to move between states.</p>
               <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
             </div>
           </div>
         </article>
 
         <article class="module reveal">
-          <p class="moduleEyebrow">MATT Website Loop</p>
-          <h3 class="moduleTitle">MATT Loop</h3>
-          <div class="videoModule" data-video-wrapper data-video-src="media/matt-loop.mp4">
+          <p class="moduleEyebrow">Website Loop</p>
+          <h3 class="moduleTitle">Website Demo</h3>
+          <div class="videoModule" data-video-wrapper data-video-src="Loop-website.mov">
             <div class="videoStage">
               <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
               <div class="fallbackVisual">
-                <img src="pic/tutor-persona-2.png" alt="Placeholder for MATT loop" />
+                <img src="pic/Mascot/2.png" alt="Fallback for website loop" />
               </div>
               <div class="playPulse" aria-hidden="true"></div>
-              <span class="videoBadge">Drop matt-loop.mp4 here</span>
+              <span class="videoBadge">Loop-website.mov</span>
             </div>
             <div class="videoMeta">
               <p class="bodyText">
-                `MP4` is perfectly fine. Once `media/matt-loop.mp4` exists, this panel will autoplay muted and loop automatically.
+                Your current website loop lives here and should autoplay muted when the browser can read the `.mov`.
               </p>
               <ul>
-                <li>Good for the More Than Words / MATT interaction flow</li>
-                <li>Recommended attributes: `autoplay`, `muted`, `loop`, `playsinline`</li>
+                <li>Uses the real `Loop-website.mov` file in the project root</li>
+                <li>If you later export an `mp4`, it will be even safer across browsers</li>
               </ul>
             </div>
           </div>
@@ -1729,7 +1901,7 @@
             <div class="videoStage">
               <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
               <div class="fallbackVisual">
-                <img src="pic/tutor-persona-3.png" alt="Placeholder for schema loop" />
+                <img src="pic/cards/persona-student-sense-makers.png" alt="Placeholder for schema loop" />
               </div>
               <div class="playPulse" aria-hidden="true"></div>
               <span class="videoBadge">Drop schema-loop.mp4 here</span>
@@ -1794,22 +1966,15 @@
           <a href="#">Add your LinkedIn URL</a>
         </div>
       </div>
-      <p class="footerNote reveal">
-        The remaining placeholders are your face image, real mascot PNG exports, and the two loop videos in `media/matt-loop.mp4` and `media/schema-loop.mp4`.
-      </p>
     </section>
   </main>
 
   <script>
     (() => {
-      const timelineDetail = document.getElementById("timelineDetail");
-      const timelinePrev = document.getElementById("timelinePrev");
-      const timelineNext = document.getElementById("timelineNext");
-      const timelineCount = document.getElementById("timelineCount");
-      const timelineProgress = document.getElementById("timelineProgress");
-      const timelineStops = [...document.querySelectorAll(".timelineStop")];
-      const timelineButtons = [...document.querySelectorAll("[data-timeline]")];
+      const workDetail = document.getElementById("workDetail");
+      const workButtons = [...document.querySelectorAll("[data-work]")];
       const thesisCards = [...document.querySelectorAll("[data-card]")];
+      const cardArena = document.querySelector(".cardArena");
       const deckDetail = document.getElementById("deckDetail");
       const revealNodes = [...document.querySelectorAll(".reveal")];
       const galleryPortrait = document.getElementById("galleryPortrait");
@@ -1822,12 +1987,12 @@
       const galleryNext = document.getElementById("galleryNext");
       const videoWrappers = [...document.querySelectorAll("[data-video-wrapper]")];
 
-      const timelineItems = [
+      const workItems = [
         {
           title: "PolyFeed Thesis",
           meta: "Monash University / Jun 2025 - Present",
           body: "Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with attention to feedback analytics uptake, co-design, and implementation strategy.",
-          tags: ["Feedback analytics", "Co-design", "PolyFeed"]
+          tags: ["Feedback analytics", "Co-design", "Implementation"]
         },
         {
           title: "More Than Words",
@@ -1851,65 +2016,61 @@
 
       const thesisItems = [
         {
-          title: "Signal Card",
-          body: "A quick entry card for implementation strategies or stakeholder concerns. The layout is now anchored so each card stays in place instead of jumping across the fan.",
-          tags: ["Strategy cards", "Stable fan", "Game-like exploration"]
+          title: "Scale Thinkers",
+          body: "A persona card for tutors or educators thinking at cohort level, with prompts about scale, repetition, and patterns across many submissions.",
+          tags: ["Persona card", "Cohort thinking", "Feedback design"]
         },
         {
-          title: "System Card",
-          body: "A placeholder for cards that explain relationships, tensions, or structural patterns across the thesis and PolyFeed implementation context.",
-          tags: ["Framework card", "Systems view", "Comparison"]
+          title: "Student Sense-Makers",
+          body: "A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.",
+          tags: ["Persona card", "Next steps", "Consistency"]
         },
         {
-          title: "Action Card",
-          body: "A placeholder for move-based or prompt-based cards that support reflection, co-design discussion, and iterative decision-making.",
-          tags: ["Prompt card", "Co-design", "Iteration"]
+          title: "What’s My Motivation",
+          body: "An instruction card for surfacing what feedback is actually meant to do, then turning those intentions into more specific and workable ideas.",
+          tags: ["Instruction card", "Tutor intentions", "Design prompts"]
         }
       ];
 
       const mascotItems = [
         {
-          name: "Mascot 01",
-          image: "pic/tutor-persona-1.png",
-          text: "A more open and welcoming mascot pose that reads clearly as a front-facing character option."
+          name: "Reader Cat",
+          image: "pic/Mascot/1.png",
+          text: "A softer research-facing mascot direction built around reading, study, and early exploration."
         },
         {
-          name: "Mascot 02",
-          image: "pic/tutor-persona-2.png",
-          text: "A more task-oriented version that feels useful for interface guidance or step-based prompts."
+          name: "Studio Cat",
+          image: "pic/Mascot/2.png",
+          text: "A making-focused state that feels closer to visual development, prototyping, and creative exploration."
         },
         {
-          name: "Mascot 03",
-          image: "pic/tutor-persona-3.png",
-          text: "A softer and more reflective state that suits explanation, pause, or slower story moments."
+          name: "Builder Cat",
+          image: "pic/Mascot/3.png",
+          text: "A planning and systems version that fits process mapping, implementation logic, and structured build work."
         },
         {
-          name: "Mascot 04",
-          image: "pic/tutor-persona-4.png",
-          text: "A diagram-friendly mascot direction that could support more framework-heavy or instructional scenes."
+          name: "Play Cat",
+          image: "pic/Mascot/4.png",
+          text: "A brighter and more expressive state that pushes the playful side of the mascot family."
         },
         {
-          name: "Mascot 05",
-          image: "pic/tutor-persona-5.png",
-          text: "A more expressive and lively state that leans further into the character-select feeling."
-        },
-        {
-          name: "Mascot 06",
-          image: "pic/tutor-persona-6.png",
-          text: "A quieter and more grounded concept that still feels consistent with the larger mascot family."
+          name: "Courier Cat",
+          image: "pic/Mascot/5.png",
+          text: "A delivery and rollout state that feels useful for communication, movement, and getting work out into the world."
         }
       ];
 
-      let timelineIndex = 0;
+      let workIndex = 0;
+      let deckIndex = 0;
       let mascotIndex = 0;
-      let touchStartX = null;
+      let deckSwipeLockUntil = 0;
 
-      function renderTimeline(index) {
-        const item = timelineItems[index];
-        if (!item || !timelineDetail) return;
-        timelineIndex = index;
+      function renderWork(index) {
+        const item = workItems[index];
+        if (!item || !workDetail) return;
+        workIndex = index;
 
-        timelineDetail.innerHTML = `
+        workDetail.innerHTML = `
           <p class="detailTitle">${item.title}</p>
           <p class="detailMeta">${item.meta}</p>
           <p class="bodyText">${item.body}</p>
@@ -1918,22 +2079,15 @@
           </div>
         `;
 
-        timelineStops.forEach((stop, stopIndex) => {
-          stop.classList.toggle("is-active", stopIndex === index);
+        workButtons.forEach((button, buttonIndex) => {
+          button.classList.toggle("is-active", buttonIndex === index);
         });
-
-        if (timelineCount) {
-          timelineCount.textContent = `${String(index + 1).padStart(2, "0")} / ${String(timelineItems.length).padStart(2, "0")}`;
-        }
-
-        if (timelineProgress) {
-          timelineProgress.style.width = `${((index + 1) / timelineItems.length) * 100}%`;
-        }
       }
 
       function renderDeck(index) {
         const item = thesisItems[index];
         if (!item || !deckDetail) return;
+        deckIndex = index;
 
         deckDetail.innerHTML = `
           <p class="detailTitle">${item.title}</p>
@@ -1973,6 +2127,51 @@
         renderMascot(mascotIndex);
       }
 
+      function moveDeck(direction) {
+        deckIndex = (deckIndex + direction + thesisItems.length) % thesisItems.length;
+        renderDeck(deckIndex);
+      }
+
+      function bindSwipe(target, onPrev, onNext, ignoreSelector) {
+        if (!target) return;
+        let startX = null;
+        let startY = null;
+
+        const reset = () => {
+          startX = null;
+          startY = null;
+          target.classList.remove("is-dragging");
+        };
+
+        target.addEventListener("pointerdown", (event) => {
+          if (event.pointerType === "mouse" && event.button !== 0) return;
+          if (ignoreSelector && event.target.closest(ignoreSelector)) return;
+          startX = event.clientX;
+          startY = event.clientY;
+          target.classList.add("is-dragging");
+        });
+
+        target.addEventListener("pointerup", (event) => {
+          if (startX === null || startY === null) return;
+          const deltaX = event.clientX - startX;
+          const deltaY = event.clientY - startY;
+          reset();
+
+          if (Math.abs(deltaX) < 34 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+          if (deltaX > 0) {
+            onPrev();
+          } else {
+            onNext();
+          }
+        });
+
+        target.addEventListener("pointercancel", reset);
+        target.addEventListener("pointerleave", (event) => {
+          if (event.pointerType === "mouse") reset();
+        });
+        target.addEventListener("dragstart", (event) => event.preventDefault());
+      }
+
       mascotItems.forEach((item, index) => {
         if (!galleryDots) return;
         const dot = document.createElement("button");
@@ -1987,26 +2186,15 @@
         galleryDots.appendChild(dot);
       });
 
-      timelineButtons.forEach((button) => {
+      workButtons.forEach((button) => {
         button.addEventListener("click", () => {
-          renderTimeline(Number(button.dataset.timeline));
+          renderWork(Number(button.dataset.work));
         });
       });
 
-      if (timelinePrev) {
-        timelinePrev.addEventListener("click", () => {
-          renderTimeline((timelineIndex - 1 + timelineItems.length) % timelineItems.length);
-        });
-      }
-
-      if (timelineNext) {
-        timelineNext.addEventListener("click", () => {
-          renderTimeline((timelineIndex + 1) % timelineItems.length);
-        });
-      }
-
       thesisCards.forEach((card) => {
         card.addEventListener("click", () => {
+          if (Date.now() < deckSwipeLockUntil) return;
           renderDeck(Number(card.dataset.card));
         });
       });
@@ -2023,21 +2211,14 @@
         galleryImage.addEventListener("dragstart", (event) => event.preventDefault());
       }
 
-      if (galleryFigure) {
-        galleryFigure.addEventListener("touchstart", (event) => {
-          touchStartX = event.changedTouches[0].clientX;
-        }, { passive: true });
-
-        galleryFigure.addEventListener("touchend", (event) => {
-          if (touchStartX === null) return;
-          const touchEndX = event.changedTouches[0].clientX;
-          const delta = touchEndX - touchStartX;
-          touchStartX = null;
-
-          if (Math.abs(delta) < 34) return;
-          moveMascot(delta > 0 ? -1 : 1);
-        }, { passive: true });
-      }
+      bindSwipe(galleryFigure, () => moveMascot(-1), () => moveMascot(1), ".galleryCursor");
+      bindSwipe(cardArena, () => {
+        deckSwipeLockUntil = Date.now() + 220;
+        moveDeck(-1);
+      }, () => {
+        deckSwipeLockUntil = Date.now() + 220;
+        moveDeck(1);
+      });
 
       videoWrappers.forEach((wrapper) => {
         const video = wrapper.querySelector(".loopVideo");
@@ -2053,6 +2234,7 @@
           video.hidden = false;
           fallback.classList.add("is-hidden");
           if (pulse) pulse.style.display = "none";
+          video.play().catch(() => {});
         }, { once: true });
 
         video.addEventListener("error", () => {
@@ -2064,7 +2246,7 @@
         video.load();
       });
 
-      renderTimeline(timelineIndex);
+      renderWork(workIndex);
       renderDeck(0);
       renderMascot(mascotIndex);
 
