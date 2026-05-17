@@ -53,6 +53,18 @@
       cursor: var(--body-cursor);
     }
 
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(17, 70, 216, 0.08), transparent 18%),
+        radial-gradient(circle at 78% 64%, rgba(17, 70, 216, 0.06), transparent 20%);
+      animation: auraDrift 12s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
     a,
     button,
     summary,
@@ -295,12 +307,14 @@
       font-size: clamp(3rem, 8.8vw, 5.8rem);
       letter-spacing: 0.01em;
       white-space: nowrap;
+      animation: titleGlow 4.8s ease-in-out infinite;
     }
 
     .sectionTitle {
       font-size: clamp(2rem, 6vw, 4rem);
       line-height: 0.95;
       margin-bottom: 18px;
+      animation: titleGlow 5.4s ease-in-out infinite;
     }
 
     .detailTitle,
@@ -339,6 +353,32 @@
       gap: 12px;
     }
 
+    .statCard {
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 18px;
+      padding: 12px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.18)),
+        rgba(255, 255, 255, 0.2);
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      min-height: 100%;
+    }
+
+    .statToken {
+      width: 34px;
+      height: 34px;
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: rgba(17, 70, 216, 0.08);
+      animation: tokenGlow 3.6s ease-in-out infinite;
+    }
+
     .factLabel,
     .moduleEyebrow,
     .timelineDate,
@@ -372,7 +412,7 @@
 
     .timelineGrid {
       display: grid;
-      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+      grid-template-columns: 1fr;
       gap: 18px;
       align-items: start;
     }
@@ -428,6 +468,7 @@
 
     .timelineStop.is-active .timelineBtn {
       background: var(--blue);
+      animation: pointGlow 2.1s ease-in-out infinite;
     }
 
     .timelineText {
@@ -438,6 +479,7 @@
 
     .timelineSide {
       display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.92fr);
       gap: 18px;
     }
 
@@ -672,8 +714,16 @@
       overflow: hidden;
     }
 
+    .galleryFigure {
+      position: relative;
+      width: min(100%, 300px);
+      min-height: 240px;
+      display: grid;
+      place-items: center;
+    }
+
     .galleryImage {
-      width: min(78%, 250px);
+      width: min(82%, 238px);
       transition: opacity 180ms ease, transform 220ms ease;
     }
 
@@ -698,11 +748,11 @@
     }
 
     .galleryCursor.prev {
-      left: 14px;
+      left: -6px;
     }
 
     .galleryCursor.next {
-      right: 14px;
+      right: -6px;
     }
 
     .galleryInfo {
@@ -938,6 +988,42 @@
       }
     }
 
+    @keyframes titleGlow {
+      0%, 100% {
+        text-shadow: 0 0 0 rgba(17, 70, 216, 0);
+      }
+      50% {
+        text-shadow: 0 0 18px rgba(17, 70, 216, 0.14);
+      }
+    }
+
+    @keyframes tokenGlow {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(17, 70, 216, 0);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(17, 70, 216, 0.08);
+      }
+    }
+
+    @keyframes pointGlow {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(17, 70, 216, 0);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(17, 70, 216, 0.12);
+      }
+    }
+
+    @keyframes auraDrift {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        transform: translate3d(6px, -8px, 0);
+      }
+    }
+
     @keyframes pulseRing {
       0% {
         box-shadow: 0 0 0 0 rgba(17, 70, 216, 0.24);
@@ -953,7 +1039,6 @@
     @media (max-width: 980px) {
       .hero,
       .introRow,
-      .timelineGrid,
       .showcaseBoard,
       .twoCol,
       .contactGrid {
@@ -963,6 +1048,10 @@
       .factGrid,
       .timelineLine {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .timelineSide {
+        grid-template-columns: 1fr;
       }
 
       .thesisCard {
@@ -1036,6 +1125,10 @@
         grid-template-columns: 1fr;
       }
 
+      .timelineSide {
+        grid-template-columns: 1fr;
+      }
+
       .timelineLine::before {
         left: 10px;
         right: auto;
@@ -1102,11 +1195,11 @@
 
       .galleryPortrait {
         min-height: 300px;
-        padding: 18px 56px;
+        padding: 18px 42px;
       }
 
       .galleryImage {
-        width: min(80%, 210px);
+        width: min(84%, 205px);
       }
 
       .galleryCursor {
@@ -1117,11 +1210,11 @@
       }
 
       .galleryCursor.prev {
-        left: 8px;
+        left: -2px;
       }
 
       .galleryCursor.next {
-        right: 8px;
+        right: -2px;
       }
     }
 
@@ -1160,50 +1253,48 @@
             <img
               class="portraitImg"
               src="pic/chibi5.png"
-              alt="Profile image placeholder"
+              alt="Profile image"
             />
           </div>
-          <div class="portraitBadge">Face Placeholder</div>
         </div>
-        <p class="miniNote">
-          This left panel is simplified now so it reads as a profile-photo area instead of another interactive widget.
-        </p>
       </div>
 
       <div class="heroRight">
         <div class="nameBlock reveal">
-          <div class="eyebrow">Foo (Jackie) Jie Kie</div>
+          <div class="eyebrow">Student Researcher / Melbourne + Malaysia</div>
           <h1 class="heroTitle">Jackie Foo</h1>
         </div>
 
         <div class="introRow">
           <div class="panel reveal">
             <p class="introText">
-              <strong>PhD EOI candidate</strong> interested in human-centred learning analytics,
-              feedback analytics, co-design, and educational technology implementation.
-              I work across research, stakeholder-facing design, and practical web-based
-              systems that turn real user needs into clearer and more sustainable tools.
+              Student researcher interested in how technology can better support learning,
+              communication, and feedback in real-world settings. I have worked on
+              feedback analytics and co-design research, assistive technology projects
+              involving local AI experimentation, and implementation work with different
+              stakeholders. I am interested in human-centred research that turns real
+              user needs into practical and sustainable tools.
             </p>
           </div>
 
           <div class="panel factCard reveal">
             <div class="factGrid">
-              <div>
+              <div class="statCard">
+                <div class="statToken">01</div>
                 <p class="factLabel">Base</p>
                 <p class="factValue">Melbourne / Malaysia</p>
               </div>
-              <div>
+              <div class="statCard">
+                <div class="statToken">02</div>
                 <p class="factLabel">Current Study</p>
                 <p class="factValue">Master of Data Science, Monash</p>
               </div>
-              <div>
-                <p class="factLabel">Focus Areas</p>
+              <div class="statCard">
+                <div class="statToken">03</div>
+                <p class="factLabel">Research Focus</p>
                 <p class="factValue">Feedback analytics, HCI, co-design</p>
               </div>
             </div>
-            <p class="helper">
-              The copy is now much closer to your actual research profile instead of a generic design-portfolio intro.
-            </p>
           </div>
         </div>
       </div>
@@ -1212,7 +1303,7 @@
     <section id="timeline" class="section">
       <h2 class="sectionTitle reveal">Research / Project Timeline</h2>
       <p class="sectionLead reveal">
-        A more accurate snapshot of your current academic and project track. Click each stop to swap the research focus panel, and use the side column for experience and service.
+        A snapshot of the research, implementation, and project threads shaping my current work. Click each stop to swap the focus panel.
       </p>
 
       <div class="timelineGrid">
@@ -1354,14 +1445,16 @@
           <div class="galleryShell">
             <div class="galleryStage">
               <div class="galleryPortrait" id="galleryPortrait">
-                <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
-                <img
-                  id="galleryImage"
-                  class="galleryImage"
-                  src="pic/tutor-persona-1.png"
-                  alt="Mascot development concept"
-                />
-                <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
+                <div class="galleryFigure">
+                  <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
+                  <img
+                    id="galleryImage"
+                    class="galleryImage"
+                    src="pic/tutor-persona-1.png"
+                    alt="Mascot development concept"
+                  />
+                  <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
+                </div>
               </div>
             </div>
             <div class="galleryInfo">
@@ -1369,6 +1462,7 @@
               <p class="bodyText" id="galleryText">
                 A more open and welcoming mascot pose that reads clearly as a front-facing character option.
               </p>
+              <p class="miniNote">Swipe left or right on mobile.</p>
               <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
             </div>
           </div>
