@@ -6,7 +6,7 @@
   <title>Jackie Foo | CV Poster</title>
   <meta
     name="description"
-    content="Single-page CV poster for Jackie Foo with a research timeline, thesis showcase, mascot gallery, and looping media placeholders."
+    content="Single-page CV poster for Jackie Foo with a research timeline, mascot selector, thesis card showcase, and looping media placeholders."
   />
   <meta name="theme-color" content="#0d47d9" />
 
@@ -28,6 +28,8 @@
       --line: rgba(17, 70, 216, 0.34);
       --shadow: 0 18px 44px rgba(17, 70, 216, 0.12);
       --max: 1220px;
+      --body-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='none' stroke='%231146d8' stroke-width='2'/%3E%3Cpath d='M12 1v4M12 19v4M1 12h4M19 12h4' stroke='%231146d8' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 12 12, auto;
+      --action-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 3l12 8-5 1 3 6-2 1-3-6-4 4z' fill='%231146d8' stroke='%230a329f' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 4 4, pointer;
     }
 
     * {
@@ -48,10 +50,15 @@
         radial-gradient(circle at 85% 14%, rgba(255, 255, 255, 0.28), transparent 22%),
         linear-gradient(180deg, var(--paper) 0%, #f7ead2 44%, var(--paper-2) 100%);
       overflow-x: hidden;
+      cursor: var(--body-cursor);
     }
 
     a,
-    button {
+    button,
+    summary,
+    .galleryDots button,
+    .thesisCard {
+      cursor: var(--action-cursor);
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -114,7 +121,7 @@
 
     .brand {
       font-family: "Bungee", sans-serif;
-      font-size: clamp(1rem, 2.2vw, 1.24rem);
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
       line-height: 1;
       letter-spacing: 0.02em;
       text-transform: uppercase;
@@ -128,7 +135,6 @@
     }
 
     .nav a,
-    .chip,
     .galleryCursor {
       border: 2px solid var(--blue);
       border-radius: 999px;
@@ -142,14 +148,11 @@
       text-transform: uppercase;
       padding: 8px 12px;
       transition: transform 160ms ease, background 160ms ease, color 160ms ease;
-      cursor: pointer;
     }
 
     .nav a:hover,
-    .chip:hover,
-    .galleryCursor:hover,
     .nav a:focus-visible,
-    .chip:focus-visible,
+    .galleryCursor:hover,
     .galleryCursor:focus-visible {
       background: var(--blue);
       color: var(--paper);
@@ -165,13 +168,13 @@
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1.22fr);
+      grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
       gap: 22px;
       align-items: start;
     }
 
-    .portraitCard,
     .panel,
+    .portraitCard,
     .detailCard,
     .experienceCard,
     .module,
@@ -179,11 +182,12 @@
     .contactBlock {
       border: 2px solid var(--blue);
       border-radius: 24px;
-      background: rgba(255, 253, 247, 0.7);
+      background: rgba(255, 253, 247, 0.72);
       padding: 16px;
     }
 
-    .heroLeft {
+    .heroLeft,
+    .heroRight {
       display: grid;
       gap: 16px;
       align-content: start;
@@ -191,16 +195,16 @@
 
     .portraitCard {
       padding: 18px;
+      min-height: 340px;
       position: relative;
       overflow: hidden;
-      min-height: 340px;
     }
 
     .portraitCard::before {
       content: "";
       position: absolute;
       inset: 18px;
-      border: 2px solid var(--line);
+      border: 2px solid rgba(17, 70, 216, 0.18);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -216,7 +220,7 @@
 
     .portraitRing {
       position: absolute;
-      inset: 6%;
+      inset: 7%;
       border: 2px solid var(--blue);
       border-radius: 50%;
     }
@@ -224,47 +228,30 @@
     .portraitImg {
       position: relative;
       z-index: 1;
-      width: min(84%, 280px);
-      filter: saturate(0) contrast(1.08) brightness(1.12);
+      width: min(82%, 270px);
+      filter: saturate(0) contrast(1.06) brightness(1.1);
       mix-blend-mode: multiply;
-      transition: transform 220ms ease, opacity 180ms ease;
     }
 
-    .portraitCard:hover .portraitImg {
-      transform: rotate(-3deg) scale(1.03);
-    }
-
-    .portraitControls {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .chip {
-      min-width: 0;
-      background: rgba(255, 255, 255, 0.4);
-    }
-
-    .chip.is-active,
-    .chip[aria-pressed="true"] {
-      background: var(--blue);
-      color: var(--paper);
+    .portraitBadge {
+      margin: 16px auto 0;
+      width: fit-content;
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.36);
     }
 
     .miniNote,
     .helper {
       margin: 0;
       font-size: 0.82rem;
-      line-height: 1.5;
+      line-height: 1.52;
       color: var(--blue-dark);
-    }
-
-    .heroRight {
-      display: grid;
-      gap: 18px;
-      align-content: start;
     }
 
     .nameBlock {
@@ -295,7 +282,8 @@
     .heroTitle,
     .sectionTitle,
     .detailTitle,
-    .moduleTitle {
+    .moduleTitle,
+    .galleryName {
       margin: 0;
       font-family: "Bungee", sans-serif;
       color: var(--blue);
@@ -304,8 +292,9 @@
     }
 
     .heroTitle {
-      font-size: clamp(3.25rem, 10vw, 7.5rem);
+      font-size: clamp(3rem, 8.8vw, 5.8rem);
       letter-spacing: 0.01em;
+      white-space: nowrap;
     }
 
     .sectionTitle {
@@ -315,22 +304,23 @@
     }
 
     .detailTitle,
-    .moduleTitle {
-      font-size: clamp(1.45rem, 3vw, 2.2rem);
+    .moduleTitle,
+    .galleryName {
+      font-size: clamp(1.35rem, 3vw, 2rem);
     }
 
     .introRow {
       display: grid;
-      grid-template-columns: minmax(0, 1.12fr) minmax(240px, 0.88fr);
+      grid-template-columns: minmax(0, 1.08fr) minmax(250px, 0.92fr);
       gap: 18px;
       align-items: start;
     }
 
     .introText {
       margin: 0;
-      font-size: clamp(1rem, 1.8vw, 1.2rem);
-      line-height: 1.42;
-      max-width: 34ch;
+      font-size: clamp(1rem, 1.6vw, 1.14rem);
+      line-height: 1.5;
+      max-width: 36ch;
     }
 
     .introText strong {
@@ -350,9 +340,11 @@
     }
 
     .factLabel,
-    .kicker,
-    .moduleEyebrow {
-      margin: 0 0 4px;
+    .moduleEyebrow,
+    .timelineDate,
+    .timelineLabel,
+    .kicker {
+      margin: 0;
       font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 0.08em;
@@ -363,24 +355,24 @@
     .detailMeta,
     .bodyText {
       margin: 0;
-      line-height: 1.55;
+      line-height: 1.58;
     }
 
     .factValue {
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       font-weight: 700;
     }
 
     .sectionLead {
       margin: -6px 0 20px;
-      max-width: 62ch;
+      max-width: 64ch;
       font-size: 0.96rem;
       line-height: 1.6;
     }
 
     .timelineGrid {
       display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(310px, 0.92fr);
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
       gap: 18px;
       align-items: start;
     }
@@ -424,7 +416,6 @@
       border-radius: 50%;
       border: 2px solid var(--blue);
       background: var(--paper);
-      cursor: pointer;
       transition: transform 160ms ease, background 160ms ease;
     }
 
@@ -439,19 +430,10 @@
       background: var(--blue);
     }
 
-    .timelineLabel,
-    .timelineDate {
-      margin: 0;
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
     .timelineText {
       margin: 0;
       font-size: 0.88rem;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .timelineSide {
@@ -464,7 +446,6 @@
       display: grid;
       gap: 12px;
       align-content: start;
-      min-height: 100%;
     }
 
     .tagRow {
@@ -502,7 +483,7 @@
     }
 
     .experienceItem h4 {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
@@ -510,7 +491,7 @@
     .experienceItem p {
       margin-top: 6px;
       font-size: 0.84rem;
-      line-height: 1.45;
+      line-height: 1.48;
     }
 
     .showcaseBoard {
@@ -536,27 +517,26 @@
     }
 
     .cardArena {
-      min-height: 420px;
+      min-height: 380px;
       position: relative;
       display: grid;
       place-items: center;
-      padding: 22px;
+      padding: 26px 18px 10px;
     }
 
     .thesisCard {
       --card-x: 0px;
       --card-y: 0px;
       --card-rotate: 0deg;
-      --card-scale: 1;
       position: absolute;
       left: 50%;
       top: 50%;
-      width: min(31vw, 186px);
+      width: min(28vw, 176px);
       aspect-ratio: 2.5 / 3.5;
       border: 2px solid var(--blue);
       border-radius: 26px;
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.34)),
         var(--paper);
       padding: 12px;
       display: grid;
@@ -564,34 +544,32 @@
       box-shadow: 0 18px 30px rgba(17, 70, 216, 0.12);
       transform:
         translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y)))
-        rotate(var(--card-rotate))
-        scale(var(--card-scale));
+        rotate(var(--card-rotate));
       transform-origin: 50% 85%;
       transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-      cursor: pointer;
       animation: floatCard 4.4s ease-in-out infinite;
     }
 
     .thesisCard:nth-of-type(1) {
-      --card-x: -150px;
-      --card-y: 10px;
-      --card-rotate: -14deg;
+      --card-x: -108px;
+      --card-y: 20px;
+      --card-rotate: -13deg;
       z-index: 1;
       animation-delay: -0.8s;
     }
 
     .thesisCard:nth-of-type(2) {
       --card-x: 0px;
-      --card-y: -6px;
+      --card-y: 36px;
       --card-rotate: 0deg;
       z-index: 2;
       animation-delay: -0.2s;
     }
 
     .thesisCard:nth-of-type(3) {
-      --card-x: 150px;
-      --card-y: 10px;
-      --card-rotate: 14deg;
+      --card-x: 108px;
+      --card-y: 20px;
+      --card-rotate: 13deg;
       z-index: 1;
       animation-delay: -1.4s;
     }
@@ -599,11 +577,9 @@
     .thesisCard:hover,
     .thesisCard:focus-visible,
     .thesisCard.is-active {
-      --card-scale: 1.04;
       transform:
-        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y) - 14px))
-        rotate(var(--card-rotate))
-        scale(var(--card-scale));
+        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y) - 16px))
+        rotate(var(--card-rotate));
       box-shadow: 0 24px 40px rgba(17, 70, 216, 0.18);
       border-color: var(--blue-dark);
       outline: none;
@@ -619,20 +595,19 @@
 
     .cardSuit {
       font-family: "Bungee", sans-serif;
-      font-size: 1.2rem;
+      font-size: 1.12rem;
       line-height: 1;
     }
 
     .cardRank {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     .cardVisual,
-    .videoFallback,
-    .schemaFallback {
+    .fallbackVisual {
       border: 2px solid rgba(17, 70, 216, 0.18);
       border-radius: 18px;
       background:
@@ -643,33 +618,28 @@
 
     .cardVisual {
       margin: 14px 0;
+      min-height: 154px;
       display: grid;
       place-items: center;
-      min-height: 170px;
     }
 
     .cardVisual img,
     .galleryImage,
-    .videoFallback img,
-    .schemaFallback img {
+    .fallbackVisual img {
       width: 100%;
       filter: saturate(0) contrast(1.04) brightness(1.06);
       mix-blend-mode: multiply;
     }
 
-    .cardName {
-      margin: 0;
-      font-family: "Bungee", sans-serif;
-      font-size: 1.36rem;
-      line-height: 0.92;
-      color: var(--blue);
-      text-transform: uppercase;
+    .cardName,
+    .galleryName {
+      font-size: clamp(1.26rem, 2.4vw, 1.7rem);
     }
 
     .cardFlavor {
       margin: 8px 0 0;
-      font-size: 0.78rem;
-      line-height: 1.45;
+      font-size: 0.76rem;
+      line-height: 1.42;
     }
 
     .deckDetail,
@@ -685,10 +655,31 @@
 
     .galleryStage {
       position: relative;
-      min-height: 420px;
+    }
+
+    .galleryPortrait {
+      position: relative;
+      min-height: 330px;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 24px;
+      background:
+        linear-gradient(160deg, rgba(17, 70, 216, 0.08), transparent 56%),
+        rgba(255, 255, 255, 0.46);
       display: grid;
       place-items: center;
-      padding: 12px 66px;
+      padding: 18px 72px;
+      touch-action: pan-y;
+      overflow: hidden;
+    }
+
+    .galleryImage {
+      width: min(78%, 250px);
+      transition: opacity 180ms ease, transform 220ms ease;
+    }
+
+    .galleryPortrait.is-changing .galleryImage {
+      opacity: 0.18;
+      transform: translateX(10px) scale(0.98);
     }
 
     .galleryCursor {
@@ -700,56 +691,23 @@
       padding: 0;
       display: grid;
       place-items: center;
-      font-size: 1.3rem;
+      font-size: 1.36rem;
       line-height: 1;
       z-index: 3;
+      background: rgba(248, 236, 217, 0.92);
     }
 
     .galleryCursor.prev {
-      left: 8px;
+      left: 14px;
     }
 
     .galleryCursor.next {
-      right: 8px;
-    }
-
-    .galleryPortrait {
-      width: 100%;
-      min-height: 360px;
-      border: 2px solid rgba(17, 70, 216, 0.18);
-      border-radius: 24px;
-      background:
-        linear-gradient(160deg, rgba(17, 70, 216, 0.1), transparent 56%),
-        rgba(255, 255, 255, 0.46);
-      display: grid;
-      place-items: center;
-      padding: 18px;
-      touch-action: pan-y;
-      overflow: hidden;
-    }
-
-    .galleryImage {
-      width: min(82%, 290px);
-      transition: opacity 180ms ease, transform 220ms ease;
-    }
-
-    .galleryPortrait.is-changing .galleryImage {
-      opacity: 0.18;
-      transform: translateX(10px) scale(0.98);
+      right: 14px;
     }
 
     .galleryInfo {
       display: grid;
       gap: 8px;
-    }
-
-    .galleryName {
-      margin: 0;
-      font-family: "Bungee", sans-serif;
-      font-size: clamp(1.36rem, 3vw, 2rem);
-      line-height: 0.92;
-      color: var(--blue);
-      text-transform: uppercase;
     }
 
     .galleryDots {
@@ -764,21 +722,15 @@
       border: 2px solid var(--blue);
       background: transparent;
       padding: 0;
-      cursor: pointer;
     }
 
     .galleryDots button.is-active {
       background: var(--blue);
     }
 
-    .videoModule {
-      display: grid;
-      gap: 14px;
-    }
-
     .videoStage {
       position: relative;
-      min-height: 304px;
+      min-height: 290px;
       border: 2px solid rgba(17, 70, 216, 0.18);
       border-radius: 20px;
       overflow: hidden;
@@ -791,11 +743,10 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.34);
     }
 
-    .videoFallback,
-    .schemaFallback {
+    .fallbackVisual {
       position: absolute;
       inset: 0;
       display: grid;
@@ -803,19 +754,16 @@
       padding: 18px;
     }
 
-    .videoFallback img,
-    .schemaFallback img {
-      width: 92%;
+    .fallbackVisual img {
+      width: 90%;
     }
 
-    .videoFallback.is-hidden,
-    .schemaFallback.is-hidden,
+    .fallbackVisual.is-hidden,
     .loopVideo[hidden] {
       display: none;
     }
 
-    .videoBadge,
-    .loopBadge {
+    .videoBadge {
       position: absolute;
       left: 16px;
       bottom: 16px;
@@ -886,7 +834,7 @@
       padding-left: 18px;
       display: grid;
       gap: 8px;
-      line-height: 1.45;
+      line-height: 1.48;
     }
 
     .toolGrid {
@@ -964,7 +912,7 @@
 
     .footerNote {
       margin: 18px 0 0;
-      max-width: 54ch;
+      max-width: 56ch;
       font-size: 0.86rem;
       line-height: 1.5;
       color: rgba(248, 236, 217, 0.78);
@@ -1018,7 +966,15 @@
       }
 
       .thesisCard {
-        width: min(43vw, 214px);
+        width: min(38vw, 184px);
+      }
+
+      .thesisCard:nth-of-type(1) {
+        --card-x: -94px;
+      }
+
+      .thesisCard:nth-of-type(3) {
+        --card-x: 94px;
       }
     }
 
@@ -1028,6 +984,13 @@
         margin: 6px auto;
       }
 
+      .masthead {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 10px;
+      }
+
       .masthead,
       .section,
       .contactBand {
@@ -1035,12 +998,35 @@
         padding-right: 14px;
       }
 
-      .portraitCard {
-        min-height: auto;
+      .brand {
+        font-size: 0.92rem;
+      }
+
+      .nav {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+      }
+
+      .nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav a,
+      .galleryCursor {
+        font-size: 0.72rem;
+        padding: 7px 10px;
+      }
+
+      .nav a {
+        white-space: nowrap;
       }
 
       .heroTitle {
-        font-size: clamp(2.65rem, 19vw, 4.5rem);
+        font-size: clamp(2.25rem, 13vw, 3.3rem);
+        line-height: 0.98;
       }
 
       .factGrid,
@@ -1070,61 +1056,72 @@
         margin: 0;
       }
 
-      .timelineLabel,
       .timelineDate,
+      .timelineLabel,
       .timelineText {
         grid-column: 2;
       }
 
-      .galleryStage {
-        min-height: 360px;
-        padding: 0;
-      }
-
-      .galleryCursor {
-        width: 46px;
-        height: 46px;
-        margin-top: -23px;
-        top: auto;
-        bottom: 12px;
-      }
-
-      .galleryCursor.prev {
-        left: 12px;
-      }
-
-      .galleryCursor.next {
-        right: 12px;
-      }
-
-      .galleryPortrait {
-        min-height: 300px;
+      .introText,
+      .bodyText,
+      .timelineText,
+      .experienceItem p,
+      .videoMeta li {
+        font-size: 0.94rem;
       }
 
       .cardArena {
-        min-height: 620px;
+        min-height: 352px;
+        padding-top: 22px;
       }
 
       .thesisCard {
-        width: min(70vw, 230px);
+        width: min(46vw, 162px);
       }
 
       .thesisCard:nth-of-type(1) {
-        --card-x: -6px;
-        --card-y: -126px;
-        --card-rotate: -10deg;
+        --card-x: -74px;
+        --card-y: 8px;
+        --card-rotate: -12deg;
       }
 
       .thesisCard:nth-of-type(2) {
         --card-x: 0px;
         --card-y: 18px;
-        --card-rotate: 0deg;
       }
 
       .thesisCard:nth-of-type(3) {
-        --card-x: 6px;
-        --card-y: 162px;
-        --card-rotate: 10deg;
+        --card-x: 74px;
+        --card-y: 8px;
+        --card-rotate: 12deg;
+      }
+
+      .cardVisual {
+        min-height: 130px;
+      }
+
+      .galleryPortrait {
+        min-height: 300px;
+        padding: 18px 56px;
+      }
+
+      .galleryImage {
+        width: min(80%, 210px);
+      }
+
+      .galleryCursor {
+        width: 44px;
+        height: 44px;
+        margin-top: -22px;
+        font-size: 1.1rem;
+      }
+
+      .galleryCursor.prev {
+        left: 8px;
+      }
+
+      .galleryCursor.next {
+        right: 8px;
       }
     }
 
@@ -1161,57 +1158,51 @@
           <div class="portraitWrap">
             <div class="portraitRing" aria-hidden="true"></div>
             <img
-              id="portraitImage"
               class="portraitImg"
-              src="/pic/chibi5.png"
-              alt="Illustrated portrait of Jackie Foo"
+              src="pic/chibi5.png"
+              alt="Profile image placeholder"
             />
           </div>
-          <div class="portraitControls" aria-label="Portrait styles">
-            <button class="chip is-active" type="button" data-portrait="/pic/chibi5.png" aria-pressed="true">Main</button>
-            <button class="chip" type="button" data-portrait="/pic/chibi1.png" aria-pressed="false">Sketch</button>
-            <button class="chip" type="button" data-portrait="/pic/chibi2.png" aria-pressed="false">Studio</button>
-            <button class="chip" type="button" data-portrait="/pic/chibi3.png" aria-pressed="false">Play</button>
-          </div>
+          <div class="portraitBadge">Face Placeholder</div>
         </div>
         <p class="miniNote">
-          Mascot interaction is now fuller: six states in the showcase, cursor-like selectors, and swipe support kept for mobile.
+          This left panel is simplified now so it reads as a profile-photo area instead of another interactive widget.
         </p>
       </div>
 
       <div class="heroRight">
         <div class="nameBlock reveal">
-          <div class="eyebrow">Hello, I’m Jackie</div>
-          <h1 class="heroTitle">Jackie<br />Foo</h1>
+          <div class="eyebrow">Foo (Jackie) Jie Kie</div>
+          <h1 class="heroTitle">Jackie Foo</h1>
         </div>
 
         <div class="introRow">
           <div class="panel reveal">
             <p class="introText">
-              I design <strong>playful systems for clearer ideas</strong> across interaction,
-              research, workshop flows, and story-led interfaces. This version
-              pushes the page closer to a game-like portfolio board while staying
-              in the same blue-and-cream poster language.
+              <strong>PhD EOI candidate</strong> interested in human-centred learning analytics,
+              feedback analytics, co-design, and educational technology implementation.
+              I work across research, stakeholder-facing design, and practical web-based
+              systems that turn real user needs into clearer and more sustainable tools.
             </p>
           </div>
 
           <div class="panel factCard reveal">
             <div class="factGrid">
               <div>
-                <p class="factLabel">Focus</p>
-                <p class="factValue">Interaction design + research artifacts</p>
+                <p class="factLabel">Base</p>
+                <p class="factValue">Melbourne / Malaysia</p>
               </div>
               <div>
-                <p class="factLabel">Track</p>
-                <p class="factValue">Design + software development</p>
+                <p class="factLabel">Current Study</p>
+                <p class="factValue">Master of Data Science, Monash</p>
               </div>
               <div>
-                <p class="factLabel">Mode</p>
-                <p class="factValue">Playful, structured, and systems-led</p>
+                <p class="factLabel">Focus Areas</p>
+                <p class="factValue">Feedback analytics, HCI, co-design</p>
               </div>
             </div>
             <p class="helper">
-              Both loop sections are ready for `.mp4` files and will autoplay muted once the files exist.
+              The copy is now much closer to your actual research profile instead of a generic design-portfolio intro.
             </p>
           </div>
         </div>
@@ -1221,68 +1212,68 @@
     <section id="timeline" class="section">
       <h2 class="sectionTitle reveal">Research / Project Timeline</h2>
       <p class="sectionLead reveal">
-        This timeline is your project map rather than a project-card section. Click each stop to change the focus panel, and use the right column for professional experience.
+        A more accurate snapshot of your current academic and project track. Click each stop to swap the research focus panel, and use the side column for experience and service.
       </p>
 
       <div class="timelineGrid">
         <div class="timelineRail reveal">
           <div class="timelineLine">
             <article class="timelineStop is-active">
-              <button class="timelineBtn" type="button" data-timeline="0" aria-label="Show Master Thesis"></button>
-              <p class="timelineDate">2025 - Present</p>
-              <p class="timelineLabel">Master Thesis</p>
-              <p class="timelineText">Cards, systems, interaction</p>
+              <button class="timelineBtn" type="button" data-timeline="0" aria-label="Show PolyFeed Thesis"></button>
+              <p class="timelineDate">Jun 2025 - Present</p>
+              <p class="timelineLabel">PolyFeed Thesis</p>
+              <p class="timelineText">Feedback analytics and co-design</p>
             </article>
             <article class="timelineStop">
               <button class="timelineBtn" type="button" data-timeline="1" aria-label="Show More Than Words"></button>
-              <p class="timelineDate">2025</p>
+              <p class="timelineDate">Mar 2025 - Present</p>
               <p class="timelineLabel">More Than Words</p>
-              <p class="timelineText">Communication and framing</p>
+              <p class="timelineText">Assistive communication research</p>
             </article>
             <article class="timelineStop">
-              <button class="timelineBtn" type="button" data-timeline="2" aria-label="Show Action Lab Research"></button>
-              <p class="timelineDate">2024 - 2025</p>
-              <p class="timelineLabel">Action Lab Research</p>
-              <p class="timelineText">Experiment and reflection</p>
+              <button class="timelineBtn" type="button" data-timeline="2" aria-label="Show Action Lab Malaysia"></button>
+              <p class="timelineDate">Nov 2024 - Present</p>
+              <p class="timelineLabel">Action Lab Malaysia</p>
+              <p class="timelineText">HCI literature and research prep</p>
             </article>
             <article class="timelineStop">
               <button class="timelineBtn" type="button" data-timeline="3" aria-label="Show Casual Web Development"></button>
-              <p class="timelineDate">Ongoing</p>
-              <p class="timelineLabel">Casual Web Development</p>
-              <p class="timelineText">Software engineering track</p>
+              <p class="timelineDate">2024 - Present</p>
+              <p class="timelineLabel">Web Development</p>
+              <p class="timelineText">Frontend systems and dashboards</p>
             </article>
           </div>
         </div>
 
         <div class="timelineSide">
           <aside class="detailCard reveal" id="timelineDetail" aria-live="polite">
-            <p class="detailTitle">Master Thesis</p>
-            <p class="detailMeta">2025 - Present / card systems / thesis interaction design</p>
+            <p class="detailTitle">PolyFeed Thesis</p>
+            <p class="detailMeta">Monash University / Jun 2025 - Present</p>
             <p class="bodyText">
-              Building a thesis direction that turns complex ideas into more playable, discussable, and visually memorable interaction artifacts.
+              Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with emphasis on what makes feedback analytics useful, difficult to engage with, or meaningful in practice.
             </p>
             <div class="tagRow">
-              <span class="tag">Card design</span>
-              <span class="tag">System thinking</span>
-              <span class="tag">Interactive artifact</span>
+              <span class="tag">Feedback analytics</span>
+              <span class="tag">Co-design</span>
+              <span class="tag">Implementation tensions</span>
             </div>
           </aside>
 
           <aside class="experienceCard reveal">
-            <p class="moduleEyebrow">Professional Experience / Fill-in Column</p>
-            <h3 class="detailTitle">Experience</h3>
+            <p class="moduleEyebrow">Experience / Service</p>
+            <h3 class="detailTitle">Professional Experience</h3>
             <div class="experienceList">
               <div class="experienceItem">
-                <h4>Role / Studio / Company</h4>
-                <p>Add your title, place, and a one-line summary here.</p>
+                <h4>Maybank / Strategy &amp; Transformation, Group Risk</h4>
+                <p>Supported a large-scale risk migration programme across 14 applications and 200+ stakeholders, including reporting, coordination, and dashboard automation.</p>
               </div>
               <div class="experienceItem">
-                <h4>Role / Studio / Company</h4>
-                <p>Use this for another internship, freelance, research, or team role.</p>
+                <h4>Maybank / Retail Branding &amp; Marcom</h4>
+                <p>Worked across campaign coordination, rollout support, and ROI reporting in consumer financial services.</p>
               </div>
               <div class="experienceItem">
-                <h4>Role / Studio / Company</h4>
-                <p>This side column is meant to stay easy to update once you lock in your final wording.</p>
+                <h4>DIS Reviewer / 2025 - 2026</h4>
+                <p>Reviewed HCI submissions and built familiarity with contribution framing, methodological clarity, and academic review standards.</p>
               </div>
             </div>
           </aside>
@@ -1293,7 +1284,7 @@
     <section id="showcase" class="section">
       <h2 class="sectionTitle reveal">Showcase</h2>
       <p class="sectionLead reveal">
-        The main screen works like a game board now: a more stable thesis card fan, a six-state mascot selector, a MATT loop slot, and a separate schema loop slot.
+        The page now leans harder into the artifact side of your work: strategy cards, mascot development, and separate media loops for the MATT website and schema-based material.
       </p>
 
       <div class="showcaseBoard">
@@ -1307,11 +1298,11 @@
                 <span class="cardRank">Insight</span>
               </div>
               <div class="cardVisual">
-                <img src="/pic/tutor-persona-1.png" alt="Placeholder thesis card art" />
+                <img src="pic/tutor-persona-1.png" alt="Placeholder thesis card art" />
               </div>
               <div>
                 <p class="cardName">Signal Card</p>
-                <p class="cardFlavor">A front-cover style card for the deck.</p>
+                <p class="cardFlavor">A quick entry point into one implementation strategy.</p>
               </div>
             </button>
 
@@ -1321,11 +1312,11 @@
                 <span class="cardRank">Pattern</span>
               </div>
               <div class="cardVisual">
-                <img src="/pic/tutor-persona-4.png" alt="Placeholder thesis card art" />
+                <img src="pic/tutor-persona-4.png" alt="Placeholder thesis card art" />
               </div>
               <div>
                 <p class="cardName">System Card</p>
-                <p class="cardFlavor">For structure, rules, and frameworks.</p>
+                <p class="cardFlavor">For relationships, structures, and trade-offs.</p>
               </div>
             </button>
 
@@ -1335,11 +1326,11 @@
                 <span class="cardRank">Prompt</span>
               </div>
               <div class="cardVisual">
-                <img src="/pic/tutor-persona-6.png" alt="Placeholder thesis card art" />
+                <img src="pic/tutor-persona-6.png" alt="Placeholder thesis card art" />
               </div>
               <div>
                 <p class="cardName">Action Card</p>
-                <p class="cardFlavor">For reflection, response, and play.</p>
+                <p class="cardFlavor">For stakeholder discussion and iteration.</p>
               </div>
             </button>
           </div>
@@ -1347,12 +1338,12 @@
           <div class="deckDetail" id="deckDetail" aria-live="polite">
             <p class="detailTitle">Signal Card</p>
             <p class="bodyText">
-              The card fan now keeps each card anchored in place while still lifting the active card, which should fix the glitchy jump from the earlier version.
+              These cards now stay in a cleaner fan layout on both desktop and mobile, while the active card lifts without dragging the whole stack out of place.
             </p>
             <div class="tagRow">
-              <span class="tag">Poker size</span>
+              <span class="tag">PolyFeed strategy cards</span>
               <span class="tag">Stable fan layout</span>
-              <span class="tag">Thesis artifact</span>
+              <span class="tag">Game-like exploration</span>
             </div>
           </div>
         </article>
@@ -1362,16 +1353,16 @@
           <h3 class="moduleTitle">Character Select</h3>
           <div class="galleryShell">
             <div class="galleryStage">
-              <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
               <div class="galleryPortrait" id="galleryPortrait">
+                <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
                 <img
                   id="galleryImage"
                   class="galleryImage"
-                  src="/pic/tutor-persona-1.png"
+                  src="pic/tutor-persona-1.png"
                   alt="Mascot development concept"
                 />
+                <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
               </div>
-              <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
             </div>
             <div class="galleryInfo">
               <p class="galleryName" id="galleryName">Mascot 01</p>
@@ -1386,27 +1377,22 @@
         <article class="module reveal">
           <p class="moduleEyebrow">MATT Website Loop</p>
           <h3 class="moduleTitle">MATT Loop</h3>
-          <div
-            class="videoModule"
-            data-video-wrapper
-            data-video-src="/media/matt-loop.mp4"
-            data-video-label="Drop matt-loop.mp4 here"
-          >
+          <div class="videoModule" data-video-wrapper data-video-src="media/matt-loop.mp4">
             <div class="videoStage">
               <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-              <div class="videoFallback">
-                <img src="/pic/tutor-persona-2.png" alt="Placeholder for MATT website loop" />
+              <div class="fallbackVisual">
+                <img src="pic/tutor-persona-2.png" alt="Placeholder for MATT loop" />
               </div>
               <div class="playPulse" aria-hidden="true"></div>
               <span class="videoBadge">Drop matt-loop.mp4 here</span>
             </div>
             <div class="videoMeta">
               <p class="bodyText">
-                `MP4` is completely fine here. Once `media/matt-loop.mp4` exists, this module will autoplay muted and loop automatically.
+                `MP4` is perfectly fine. Once `media/matt-loop.mp4` exists, this panel will autoplay muted and loop automatically.
               </p>
               <ul>
-                <li>Recommended: `muted`, `loop`, `playsinline`, `autoplay`</li>
-                <li>Use this for the MATT website walk-through or screen-recorded interaction</li>
+                <li>Good for the More Than Words / MATT interaction flow</li>
+                <li>Recommended attributes: `autoplay`, `muted`, `loop`, `playsinline`</li>
               </ul>
             </div>
           </div>
@@ -1415,27 +1401,22 @@
         <article class="module reveal">
           <p class="moduleEyebrow">Schema Loop Video</p>
           <h3 class="moduleTitle">Schema Loop</h3>
-          <div
-            class="videoModule"
-            data-video-wrapper
-            data-video-src="/media/schema-loop.mp4"
-            data-video-label="Drop schema-loop.mp4 here"
-          >
+          <div class="videoModule" data-video-wrapper data-video-src="media/schema-loop.mp4">
             <div class="videoStage">
               <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-              <div class="schemaFallback">
-                <img src="/pic/tutor-persona-3.png" alt="Placeholder for schema loop video" />
+              <div class="fallbackVisual">
+                <img src="pic/tutor-persona-3.png" alt="Placeholder for schema loop" />
               </div>
               <div class="playPulse" aria-hidden="true"></div>
-              <span class="loopBadge">Drop schema-loop.mp4 here</span>
+              <span class="videoBadge">Drop schema-loop.mp4 here</span>
             </div>
             <div class="videoMeta">
               <p class="bodyText">
-                This is your second loop slot, kept separate from MATT so the schema animation can stand on its own.
+                A separate loop slot for your schema or dashboard logic, so it is not competing with the MATT website panel.
               </p>
               <ul>
-                <li>Place `schema-loop.mp4` inside a `media` folder at the project root</li>
-                <li>The page will swap from placeholder image to real loop automatically</li>
+                <li>Put the file at `media/schema-loop.mp4`</li>
+                <li>Useful for schema structure, content model, or dashboard logic walkthroughs</li>
               </ul>
             </div>
           </div>
@@ -1448,26 +1429,26 @@
         <div class="skillCol reveal">
           <h2 class="sectionTitle">Skills</h2>
           <div class="toolGrid" aria-label="Core skills">
-            <div class="toolTile">UI</div>
-            <div class="toolTile">UX</div>
-            <div class="toolTile">Flow</div>
-            <div class="toolTile">Story</div>
+            <div class="toolTile">HCI</div>
+            <div class="toolTile">Co-Design</div>
+            <div class="toolTile">Python</div>
+            <div class="toolTile">SQL</div>
           </div>
           <ul class="bulletList">
-            <li>Interaction design with a playful visual voice</li>
-            <li>Research translation into cards, systems, and visual structures</li>
-            <li>Workshop framing, mapping, and facilitation support</li>
-            <li>Prototype-ready HTML and CSS presentation</li>
+            <li>Human-centred learning analytics and feedback analytics</li>
+            <li>Qualitative interviewing, workshops, thematic analysis, and stakeholder synthesis</li>
+            <li>Interactive artifact design, web prototyping, and dashboard thinking</li>
+            <li>HTML, CSS, JavaScript, database structure, and reporting automation</li>
           </ul>
         </div>
 
         <div class="skillCol reveal">
           <h2 class="sectionTitle">Strengths</h2>
           <ul class="bulletList">
-            <li>Turning messy ideas into a visual structure people can follow</li>
-            <li>Balancing personality with clarity so the design still feels memorable and useful</li>
-            <li>Working across design and software-facing project setups</li>
-            <li>Making interfaces feel warm, expressive, and easy to navigate</li>
+            <li>Turning real stakeholder friction into usable research and design directions</li>
+            <li>Balancing research depth with practical implementation thinking</li>
+            <li>Working across design, technical, educational, and organisational contexts</li>
+            <li>Making dense systems easier to understand through clearer structures and artifacts</li>
           </ul>
         </div>
       </div>
@@ -1481,24 +1462,22 @@
           <a href="mailto:you@email.com">you@email.com</a>
         </div>
         <div class="contactBlock reveal">
-          <h3>LinkedIn</h3>
-          <a href="#">Add your LinkedIn link</a>
+          <h3>Portfolio</h3>
+          <a href="https://www.jackiefoo.me/" target="_blank" rel="noreferrer">jackiefoo.me</a>
         </div>
         <div class="contactBlock reveal">
-          <h3>GitHub</h3>
-          <a href="#">Add your GitHub link</a>
+          <h3>LinkedIn</h3>
+          <a href="#">Add your LinkedIn URL</a>
         </div>
       </div>
       <p class="footerNote reveal">
-        Once you add real mascot images and the two `.mp4` files, this should feel much closer to a finished interactive CV board.
+        The remaining placeholders are your face image, real mascot PNG exports, and the two loop videos in `media/matt-loop.mp4` and `media/schema-loop.mp4`.
       </p>
     </section>
   </main>
 
   <script>
     (() => {
-      const portraitImage = document.getElementById("portraitImage");
-      const portraitButtons = [...document.querySelectorAll("[data-portrait]")];
       const timelineDetail = document.getElementById("timelineDetail");
       const timelineStops = [...document.querySelectorAll(".timelineStop")];
       const timelineButtons = [...document.querySelectorAll("[data-timeline]")];
@@ -1516,104 +1495,84 @@
 
       const timelineItems = [
         {
-          title: "Master Thesis",
-          meta: "2025 - Present / card systems / thesis interaction design",
-          body: "Building a thesis direction that turns complex ideas into more playable, discussable, and visually memorable interaction artifacts.",
-          tags: ["Card design", "System thinking", "Interactive artifact"]
+          title: "PolyFeed Thesis",
+          meta: "Monash University / Jun 2025 - Present",
+          body: "Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with attention to feedback analytics uptake, co-design, and implementation strategy.",
+          tags: ["Feedback analytics", "Co-design", "PolyFeed"]
         },
         {
           title: "More Than Words",
-          meta: "2025 / communication framing / meaning beyond text",
-          body: "A project lens focused on how visual and interactive forms can hold meaning, tone, and interpretation beyond literal wording alone.",
-          tags: ["Communication", "Visual framing", "Meaning making"]
+          meta: "MATT / Mar 2025 - Present",
+          body: "Assistive technology research exploring emoji recommendation and communication support, including local AI experimentation and context-sensitive interpretation.",
+          tags: ["Assistive technology", "Emoji recommendation", "Local AI"]
         },
         {
-          title: "Action Lab Research",
-          meta: "2024 - 2025 / experimentation / reflection and iteration",
-          body: "Research-led making that brings together testing, reflection, and iterative decisions across systems, interfaces, and workshop structures.",
-          tags: ["Research", "Experimentation", "Iteration"]
+          title: "Action Lab Malaysia",
+          meta: "Monash University Malaysia / Nov 2024 - Present",
+          body: "HCI research collaboration focused on literature synthesis, research preparation, and strengthening positioning across CHI, DIS, and CSCW-adjacent work.",
+          tags: ["HCI research", "Literature review", "Research preparation"]
         },
         {
           title: "Casual Web Development",
-          meta: "Ongoing / software engineering track / frontend builds",
-          body: "An active development track where design thinking meets implementation through personal sites, interface systems, and interactive frontend work.",
-          tags: ["Frontend", "Implementation", "Software track"]
+          meta: "Ongoing / software engineering track",
+          body: "Web-facing builds that connect interface design, structured content, dashboards, and implementation-minded frontend work.",
+          tags: ["Frontend", "Dashboards", "Implementation"]
         }
       ];
 
       const thesisItems = [
         {
           title: "Signal Card",
-          body: "The active card now lifts while staying anchored in the same fanned position, which should stop the earlier glitch where the whole stack felt like it was snapping around.",
-          tags: ["Poker size", "Stable fan layout", "Visual hook"]
+          body: "A quick entry card for implementation strategies or stakeholder concerns. The layout is now anchored so each card stays in place instead of jumping across the fan.",
+          tags: ["Strategy cards", "Stable fan", "Game-like exploration"]
         },
         {
           title: "System Card",
-          body: "A good slot for cards that explain frameworks, relationships, or recurring patterns in your thesis. This can become a more informational card front later.",
-          tags: ["Framework", "Pattern", "Thesis system"]
+          body: "A placeholder for cards that explain relationships, tensions, or structural patterns across the thesis and PolyFeed implementation context.",
+          tags: ["Framework card", "Systems view", "Comparison"]
         },
         {
           title: "Action Card",
-          body: "This one works well for prompt or move-based cards that encourage reflection, response, or a choice during a workshop-style interaction.",
-          tags: ["Prompt card", "Interaction", "Decision point"]
+          body: "A placeholder for move-based or prompt-based cards that support reflection, co-design discussion, and iterative decision-making.",
+          tags: ["Prompt card", "Co-design", "Iteration"]
         }
       ];
 
       const mascotItems = [
         {
           name: "Mascot 01",
-          image: "/pic/tutor-persona-1.png",
+          image: "pic/tutor-persona-1.png",
           text: "A more open and welcoming mascot pose that reads clearly as a front-facing character option."
         },
         {
           name: "Mascot 02",
-          image: "/pic/tutor-persona-2.png",
-          text: "A system-facing concept that feels more task-oriented and useful for a guided interface role."
+          image: "pic/tutor-persona-2.png",
+          text: "A more task-oriented version that feels useful for interface guidance or step-based prompts."
         },
         {
           name: "Mascot 03",
-          image: "/pic/tutor-persona-3.png",
-          text: "A softer, more reflective state that works well for explanation, pause, or slower narrative moments."
+          image: "pic/tutor-persona-3.png",
+          text: "A softer and more reflective state that suits explanation, pause, or slower story moments."
         },
         {
           name: "Mascot 04",
-          image: "/pic/tutor-persona-4.png",
-          text: "A more diagram-driven mascot direction that can support framework-heavy or instructional content."
+          image: "pic/tutor-persona-4.png",
+          text: "A diagram-friendly mascot direction that could support more framework-heavy or instructional scenes."
         },
         {
           name: "Mascot 05",
-          image: "/pic/tutor-persona-5.png",
-          text: "A more expressive and lively version that suits a playful character-select mood."
+          image: "pic/tutor-persona-5.png",
+          text: "A more expressive and lively state that leans further into the character-select feeling."
         },
         {
           name: "Mascot 06",
-          image: "/pic/tutor-persona-6.png",
-          text: "A quieter and more grounded design direction that still feels consistent with the larger mascot family."
+          image: "pic/tutor-persona-6.png",
+          text: "A quieter and more grounded concept that still feels consistent with the larger mascot family."
         }
       ];
 
       let mascotIndex = 0;
       let touchStartX = null;
-
-      portraitButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const nextSrc = button.dataset.portrait;
-          if (!nextSrc || portraitImage.getAttribute("src") === nextSrc) return;
-
-          portraitImage.style.opacity = "0.25";
-
-          setTimeout(() => {
-            portraitImage.src = nextSrc;
-            portraitImage.style.opacity = "1";
-          }, 120);
-
-          portraitButtons.forEach((item) => {
-            const active = item === button;
-            item.classList.toggle("is-active", active);
-            item.setAttribute("aria-pressed", String(active));
-          });
-        });
-      });
 
       function renderTimeline(index) {
         const item = timelineItems[index];
@@ -1720,14 +1679,14 @@
           const delta = touchEndX - touchStartX;
           touchStartX = null;
 
-          if (Math.abs(delta) < 36) return;
+          if (Math.abs(delta) < 34) return;
           moveMascot(delta > 0 ? -1 : 1);
         }, { passive: true });
       }
 
       videoWrappers.forEach((wrapper) => {
         const video = wrapper.querySelector(".loopVideo");
-        const fallback = wrapper.querySelector(".videoFallback, .schemaFallback");
+        const fallback = wrapper.querySelector(".fallbackVisual");
         const pulse = wrapper.querySelector(".playPulse");
         const src = wrapper.dataset.videoSrc;
 
