@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jackie Foo | Chatbot Concept</title>
+  <meta
+    name="description"
+    content="Chatbot interaction concept page for More Than Words style conversational support."
+  />
+  <meta name="theme-color" content="#0d47d9" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Bungee:wght@400&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --paper: #f8ecd9;
+      --paper-2: #f3e1c5;
+      --blue: #1146d8;
+      --blue-dark: #0a329f;
+      --ink: #18347f;
+      --mint: #9ce2d0;
+      --coral: #ffb089;
+      --lavender: #b9b0ff;
+      --line: rgba(17, 70, 216, 0.2);
+      --shadow: 0 22px 48px rgba(17, 70, 216, 0.14);
+      --max: 1220px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Archivo", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 10%, rgba(255, 255, 255, 0.76), transparent 18%),
+        radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.34), transparent 24%),
+        linear-gradient(180deg, var(--paper) 0%, #f5e5c9 54%, var(--paper-2) 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 22% 24%, rgba(17, 70, 216, 0.08), transparent 14%),
+        radial-gradient(circle at 76% 72%, rgba(156, 226, 208, 0.18), transparent 18%),
+        linear-gradient(rgba(17, 70, 216, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17, 70, 216, 0.04) 1px, transparent 1px);
+      background-size: auto, auto, 26px 26px, 26px 26px;
+      mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 1) 48%, rgba(0, 0, 0, 0.5) 78%);
+      animation: drift 16s ease-in-out infinite alternate;
+    }
+
+    a,
+    button {
+      color: inherit;
+      font: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .page {
+      width: min(calc(100% - 24px), var(--max));
+      margin: 14px auto;
+      border: 2px solid var(--blue);
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)),
+        var(--paper);
+      box-shadow: var(--shadow);
+      overflow: clip;
+      position: relative;
+    }
+
+    .page::before,
+    .page::after {
+      content: "";
+      position: absolute;
+      border: 2px solid rgba(17, 70, 216, 0.12);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .page::before {
+      width: 340px;
+      height: 340px;
+      right: -160px;
+      top: -140px;
+    }
+
+    .page::after {
+      width: 280px;
+      height: 280px;
+      left: -120px;
+      bottom: 160px;
+    }
+
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 2px solid var(--blue);
+      background: rgba(248, 236, 217, 0.92);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(0.94rem, 2vw, 1.16rem);
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav a,
+    .cta,
+    .chip {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      text-decoration: none;
+      background: transparent;
+      padding: 8px 12px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .nav a:hover,
+    .nav a:focus-visible,
+    .cta:hover,
+    .cta:focus-visible {
+      transform: translateY(-2px);
+      background: var(--blue);
+      color: var(--paper);
+      outline: none;
+    }
+
+    .section {
+      padding: 28px 20px 26px;
+      border-bottom: 2px solid var(--blue);
+      position: relative;
+      z-index: 1;
+    }
+
+    .section:last-of-type {
+      border-bottom: 0;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .hero > * {
+      min-width: 0;
+    }
+
+    .copyPanel,
+    .board,
+    .noteCard {
+      position: relative;
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+      border: 2px solid var(--blue);
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0)),
+        rgba(255, 252, 247, 0.62);
+      overflow: hidden;
+    }
+
+    .copyPanel::before,
+    .board::before,
+    .noteCard::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(17, 70, 216, 0.14);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .eyebrow,
+    .panelLabel {
+      margin: 0;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue-dark);
+    }
+
+    .heroTitle,
+    .sectionTitle,
+    .boardTitle {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      color: var(--blue);
+      text-transform: uppercase;
+      line-height: 0.94;
+    }
+
+    .heroTitle {
+      font-size: clamp(2.4rem, 6.6vw, 4.4rem);
+      letter-spacing: 0.01em;
+    }
+
+    .sectionTitle {
+      font-size: clamp(2rem, 5vw, 3rem);
+    }
+
+    .boardTitle {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+    }
+
+    .lead,
+    .bodyText {
+      margin: 0;
+      line-height: 1.6;
+      font-size: 1rem;
+      max-width: 34ch;
+    }
+
+    .chipRow,
+    .metricRow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      background: rgba(17, 70, 216, 0.06);
+    }
+
+    .metricCard {
+      min-width: 132px;
+      flex: 1 1 150px;
+      padding: 14px;
+      border: 2px solid rgba(17, 70, 216, 0.16);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.52);
+      display: grid;
+      gap: 6px;
+    }
+
+    .metricValue {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      font-size: 1.1rem;
+      line-height: 1;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .metricText {
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .board {
+      gap: 18px;
+      padding: 18px;
+      min-height: 640px;
+      background:
+        radial-gradient(circle at 20% 16%, rgba(185, 176, 255, 0.22), transparent 22%),
+        radial-gradient(circle at 82% 24%, rgba(156, 226, 208, 0.26), transparent 24%),
+        rgba(255, 252, 247, 0.72);
+    }
+
+    .boardTop {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .livePill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(17, 70, 216, 0.06);
+    }
+
+    .livePill::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 0 rgba(156, 226, 208, 0.72);
+      animation: ping 1.8s ease-out infinite;
+    }
+
+    .chatShell {
+      position: relative;
+      display: grid;
+      gap: 14px;
+      min-height: 492px;
+      padding: 18px;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4)),
+        rgba(255, 255, 255, 0.66);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .chatShell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(17, 70, 216, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17, 70, 216, 0.05) 1px, transparent 1px);
+      background-size: 22px 22px;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .chatShell::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -48px;
+      top: -40px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--scene-glow, rgba(185, 176, 255, 0.32)) 0%, rgba(17, 70, 216, 0) 72%);
+      filter: blur(6px);
+      animation: drift 7s ease-in-out infinite alternate;
+      z-index: -1;
+    }
+
+    .chatShell.theme-mint {
+      --scene-glow: rgba(156, 226, 208, 0.44);
+    }
+
+    .chatShell.theme-coral {
+      --scene-glow: rgba(255, 176, 137, 0.4);
+    }
+
+    .chatShell.theme-lavender {
+      --scene-glow: rgba(185, 176, 255, 0.42);
+    }
+
+    .chatHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .botIdentity {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .botOrb {
+      width: 54px;
+      height: 54px;
+      border: 2px solid var(--blue);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 38% 32%, #fff 0%, #fff 16%, transparent 17%),
+        linear-gradient(140deg, rgba(156, 226, 208, 0.8), rgba(185, 176, 255, 0.95));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    }
+
+    .botName,
+    .sceneTitle {
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .botSub,
+    .sceneMeta {
+      margin: 2px 0 0;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .statusText {
+      margin: 0;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .sceneBadge {
+      border: 2px solid rgba(17, 70, 216, 0.14);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(17, 70, 216, 0.06);
+    }
+
+    .chatFlow {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      min-height: 248px;
+    }
+
+    .message {
+      max-width: 88%;
+      padding: 14px 16px;
+      border: 2px solid rgba(17, 70, 216, 0.12);
+      border-radius: 22px;
+      line-height: 1.5;
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: 0 14px 26px rgba(17, 70, 216, 0.06);
+      transform-origin: 0 100%;
+      animation: messageRise 360ms ease;
+    }
+
+    .message.assistant {
+      border-top-left-radius: 8px;
+      justify-self: start;
+    }
+
+    .message.user {
+      border-top-right-radius: 8px;
+      justify-self: end;
+      background: rgba(17, 70, 216, 0.92);
+      color: var(--paper);
+      border-color: rgba(17, 70, 216, 0.92);
+    }
+
+    .message.helper {
+      max-width: 72%;
+      padding: 10px 14px;
+      font-size: 0.92rem;
+      justify-self: start;
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .emojiDock,
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .emojiPill,
+    .suggestionPill {
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 2px solid rgba(17, 70, 216, 0.12);
+      box-shadow: 0 12px 22px rgba(17, 70, 216, 0.06);
+      font-weight: 700;
+      animation: messageRise 380ms ease;
+    }
+
+    .emojiPill strong {
+      margin-right: 6px;
+    }
+
+    .suggestionPill {
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--blue-dark);
+    }
+
+    .composer {
+      margin-top: auto;
+      display: grid;
+      gap: 10px;
+    }
+
+    .typingRow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.84rem;
+      color: var(--blue-dark);
+    }
+
+    .typingDots {
+      display: inline-flex;
+      gap: 6px;
+    }
+
+    .typingDots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      animation: bounce 1s ease-in-out infinite;
+    }
+
+    .typingDots span:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+
+    .typingDots span:nth-child(3) {
+      animation-delay: 0.24s;
+    }
+
+    .composerBar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 12px;
+      border: 2px solid rgba(17, 70, 216, 0.14);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .composerText {
+      margin: 0;
+      color: rgba(24, 52, 127, 0.76);
+    }
+
+    .sendBadge {
+      min-width: 106px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: var(--blue);
+      color: var(--paper);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 12px 14px;
+    }
+
+    .sticker {
+      position: absolute;
+      right: 18px;
+      bottom: 98px;
+      width: 120px;
+      padding: 10px;
+      border: 2px solid rgba(17, 70, 216, 0.16);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 16px 24px rgba(17, 70, 216, 0.08);
+      transform: rotate(8deg);
+    }
+
+    .sticker img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .noteCard {
+      gap: 10px;
+      min-height: 220px;
+    }
+
+    .noteCard p {
+      margin: 0;
+      line-height: 1.56;
+    }
+
+    .footerBand {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .footerText {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      max-width: 52ch;
+    }
+
+    @keyframes drift {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        transform: translate3d(8px, -10px, 0);
+      }
+    }
+
+    @keyframes ping {
+      0% {
+        box-shadow: 0 0 0 0 rgba(156, 226, 208, 0.64);
+      }
+      70% {
+        box-shadow: 0 0 0 12px rgba(156, 226, 208, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(156, 226, 208, 0);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 80%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+      }
+      40% {
+        transform: translateY(-4px);
+        opacity: 1;
+      }
+    }
+
+    @keyframes messageRise {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .board {
+        min-height: 0;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        width: min(calc(100% - 12px), var(--max));
+        margin: 6px auto;
+      }
+
+      .masthead,
+      .section {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .masthead {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .heroTitle {
+        font-size: clamp(2.2rem, 13vw, 3.8rem);
+      }
+
+      .lead,
+      .bodyText,
+      .message,
+      .metricText,
+      .noteCard p {
+        font-size: 0.96rem;
+      }
+
+      .copyPanel,
+      .board,
+      .noteCard {
+        padding: 14px;
+      }
+
+      .chatShell {
+        min-height: 560px;
+        padding: 14px;
+      }
+
+      .message {
+        max-width: 94%;
+      }
+
+      .message.helper {
+        max-width: 88%;
+      }
+
+      .composerBar {
+        grid-template-columns: 1fr;
+      }
+
+      .sendBadge {
+        min-width: 0;
+      }
+
+      .sticker {
+        position: static;
+        width: 108px;
+        margin-left: auto;
+        transform: rotate(6deg);
+      }
+
+      .footerBand {
+        align-items: start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="masthead">
+      <div class="brand">Jackie Foo / Chatbot Concept</div>
+      <nav class="nav" aria-label="Page navigation">
+        <a href="index2.html">Back to Portfolio</a>
+        <a href="#loop">Chat Loop</a>
+        <a href="#notes">Design Notes</a>
+      </nav>
+    </header>
+
+    <section class="section hero" id="loop">
+      <article class="copyPanel">
+        <p class="eyebrow">More Than Words / Conversational Support</p>
+        <h1 class="heroTitle">Conversation Loop</h1>
+        <p class="lead">
+          A more visual chatbot concept page for communication support, designed
+          to feel gentle, game-like, and easy to scan. The loop below rotates
+          through different support moments so the interaction looks alive even
+          before a real demo video is dropped in.
+        </p>
+
+        <div class="chipRow" aria-label="Concept tags">
+          <span class="chip">Context cues</span>
+          <span class="chip">Emoji prompts</span>
+          <span class="chip">Low-pressure replies</span>
+        </div>
+
+        <div class="metricRow">
+          <div class="metricCard">
+            <p class="panelLabel">Mode</p>
+            <p class="metricValue">Assistive</p>
+            <p class="metricText">Soft prompts and response choices instead of demanding full sentences first.</p>
+          </div>
+          <div class="metricCard">
+            <p class="panelLabel">Style</p>
+            <p class="metricValue">Looping UI</p>
+            <p class="metricText">Built to be visually alive on a portfolio page even without user input.</p>
+          </div>
+          <div class="metricCard">
+            <p class="panelLabel">Intent</p>
+            <p class="metricValue">Clarity</p>
+            <p class="metricText">Turns uncertain feelings and vague needs into easier next-step choices.</p>
+          </div>
+        </div>
+
+        <a class="cta" href="index2.html#portfolio">Return to portfolio</a>
+      </article>
+
+      <article class="board">
+        <div class="boardTop">
+          <div>
+            <p class="panelLabel">Live prototype loop</p>
+            <h2 class="boardTitle">Chatbot Interaction</h2>
+          </div>
+          <div class="livePill">Auto loop active</div>
+        </div>
+
+        <div class="chatShell theme-lavender" id="chatShell">
+          <div class="chatHeader">
+            <div class="botIdentity">
+              <div class="botOrb" aria-hidden="true"></div>
+              <div>
+                <p class="botName">More Than Words Bot</p>
+                <p class="botSub">A calmer way to start communication.</p>
+              </div>
+            </div>
+            <div class="sceneBadge">
+              <p class="statusText" id="sceneStatus">Listening mode</p>
+            </div>
+          </div>
+
+          <div>
+            <p class="sceneTitle" id="sceneTitle">Feeling stuck</p>
+            <p class="sceneMeta" id="sceneMeta">Low-pressure opening prompt</p>
+          </div>
+
+          <div class="chatFlow" aria-live="polite">
+            <div class="message assistant" id="assistantIntro">
+              You do not need a perfect sentence. We can start with one feeling,
+              one emoji, or one small need.
+            </div>
+            <div class="message user" id="userMessage">
+              I do not know how to say how I feel today.
+            </div>
+            <div class="message assistant" id="assistantMessage">
+              That is okay. Want to pick a mood, a colour, or an emoji first?
+            </div>
+            <div class="message helper" id="helperMessage">
+              Gentle prompt: reduce pressure before asking for detail.
+            </div>
+          </div>
+
+          <div class="emojiDock" id="emojiDock" aria-label="Suggested emoji prompts"></div>
+          <div class="suggestions" id="suggestions" aria-label="Suggested replies"></div>
+
+          <div class="composer">
+            <div class="typingRow">
+              <span>Generating supportive prompts</span>
+              <span class="typingDots" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </div>
+            <div class="composerBar">
+              <p class="composerText" id="composerText">Type, tap a prompt, or choose an emoji to keep going.</p>
+              <div class="sendBadge" id="sendBadge">Looping</div>
+            </div>
+          </div>
+
+          <div class="sticker" aria-hidden="true">
+            <img src="pic/Mascot/2.png" alt="" />
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="notes">
+      <p class="eyebrow">Design notes</p>
+      <h2 class="sectionTitle">What this concept is doing</h2>
+      <div class="grid">
+        <article class="noteCard">
+          <p class="panelLabel">01 / Entry</p>
+          <p class="bodyText">
+            The first prompt lowers the barrier to participation. Instead of
+            forcing a full reply, the interface offers feelings, emojis, and
+            small response handles.
+          </p>
+        </article>
+
+        <article class="noteCard">
+          <p class="panelLabel">02 / Interpretation</p>
+          <p class="bodyText">
+            Suggested replies are visible and editable, which helps the chatbot
+            feel supportive rather than controlling. The user can borrow language
+            without being trapped by it.
+          </p>
+        </article>
+
+        <article class="noteCard">
+          <p class="panelLabel">03 / Repair</p>
+          <p class="bodyText">
+            Each loop leaves room for clarification, correction, and softer
+            re-entry. That makes the experience more suitable for uncertain,
+            emotional, or high-friction communication moments.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="footerBand">
+        <p class="footerText">
+          This page is set up as a polished visual concept. It already loops on
+          its own, and later you can swap the staged interaction for a real demo
+          capture or connect it to a live prototype flow.
+        </p>
+        <a class="cta" href="index2.html#portfolio">Back to portfolio</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const chatShell = document.getElementById("chatShell");
+      const sceneTitle = document.getElementById("sceneTitle");
+      const sceneMeta = document.getElementById("sceneMeta");
+      const sceneStatus = document.getElementById("sceneStatus");
+      const userMessage = document.getElementById("userMessage");
+      const assistantMessage = document.getElementById("assistantMessage");
+      const helperMessage = document.getElementById("helperMessage");
+      const emojiDock = document.getElementById("emojiDock");
+      const suggestions = document.getElementById("suggestions");
+      const composerText = document.getElementById("composerText");
+      const sendBadge = document.getElementById("sendBadge");
+
+      const scenes = [
+        {
+          title: "Feeling stuck",
+          meta: "Low-pressure opening prompt",
+          status: "Listening mode",
+          user: "I do not know how to say how I feel today.",
+          assistant: "That is okay. Want to pick a mood, a colour, or an emoji first?",
+          helper: "Gentle prompt: reduce pressure before asking for detail.",
+          emojis: [
+            { icon: "🙂", label: "Okay-ish" },
+            { icon: "😕", label: "Unsure" },
+            { icon: "😣", label: "Overwhelmed" }
+          ],
+          suggestions: ["Pick a mood", "Show emoji options", "Need more time"],
+          composer: "Type, tap a prompt, or choose an emoji to keep going.",
+          badge: "Looping",
+          theme: "theme-mint"
+        },
+        {
+          title: "Repairing meaning",
+          meta: "Clarify what the emoji means for this person",
+          status: "Context check",
+          user: "I picked this emoji but it means something different for me.",
+          assistant: "Thanks for telling me. Do you want to say what it means, or should I offer a few interpretations to edit?",
+          helper: "Interpretation support: do not assume a fixed universal meaning.",
+          emojis: [
+            { icon: "💭", label: "Explain it" },
+            { icon: "🧩", label: "Offer options" },
+            { icon: "✍️", label: "Edit wording" }
+          ],
+          suggestions: ["It means tired", "It means too much noise", "Show editable options"],
+          composer: "You can rewrite the suggestion so it sounds more like you.",
+          badge: "Editing",
+          theme: "theme-coral"
+        },
+        {
+          title: "Turning feelings into action",
+          meta: "Translate emotion into the next useful step",
+          status: "Support planning",
+          user: "I know I am stressed. I just do not know what would help.",
+          assistant: "We can keep it small. Do you want a comfort action, a communication action, or a pause action first?",
+          helper: "Next-step framing: move from feeling language into practical support choices.",
+          emojis: [
+            { icon: "🫖", label: "Comfort" },
+            { icon: "💬", label: "Communicate" },
+            { icon: "⏸️", label: "Pause" }
+          ],
+          suggestions: ["Ask for a break", "Message someone", "Make a calmer plan"],
+          composer: "Pick a path and the chatbot can keep narrowing it down with you.",
+          badge: "Planning",
+          theme: "theme-lavender"
+        }
+      ];
+
+      let sceneIndex = 0;
+
+      function renderScene(index) {
+        const scene = scenes[index];
+        if (!scene) return;
+
+        sceneTitle.textContent = scene.title;
+        sceneMeta.textContent = scene.meta;
+        sceneStatus.textContent = scene.status;
+        userMessage.textContent = scene.user;
+        assistantMessage.textContent = scene.assistant;
+        helperMessage.textContent = scene.helper;
+        composerText.textContent = scene.composer;
+        sendBadge.textContent = scene.badge;
+
+        chatShell.classList.remove("theme-mint", "theme-coral", "theme-lavender");
+        chatShell.classList.add(scene.theme);
+
+        emojiDock.innerHTML = scene.emojis
+          .map((item) => `<div class="emojiPill"><strong>${item.icon}</strong>${item.label}</div>`)
+          .join("");
+
+        suggestions.innerHTML = scene.suggestions
+          .map((item) => `<div class="suggestionPill">${item}</div>`)
+          .join("");
+      }
+
+      renderScene(sceneIndex);
+
+      setInterval(() => {
+        sceneIndex = (sceneIndex + 1) % scenes.length;
+        renderScene(sceneIndex);
+      }, 3800);
+    })();
+  </script>
+</body>
+</html>
