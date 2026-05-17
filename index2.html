@@ -6,7 +6,7 @@
   <title>Jackie Foo | CV Poster</title>
   <meta
     name="description"
-    content="Single-page CV poster for Jackie Foo with bold editorial typography, selected work, skills, and contact details."
+    content="Single-page CV poster for Jackie Foo with bold editorial typography, selected work, thesis card showcase, and contact details."
   />
   <meta name="theme-color" content="#0d47d9" />
 
@@ -27,7 +27,7 @@
       --ink: #15317f;
       --line: rgba(17, 70, 216, 0.34);
       --white: #fffdf7;
-      --shadow: 0 16px 40px rgba(17, 70, 216, 0.12);
+      --shadow: 0 18px 44px rgba(17, 70, 216, 0.12);
       --max: 1220px;
     }
 
@@ -65,6 +65,7 @@
       width: min(calc(100% - 24px), var(--max));
       margin: 14px auto;
       border: 2px solid var(--blue);
+      border-radius: 28px;
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)),
         var(--paper);
@@ -93,7 +94,7 @@
     .page::after {
       width: 260px;
       height: 260px;
-      bottom: 180px;
+      bottom: 220px;
       left: -140px;
     }
 
@@ -109,6 +110,7 @@
       border-bottom: 2px solid var(--blue);
       background: rgba(248, 236, 217, 0.92);
       backdrop-filter: blur(10px);
+      border-radius: 26px 26px 0 0;
     }
 
     .brand {
@@ -130,6 +132,7 @@
     .ghostBtn,
     .chip {
       border: 2px solid var(--blue);
+      border-radius: 999px;
       background: transparent;
       color: var(--blue);
       text-decoration: none;
@@ -176,6 +179,7 @@
 
     .portraitCard {
       border: 2px solid var(--blue);
+      border-radius: 24px;
       background: rgba(255, 253, 247, 0.74);
       padding: 18px;
       position: relative;
@@ -304,6 +308,7 @@
     .skillCol,
     .contactBlock {
       border: 2px solid var(--blue);
+      border-radius: 24px;
       background: rgba(255, 253, 247, 0.68);
       padding: 16px;
     }
@@ -390,6 +395,7 @@
       top: 29px;
       height: 2px;
       background: var(--blue);
+      border-radius: 999px;
     }
 
     .timelineStop {
@@ -443,7 +449,8 @@
       align-content: start;
     }
 
-    .timelineRole {
+    .timelineRole,
+    .deckTitle {
       margin: 0;
       font-family: "Bungee", sans-serif;
       font-size: clamp(1.5rem, 3vw, 2.2rem);
@@ -453,7 +460,8 @@
     }
 
     .timelineMeta,
-    .timelineBody {
+    .timelineBody,
+    .deckBody {
       margin: 0;
       line-height: 1.55;
     }
@@ -466,6 +474,7 @@
 
     .tag {
       border: 2px solid var(--blue);
+      border-radius: 999px;
       padding: 7px 10px;
       font-size: 0.75rem;
       font-weight: 700;
@@ -502,6 +511,7 @@
     .projectArt {
       min-height: 220px;
       border: 2px solid var(--line);
+      border-radius: 18px;
       background:
         linear-gradient(140deg, rgba(17, 70, 216, 0.08), transparent 58%),
         rgba(255, 255, 255, 0.54);
@@ -516,7 +526,8 @@
       mix-blend-mode: multiply;
     }
 
-    .projectKicker {
+    .projectKicker,
+    .panelEyebrow {
       margin: 0;
       font-size: 0.72rem;
       font-weight: 800;
@@ -524,7 +535,8 @@
       text-transform: uppercase;
     }
 
-    .projectTitle {
+    .projectTitle,
+    .cardName {
       margin: 0;
       font-family: "Bungee", sans-serif;
       font-size: clamp(1.2rem, 2vw, 1.7rem);
@@ -555,6 +567,228 @@
       display: none;
     }
 
+    .showcaseGrid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .deckPanel,
+    .videoPanel {
+      border: 2px solid var(--blue);
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.04)),
+        rgba(255, 253, 247, 0.7);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .deckPanel::before,
+    .videoPanel::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(17, 70, 216, 0.18);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .cardArena {
+      min-height: 430px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .thesisCard {
+      position: absolute;
+      width: min(32vw, 200px);
+      aspect-ratio: 2.5 / 3.5;
+      border: 2px solid var(--blue);
+      border-radius: 26px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3)),
+        var(--paper);
+      padding: 12px;
+      display: grid;
+      align-content: space-between;
+      box-shadow: 0 18px 30px rgba(17, 70, 216, 0.12);
+      transform-origin: 50% 85%;
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+      cursor: pointer;
+      animation: floatCard 4.4s ease-in-out infinite;
+    }
+
+    .thesisCard:hover,
+    .thesisCard:focus-visible,
+    .thesisCard.is-active {
+      transform: translateY(-14px) rotate(0deg) scale(1.04) !important;
+      box-shadow: 0 24px 40px rgba(17, 70, 216, 0.18);
+      border-color: var(--blue-dark);
+      outline: none;
+      z-index: 5;
+    }
+
+    .thesisCard:nth-of-type(1) {
+      left: 9%;
+      top: 18%;
+      transform: rotate(-12deg);
+      animation-delay: -0.8s;
+    }
+
+    .thesisCard:nth-of-type(2) {
+      z-index: 2;
+      transform: rotate(0deg);
+      animation-delay: -0.2s;
+    }
+
+    .thesisCard:nth-of-type(3) {
+      right: 9%;
+      top: 18%;
+      transform: rotate(12deg);
+      animation-delay: -1.4s;
+    }
+
+    .cardTop {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .cardSuit {
+      font-family: "Bungee", sans-serif;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .cardRank {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cardVisual {
+      margin: 14px 0;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(17, 70, 216, 0.12), transparent 34%),
+        rgba(255, 255, 255, 0.46);
+      display: grid;
+      place-items: center;
+      min-height: 170px;
+      overflow: hidden;
+    }
+
+    .cardVisual img {
+      width: 86%;
+      filter: saturate(0) contrast(1.04) brightness(1.06);
+      mix-blend-mode: multiply;
+    }
+
+    .cardFlavor {
+      margin: 8px 0 0;
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .deckDetail {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+      border-top: 2px solid rgba(17, 70, 216, 0.18);
+      padding-top: 14px;
+    }
+
+    .videoShell {
+      position: relative;
+      min-height: 420px;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 24px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(17, 70, 216, 0.16), transparent 50%),
+        rgba(255, 255, 255, 0.32);
+      display: grid;
+      align-content: space-between;
+    }
+
+    .videoPoster {
+      min-height: 320px;
+      background:
+        linear-gradient(150deg, rgba(17, 70, 216, 0.12), transparent 48%),
+        url("/pic/tutor-persona-3.png") center / cover no-repeat;
+      position: relative;
+    }
+
+    .videoPoster::after {
+      content: "Loop Video Placeholder";
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(248, 236, 217, 0.92);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .playPulse {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 94px;
+      height: 94px;
+      margin: -47px 0 0 -47px;
+      border: 2px solid rgba(248, 236, 217, 0.9);
+      border-radius: 50%;
+      background: rgba(17, 70, 216, 0.86);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 24px rgba(17, 70, 216, 0.22);
+      animation: pulseRing 2s ease-out infinite;
+    }
+
+    .playPulse::before {
+      content: "";
+      width: 0;
+      height: 0;
+      margin-left: 4px;
+      border-top: 13px solid transparent;
+      border-bottom: 13px solid transparent;
+      border-left: 21px solid var(--paper);
+    }
+
+    .videoMeta {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .videoDock {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .dockTile {
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 16px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.36);
+      font-size: 0.76rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
     .twoCol {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -583,6 +817,7 @@
 
     .toolTile {
       border: 2px solid var(--blue);
+      border-radius: 18px;
       padding: 12px;
       text-align: center;
       font-family: "Bungee", sans-serif;
@@ -595,6 +830,7 @@
       background: var(--blue);
       color: var(--paper);
       padding: 24px 22px 30px;
+      border-radius: 0 0 26px 26px;
     }
 
     .contactTitle {
@@ -665,10 +901,32 @@
       transform: translateY(0);
     }
 
+    @keyframes floatCard {
+      0%, 100% {
+        translate: 0 0;
+      }
+      50% {
+        translate: 0 -10px;
+      }
+    }
+
+    @keyframes pulseRing {
+      0% {
+        box-shadow: 0 0 0 0 rgba(17, 70, 216, 0.24);
+      }
+      70% {
+        box-shadow: 0 0 0 20px rgba(17, 70, 216, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(17, 70, 216, 0);
+      }
+    }
+
     @media (max-width: 980px) {
       .hero,
       .introRow,
       .timelineGrid,
+      .showcaseGrid,
       .twoCol,
       .contactGrid {
         grid-template-columns: 1fr;
@@ -681,6 +939,14 @@
       .factGrid,
       .timelineLine {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .cardArena {
+        min-height: 500px;
+      }
+
+      .thesisCard {
+        width: min(44vw, 220px);
       }
     }
 
@@ -707,7 +973,8 @@
 
       .factGrid,
       .toolGrid,
-      .timelineLine {
+      .timelineLine,
+      .videoDock {
         grid-template-columns: 1fr;
       }
 
@@ -735,6 +1002,34 @@
       .timelineText {
         grid-column: 2;
       }
+
+      .cardArena {
+        min-height: 640px;
+      }
+
+      .thesisCard {
+        width: min(70vw, 230px);
+      }
+
+      .thesisCard:nth-of-type(1),
+      .thesisCard:nth-of-type(2),
+      .thesisCard:nth-of-type(3) {
+        left: 50%;
+        right: auto;
+        top: auto;
+      }
+
+      .thesisCard:nth-of-type(1) {
+        transform: translateX(-50%) translateY(-88px) rotate(-10deg);
+      }
+
+      .thesisCard:nth-of-type(2) {
+        transform: translateX(-50%) translateY(22px) rotate(0deg);
+      }
+
+      .thesisCard:nth-of-type(3) {
+        transform: translateX(-50%) translateY(136px) rotate(10deg);
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -759,6 +1054,7 @@
         <a href="#profile">Profile</a>
         <a href="#timeline">Timeline</a>
         <a href="#work">Work</a>
+        <a href="#showcase">Showcase</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -784,7 +1080,7 @@
           </div>
         </div>
         <p class="miniNote">
-          Playful visual system, but cleaner and more hireable: one page, one scroll, stronger first impression.
+          Same poster energy, but now softened and a little more game-like instead of purely boxy.
         </p>
       </div>
 
@@ -798,9 +1094,9 @@
           <div class="introCard reveal">
             <p class="introText">
               I design <strong>playful systems for clearer ideas</strong> across interaction,
-              workshop flows, and story-led interfaces. This page turns the old
-              project board into a single CV format while keeping the same personal,
-              illustrated energy.
+              workshop flows, and story-led interfaces. This page keeps the same
+              blue-and-cream editorial vibe, but adds a more collectible,
+              game-inspired way to show your projects and thesis artifacts.
             </p>
           </div>
 
@@ -816,11 +1112,11 @@
               </div>
               <div>
                 <p class="factLabel">Building</p>
-                <p class="factValue">Projects, flows, and systems</p>
+                <p class="factValue">Projects, flows, systems, and artifacts</p>
               </div>
             </div>
             <p class="helper">
-              This layout is intentionally more editorial than corporate, so it still feels like your work.
+              This version adds smoother corners, softer framing, and showcase areas for cards and media.
             </p>
           </div>
         </div>
@@ -835,7 +1131,7 @@
 
       <div class="timelineGrid">
         <div class="timelineRail reveal">
-          <div class="timelineLine" id="timelineStops">
+          <div class="timelineLine">
             <article class="timelineStop is-active">
               <button class="timelineBtn" type="button" data-timeline="0" aria-label="Show Project 01"></button>
               <p class="timelineLabel">Project 01</p>
@@ -950,6 +1246,94 @@
       </div>
     </section>
 
+    <section id="showcase" class="section">
+      <h2 class="sectionTitle reveal">Thesis Deck</h2>
+      <p class="sectionLead reveal">
+        A more game-like showcase zone for your thesis cards and a looping website demo. The cards below are placeholder slots sized like poker cards so your real deck can drop in later.
+      </p>
+
+      <div class="showcaseGrid">
+        <div class="deckPanel reveal">
+          <p class="panelEyebrow">Card Showcase / Click a card</p>
+          <div class="cardArena" aria-label="Animated thesis card preview">
+            <button class="thesisCard is-active" type="button" data-card="0">
+              <div class="cardTop">
+                <span class="cardSuit">A</span>
+                <span class="cardRank">Insight</span>
+              </div>
+              <div class="cardVisual">
+                <img src="/pic/tutor-persona-1.png" alt="Placeholder thesis card art" />
+              </div>
+              <div>
+                <p class="cardName">Signal Card</p>
+                <p class="cardFlavor">Use this as the front-cover look for one of your thesis deck cards.</p>
+              </div>
+            </button>
+
+            <button class="thesisCard" type="button" data-card="1">
+              <div class="cardTop">
+                <span class="cardSuit">K</span>
+                <span class="cardRank">Pattern</span>
+              </div>
+              <div class="cardVisual">
+                <img src="/pic/tutor-persona-4.png" alt="Placeholder thesis card art" />
+              </div>
+              <div>
+                <p class="cardName">System Card</p>
+                <p class="cardFlavor">A nice slot for a more diagram-based or structural card in the set.</p>
+              </div>
+            </button>
+
+            <button class="thesisCard" type="button" data-card="2">
+              <div class="cardTop">
+                <span class="cardSuit">Q</span>
+                <span class="cardRank">Prompt</span>
+              </div>
+              <div class="cardVisual">
+                <img src="/pic/tutor-persona-6.png" alt="Placeholder thesis card art" />
+              </div>
+              <div>
+                <p class="cardName">Action Card</p>
+                <p class="cardFlavor">A place for cards that ask players to reflect, choose, or respond.</p>
+              </div>
+            </button>
+          </div>
+
+          <div class="deckDetail" id="deckDetail" aria-live="polite">
+            <p class="deckTitle">Signal Card</p>
+            <p class="deckBody">
+              This panel can explain what the card set does, how the deck works, or why the visual language matters in your thesis project.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Poker size</span>
+              <span class="tag">Animated preview</span>
+              <span class="tag">Thesis artifact</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="videoPanel reveal">
+          <p class="panelEyebrow">Website Loop / Drop in your video</p>
+          <div class="videoShell">
+            <div class="videoPoster">
+              <div class="playPulse" aria-hidden="true"></div>
+            </div>
+            <div class="videoMeta">
+              <p class="deckTitle">Website Demo Loop</p>
+              <p class="deckBody">
+                This stage is ready for a muted looping video of your website or thesis interaction. Once you have the file, we can swap this placeholder for a real autoplay loop.
+              </p>
+              <div class="videoDock">
+                <div class="dockTile">Format: `.mp4` or `.webm`</div>
+                <div class="dockTile">Behavior: autoplay / muted / loop</div>
+                <div class="dockTile">Best use: website walkthrough or card interaction demo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="skills" class="section">
       <div class="twoCol">
         <div class="skillCol reveal">
@@ -997,7 +1381,7 @@
         </div>
       </div>
       <p class="footerNote reveal">
-        If you want, the next pass can swap these placeholder contact links for your real details and tighten the wording into a more formal job-application version.
+        If you want, the next pass can swap these placeholder contact links for your real details and replace the video shell with your actual looping file.
       </p>
     </section>
   </main>
@@ -1011,6 +1395,8 @@
       const timelineButtons = [...document.querySelectorAll("[data-timeline]")];
       const filterButtons = [...document.querySelectorAll("[data-filter]")];
       const projectCards = [...document.querySelectorAll(".projectCard")];
+      const thesisCards = [...document.querySelectorAll("[data-card]")];
+      const deckDetail = document.getElementById("deckDetail");
       const revealNodes = [...document.querySelectorAll(".reveal")];
 
       const timelineItems = [
@@ -1037,6 +1423,24 @@
           meta: "Project 04 / workflow clarity / operational communication",
           body: "Flow-based constraint mapping that focuses on marking operations and communication bottlenecks across an assessment pipeline.",
           tags: ["Workflow mapping", "Operations", "Communication systems"]
+        }
+      ];
+
+      const thesisItems = [
+        {
+          title: "Signal Card",
+          body: "Use this as a hero-style placeholder for one of your thesis cards. The stack animation makes the deck feel collectible and more game-like without changing your color palette.",
+          tags: ["Poker size", "Cover card", "Visual hook"]
+        },
+        {
+          title: "System Card",
+          body: "A good slot for cards that explain frameworks, relationships, or recurring patterns in your thesis. This can become a more informational card front later.",
+          tags: ["Framework", "Pattern", "Thesis system"]
+        },
+        {
+          title: "Action Card",
+          body: "This one works well for prompt or move-based cards that encourage reflection, response, or a choice during a workshop-style interaction.",
+          tags: ["Prompt card", "Interaction", "Decision point"]
         }
       ];
 
@@ -1078,6 +1482,23 @@
         });
       }
 
+      function renderDeck(index) {
+        const item = thesisItems[index];
+        if (!item || !deckDetail) return;
+
+        deckDetail.innerHTML = `
+          <p class="deckTitle">${item.title}</p>
+          <p class="deckBody">${item.body}</p>
+          <div class="tagRow">
+            ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+        `;
+
+        thesisCards.forEach((card, cardIndex) => {
+          card.classList.toggle("is-active", cardIndex === index);
+        });
+      }
+
       timelineButtons.forEach((button) => {
         button.addEventListener("click", () => {
           renderTimeline(Number(button.dataset.timeline));
@@ -1103,6 +1524,12 @@
             const categories = card.dataset.category || "";
             card.hidden = !categories.includes(filter);
           });
+        });
+      });
+
+      thesisCards.forEach((card) => {
+        card.addEventListener("click", () => {
+          renderDeck(Number(card.dataset.card));
         });
       });
 
