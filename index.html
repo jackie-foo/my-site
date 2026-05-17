@@ -3,456 +3,2770 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jackie Foo</title>
-  <meta name="description" content="This is my internet corner, a little piece of me." />
-  <meta name="theme-color" content="#ffcb79" />
+  <title>Jackie Foo | Portfolio</title>
+  <meta
+    name="description"
+    content="Single-page portfolio for Jackie Foo with research work, mascot development, thesis cards, and looping media."
+  />
+  <meta name="theme-color" content="#0d47d9" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Bungee:wght@400&family=Montserrat:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
 
   <style>
     :root {
-      --bg1: #fff4d6;
-      --bg2: #ffd992;
-      --bg3: #ffbf65;
-      --ink: #4a2a12;
-      --muted: #6f482a;
-      --card: rgba(255, 249, 238, 0.82);
-      --line: rgba(74, 42, 18, 0.16);
+      --paper: #f8ecd9;
+      --paper-2: #f3e1c5;
+      --blue: #1146d8;
+      --blue-dark: #0a329f;
+      --blue-soft: rgba(17, 70, 216, 0.14);
+      --ink: #15317f;
+      --line: rgba(17, 70, 216, 0.34);
+      --shadow: 0 18px 44px rgba(17, 70, 216, 0.12);
+      --max: 1220px;
+      --body-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='6' fill='none' stroke='%231146d8' stroke-width='2'/%3E%3Cpath d='M12 1v4M12 19v4M1 12h4M19 12h4' stroke='%231146d8' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 12 12, auto;
+      --action-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 3l12 8-5 1 3 6-2 1-3-6-4 4z' fill='%231146d8' stroke='%230a329f' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 4 4, pointer;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html,
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      min-height: 100%;
-      font-family: "Manrope", sans-serif;
+      min-height: 100vh;
+      font-family: "Archivo", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 12% 16%, rgba(255,255,255,0.6), transparent 36%),
-        radial-gradient(circle at 85% 18%, rgba(255,243,212,0.65), transparent 34%),
-        linear-gradient(155deg, var(--bg1) 0%, var(--bg2) 52%, var(--bg3) 100%);
+        radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.72), transparent 18%),
+        radial-gradient(circle at 85% 14%, rgba(255, 255, 255, 0.28), transparent 22%),
+        linear-gradient(180deg, var(--paper) 0%, #f7ead2 44%, var(--paper-2) 100%);
       overflow-x: hidden;
+      cursor: var(--body-cursor);
     }
 
-    .rain {
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
-      z-index: 0;
       pointer-events: none;
-      overflow: hidden;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 92%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 92%, transparent 100%);
+      background:
+        radial-gradient(circle at 22% 18%, rgba(17, 70, 216, 0.08), transparent 18%),
+        radial-gradient(circle at 78% 64%, rgba(17, 70, 216, 0.06), transparent 20%);
+      animation: auraDrift 12s ease-in-out infinite alternate;
+      z-index: 0;
     }
 
-    .drop {
-      position: absolute;
-      top: -180px;
-      left: 0;
-      width: var(--size, 80px);
-      opacity: var(--op, 0.18);
-      animation: fall var(--dur, 14s) linear infinite;
-      animation-delay: var(--delay, 0s);
-      filter: drop-shadow(0 6px 12px rgba(110, 62, 30, 0.16));
-      mix-blend-mode: multiply;
+    a,
+    button,
+    summary,
+    .galleryDots button,
+    .thesisCard {
+      cursor: var(--action-cursor);
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .drop img {
-      width: 100%;
-      height: auto;
+    img,
+    video {
+      max-width: 100%;
       display: block;
-      transform: scaleX(var(--flip, 1));
-      user-select: none;
-      -webkit-user-drag: none;
     }
 
     .page {
-      min-height: 100vh;
+      width: min(calc(100% - 24px), var(--max));
+      margin: 14px auto;
+      border: 2px solid var(--blue);
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)),
+        var(--paper);
+      box-shadow: var(--shadow);
       position: relative;
-      z-index: 1;
-      display: grid;
-      place-items: center;
-      padding: clamp(22px, 4.6vw, 56px);
+      overflow: clip;
+    }
+
+    .page::before,
+    .page::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(17, 70, 216, 0.12);
+      pointer-events: none;
+    }
+
+    .page::before {
+      width: 320px;
+      height: 320px;
+      top: -160px;
+      right: -110px;
+    }
+
+    .page::after {
+      width: 260px;
+      height: 260px;
+      bottom: 320px;
+      left: -140px;
+    }
+
+    .masthead {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 2px solid var(--blue);
+      background: rgba(248, 236, 217, 0.92);
+      backdrop-filter: blur(10px);
+      border-radius: 26px 26px 0 0;
+    }
+
+    .brand {
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      flex: 0 0 auto;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .nav a,
+    .galleryCursor {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--blue);
+      text-decoration: none;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .nav a:hover,
+    .nav a:focus-visible,
+    .galleryCursor:hover,
+    .galleryCursor:focus-visible {
+      background: var(--blue);
+      color: var(--paper);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .section {
+      position: relative;
+      padding: 28px 22px;
+      border-bottom: 2px solid var(--blue);
     }
 
     .hero {
-      width: min(1020px, 100%);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: rgba(255, 249, 238, 0.74);
-      backdrop-filter: blur(4px);
-      box-shadow: 0 12px 30px rgba(88, 49, 24, 0.1);
-      padding: clamp(16px, 2.6vw, 28px);
       display: grid;
-      grid-template-columns: minmax(200px, 280px) 1fr;
-      gap: clamp(18px, 2.8vw, 30px);
-      align-items: center;
+      grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel,
+    .detailCard,
+    .module,
+    .contactBlock,
+    .experienceLog,
+    .cvPanel {
+      border: 2px solid var(--blue);
+      border-radius: 24px;
+      background: rgba(255, 253, 247, 0.72);
+      padding: 16px;
+    }
+
+    .heroLeft,
+    .heroRight {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .portraitCard {
+      padding: 0;
+      min-height: auto;
       position: relative;
+      background: transparent;
+      border: 0;
     }
 
-    .heroCopy {
-      order: 2;
-      animation: rise 500ms ease-out both;
+    .portraitCard::before {
+      display: none;
     }
 
-    .tag {
+    .portraitOrbit {
+      position: relative;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+    }
+
+    .portraitOrbit::before,
+    .portraitOrbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .portraitOrbit::before {
+      width: min(94%, 520px);
+      aspect-ratio: 1 / 1;
+      border: 2px solid rgba(17, 70, 216, 0.16);
+    }
+
+    .portraitOrbit::after {
+      width: min(72%, 380px);
+      aspect-ratio: 1 / 1;
+      border: 2px solid rgba(17, 70, 216, 0.22);
+    }
+
+    .portraitWrap {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      width: min(72%, 290px);
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+    }
+
+    .portraitRing {
+      position: absolute;
+      inset: -10%;
+      border: 2px solid rgba(17, 70, 216, 0.16);
+      border-radius: 50%;
+    }
+
+    .portraitImg {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid var(--blue);
+      filter: grayscale(1) contrast(1.03);
+      mix-blend-mode: normal;
+      background: #fff;
+    }
+
+    .portraitBadge {
+      margin: 16px auto 0;
       width: fit-content;
-      border: 1px solid var(--line);
+      border: 2px solid var(--blue);
       border-radius: 999px;
-      padding: 7px 12px;
-      background: rgba(255,255,255,0.75);
-      color: var(--muted);
+      padding: 8px 12px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.36);
+    }
+
+    .miniNote,
+    .helper {
+      margin: 0;
+      font-size: 0.82rem;
+      line-height: 1.52;
+      color: var(--blue-dark);
+    }
+
+    .nameBlock {
+      display: grid;
+      gap: 10px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      background: rgba(17, 70, 216, 0.1);
+    }
+
+    .heroTitle,
+    .sectionTitle,
+    .detailTitle,
+    .moduleTitle,
+    .galleryName {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      color: var(--blue);
+      text-transform: uppercase;
+      line-height: 0.92;
+    }
+
+    .heroTitle {
+      font-size: clamp(3rem, 8.8vw, 5.8rem);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      animation: titleGlow 4.8s ease-in-out infinite;
+    }
+
+    .sectionTitle {
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 0.95;
+      margin-bottom: 18px;
+      animation: titleGlow 5.4s ease-in-out infinite;
+    }
+
+    .detailTitle,
+    .moduleTitle,
+    .galleryName {
+      font-size: clamp(1.35rem, 3vw, 2rem);
+    }
+
+    .introRow {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(250px, 0.92fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .introText {
+      margin: 0;
+      font-size: clamp(1rem, 1.6vw, 1.14rem);
+      line-height: 1.5;
+      max-width: 36ch;
+    }
+
+    .introText strong {
+      font-weight: 800;
+    }
+
+    .heroIntro {
+      margin: 0;
+      max-width: 48ch;
+      font-size: clamp(1rem, 1.75vw, 1.16rem);
+      line-height: 1.58;
+      text-wrap: pretty;
+    }
+
+    .metaRail {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 54rem;
+      padding-left: 0;
+    }
+
+    .metaRail::before {
+      display: none;
+    }
+
+    .metaLine {
+      border-top: 2px solid rgba(17, 70, 216, 0.24);
+      padding-top: 12px;
+      display: grid;
+      gap: 5px;
+    }
+
+    .metaLine::before {
+      display: none;
+    }
+
+    .factCard {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .factGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .statCard {
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 18px;
+      padding: 12px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.18)),
+        rgba(255, 255, 255, 0.2);
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      min-height: 100%;
+    }
+
+    .statToken {
+      width: 34px;
+      height: 34px;
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
       font-size: 0.78rem;
       font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      position: absolute;
-      top: 12px;
-      right: 14px;
+      background: rgba(17, 70, 216, 0.08);
+      animation: tokenGlow 3.6s ease-in-out infinite;
     }
 
-    .tag::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ffc74d;
-      box-shadow: 0 0 0 0 rgba(255, 199, 77, 0.58);
-      animation: glow 1.8s ease-out infinite;
-    }
-
-    h1 {
-      margin: 12px 0 0;
-      font-size: clamp(1.8rem, 4.8vw, 3.1rem);
-      line-height: 1.02;
-      letter-spacing: -0.02em;
-      max-width: 14ch;
+    .factLabel,
+    .moduleEyebrow,
+    .timelineDate,
+    .timelineLabel,
+    .kicker {
+      margin: 0;
+      font-size: 0.72rem;
       font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .subTitle {
-      margin: 10px 0 0;
-      max-width: 50ch;
-      color: var(--muted);
-      font-size: clamp(0.98rem, 1.8vw, 1.06rem);
-      line-height: 1.66;
-      font-weight: 600;
+    .factValue,
+    .detailMeta,
+    .bodyText {
+      margin: 0;
+      line-height: 1.58;
     }
 
-    .lead {
-      margin: 10px 0 0;
-      max-width: 55ch;
-      color: var(--muted);
-      font-size: clamp(0.9rem, 1.55vw, 0.98rem);
-      line-height: 1.62;
-      font-weight: 500;
-    }
-
-    .links {
-      margin-top: 18px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 14px;
-    }
-
-    .link {
-      color: var(--ink);
-      text-decoration: none;
-      font-size: 0.88rem;
+    .factValue {
+      font-size: 0.94rem;
       font-weight: 700;
+    }
+
+    .sectionLead {
+      margin: -6px 0 20px;
+      max-width: 64ch;
+      font-size: 0.96rem;
+      line-height: 1.6;
+    }
+
+    .workGrid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 22px;
+    }
+
+    .workPicker {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .workCard {
       position: relative;
-      transition: color 140ms ease, transform 140ms ease;
-      animation: rise 500ms ease-out both;
-      padding: 3px 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      border: 2px solid var(--blue);
+      border-radius: 24px;
+      background: rgba(255, 253, 247, 0.72);
+      padding: 16px;
+      text-align: left;
+      display: grid;
+      gap: 10px;
+      transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+      overflow: hidden;
     }
 
-    .link::before {
-      content: "↗";
+    .workCard::before {
+      content: "";
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(17, 70, 216, 0.22);
+      border-radius: 50%;
+    }
+
+    .workCard:hover,
+    .workCard:focus-visible,
+    .workCard.is-active {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 34px rgba(17, 70, 216, 0.1);
+      outline: none;
+    }
+
+    .workCard.is-active {
+      background: var(--blue);
+      color: var(--paper);
+    }
+
+    .workCard.is-active::before {
+      border-color: rgba(248, 236, 217, 0.58);
+      background: rgba(248, 236, 217, 0.16);
+    }
+
+    .workDate,
+    .workName,
+    .workText {
+      margin: 0;
+    }
+
+    .workDate {
       font-size: 0.74rem;
-      color: rgba(74, 42, 18, 0.66);
-      transform: translateY(-0.5px);
-      transition: color 160ms ease, transform 160ms ease;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .link::after {
+    .workName {
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(1rem, 2vw, 1.36rem);
+      line-height: 0.96;
+      text-transform: uppercase;
+    }
+
+    .workText {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      max-width: 26ch;
+    }
+
+    .workCard.is-active .workDate,
+    .workCard.is-active .workName,
+    .workCard.is-active .workText {
+      color: inherit;
+    }
+
+    .workPanel {
+      min-height: 100%;
+    }
+
+    .sectionStack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .sectionHeader {
+      display: grid;
+      gap: 8px;
+    }
+
+    .storyRail {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(300px, 340px);
+      gap: 18px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .storyRail::-webkit-scrollbar {
+      display: none;
+    }
+
+    .storyCard {
+      scroll-snap-align: start;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      border: 2px solid var(--blue);
+      border-radius: 24px;
+      background: rgba(255, 253, 247, 0.76);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      box-shadow: 0 14px 26px rgba(17, 70, 216, 0.07);
+    }
+
+    .storyCard::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(17, 70, 216, 0.16);
+      border-radius: 18px;
+      pointer-events: none;
+    }
+
+    .storyVisual {
+      position: relative;
+      min-height: 104px;
+      order: 5;
+      display: grid;
+      place-items: end right;
+      padding-top: 10px;
+    }
+
+    .storyVisual::before {
+      display: none;
+    }
+
+    .storyVisual--research {
+      min-height: 178px;
+      place-items: center;
+      padding-top: 0;
+      padding-bottom: 8px;
+    }
+
+    .storyFrame {
+      position: relative;
+      width: min(100%, 206px);
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      margin-inline: auto;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.08) 68%),
+        radial-gradient(circle at 50% 50%, rgba(17, 70, 216, 0.08), rgba(17, 70, 216, 0.02) 62%, rgba(17, 70, 216, 0) 78%);
+      box-shadow:
+        inset 0 0 0 2px rgba(17, 70, 216, 0.14),
+        0 18px 28px rgba(17, 70, 216, 0.08);
+      overflow: visible;
+    }
+
+    .storyFrame::before,
+    .storyFrame::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .storyFrame::before {
+      inset: -10px;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+    }
+
+    .storyFrame::after {
+      inset: 18px;
+      border: 1px dashed rgba(17, 70, 216, 0.16);
+      opacity: 0.8;
+    }
+
+    .storyPlaceholder {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 6px;
+      justify-items: end;
+      text-align: right;
+      color: var(--blue);
+      opacity: 0.92;
+    }
+
+    .storyPlaceholder strong {
+      font-family: "Bungee", sans-serif;
+      font-size: 0.86rem;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .storyPlaceholder span {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.72;
+    }
+
+    .storyOrb {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      background:
+        radial-gradient(circle at 50% 40%, rgba(17, 70, 216, 0.16), rgba(17, 70, 216, 0.02) 58%, rgba(17, 70, 216, 0) 72%);
+      box-shadow:
+        0 0 0 14px rgba(17, 70, 216, 0.03),
+        0 12px 18px rgba(17, 70, 216, 0.06);
+    }
+
+    .storyChibi {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 220px);
+      max-height: 170px;
+      object-fit: contain;
+      object-position: bottom right;
+      margin-left: auto;
+      filter:
+        drop-shadow(0 18px 24px rgba(17, 70, 216, 0.1))
+        drop-shadow(0 0 22px rgba(255, 244, 190, 0.45));
+    }
+
+    .storyVisual--research .storyChibi {
+      width: min(100%, 210px);
+      max-height: 194px;
+      margin-left: 0;
+      object-position: center bottom;
+      filter:
+        drop-shadow(0 18px 26px rgba(17, 70, 216, 0.12))
+        drop-shadow(0 0 24px rgba(255, 244, 190, 0.42));
+    }
+
+    .storyMeta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-dark);
+    }
+
+    .storyTitle {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      color: var(--blue);
+      font-size: clamp(1rem, 2.3vw, 1.36rem);
+      line-height: 0.98;
+      text-transform: uppercase;
+    }
+
+    .storyText {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.56;
+    }
+
+    .timelineGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .timelineRail {
+      display: grid;
+      gap: 16px;
+    }
+
+    .timelineLine {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px 0 0;
+    }
+
+    .timelineLine::before {
       content: "";
       position: absolute;
       left: 0;
       right: 0;
-      bottom: -3px;
-      height: 1px;
-      background: currentColor;
-      transform: scaleX(0.2);
-      transform-origin: left;
-      opacity: 0.45;
-      transition: transform 160ms ease, opacity 160ms ease;
-    }
-
-    .link:hover {
-      color: #2e1709;
-      transform: translateY(-1px);
-    }
-
-    .link:hover::before {
-      color: #2e1709;
-      transform: translate(1px, -1px);
-    }
-
-    .link:hover::after {
-      transform: scaleX(1);
-      opacity: 1;
-    }
-
-    .link:focus-visible {
-      outline: 2px solid rgba(46, 23, 9, 0.28);
-      outline-offset: 4px;
-      border-radius: 4px;
-    }
-
-    .workshopWrap {
-      margin-top: 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      border: 1px solid rgba(74, 42, 18, 0.2);
+      top: 30px;
+      height: 2px;
+      background: var(--blue);
       border-radius: 999px;
-      padding: 7px 12px;
-      font: inherit;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.65);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: transform 120ms ease, box-shadow 120ms ease;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(50, 26, 12, 0.12);
-    }
-
-    .redirectNote {
-      margin: 0;
-      color: rgba(74, 42, 18, 0.68);
-      font-size: 0.76rem;
-      font-weight: 600;
-    }
-
-    .profileCol {
+    .timelineStop {
+      position: relative;
       display: grid;
-      justify-items: center;
-      align-items: center;
-      order: 1;
-      position: relative;
-      z-index: 0;
-      animation: rise 540ms ease-out both;
+      gap: 8px;
+      align-content: start;
+      text-align: center;
+      transition: transform 180ms ease, opacity 180ms ease;
     }
 
-    .picWrap {
-      width: clamp(180px, 24vw, 250px);
-      aspect-ratio: 1 / 1;
+    .timelineStop:hover {
+      transform: translateY(-3px);
+    }
+
+    .timelineStop.is-active {
+      transform: translateY(-4px);
+    }
+
+    .timelineBtn {
+      width: 24px;
+      height: 24px;
+      margin: 0 auto;
       border-radius: 50%;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      background: linear-gradient(145deg, #fff8ea, #ffe8bf);
-      box-shadow: 0 10px 22px rgba(84, 47, 22, 0.14);
-      position: relative;
-      z-index: 2;
+      border: 2px solid var(--blue);
+      background: var(--paper);
+      transition: transform 160ms ease, background 160ms ease;
     }
 
-    .picWrap::before {
+    .timelineBtn:hover,
+    .timelineBtn:focus-visible {
+      transform: scale(1.12);
+      background: var(--blue-soft);
+      outline: none;
+    }
+
+    .timelineStop.is-active .timelineBtn {
+      background: var(--blue);
+      animation: pointGlow 2.1s ease-in-out infinite;
+    }
+
+    .timelineStop.is-active .timelineLabel,
+    .timelineStop.is-active .timelineText,
+    .timelineStop.is-active .timelineDate {
+      color: var(--blue-dark);
+    }
+
+    .timelineText {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .timelineSide {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .detailCard {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .timelineControls {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding-top: 4px;
+    }
+
+    .timelineNav {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--blue);
+      font: inherit;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .timelineNav:hover,
+    .timelineNav:focus-visible {
+      transform: translateY(-2px);
+      background: var(--blue);
+      color: var(--paper);
+      outline: none;
+    }
+
+    .timelineMeter {
+      display: grid;
+      gap: 8px;
+    }
+
+    .timelineCount {
+      margin: 0;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-dark);
+    }
+
+    .timelineProgress {
+      width: 100%;
+      height: 8px;
+      border: 2px solid rgba(17, 70, 216, 0.22);
+      border-radius: 999px;
+      background: rgba(17, 70, 216, 0.08);
+      overflow: hidden;
+    }
+
+    .timelineProgress span {
+      display: block;
+      height: 100%;
+      width: 25%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), #4d86ff);
+      box-shadow: 0 0 18px rgba(17, 70, 216, 0.28);
+      transition: width 180ms ease;
+    }
+
+    .tagRow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(17, 70, 216, 0.06);
+    }
+
+    .experienceSectionWrap {
+      display: grid;
+      gap: 18px;
+    }
+
+    .experienceHeaderRow {
+      display: grid;
+      gap: 8px;
+    }
+
+    .experienceHeaderRow .sectionLead {
+      margin: 0;
+      max-width: 32ch;
+    }
+
+    .experienceGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .experienceLog {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .experienceLog::before {
       content: "";
       position: absolute;
-      inset: 8px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.75);
+      inset: 12px;
+      border: 1px solid rgba(17, 70, 216, 0.18);
+      border-radius: 18px;
       pointer-events: none;
     }
 
-    .picWrap img {
+    .experienceLog:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 34px rgba(17, 70, 216, 0.08);
+    }
+
+    .expMeta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--blue-dark);
+    }
+
+    .expRole {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      color: var(--blue);
+      text-transform: uppercase;
+      line-height: 0.94;
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      overflow-wrap: anywhere;
+    }
+
+    .expBullets {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+      line-height: 1.48;
+      font-size: 0.92rem;
+    }
+
+    .expBullets li::marker {
+      color: var(--blue);
+    }
+
+    .portfolioCarousel {
+      position: relative;
+      border: 2px solid var(--blue);
+      border-radius: 24px;
+      background: rgba(255, 253, 247, 0.72);
+      overflow: hidden;
+    }
+
+    .portfolioCarousel::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(17, 70, 216, 0.18);
+      border-radius: 18px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .portfolioViewport {
+      position: relative;
+      overflow: hidden;
+      touch-action: pan-y;
+      z-index: 1;
+    }
+
+    .portfolioTrack {
+      display: flex;
+      transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    .portfolioSlide {
+      min-width: 100%;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.94fr) minmax(0, 1.06fr);
+      gap: 18px;
+      align-items: start;
+      padding: 18px;
+      opacity: 0.68;
+      transition: opacity 220ms ease;
+    }
+
+    .portfolioSlide.is-active {
+      opacity: 1;
+    }
+
+    .portfolioInfo {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      min-width: 0;
+    }
+
+    .portfolioCanvas {
+      min-width: 0;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, rgba(17, 70, 216, 0.08), transparent 48%),
+        rgba(255, 255, 255, 0.44);
+      padding: 12px;
+      min-height: 452px;
+      display: grid;
+      align-items: stretch;
+      justify-items: center;
+      overflow: hidden;
+    }
+
+    .portfolioSlide:first-child .portfolioCanvas {
+      background:
+        linear-gradient(180deg, rgba(17, 70, 216, 0.05), transparent 52%),
+        rgba(255, 255, 255, 0.38);
+    }
+
+    .portfolioCanvas--art {
+      border-color: rgba(17, 70, 216, 0.16);
+      background:
+        radial-gradient(circle at 50% 46%, rgba(17, 70, 216, 0.1), transparent 38%),
+        radial-gradient(circle at 50% 48%, rgba(255, 242, 189, 0.5), transparent 56%),
+        rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 0 0 1px rgba(17, 70, 216, 0.08);
+    }
+
+    .portfolioMeta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 14px 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portfolioArrow {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      background: rgba(248, 236, 217, 0.94);
+      color: var(--blue);
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      font-size: 1.05rem;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .portfolioArrow:hover,
+    .portfolioArrow:focus-visible {
+      transform: translateY(-2px);
+      background: var(--blue);
+      color: var(--paper);
+      outline: none;
+    }
+
+    .portfolioDots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .portfolioDots button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--blue);
+      background: transparent;
+      padding: 0;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .portfolioDots button.is-active {
+      background: var(--blue);
+      transform: scale(1.08);
+    }
+
+    .cardArena {
+      min-height: 100%;
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 20px 14px 10px;
+      width: min(100%, 560px);
+    }
+
+    .thesisCard {
+      --card-x: 0px;
+      --card-y: 0px;
+      --card-rotate: 0deg;
+      font-family: "Montserrat", "Archivo", sans-serif;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(27vw, 184px);
+      aspect-ratio: 5 / 7.2;
+      border: 2px solid var(--blue);
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.22)),
+        #fff6e6;
+      padding: 10px 10px 12px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 8px;
+      align-content: stretch;
+      box-shadow: 0 18px 30px rgba(17, 70, 216, 0.12);
+      transform:
+        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y)))
+        rotate(var(--card-rotate));
+      transform-origin: 50% 85%;
+      transition:
+        transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 300ms ease,
+        border-color 300ms ease,
+        opacity 300ms ease;
+      will-change: transform;
+      animation: floatCard 5s ease-in-out infinite;
+    }
+
+    .thesisCard.is-left {
+      --card-x: -92px;
+      --card-y: 18px;
+      --card-rotate: -11deg;
+      z-index: 1;
+      animation-delay: -0.8s;
+      opacity: 0.95;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.26)),
+        #ffe8c9;
+    }
+
+    .thesisCard.is-center {
+      --card-x: 0px;
+      --card-y: 28px;
+      --card-rotate: 0deg;
+      z-index: 3;
+      animation-delay: -0.2s;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.22)),
+        #f6f0ff;
+    }
+
+    .thesisCard.is-right {
+      --card-x: 92px;
+      --card-y: 18px;
+      --card-rotate: 11deg;
+      z-index: 1;
+      animation-delay: -1.4s;
+      opacity: 0.95;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.24)),
+        #e8f7ff;
+    }
+
+    .thesisCard.is-center,
+    .thesisCard.is-active {
+      transform:
+        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y) - 14px))
+        rotate(var(--card-rotate));
+      box-shadow: 0 24px 40px rgba(17, 70, 216, 0.18);
+      border-color: var(--blue-dark);
+      z-index: 5;
+    }
+
+    .thesisCard:hover,
+    .thesisCard:focus-visible {
+      transform:
+        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y) - 10px))
+        rotate(var(--card-rotate));
+      box-shadow: 0 24px 40px rgba(17, 70, 216, 0.18);
+      border-color: var(--blue-dark);
+      outline: none;
+      z-index: 5;
+    }
+
+    .cardTop {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .cardSuit {
+      font-family: "Montserrat", "Archivo", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .cardRank {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cardVisual,
+    .fallbackVisual {
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(17, 70, 216, 0.12), transparent 34%),
+        rgba(255, 255, 255, 0.46);
+      overflow: hidden;
+    }
+
+    .cardVisual {
+      aspect-ratio: 1 / 1.02;
+      min-height: 0;
+      padding: 12px 10px;
+      display: grid;
+      place-items: center;
+      box-shadow: inset 0 0 0 1px rgba(17, 70, 216, 0.05);
+      background:
+        radial-gradient(circle at 50% 28%, rgba(17, 70, 216, 0.12), transparent 36%),
+        rgba(255, 255, 255, 0.54);
+      border-color: rgba(17, 70, 216, 0.12);
+    }
+
+    .galleryImage,
+    .fallbackVisual img {
+      width: 100%;
+    }
+
+    .cardVisual img {
+      width: 92%;
+      height: 92%;
+      object-fit: contain;
+      object-position: center;
+      filter: none;
+      mix-blend-mode: normal;
+      transform: translateZ(0);
+    }
+
+    .cardName,
+    .galleryName {
+      font-size: clamp(1.26rem, 2.4vw, 1.7rem);
+    }
+
+    .cardName {
+      margin: 0;
+      font-family: "Montserrat", "Archivo", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.16;
+    }
+
+    .cardFlavor {
+      margin: 2px 0 0;
+      font-family: "Montserrat", "Archivo", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.34;
+      opacity: 0.86;
+    }
+
+    .cardFooter {
+      display: grid;
+      gap: 2px;
+      align-content: end;
+    }
+
+    .deckDetail,
+    .moduleBody {
+      display: grid;
+      gap: 12px;
+    }
+
+    .galleryShell {
+      display: grid;
+      gap: 14px;
+    }
+
+    .galleryStage {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      display: grid;
+      place-items: center;
+    }
+
+    .galleryPortrait {
+      position: relative;
+      min-height: 100%;
+      width: min(100%, 100%);
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(17, 70, 216, 0.06), transparent 44%),
+        rgba(255, 255, 255, 0.3);
+      display: grid;
+      place-items: center;
+      padding: 14px 56px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(17, 70, 216, 0.04);
+    }
+
+    .galleryPortrait::before,
+    .galleryPortrait::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .galleryPortrait::before {
+      background:
+        radial-gradient(circle at 50% 50%, rgba(17, 70, 216, 0.16), transparent 34%),
+        radial-gradient(circle at 50% 50%, rgba(255, 242, 189, 0.58), transparent 54%);
+      filter: blur(6px);
+      opacity: 0.9;
+    }
+
+    .galleryPortrait::after {
+      inset: 18px;
+      border: 1px solid rgba(17, 70, 216, 0.1);
+      border-radius: 20px;
+    }
+
+    .galleryFigure {
+      position: relative;
+      width: min(100%, 310px);
+      height: 248px;
+      display: grid;
+      place-items: center;
+    }
+
+    .galleryFigure::before,
+    .galleryFigure::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .galleryFigure::before {
+      width: 224px;
+      height: 224px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(17, 70, 216, 0.28) 0%, rgba(17, 70, 216, 0.12) 38%, rgba(17, 70, 216, 0) 74%);
+      filter: blur(14px);
+      animation: mascotGlow 3.8s ease-in-out infinite alternate;
+    }
+
+    .galleryFigure::after {
+      width: 240px;
+      height: 240px;
+      border: 1px dashed rgba(17, 70, 216, 0.18);
+      border-radius: 50%;
+      animation: slowSpin 16s linear infinite;
+    }
+
+    .galleryImage {
+      width: min(80%, 232px);
+      height: 216px;
+      object-fit: contain;
+      object-position: center;
+      transition: opacity 180ms ease, transform 220ms ease;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+      filter: none;
+      mix-blend-mode: normal;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 18px 34px rgba(17, 70, 216, 0.18));
+    }
+
+    .galleryPortrait.is-changing .galleryImage {
+      opacity: 0.18;
+      transform: translateX(10px) scale(0.98);
+    }
+
+    .galleryCursor {
+      position: absolute;
+      top: 50%;
+      width: 52px;
+      height: 52px;
+      margin-top: -26px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      font-size: 1.36rem;
+      line-height: 1;
+      z-index: 3;
+      background: rgba(248, 236, 217, 0.92);
+      box-shadow: 0 0 0 0 rgba(17, 70, 216, 0.12);
+      animation: pointGlow 2.6s ease-in-out infinite;
+    }
+
+    .galleryCursor.prev {
+      left: -6px;
+    }
+
+    .galleryCursor.next {
+      right: -6px;
+    }
+
+    .galleryInfo {
+      display: grid;
+      gap: 8px;
+    }
+
+    .galleryDots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .galleryDots button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--blue);
+      background: transparent;
+      padding: 0;
+    }
+
+    .galleryDots button.is-active {
+      background: var(--blue);
+    }
+
+    .videoStage {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 20px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(180deg, rgba(17, 70, 216, 0.12), transparent 44%),
+        rgba(255, 255, 255, 0.32);
+    }
+
+    .loopVideo {
+      position: relative;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: center;
-      transform: scale(1.02);
-      display: block;
+      object-fit: contain;
+      object-position: center center;
+      background:
+        linear-gradient(180deg, rgba(17, 70, 216, 0.08), rgba(255, 255, 255, 0.14)),
+        rgba(255, 255, 255, 0.5);
     }
 
-    .profileGlow {
-      width: clamp(160px, 22vw, 230px);
-      height: clamp(160px, 22vw, 230px);
-      border-radius: 50%;
-      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
-      position: absolute;
-      z-index: 0;
-      transform: translateY(8px);
-      filter: blur(1px);
+    .videoBadge {
+      display: none;
     }
 
-    footer {
-      margin-top: 12px;
-      color: rgba(74, 42, 18, 0.66);
-      font-size: 0.79rem;
-      font-weight: 700;
+    .videoMeta {
+      display: grid;
+      gap: 10px;
     }
 
-    @keyframes fall {
+    .videoModule {
+      height: 100%;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+    }
+
+    .videoMeta ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+      line-height: 1.45;
+    }
+
+    .cvPanel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) auto;
+      gap: 18px;
+      align-items: center;
+      background:
+        linear-gradient(135deg, rgba(17, 70, 216, 0.08), rgba(255, 255, 255, 0)),
+        rgba(255, 253, 247, 0.72);
+    }
+
+    .cvCopy {
+      display: grid;
+      gap: 8px;
+    }
+
+    .cvButton {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      padding: 14px 20px;
+      background: var(--blue);
+      color: var(--paper);
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+      white-space: nowrap;
+    }
+
+    .cvButton:hover,
+    .cvButton:focus-visible {
+      transform: translateY(-2px);
+      background: transparent;
+      color: var(--blue);
+      outline: none;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 420ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes floatCard {
+      0%, 100% {
+        translate: 0 0;
+      }
+      50% {
+        translate: 0 -10px;
+      }
+    }
+
+    @keyframes titleGlow {
+      0%, 100% {
+        text-shadow: 0 0 0 rgba(17, 70, 216, 0);
+      }
+      50% {
+        text-shadow: 0 0 18px rgba(17, 70, 216, 0.14);
+      }
+    }
+
+    @keyframes tokenGlow {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(17, 70, 216, 0);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(17, 70, 216, 0.08);
+      }
+    }
+
+    @keyframes pointGlow {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(17, 70, 216, 0);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(17, 70, 216, 0.12);
+      }
+    }
+
+    @keyframes auraDrift {
       from {
-        transform: translate3d(0, -20vh, 0) rotate(0deg);
+        transform: translate3d(0, 0, 0);
       }
       to {
-        transform: translate3d(var(--drift, 20px), 128vh, 0) rotate(var(--rot, 9deg));
+        transform: translate3d(6px, -8px, 0);
       }
     }
 
-    @keyframes rise {
+    @keyframes mascotGlow {
       from {
-        opacity: 0;
-        transform: translateY(10px);
+        transform: scale(0.96);
+        opacity: 0.62;
       }
       to {
+        transform: scale(1.08);
         opacity: 1;
-        transform: translateY(0);
       }
     }
 
-    @keyframes glow {
+    @keyframes slowSpin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulseRing {
       0% {
-        box-shadow: 0 0 0 0 rgba(255, 199, 77, 0.58);
+        box-shadow: 0 0 0 0 rgba(17, 70, 216, 0.24);
+      }
+      70% {
+        box-shadow: 0 0 0 20px rgba(17, 70, 216, 0);
       }
       100% {
-        box-shadow: 0 0 0 9px rgba(255, 199, 77, 0);
+        box-shadow: 0 0 0 0 rgba(17, 70, 216, 0);
       }
     }
 
-    @media (max-width: 900px) {
-      .hero {
+    @media (max-width: 980px) {
+      .hero,
+      .workGrid,
+      .experienceGrid,
+      .cvPanel {
         grid-template-columns: 1fr;
       }
 
-      .heroCopy {
-        order: 2;
+      .storyRail {
+        grid-auto-columns: minmax(300px, 320px);
       }
 
-      .profileCol {
-        order: 1;
-        justify-items: center;
+      .workPicker,
+      .factGrid,
+      .timelineLine {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .tag {
-        top: 10px;
-        right: 10px;
+      .portraitOrbit {
+        min-height: 360px;
+      }
+
+      .metaRail {
+        grid-template-columns: 1fr;
+      }
+
+      .workPanel {
+        order: -1;
+      }
+
+      .portfolioSlide {
+        grid-template-columns: 1fr;
+      }
+
+      .portfolioCanvas {
+        order: -1;
+      }
+
+      .thesisCard {
+        width: min(31vw, 178px);
+      }
+
+      .thesisCard.is-left {
+        --card-x: -86px;
+      }
+
+      .thesisCard.is-right {
+        --card-x: 86px;
       }
     }
 
-    @media (max-width: 760px) {
-      .workshopWrap {
-        align-items: flex-start;
+    @media (max-width: 680px) {
+      .page {
+        width: min(calc(100% - 12px), var(--max));
+        margin: 6px auto;
+      }
+
+      .masthead {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 10px;
+      }
+
+      .masthead,
+      .section,
+      .contactBand {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .brand {
+        font-size: 0.92rem;
+      }
+
+      .nav {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+      }
+
+      .nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav a,
+      .galleryCursor {
+        font-size: 0.72rem;
+        padding: 7px 10px;
+      }
+
+      .nav a {
+        white-space: nowrap;
+      }
+
+      .heroTitle {
+        font-size: clamp(2.25rem, 13vw, 3.3rem);
+        line-height: 0.98;
+        white-space: normal;
+      }
+
+      .workPicker,
+      .factGrid,
+      .timelineLine,
+      .experienceGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .storyRail {
+        grid-auto-columns: 86vw;
+      }
+
+      .storyVisual--research {
+        min-height: 150px;
+      }
+
+      .storyFrame {
+        width: min(100%, 178px);
+      }
+
+      .storyVisual--research .storyChibi {
+        max-height: 170px;
+      }
+
+      .portraitOrbit {
+        min-height: 304px;
+      }
+
+      .portraitWrap {
+        width: min(74vw, 248px);
+      }
+
+      .heroIntro {
+        max-width: none;
+      }
+
+      .metaRail {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .metaLine {
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      .timelineLine::before {
+        left: 10px;
+        right: auto;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        height: auto;
+      }
+
+      .timelineStop {
+        text-align: left;
+        grid-template-columns: 22px 1fr;
+        column-gap: 12px;
+        align-items: start;
+      }
+
+      .timelineBtn {
+        margin: 0;
+      }
+
+      .timelineDate,
+      .timelineLabel,
+      .timelineText {
+        grid-column: 2;
+      }
+
+      .timelineControls {
+        grid-template-columns: 1fr;
+      }
+
+      .timelineNav {
+        width: 100%;
+      }
+
+      .experienceHeaderRow {
+        align-items: start;
+      }
+
+      .expMeta {
+        display: grid;
+        gap: 6px;
+        font-size: 0.68rem;
+      }
+
+      .expRole {
+        font-size: clamp(0.88rem, 5.2vw, 1.08rem);
+        line-height: 0.98;
+        letter-spacing: 0.01em;
+      }
+
+      .experienceLog {
+        padding: 14px;
+      }
+
+      .experienceLog .tag {
+        font-size: 0.68rem;
+      }
+
+      .introText,
+      .bodyText,
+      .timelineText,
+      .expBullets,
+      .videoMeta li {
+        font-size: 0.94rem;
+      }
+
+      .portfolioSlide {
+        padding: 14px;
+      }
+
+      .portfolioCanvas {
+        min-height: 388px;
+      }
+
+      .portfolioMeta {
+        padding: 8px 12px 12px;
+      }
+
+      .portfolioArrow {
+        width: 40px;
+        height: 40px;
+      }
+
+      .cardArena {
+        min-height: 100%;
+        padding-top: 22px;
+        touch-action: pan-y;
+      }
+
+      .thesisCard {
+        width: min(46vw, 164px);
+      }
+
+      .thesisCard.is-left {
+        --card-x: -60px;
+        --card-y: 8px;
+        --card-rotate: -9deg;
+      }
+
+      .thesisCard.is-center {
+        --card-x: 0px;
+        --card-y: 18px;
+      }
+
+      .thesisCard.is-right {
+        --card-x: 60px;
+        --card-y: 8px;
+        --card-rotate: 9deg;
+      }
+
+      .cardVisual {
+        min-height: 0;
+      }
+
+      .galleryPortrait {
+        min-height: 300px;
+        padding: 0 38px;
+      }
+
+      .galleryFigure {
+        height: 220px;
+      }
+
+      .galleryImage {
+        width: min(84%, 205px);
+        height: 190px;
+      }
+
+      .galleryCursor {
+        width: 44px;
+        height: 44px;
+        margin-top: -22px;
+        font-size: 1.1rem;
+      }
+
+      .galleryCursor.prev {
+        left: -2px;
+      }
+
+      .galleryCursor.next {
+        right: -2px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .drop,
-      .heroCopy,
-      .profileCol,
-      .profileGlow,
-      .link,
-      .btn {
-        animation: none;
-        transition: none;
+      html {
+        scroll-behavior: auto;
       }
 
-      .tag::before {
-        animation: none;
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
       }
     }
   </style>
 </head>
 <body>
-  <div id="rain" class="rain" aria-hidden="true"></div>
+  <main class="page">
+    <header class="masthead">
+      <div class="brand">Jackie Foo / Portfolio</div>
+      <nav class="nav" aria-label="Section navigation">
+        <a href="#profile">Profile</a>
+        <a href="#research">Research</a>
+        <a href="#industry">Industry</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#cv">CV</a>
+      </nav>
+    </header>
 
-  <div class="page">
-    <main class="hero" aria-label="Intro">
-      <section class="heroCopy">
-        <span class="tag">Coming Soon</span>
-        <h1>Jackie Foo</h1>
-        <p class="subTitle">I am still developing this website, STAY TUNE.</p>
-        <p class="lead">I am going to be the villian in everyone's life.</p>
+    <section id="profile" class="section hero">
+      <div class="heroLeft reveal">
+        <div class="portraitCard">
+          <div class="portraitOrbit">
+            <div class="portraitWrap">
+              <div class="portraitRing" aria-hidden="true"></div>
+              <img
+                class="portraitImg"
+                src="pic/Profile photo.jpeg"
+                alt="Portrait of Jackie Foo"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <nav class="links" aria-label="Profile links">
-          <a class="link" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a class="link" href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a class="link" href="mailto:you@email.com">Email</a>
-          <a class="link" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
-        </nav>
+      <div class="heroRight">
+        <div class="nameBlock reveal">
+          <div class="eyebrow">Student Researcher / Melbourne + Malaysia</div>
+          <h1 class="heroTitle">Jackie Foo</h1>
+        </div>
 
-        <section class="workshopWrap" aria-label="Workshop redirect">
-          <button id="openBtn" class="btn" type="button">Go To Workshop</button>
-          <p class="redirectNote">Redirects to the Stage 1 workshop page.</p>
-        </section>
+        <p class="heroIntro reveal">
+          Student researcher interested in how technology can better support learning,
+          communication, and feedback in real-world settings. I have worked on
+          feedback analytics and co-design research, assistive technology projects
+          involving local AI experimentation, and implementation work with different
+          stakeholders. I am interested in human-centred research that turns real
+          user needs into practical and sustainable tools.
+        </p>
 
-        <footer>© <span id="year"></span> Jackie Foo</footer>
-      </section>
+        <div class="metaRail reveal" aria-label="Profile details">
+          <div class="metaLine">
+            <p class="factLabel">Base</p>
+            <p class="factValue">Melbourne / Malaysia</p>
+          </div>
+          <div class="metaLine">
+            <p class="factLabel">Current Study</p>
+            <p class="factValue">Master of Data Science, Monash</p>
+          </div>
+          <div class="metaLine">
+            <p class="factLabel">Research Focus</p>
+            <p class="factValue">Feedback analytics, HCI, co-design</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <section class="profileCol" aria-label="Profile image">
-        <div class="profileGlow" aria-hidden="true"></div>
-        <figure class="picWrap">
-          <img src="/pic/chibi1.png" alt="Jackie chibi portrait" />
-        </figure>
-      </section>
-    </main>
-  </div>
+    <section id="research" class="section">
+      <div class="sectionStack">
+        <div class="sectionHeader">
+          <h2 class="sectionTitle reveal">Research</h2>
+          <p class="sectionLead reveal">
+            Current research tracks and project directions.
+          </p>
+        </div>
+
+        <div class="storyRail reveal" aria-label="Research projects">
+          <article class="storyCard storyCard--research">
+            <div class="storyVisual storyVisual--research">
+              <div class="storyFrame">
+                <img class="storyChibi" src="chibi_transparent_backgrounds/01_tech_research_education.png" alt="Chibi illustration for PolyFeed thesis" />
+              </div>
+            </div>
+            <div class="storyMeta">
+              <span>Jun 2025 - Present</span>
+              <span>Monash University</span>
+            </div>
+            <h3 class="storyTitle">PolyFeed Thesis</h3>
+            <p class="storyText">
+              Feedback analytics, co-design, and implementation strategy across real teaching contexts, with attention to what makes the tool useful, difficult, or meaningful in practice.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Feedback analytics</span>
+              <span class="tag">Co-design</span>
+              <span class="tag">Implementation</span>
+            </div>
+          </article>
+
+          <article class="storyCard storyCard--research">
+            <div class="storyVisual storyVisual--research">
+              <div class="storyFrame">
+                <img class="storyChibi" src="chibi_transparent_backgrounds/03_ai_neurodivergent_support.png" alt="Chibi illustration for More Than Words" />
+              </div>
+            </div>
+            <div class="storyMeta">
+              <span>Mar 2025 - Present</span>
+              <span>Monash Assistive Tech Team</span>
+            </div>
+            <h3 class="storyTitle">More Than Words</h3>
+            <p class="storyText">
+              Assistive communication research exploring emoji recommendation, local AI experimentation, and how different users interpret communication cues in context.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Assistive tech</span>
+              <span class="tag">Local AI</span>
+              <span class="tag">Communication</span>
+            </div>
+          </article>
+
+          <article class="storyCard storyCard--research">
+            <div class="storyVisual storyVisual--research">
+              <div class="storyFrame">
+                <img class="storyChibi" src="chibi_transparent_backgrounds/02_lab_office_desk.png" alt="Chibi illustration for Action Lab Malaysia" />
+              </div>
+            </div>
+            <div class="storyMeta">
+              <span>Nov 2024 - Present</span>
+              <span>Monash Malaysia</span>
+            </div>
+            <h3 class="storyTitle">Action Lab Malaysia</h3>
+            <p class="storyText">
+              HCI research collaboration focused on literature synthesis, research preparation, and strengthening positioning across CHI, DIS, and CSCW-adjacent work.
+            </p>
+            <div class="tagRow">
+              <span class="tag">HCI research</span>
+              <span class="tag">Literature review</span>
+              <span class="tag">Preparation</span>
+            </div>
+          </article>
+
+          <article class="storyCard storyCard--research">
+            <div class="storyVisual storyVisual--research">
+              <div class="storyFrame">
+                <img class="storyChibi" src="chibi_transparent_backgrounds/06_tech_coding_debugging.png" alt="Chibi illustration for web development" />
+              </div>
+            </div>
+            <div class="storyMeta">
+              <span>2024 - Present</span>
+              <span>Software engineering track</span>
+            </div>
+            <h3 class="storyTitle">Web Development</h3>
+            <p class="storyText">
+              Interactive systems, dashboards, and research-facing frontend work that connect structured content, interface design, and implementation-minded prototypes.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Frontend</span>
+              <span class="tag">Dashboards</span>
+              <span class="tag">Prototype</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="industry" class="section">
+      <div class="sectionStack">
+        <div class="sectionHeader">
+          <h2 class="sectionTitle reveal">Industry</h2>
+          <p class="sectionLead reveal">
+            Selected roles and academic service.
+          </p>
+        </div>
+
+        <div class="storyRail reveal" aria-label="Industry experience">
+          <article class="storyCard">
+            <div class="storyVisual">
+              <img class="storyChibi" src="chibi_transparent_backgrounds/05_corporate_cross_country_implementation.png" alt="Chibi illustration for strategy and transformation" />
+            </div>
+            <div class="storyMeta">
+              <span>May 2023 - Aug 2024</span>
+              <span>Malaysia / On-site</span>
+            </div>
+            <h3 class="storyTitle">Strategy &amp; Transformation</h3>
+            <p class="storyText">
+              Worked across a capital risk migration touching 14 applications and 200+ stakeholders, while building a dashboard that reduced monthly status preparation from around five days to about one hour.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Stakeholders</span>
+              <span class="tag">Dashboards</span>
+              <span class="tag">Transformation</span>
+            </div>
+          </article>
+
+          <article class="storyCard">
+            <div class="storyVisual">
+              <img class="storyChibi" src="chibi_transparent_backgrounds/04_corporate_marketing_yellow_tie.png" alt="Chibi illustration for retail branding and marcom" />
+            </div>
+            <div class="storyMeta">
+              <span>Nov 2022 - Apr 2023</span>
+              <span>Malaysia / On-site</span>
+            </div>
+            <h3 class="storyTitle">Retail Branding &amp; Marcom</h3>
+            <p class="storyText">
+              Supported premium card launch coordination, campaign rollout, and reporting across multiple workstreams, including six ROI reports in the first eight weeks.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Reporting</span>
+              <span class="tag">Campaign ops</span>
+              <span class="tag">Communication</span>
+            </div>
+          </article>
+
+          <article class="storyCard">
+            <div class="storyVisual">
+              <img class="storyChibi" src="chibi_transparent_backgrounds/07_data_analytics_presentation.png" alt="Chibi illustration for DIS reviewer" />
+            </div>
+            <div class="storyMeta">
+              <span>2025 - 2026</span>
+              <span>Academic service</span>
+            </div>
+            <h3 class="storyTitle">DIS Reviewer</h3>
+            <p class="storyText">
+              Reviewed HCI submissions and strengthened my sense of contribution framing, methodological clarity, and what makes research arguments feel credible and publishable.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Reviewing</span>
+              <span class="tag">HCI</span>
+              <span class="tag">Research standards</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="portfolio" class="section">
+      <h2 class="sectionTitle reveal">Portfolio</h2>
+      <p class="sectionLead reveal">
+        Thesis cards, mascot development, and looped demos.
+      </p>
+
+      <div class="portfolioCarousel reveal">
+        <div class="portfolioViewport" id="portfolioViewport">
+          <div class="portfolioTrack" id="portfolioTrack">
+            <article class="portfolioSlide is-active" data-portfolio-slide="0">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Thesis Deck</p>
+                <h3 class="moduleTitle">Thesis Card System</h3>
+                <div class="deckDetail" id="deckDetail" aria-live="polite">
+                  <p class="detailTitle">Student Sense-Makers</p>
+                  <p class="bodyText">
+                    A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.
+                  </p>
+                  <div class="tagRow">
+                    <span class="tag">Persona card</span>
+                    <span class="tag">Next steps</span>
+                    <span class="tag">Consistency</span>
+                  </div>
+                </div>
+              </div>
+              <div class="portfolioCanvas portfolioCanvas--art">
+                <div class="cardArena" aria-label="Animated thesis card preview">
+                  <button class="thesisCard is-active is-center" type="button" data-card="0">
+                    <div class="cardTop">
+                      <span class="cardSuit">Persona</span>
+                      <span class="cardRank">01</span>
+                    </div>
+                    <div class="cardVisual">
+                      <img src="pic/tutor-persona-2.png" alt="Student Sense-Makers card preview" />
+                    </div>
+                    <div class="cardFooter">
+                      <p class="cardName">Student Sense-Makers</p>
+                      <p class="cardFlavor">Persona card</p>
+                    </div>
+                  </button>
+
+                  <button class="thesisCard is-right" type="button" data-card="1">
+                    <div class="cardTop">
+                      <span class="cardSuit">Persona</span>
+                      <span class="cardRank">02</span>
+                    </div>
+                    <div class="cardVisual">
+                      <img src="pic/tutor-persona-1.png" alt="Scale Thinkers card preview" />
+                    </div>
+                    <div class="cardFooter">
+                      <p class="cardName">Scale Thinkers</p>
+                      <p class="cardFlavor">Persona card</p>
+                    </div>
+                  </button>
+
+                  <button class="thesisCard is-left" type="button" data-card="2">
+                    <div class="cardTop">
+                      <span class="cardSuit">Instruction</span>
+                      <span class="cardRank">03</span>
+                    </div>
+                    <div class="cardVisual">
+                      <img src="pic/tutor-persona-5.png" alt="What's my motivation card preview" />
+                    </div>
+                    <div class="cardFooter">
+                      <p class="cardName">What’s My Motivation</p>
+                      <p class="cardFlavor">Instruction card</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="portfolioSlide" data-portfolio-slide="1">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Mascot Development</p>
+                <h3 class="galleryName" id="galleryName">Reader Cat</h3>
+                <p class="bodyText" id="galleryText">
+                  A softer research-facing mascot direction built around reading, study, and early exploration.
+                </p>
+                <p class="miniNote">Use the arrows to move between mascot states.</p>
+                <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
+              </div>
+              <div class="portfolioCanvas portfolioCanvas--art">
+                <div class="galleryStage">
+                  <div class="galleryPortrait" id="galleryPortrait">
+                    <div class="galleryFigure">
+                      <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
+                      <img
+                        id="galleryImage"
+                        class="galleryImage"
+                        src="pic/Mascot/1.png"
+                        alt="Mascot development concept"
+                        draggable="false"
+                      />
+                      <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="portfolioSlide" data-portfolio-slide="2">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Website Loop</p>
+                <h3 class="moduleTitle">Website Demo</h3>
+                <div class="videoMeta">
+                  <p class="bodyText">
+                    Looping walkthrough of the current website direction.
+                  </p>
+                  <ul>
+                    <li>Main site flow and visual direction</li>
+                    <li>Autoplay, muted, and looping in the page</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="portfolioCanvas">
+                <div class="videoModule">
+                  <div class="videoStage">
+                    <video class="loopVideo" muted loop autoplay playsinline preload="auto" poster="pic/Mascot/2.png">
+                      <source src="Loop-website.mp4?v=20260518" type="video/mp4" />
+                      <source src="Loop-website.mov?v=20260518" type="video/quicktime" />
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="portfolioSlide" data-portfolio-slide="3">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Participant Website Loop</p>
+                <h3 class="moduleTitle">Participant Demo</h3>
+                <div class="videoMeta">
+                  <p class="bodyText">
+                    Participant-facing website flow and interaction screens.
+                  </p>
+                  <ul>
+                    <li>Shows the participant-side interface and flow</li>
+                    <li>Loops in the same way as the other demo modules</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="portfolioCanvas">
+                <div class="videoModule">
+                  <div class="videoStage">
+                    <video class="loopVideo" muted loop autoplay playsinline preload="auto" poster="pic/tutor-persona-2.png">
+                      <source src="Participant website.mp4?v=20260518" type="video/mp4" />
+                      <source src="Participant website.mov?v=20260518" type="video/quicktime" />
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="portfolioSlide" data-portfolio-slide="4">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Schema Loop Video</p>
+                <h3 class="moduleTitle">Schema Loop</h3>
+                <div class="videoMeta">
+                  <p class="bodyText">
+                    Schema structure, content model, and dashboard logic walkthrough.
+                  </p>
+                  <ul>
+                    <li>Uses the real schema video already in the project</li>
+                    <li>Separate from the website demos so it can stand on its own</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="portfolioCanvas">
+                <div class="videoModule">
+                  <div class="videoStage">
+                    <video class="loopVideo" muted loop autoplay playsinline preload="auto" poster="pic/tutor-persona-1.png">
+                      <source src="Schema_video.mp4?v=20260518" type="video/mp4" />
+                      <source src="Schema_video.mov?v=20260518" type="video/quicktime" />
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="portfolioMeta">
+          <button class="portfolioArrow prev" type="button" id="portfolioPrev" aria-label="Previous portfolio item">&#8249;</button>
+          <div class="portfolioDots" id="portfolioDots" aria-label="Portfolio selector"></div>
+          <button class="portfolioArrow next" type="button" id="portfolioNext" aria-label="Next portfolio item">&#8250;</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="cv" class="section">
+      <div class="cvPanel reveal">
+        <div class="cvCopy">
+          <p class="moduleEyebrow">CV Download</p>
+          <h2 class="sectionTitle">Full CV</h2>
+          <p class="bodyText">
+            Open the full CV on a separate page for the more detailed academic and professional record.
+          </p>
+        </div>
+        <a class="cvButton" href="index.html" target="_blank" rel="noreferrer">Open CV Page</a>
+      </div>
+    </section>
+  </main>
 
   <script>
     (() => {
-      const WORKSHOP_LINK = "/stage1/landing.html";
+      const workDetail = document.getElementById("workDetail");
+      const workButtons = [...document.querySelectorAll("[data-work]")];
+      const thesisCards = [...document.querySelectorAll("[data-card]")];
+      const cardArena = document.querySelector(".cardArena");
+      const deckDetail = document.getElementById("deckDetail");
+      const revealNodes = [...document.querySelectorAll(".reveal")];
+      const portfolioViewport = document.getElementById("portfolioViewport");
+      const portfolioTrack = document.getElementById("portfolioTrack");
+      const portfolioSlides = [...document.querySelectorAll("[data-portfolio-slide]")];
+      const portfolioDots = document.getElementById("portfolioDots");
+      const portfolioPrev = document.getElementById("portfolioPrev");
+      const portfolioNext = document.getElementById("portfolioNext");
+      const galleryPortrait = document.getElementById("galleryPortrait");
+      const galleryImage = document.getElementById("galleryImage");
+      const galleryName = document.getElementById("galleryName");
+      const galleryText = document.getElementById("galleryText");
+      const galleryDots = document.getElementById("galleryDots");
+      const galleryPrev = document.getElementById("galleryPrev");
+      const galleryNext = document.getElementById("galleryNext");
+      const portfolioVideos = [...document.querySelectorAll(".portfolioSlide .loopVideo")];
 
-      const year = document.getElementById("year");
-      const openBtn = document.getElementById("openBtn");
-      const rain = document.getElementById("rain");
+      const workItems = [
+        {
+          title: "PolyFeed Thesis",
+          meta: "Monash University / Jun 2025 - Present",
+          body: "Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with attention to feedback analytics uptake, co-design, and implementation strategy.",
+          tags: ["Feedback analytics", "Co-design", "Implementation"]
+        },
+        {
+          title: "More Than Words",
+          meta: "Monash Assistive Tech Team / Mar 2025 - Present",
+          body: "Assistive technology research exploring emoji recommendation and communication support, including local AI experimentation and context-sensitive interpretation.",
+          tags: ["Assistive technology", "Emoji recommendation", "Local AI"]
+        },
+        {
+          title: "Action Lab Malaysia",
+          meta: "Monash University Malaysia / Nov 2024 - Present",
+          body: "HCI research collaboration focused on literature synthesis, research preparation, and strengthening positioning across CHI, DIS, and CSCW-adjacent work.",
+          tags: ["HCI research", "Literature review", "Research preparation"]
+        },
+        {
+          title: "Casual Web Development",
+          meta: "Ongoing / software engineering track",
+          body: "Web-facing builds that connect interface design, structured content, dashboards, and implementation-minded frontend work.",
+          tags: ["Frontend", "Dashboards", "Implementation"]
+        }
+      ];
 
-      year.textContent = String(new Date().getFullYear());
+      const thesisItems = [
+        {
+          title: "Student Sense-Makers",
+          body: "A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.",
+          tags: ["Persona card", "Next steps", "Consistency"]
+        },
+        {
+          title: "Scale Thinkers",
+          body: "A persona card for tutors or educators thinking at cohort level, with prompts about scale, repetition, and patterns across many submissions.",
+          tags: ["Persona card", "Cohort thinking", "Feedback design"]
+        },
+        {
+          title: "What’s My Motivation",
+          body: "An instruction card for surfacing what feedback is actually meant to do, then turning those intentions into more specific and workable ideas.",
+          tags: ["Instruction card", "Tutor intentions", "Design prompts"]
+        }
+      ];
 
-      function openStage() {
-        window.location.href = WORKSHOP_LINK;
+      const mascotItems = [
+        {
+          name: "Reader Cat",
+          image: "pic/Mascot/1.png",
+          text: "A softer research-facing mascot direction built around reading, study, and early exploration."
+        },
+        {
+          name: "Studio Cat",
+          image: "pic/Mascot/2.png",
+          text: "A making-focused state that feels closer to visual development, prototyping, and creative exploration."
+        },
+        {
+          name: "Builder Cat",
+          image: "pic/Mascot/3.png",
+          text: "A planning and systems version that fits process mapping, implementation logic, and structured build work."
+        },
+        {
+          name: "Play Cat",
+          image: "pic/Mascot/4.png",
+          text: "A brighter and more expressive state that pushes the playful side of the mascot family."
+        },
+        {
+          name: "Courier Cat",
+          image: "pic/Mascot/5.png",
+          text: "A delivery and rollout state that feels useful for communication, movement, and getting work out into the world."
+        }
+      ];
+
+      const portfolioItems = [
+        "Thesis deck",
+        "Mascot development",
+        "Website demo",
+        "Participant demo",
+        "Schema loop"
+      ];
+
+      let workIndex = 0;
+      let deckIndex = 0;
+      let portfolioIndex = 0;
+      let mascotIndex = 0;
+      let deckSwipeLockUntil = 0;
+
+      function renderWork(index) {
+        const item = workItems[index];
+        if (!item || !workDetail) return;
+        workIndex = index;
+
+        workDetail.innerHTML = `
+          <p class="detailTitle">${item.title}</p>
+          <p class="detailMeta">${item.meta}</p>
+          <p class="bodyText">${item.body}</p>
+          <div class="tagRow">
+            ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+        `;
+
+        workButtons.forEach((button, buttonIndex) => {
+          button.classList.toggle("is-active", buttonIndex === index);
+        });
       }
 
-      openBtn.addEventListener("click", openStage);
+      function renderDeck(index) {
+        const item = thesisItems[index];
+        if (!item || !deckDetail) return;
+        deckIndex = index;
 
-      const count = Math.min(86, Math.max(44, Math.floor(window.innerWidth / 18)));
-      for (let i = 0; i < count; i += 1) {
-        const drop = document.createElement("div");
-        drop.className = "drop";
+        deckDetail.innerHTML = `
+          <p class="detailTitle">${item.title}</p>
+          <p class="bodyText">${item.body}</p>
+          <div class="tagRow">
+            ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+        `;
 
-        const size = 30 + Math.random() * 64;
-        drop.style.setProperty("--size", `${size}px`);
-        drop.style.left = `${Math.random() * 100}%`;
-        drop.style.setProperty("--dur", `${10 + Math.random() * 12}s`);
-        drop.style.setProperty("--delay", `${Math.random() * -24}s`);
-        drop.style.setProperty("--op", `${0.14 + Math.random() * 0.18}`);
-        drop.style.setProperty("--drift", `${-34 + Math.random() * 68}px`);
-        drop.style.setProperty("--rot", `${-8 + Math.random() * 16}deg`);
-        drop.style.setProperty("--flip", Math.random() > 0.5 ? "-1" : "1");
+        thesisCards.forEach((card, cardIndex) => {
+          const relativeIndex = (cardIndex - index + thesisCards.length) % thesisCards.length;
+          const positionClass = relativeIndex === 0 ? "is-center" : relativeIndex === 1 ? "is-right" : "is-left";
 
-        const img = document.createElement("img");
-        img.src = "/pic/chibi3.png";
-        img.alt = "";
+          card.classList.toggle("is-active", cardIndex === index);
+          card.classList.remove("is-left", "is-center", "is-right");
+          card.classList.add(positionClass);
+        });
+      }
 
-        drop.appendChild(img);
-        rain.appendChild(drop);
+      function renderMascot(index) {
+        const item = mascotItems[index];
+        if (!item || !galleryImage || !galleryName || !galleryText || !galleryDots || !galleryPortrait) return;
+
+        galleryPortrait.classList.add("is-changing");
+
+        setTimeout(() => {
+          galleryImage.src = item.image;
+          galleryImage.alt = item.name;
+          galleryName.textContent = item.name;
+          galleryText.textContent = item.text;
+          galleryPortrait.classList.remove("is-changing");
+        }, 120);
+
+        [...galleryDots.querySelectorAll("button")].forEach((dot, dotIndex) => {
+          dot.classList.toggle("is-active", dotIndex === index);
+          dot.setAttribute("aria-pressed", String(dotIndex === index));
+        });
+      }
+
+      function moveMascot(direction) {
+        mascotIndex = (mascotIndex + direction + mascotItems.length) % mascotItems.length;
+        renderMascot(mascotIndex);
+      }
+
+      function moveDeck(direction) {
+        deckIndex = (deckIndex + direction + thesisItems.length) % thesisItems.length;
+        renderDeck(deckIndex);
+      }
+
+      function renderPortfolio(index) {
+        if (!portfolioTrack || !portfolioDots) return;
+
+        portfolioIndex = index;
+        portfolioTrack.style.transform = `translateX(-${index * 100}%)`;
+
+        portfolioSlides.forEach((slide, slideIndex) => {
+          slide.classList.toggle("is-active", slideIndex === index);
+        });
+
+        [...portfolioDots.querySelectorAll("button")].forEach((dot, dotIndex) => {
+          dot.classList.toggle("is-active", dotIndex === index);
+          dot.setAttribute("aria-pressed", String(dotIndex === index));
+        });
+
+        syncPortfolioVideos(index);
+      }
+
+      function movePortfolio(direction) {
+        portfolioIndex = (portfolioIndex + direction + portfolioItems.length) % portfolioItems.length;
+        renderPortfolio(portfolioIndex);
+      }
+
+      function syncPortfolioVideos(activeIndex) {
+        portfolioSlides.forEach((slide, slideIndex) => {
+          const video = slide.querySelector(".loopVideo");
+          if (!video) return;
+
+          video.muted = true;
+          video.defaultMuted = true;
+          video.loop = true;
+          video.playsInline = true;
+
+          if (slideIndex === activeIndex) {
+            const playAttempt = video.play();
+            if (playAttempt && typeof playAttempt.catch === "function") {
+              playAttempt.catch(() => {});
+            }
+          } else {
+            video.pause();
+          }
+        });
+      }
+
+      function bindSwipe(target, onPrev, onNext, ignoreSelector) {
+        if (!target) return;
+        let startX = null;
+        let startY = null;
+
+        const reset = () => {
+          startX = null;
+          startY = null;
+          target.classList.remove("is-dragging");
+        };
+
+        target.addEventListener("pointerdown", (event) => {
+          if (event.pointerType === "mouse" && event.button !== 0) return;
+          if (ignoreSelector && event.target.closest(ignoreSelector)) return;
+          startX = event.clientX;
+          startY = event.clientY;
+          target.classList.add("is-dragging");
+        });
+
+        target.addEventListener("pointerup", (event) => {
+          if (startX === null || startY === null) return;
+          const deltaX = event.clientX - startX;
+          const deltaY = event.clientY - startY;
+          reset();
+
+          if (Math.abs(deltaX) < 24 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+          if (deltaX > 0) {
+            onPrev();
+          } else {
+            onNext();
+          }
+        });
+
+        target.addEventListener("pointercancel", reset);
+        target.addEventListener("pointerleave", (event) => {
+          if (event.pointerType === "mouse") reset();
+        });
+        target.addEventListener("dragstart", (event) => event.preventDefault());
+      }
+
+      mascotItems.forEach((item, index) => {
+        if (!galleryDots) return;
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Show ${item.name}`);
+        dot.setAttribute("aria-pressed", String(index === 0));
+        dot.classList.toggle("is-active", index === 0);
+        dot.addEventListener("click", () => {
+          mascotIndex = index;
+          renderMascot(mascotIndex);
+        });
+        galleryDots.appendChild(dot);
+      });
+
+      portfolioItems.forEach((item, index) => {
+        if (!portfolioDots) return;
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Show ${item}`);
+        dot.setAttribute("aria-pressed", String(index === 0));
+        dot.classList.toggle("is-active", index === 0);
+        dot.addEventListener("click", () => renderPortfolio(index));
+        portfolioDots.appendChild(dot);
+      });
+
+      workButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          renderWork(Number(button.dataset.work));
+        });
+      });
+
+      thesisCards.forEach((card) => {
+        card.addEventListener("click", () => {
+          if (Date.now() < deckSwipeLockUntil) return;
+          renderDeck(Number(card.dataset.card));
+        });
+      });
+
+      if (galleryPrev) {
+        galleryPrev.addEventListener("click", () => moveMascot(-1));
+      }
+
+      if (galleryNext) {
+        galleryNext.addEventListener("click", () => moveMascot(1));
+      }
+
+      if (portfolioPrev) {
+        portfolioPrev.addEventListener("click", () => movePortfolio(-1));
+      }
+
+      if (portfolioNext) {
+        portfolioNext.addEventListener("click", () => movePortfolio(1));
+      }
+
+      if (galleryImage) {
+        galleryImage.addEventListener("dragstart", (event) => event.preventDefault());
+      }
+
+      bindSwipe(cardArena, () => {
+        deckSwipeLockUntil = Date.now() + 180;
+        moveDeck(-1);
+      }, () => {
+        deckSwipeLockUntil = Date.now() + 180;
+        moveDeck(1);
+      });
+
+      bindSwipe(portfolioViewport, () => {
+        movePortfolio(-1);
+      }, () => {
+        movePortfolio(1);
+      }, ".thesisCard, .galleryCursor, .galleryDots button");
+
+      portfolioVideos.forEach((video) => {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.preload = "auto";
+      });
+
+      renderWork(workIndex);
+      renderDeck(0);
+      renderPortfolio(0);
+      renderMascot(mascotIndex);
+
+      if ("IntersectionObserver" in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: 0.18 });
+
+        revealNodes.forEach((node) => revealObserver.observe(node));
+      } else {
+        revealNodes.forEach((node) => node.classList.add("is-visible"));
       }
     })();
   </script>
