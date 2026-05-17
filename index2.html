@@ -137,6 +137,7 @@
       line-height: 1;
       letter-spacing: 0.02em;
       text-transform: uppercase;
+      flex: 0 0 auto;
     }
 
     .nav {
@@ -144,6 +145,8 @@
       flex-wrap: wrap;
       justify-content: flex-end;
       gap: 8px;
+      min-width: 0;
+      flex: 1 1 auto;
     }
 
     .nav a,
@@ -188,10 +191,10 @@
     .panel,
     .portraitCard,
     .detailCard,
-    .experienceCard,
     .module,
     .skillCol,
-    .contactBlock {
+    .contactBlock,
+    .experienceLog {
       border: 2px solid var(--blue);
       border-radius: 24px;
       background: rgba(255, 253, 247, 0.72);
@@ -447,6 +450,15 @@
       gap: 8px;
       align-content: start;
       text-align: center;
+      transition: transform 180ms ease, opacity 180ms ease;
+    }
+
+    .timelineStop:hover {
+      transform: translateY(-3px);
+    }
+
+    .timelineStop.is-active {
+      transform: translateY(-4px);
     }
 
     .timelineBtn {
@@ -471,6 +483,12 @@
       animation: pointGlow 2.1s ease-in-out infinite;
     }
 
+    .timelineStop.is-active .timelineLabel,
+    .timelineStop.is-active .timelineText,
+    .timelineStop.is-active .timelineDate {
+      color: var(--blue-dark);
+    }
+
     .timelineText {
       margin: 0;
       font-size: 0.88rem;
@@ -479,15 +497,77 @@
 
     .timelineSide {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.92fr);
+      grid-template-columns: 1fr;
       gap: 18px;
     }
 
-    .detailCard,
-    .experienceCard {
+    .detailCard {
       display: grid;
       gap: 12px;
       align-content: start;
+    }
+
+    .timelineControls {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding-top: 4px;
+    }
+
+    .timelineNav {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--blue);
+      font: inherit;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .timelineNav:hover,
+    .timelineNav:focus-visible {
+      transform: translateY(-2px);
+      background: var(--blue);
+      color: var(--paper);
+      outline: none;
+    }
+
+    .timelineMeter {
+      display: grid;
+      gap: 8px;
+    }
+
+    .timelineCount {
+      margin: 0;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-dark);
+    }
+
+    .timelineProgress {
+      width: 100%;
+      height: 8px;
+      border: 2px solid rgba(17, 70, 216, 0.22);
+      border-radius: 999px;
+      background: rgba(17, 70, 216, 0.08);
+      overflow: hidden;
+    }
+
+    .timelineProgress span {
+      display: block;
+      height: 100%;
+      width: 25%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), #4d86ff);
+      box-shadow: 0 0 18px rgba(17, 70, 216, 0.28);
+      transition: width 180ms ease;
     }
 
     .tagRow {
@@ -507,33 +587,87 @@
       background: rgba(17, 70, 216, 0.06);
     }
 
-    .experienceList {
+    .experienceSectionWrap {
       display: grid;
-      gap: 12px;
+      gap: 18px;
     }
 
-    .experienceItem {
-      border: 2px solid rgba(17, 70, 216, 0.18);
-      border-radius: 18px;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.28);
+    .experienceHeaderRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      flex-wrap: wrap;
     }
 
-    .experienceItem h4,
-    .experienceItem p {
+    .experienceHeaderRow .sectionLead {
       margin: 0;
+      max-width: 56ch;
     }
 
-    .experienceItem h4 {
-      font-size: 0.9rem;
-      text-transform: uppercase;
+    .experienceGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .experienceLog {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .experienceLog::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(17, 70, 216, 0.18);
+      border-radius: 18px;
+      pointer-events: none;
+    }
+
+    .experienceLog:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 34px rgba(17, 70, 216, 0.08);
+    }
+
+    .expMeta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      font-weight: 800;
       letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--blue-dark);
     }
 
-    .experienceItem p {
-      margin-top: 6px;
-      font-size: 0.84rem;
+    .expRole {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      color: var(--blue);
+      text-transform: uppercase;
+      line-height: 0.94;
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      overflow-wrap: anywhere;
+    }
+
+    .expBullets {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
       line-height: 1.48;
+      font-size: 0.92rem;
+    }
+
+    .expBullets li::marker {
+      color: var(--blue);
     }
 
     .showcaseBoard {
@@ -720,11 +854,16 @@
       min-height: 240px;
       display: grid;
       place-items: center;
+      touch-action: pan-y pinch-zoom;
+      cursor: ew-resize;
     }
 
     .galleryImage {
       width: min(82%, 238px);
       transition: opacity 180ms ease, transform 220ms ease;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
     }
 
     .galleryPortrait.is-changing .galleryImage {
@@ -1040,6 +1179,7 @@
       .hero,
       .introRow,
       .showcaseBoard,
+      .experienceGrid,
       .twoCol,
       .contactGrid {
         grid-template-columns: 1fr;
@@ -1048,10 +1188,6 @@
       .factGrid,
       .timelineLine {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .timelineSide {
-        grid-template-columns: 1fr;
       }
 
       .thesisCard {
@@ -1121,11 +1257,8 @@
       .factGrid,
       .toolGrid,
       .timelineLine,
+      .experienceGrid,
       .contactGrid {
-        grid-template-columns: 1fr;
-      }
-
-      .timelineSide {
         grid-template-columns: 1fr;
       }
 
@@ -1155,10 +1288,42 @@
         grid-column: 2;
       }
 
+      .timelineControls {
+        grid-template-columns: 1fr;
+      }
+
+      .timelineNav {
+        width: 100%;
+      }
+
+      .experienceHeaderRow {
+        align-items: start;
+      }
+
+      .expMeta {
+        display: grid;
+        gap: 6px;
+        font-size: 0.68rem;
+      }
+
+      .expRole {
+        font-size: clamp(0.88rem, 5.2vw, 1.08rem);
+        line-height: 0.98;
+        letter-spacing: 0.01em;
+      }
+
+      .experienceLog {
+        padding: 14px;
+      }
+
+      .experienceLog .tag {
+        font-size: 0.68rem;
+      }
+
       .introText,
       .bodyText,
       .timelineText,
-      .experienceItem p,
+      .expBullets,
       .videoMeta li {
         font-size: 0.94rem;
       }
@@ -1239,6 +1404,7 @@
       <nav class="nav" aria-label="Section navigation">
         <a href="#profile">Profile</a>
         <a href="#timeline">Timeline</a>
+        <a href="#experience">Experience</a>
         <a href="#showcase">Showcase</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
@@ -1303,7 +1469,7 @@
     <section id="timeline" class="section">
       <h2 class="sectionTitle reveal">Research / Project Timeline</h2>
       <p class="sectionLead reveal">
-        A snapshot of the research, implementation, and project threads shaping my current work. Click each stop to swap the focus panel.
+        A snapshot of the research, implementation, and project threads shaping my current work. Click each stop or use the panel controls to move through it.
       </p>
 
       <div class="timelineGrid">
@@ -1337,37 +1503,100 @@
         </div>
 
         <div class="timelineSide">
-          <aside class="detailCard reveal" id="timelineDetail" aria-live="polite">
-            <p class="detailTitle">PolyFeed Thesis</p>
-            <p class="detailMeta">Monash University / Jun 2025 - Present</p>
-            <p class="bodyText">
-              Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with emphasis on what makes feedback analytics useful, difficult to engage with, or meaningful in practice.
-            </p>
-            <div class="tagRow">
-              <span class="tag">Feedback analytics</span>
-              <span class="tag">Co-design</span>
-              <span class="tag">Implementation tensions</span>
+          <aside class="detailCard reveal" aria-live="polite">
+            <div id="timelineDetail">
+              <p class="detailTitle">PolyFeed Thesis</p>
+              <p class="detailMeta">Monash University / Jun 2025 - Present</p>
+              <p class="bodyText">
+                Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with emphasis on what makes feedback analytics useful, difficult to engage with, or meaningful in practice.
+              </p>
+              <div class="tagRow">
+                <span class="tag">Feedback analytics</span>
+                <span class="tag">Co-design</span>
+                <span class="tag">Implementation tensions</span>
+              </div>
+            </div>
+            <div class="timelineControls" aria-label="Timeline controls">
+              <button class="timelineNav" type="button" id="timelinePrev">Prev</button>
+              <div class="timelineMeter">
+                <p class="timelineCount" id="timelineCount">01 / 04</p>
+                <div class="timelineProgress" aria-hidden="true">
+                  <span id="timelineProgress"></span>
+                </div>
+              </div>
+              <button class="timelineNav" type="button" id="timelineNext">Next</button>
             </div>
           </aside>
+        </div>
+      </div>
+    </section>
 
-          <aside class="experienceCard reveal">
-            <p class="moduleEyebrow">Experience / Service</p>
-            <h3 class="detailTitle">Professional Experience</h3>
-            <div class="experienceList">
-              <div class="experienceItem">
-                <h4>Maybank / Strategy &amp; Transformation, Group Risk</h4>
-                <p>Supported a large-scale risk migration programme across 14 applications and 200+ stakeholders, including reporting, coordination, and dashboard automation.</p>
-              </div>
-              <div class="experienceItem">
-                <h4>Maybank / Retail Branding &amp; Marcom</h4>
-                <p>Worked across campaign coordination, rollout support, and ROI reporting in consumer financial services.</p>
-              </div>
-              <div class="experienceItem">
-                <h4>DIS Reviewer / 2025 - 2026</h4>
-                <p>Reviewed HCI submissions and built familiarity with contribution framing, methodological clarity, and academic review standards.</p>
-              </div>
+    <section id="experience" class="section">
+      <div class="experienceSectionWrap">
+        <div class="experienceHeaderRow">
+          <div>
+            <p class="moduleEyebrow reveal">Professional Experience / Separate Track</p>
+            <h2 class="sectionTitle reveal">Experience Log</h2>
+          </div>
+          <p class="sectionLead reveal">
+            A lighter web version of my experience: short impact cards instead of full resume blocks, so the page stays easier to scan.
+          </p>
+        </div>
+
+        <div class="experienceGrid">
+          <article class="experienceLog reveal">
+            <div class="expMeta">
+              <span>May 2023 - Aug 2024</span>
+              <span>Malaysia / On-site</span>
             </div>
-          </aside>
+            <h3 class="expRole">Strategy &amp; Transformation</h3>
+            <p class="detailMeta">Maybank / Group Risk / Contract</p>
+            <ul class="expBullets">
+              <li>Worked across a capital risk migration touching 14 applications and 200+ stakeholders.</li>
+              <li>Built a dashboard that reduced monthly status preparation from around five days to about one hour.</li>
+            </ul>
+            <div class="tagRow">
+              <span class="tag">Stakeholders</span>
+              <span class="tag">Dashboards</span>
+              <span class="tag">Transformation</span>
+            </div>
+          </article>
+
+          <article class="experienceLog reveal">
+            <div class="expMeta">
+              <span>Nov 2022 - Apr 2023</span>
+              <span>Malaysia / On-site</span>
+            </div>
+            <h3 class="expRole">Retail Branding &amp; Marcom</h3>
+            <p class="detailMeta">Maybank / Consumer Financial Services / Contract</p>
+            <ul class="expBullets">
+              <li>Supported premium card launch coordination, campaign rollout, and reporting across multiple workstreams.</li>
+              <li>Produced six ROI reports in the first eight weeks, linking campaign performance back to spend decisions.</li>
+            </ul>
+            <div class="tagRow">
+              <span class="tag">Reporting</span>
+              <span class="tag">Campaign Ops</span>
+              <span class="tag">Communication</span>
+            </div>
+          </article>
+
+          <article class="experienceLog reveal">
+            <div class="expMeta">
+              <span>2025 - 2026</span>
+              <span>Academic Service</span>
+            </div>
+            <h3 class="expRole">DIS Reviewer</h3>
+            <p class="detailMeta">ACM Designing Interactive Systems / Academic Service</p>
+            <ul class="expBullets">
+              <li>Reviewed HCI submissions and built stronger familiarity with contribution framing and methodological clarity.</li>
+              <li>Developed a sharper sense of what makes research arguments credible, clear, and publishable.</li>
+            </ul>
+            <div class="tagRow">
+              <span class="tag">Reviewing</span>
+              <span class="tag">HCI</span>
+              <span class="tag">Research Standards</span>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -1452,6 +1681,7 @@
                     class="galleryImage"
                     src="pic/tutor-persona-1.png"
                     alt="Mascot development concept"
+                    draggable="false"
                   />
                   <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
                 </div>
@@ -1573,12 +1803,17 @@
   <script>
     (() => {
       const timelineDetail = document.getElementById("timelineDetail");
+      const timelinePrev = document.getElementById("timelinePrev");
+      const timelineNext = document.getElementById("timelineNext");
+      const timelineCount = document.getElementById("timelineCount");
+      const timelineProgress = document.getElementById("timelineProgress");
       const timelineStops = [...document.querySelectorAll(".timelineStop")];
       const timelineButtons = [...document.querySelectorAll("[data-timeline]")];
       const thesisCards = [...document.querySelectorAll("[data-card]")];
       const deckDetail = document.getElementById("deckDetail");
       const revealNodes = [...document.querySelectorAll(".reveal")];
       const galleryPortrait = document.getElementById("galleryPortrait");
+      const galleryFigure = document.querySelector(".galleryFigure");
       const galleryImage = document.getElementById("galleryImage");
       const galleryName = document.getElementById("galleryName");
       const galleryText = document.getElementById("galleryText");
@@ -1665,12 +1900,14 @@
         }
       ];
 
+      let timelineIndex = 0;
       let mascotIndex = 0;
       let touchStartX = null;
 
       function renderTimeline(index) {
         const item = timelineItems[index];
         if (!item || !timelineDetail) return;
+        timelineIndex = index;
 
         timelineDetail.innerHTML = `
           <p class="detailTitle">${item.title}</p>
@@ -1684,6 +1921,14 @@
         timelineStops.forEach((stop, stopIndex) => {
           stop.classList.toggle("is-active", stopIndex === index);
         });
+
+        if (timelineCount) {
+          timelineCount.textContent = `${String(index + 1).padStart(2, "0")} / ${String(timelineItems.length).padStart(2, "0")}`;
+        }
+
+        if (timelineProgress) {
+          timelineProgress.style.width = `${((index + 1) / timelineItems.length) * 100}%`;
+        }
       }
 
       function renderDeck(index) {
@@ -1748,6 +1993,18 @@
         });
       });
 
+      if (timelinePrev) {
+        timelinePrev.addEventListener("click", () => {
+          renderTimeline((timelineIndex - 1 + timelineItems.length) % timelineItems.length);
+        });
+      }
+
+      if (timelineNext) {
+        timelineNext.addEventListener("click", () => {
+          renderTimeline((timelineIndex + 1) % timelineItems.length);
+        });
+      }
+
       thesisCards.forEach((card) => {
         card.addEventListener("click", () => {
           renderDeck(Number(card.dataset.card));
@@ -1762,12 +2019,16 @@
         galleryNext.addEventListener("click", () => moveMascot(1));
       }
 
-      if (galleryPortrait) {
-        galleryPortrait.addEventListener("touchstart", (event) => {
+      if (galleryImage) {
+        galleryImage.addEventListener("dragstart", (event) => event.preventDefault());
+      }
+
+      if (galleryFigure) {
+        galleryFigure.addEventListener("touchstart", (event) => {
           touchStartX = event.changedTouches[0].clientX;
         }, { passive: true });
 
-        galleryPortrait.addEventListener("touchend", (event) => {
+        galleryFigure.addEventListener("touchend", (event) => {
           if (touchStartX === null) return;
           const touchEndX = event.changedTouches[0].clientX;
           const delta = touchEndX - touchStartX;
@@ -1803,6 +2064,8 @@
         video.load();
       });
 
+      renderTimeline(timelineIndex);
+      renderDeck(0);
       renderMascot(mascotIndex);
 
       if ("IntersectionObserver" in window) {
