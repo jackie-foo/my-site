@@ -761,6 +761,17 @@
         drop-shadow(0 0 24px rgba(255, 244, 190, 0.42));
     }
 
+    .storyCard--industry .storyVisual {
+      min-height: 148px;
+      place-items: end center;
+      padding-top: 12px;
+    }
+
+    .storyCard--industry .storyChibi {
+      margin-left: 0;
+      object-position: center bottom;
+    }
+
     .storyMeta {
       display: flex;
       justify-content: space-between;
@@ -786,6 +797,14 @@
       margin: 0;
       font-size: 0.95rem;
       line-height: 1.56;
+    }
+
+    .storyOrg {
+      margin: -6px 0 0;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--blue-dark);
     }
 
     .timelineGrid {
@@ -1193,6 +1212,7 @@
       --card-y: 0px;
       --card-rotate: 0deg;
       font-family: "Montserrat", "Archivo", sans-serif;
+      color: #0d0d0d;
       position: absolute;
       left: 50%;
       top: 50%;
@@ -1292,6 +1312,7 @@
       letter-spacing: 0.08em;
       line-height: 1.1;
       text-transform: uppercase;
+      color: inherit;
     }
 
     .cardRank {
@@ -1299,6 +1320,7 @@
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      color: inherit;
     }
 
     .cardVisual,
@@ -1350,6 +1372,7 @@
       font-size: 1rem;
       font-weight: 700;
       line-height: 1.16;
+      color: inherit;
     }
 
     .cardFlavor {
@@ -1359,6 +1382,7 @@
       font-weight: 600;
       line-height: 1.34;
       opacity: 0.86;
+      color: inherit;
     }
 
     .cardFooter {
@@ -1927,6 +1951,18 @@
         min-height: 388px;
       }
 
+      .videoStage {
+        aspect-ratio: 1 / 1;
+        padding: 0;
+      }
+
+      .loopVideo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+      }
+
       .portfolioMeta {
         padding: 8px 12px 12px;
       }
@@ -2085,9 +2121,9 @@
             </div>
             <div class="storyMeta">
               <span>Jun 2025 - Present</span>
-              <span>Monash University</span>
             </div>
-            <h3 class="storyTitle">PolyFeed Feedback Analytics</h3>
+            <h3 class="storyTitle">PolyFeed</h3>
+            <p class="storyOrg">Monash University</p>
             <p class="storyText">
               Exploring how students, tutors, and educators use feedback analytics in real teaching settings. I also designed workshop cards and built a live dashboard system to help turn feedback concerns into practical strategies.
             </p>
@@ -2101,9 +2137,9 @@
             </div>
             <div class="storyMeta">
               <span>Mar 2025 - Present</span>
-              <span>Monash Assistive Tech Team</span>
             </div>
             <h3 class="storyTitle">More Than Words</h3>
+            <p class="storyOrg">Monash Assistive Tech Team</p>
             <p class="storyText">
               Exploring an emoji recommender for communication support, especially for neurodivergent users and people with diverse communication needs. I tested lightweight local AI ideas with privacy, access, and device limits in mind.
             </p>
@@ -2117,9 +2153,9 @@
             </div>
             <div class="storyMeta">
               <span>Nov 2024 - Present</span>
-              <span>Monash Malaysia</span>
             </div>
             <h3 class="storyTitle">Action Lab Malaysia</h3>
+            <p class="storyOrg">Monash University Malaysia</p>
             <p class="storyText">
               HCI design-methods research on how user research, design problems, and participatory methods can be communicated more clearly to design teams and external stakeholders.
             </p>
@@ -2133,9 +2169,9 @@
             </div>
             <div class="storyMeta">
               <span>2024 - Present</span>
-              <span>Software engineering track</span>
             </div>
             <h3 class="storyTitle">Web Development</h3>
+            <p class="storyOrg">Hobby</p>
             <p class="storyText">
               Building small web systems for research and workshop use, including live dashboards, card-based interfaces, and participant-facing pages.
             </p>
@@ -2156,7 +2192,7 @@
         </div>
 
         <div class="storyRail reveal" aria-label="Industry experience">
-          <article class="storyCard">
+          <article class="storyCard storyCard--industry">
             <div class="storyVisual">
               <img class="storyChibi" src="chibi_transparent_backgrounds/05_corporate_cross_country_implementation.png" alt="Chibi illustration for strategy and transformation" />
             </div>
@@ -2170,7 +2206,7 @@
             </p>
           </article>
 
-          <article class="storyCard">
+          <article class="storyCard storyCard--industry">
             <div class="storyVisual">
               <img class="storyChibi" src="chibi_transparent_backgrounds/04_corporate_marketing_yellow_tie.png" alt="Chibi illustration for retail branding and marcom" />
             </div>
@@ -2184,7 +2220,7 @@
             </p>
           </article>
 
-          <article class="storyCard">
+          <article class="storyCard storyCard--industry">
             <div class="storyVisual">
               <img class="storyChibi" src="chibi_transparent_backgrounds/07_data_analytics_presentation.png" alt="Chibi illustration for DIS reviewer" />
             </div>
@@ -2299,7 +2335,7 @@
 
             <article class="portfolioSlide" data-portfolio-slide="2">
               <div class="portfolioInfo">
-                <h3 class="moduleTitle">Workshop Website</h3>
+                <h3 class="moduleTitle">MATT Website</h3>
                 <div class="videoMeta">
                   <p class="bodyText">
                     This is the custom website I designed for the PolyFeed workshops. It was created after PowerPoint felt too static and Miro felt too flexible for the activity.
@@ -2425,7 +2461,7 @@
 
       const workItems = [
         {
-          title: "PolyFeed Feedback Analytics",
+          title: "PolyFeed",
           meta: "Monash University / Jun 2025 - Present",
           body: "Exploring how students, tutors, and educators use feedback analytics in real teaching settings, alongside workshop cards and a live dashboard system for turning concerns into practical strategies.",
           tags: ["Feedback analytics", "Co-design", "Implementation"]
