@@ -6,14 +6,14 @@
   <title>Jackie Foo | Portfolio</title>
   <meta
     name="description"
-    content="Single-page portfolio for Jackie Foo with research work, mascot showcase, thesis cards, and looping media."
+    content="Single-page portfolio for Jackie Foo with research work, mascot development, thesis cards, and looping media."
   />
   <meta name="theme-color" content="#0d47d9" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Bungee:wght@400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Bungee:wght@400&family=Montserrat:wght@500;600;700;800&display=swap"
     rel="stylesheet"
   />
 
@@ -191,9 +191,9 @@
     .panel,
     .detailCard,
     .module,
-    .skillCol,
     .contactBlock,
-    .experienceLog {
+    .experienceLog,
+    .cvPanel {
       border: 2px solid var(--blue);
       border-radius: 24px;
       background: rgba(255, 253, 247, 0.72);
@@ -563,6 +563,200 @@
       min-height: 100%;
     }
 
+    .sectionStack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .sectionHeader {
+      display: grid;
+      gap: 8px;
+    }
+
+    .storyRail {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(300px, 340px);
+      gap: 18px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .storyRail::-webkit-scrollbar {
+      display: none;
+    }
+
+    .storyCard {
+      scroll-snap-align: start;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      border: 2px solid var(--blue);
+      border-radius: 24px;
+      background: rgba(255, 253, 247, 0.76);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      box-shadow: 0 14px 26px rgba(17, 70, 216, 0.07);
+    }
+
+    .storyCard::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(17, 70, 216, 0.16);
+      border-radius: 18px;
+      pointer-events: none;
+    }
+
+    .storyVisual {
+      position: relative;
+      min-height: 104px;
+      order: 5;
+      display: grid;
+      place-items: end right;
+      padding-top: 10px;
+    }
+
+    .storyVisual::before {
+      display: none;
+    }
+
+    .storyVisual--research {
+      min-height: 178px;
+      place-items: center;
+      padding-top: 0;
+      padding-bottom: 8px;
+    }
+
+    .storyFrame {
+      position: relative;
+      width: min(100%, 206px);
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      margin-inline: auto;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.08) 68%),
+        radial-gradient(circle at 50% 50%, rgba(17, 70, 216, 0.08), rgba(17, 70, 216, 0.02) 62%, rgba(17, 70, 216, 0) 78%);
+      box-shadow:
+        inset 0 0 0 2px rgba(17, 70, 216, 0.14),
+        0 18px 28px rgba(17, 70, 216, 0.08);
+      overflow: visible;
+    }
+
+    .storyFrame::before,
+    .storyFrame::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .storyFrame::before {
+      inset: -10px;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+    }
+
+    .storyFrame::after {
+      inset: 18px;
+      border: 1px dashed rgba(17, 70, 216, 0.16);
+      opacity: 0.8;
+    }
+
+    .storyPlaceholder {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 6px;
+      justify-items: end;
+      text-align: right;
+      color: var(--blue);
+      opacity: 0.92;
+    }
+
+    .storyPlaceholder strong {
+      font-family: "Bungee", sans-serif;
+      font-size: 0.86rem;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .storyPlaceholder span {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.72;
+    }
+
+    .storyOrb {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      background:
+        radial-gradient(circle at 50% 40%, rgba(17, 70, 216, 0.16), rgba(17, 70, 216, 0.02) 58%, rgba(17, 70, 216, 0) 72%);
+      box-shadow:
+        0 0 0 14px rgba(17, 70, 216, 0.03),
+        0 12px 18px rgba(17, 70, 216, 0.06);
+    }
+
+    .storyChibi {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 220px);
+      max-height: 170px;
+      object-fit: contain;
+      object-position: bottom right;
+      margin-left: auto;
+      filter:
+        drop-shadow(0 18px 24px rgba(17, 70, 216, 0.1))
+        drop-shadow(0 0 22px rgba(255, 244, 190, 0.45));
+    }
+
+    .storyVisual--research .storyChibi {
+      width: min(100%, 210px);
+      max-height: 194px;
+      margin-left: 0;
+      object-position: center bottom;
+      filter:
+        drop-shadow(0 18px 26px rgba(17, 70, 216, 0.12))
+        drop-shadow(0 0 24px rgba(255, 244, 190, 0.42));
+    }
+
+    .storyMeta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-dark);
+    }
+
+    .storyTitle {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      color: var(--blue);
+      font-size: clamp(1rem, 2.3vw, 1.36rem);
+      line-height: 0.98;
+      text-transform: uppercase;
+    }
+
+    .storyText {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.56;
+    }
+
     .timelineGrid {
       display: grid;
       grid-template-columns: 1fr;
@@ -817,142 +1011,29 @@
       color: var(--blue);
     }
 
-    .portfolioFeature {
-      display: grid;
-      grid-template-columns: minmax(280px, 0.88fr) minmax(0, 1.12fr);
-      gap: 18px;
-<<<<<<< HEAD
-      align-items: stretch;
-=======
->>>>>>> parent of 904f6de (update.)
-=======
-    }
-
-    .portfolioCopy,
-    .portfolioViewer {
+    .portfolioCarousel {
       position: relative;
+      border: 2px solid var(--blue);
+      border-radius: 24px;
+      background: rgba(255, 253, 247, 0.72);
       overflow: hidden;
     }
 
-    .portfolioCopy::before,
-    .portfolioViewer::before {
+    .portfolioCarousel::before {
       content: "";
       position: absolute;
       inset: 12px;
       border: 1px solid rgba(17, 70, 216, 0.18);
       border-radius: 18px;
       pointer-events: none;
-    }
-
-    .portfolioCopy {
-      display: grid;
-      gap: 16px;
-      align-content: start;
-      padding: 24px;
-      background:
-        linear-gradient(160deg, rgba(17, 70, 216, 0.08), transparent 58%),
-        rgba(255, 253, 247, 0.76);
-    }
-
-    .portfolioLabel,
-    .slideEyebrow {
-      margin: 0;
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--blue-dark);
-    }
-
-    .portfolioSummary {
-      margin: 0;
-      font-size: 1rem;
-      line-height: 1.65;
-      max-width: 34ch;
-    }
-
-    .portfolioNotes {
-      margin: 0;
-      padding-left: 18px;
-      display: grid;
-      gap: 8px;
-      line-height: 1.55;
-    }
-
-    .portfolioControls {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .portfolioNav {
-      border: 2px solid var(--blue);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--blue);
-      font: inherit;
-      font-size: 0.74rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 8px 12px;
-      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
-    }
-
-    .portfolioNav:hover,
-    .portfolioNav:focus-visible {
-      transform: translateY(-2px);
-      background: var(--blue);
-      color: var(--paper);
-      outline: none;
-    }
-
-    .portfolioHint {
-      margin: 0;
-      font-size: 0.82rem;
-      line-height: 1.45;
-      color: rgba(18, 51, 138, 0.8);
-    }
-
-    .portfolioDots {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .portfolioDots button {
-      border: 2px solid var(--blue);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--blue);
-      padding: 7px 10px;
-      font: inherit;
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
-    }
-
-    .portfolioDots button.is-active {
-      background: var(--blue);
-      color: var(--paper);
-      box-shadow: 0 10px 20px rgba(17, 70, 216, 0.14);
-    }
-
-    .portfolioViewer {
-      padding: 12px;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)),
-        rgba(255, 253, 247, 0.72);
+      z-index: 0;
     }
 
     .portfolioViewport {
+      position: relative;
       overflow: hidden;
-      border-radius: 22px;
-      min-height: 100%;
       touch-action: pan-y;
+      z-index: 1;
     }
 
     .portfolioTrack {
@@ -964,86 +1045,201 @@
     .portfolioSlide {
       min-width: 100%;
       display: grid;
-      align-content: start;
-      gap: 12px;
-      padding: 14px;
-      opacity: 0.66;
-      transition: opacity 260ms ease;
+      grid-template-columns: minmax(280px, 0.94fr) minmax(0, 1.06fr);
+      gap: 18px;
+      align-items: start;
+      padding: 18px;
+      opacity: 0.68;
+      transition: opacity 220ms ease;
     }
 
     .portfolioSlide.is-active {
       opacity: 1;
     }
 
-    .slideBoard {
+    .portfolioInfo {
       display: grid;
       gap: 12px;
-      min-height: 100%;
+      align-content: start;
+      min-width: 0;
+    }
+
+    .portfolioCanvas {
+      min-width: 0;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, rgba(17, 70, 216, 0.08), transparent 48%),
+        rgba(255, 255, 255, 0.44);
+      padding: 12px;
+      min-height: 452px;
+      display: grid;
+      align-items: stretch;
+      justify-items: center;
+      overflow: hidden;
+    }
+
+    .portfolioSlide:first-child .portfolioCanvas {
+      background:
+        linear-gradient(180deg, rgba(17, 70, 216, 0.05), transparent 52%),
+        rgba(255, 255, 255, 0.38);
+    }
+
+    .portfolioCanvas--art {
+      border-color: rgba(17, 70, 216, 0.16);
+      background:
+        radial-gradient(circle at 50% 46%, rgba(17, 70, 216, 0.1), transparent 38%),
+        radial-gradient(circle at 50% 48%, rgba(255, 242, 189, 0.5), transparent 56%),
+        rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 0 0 1px rgba(17, 70, 216, 0.08);
+    }
+
+    .portfolioMeta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 14px 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portfolioArrow {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      background: rgba(248, 236, 217, 0.94);
+      color: var(--blue);
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      font-size: 1.05rem;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .portfolioArrow:hover,
+    .portfolioArrow:focus-visible {
+      transform: translateY(-2px);
+      background: var(--blue);
+      color: var(--paper);
+      outline: none;
+    }
+
+    .portfolioDots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .portfolioDots button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--blue);
+      background: transparent;
+      padding: 0;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .portfolioDots button.is-active {
+      background: var(--blue);
+      transform: scale(1.08);
     }
 
     .cardArena {
-      min-height: 380px;
+      min-height: 100%;
       position: relative;
       display: grid;
       place-items: center;
-      padding: 26px 18px 10px;
+      padding: 20px 14px 10px;
+      width: min(100%, 560px);
     }
 
     .thesisCard {
       --card-x: 0px;
       --card-y: 0px;
       --card-rotate: 0deg;
+      font-family: "Montserrat", "Archivo", sans-serif;
       position: absolute;
       left: 50%;
       top: 50%;
-      width: min(29vw, 188px);
-      aspect-ratio: 2.48 / 3.6;
+      width: min(27vw, 184px);
+      aspect-ratio: 5 / 7.2;
       border: 2px solid var(--blue);
-      border-radius: 26px;
+      border-radius: 24px;
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.34)),
-        var(--paper);
-      padding: 12px 12px 14px;
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.22)),
+        #fff6e6;
+      padding: 10px 10px 12px;
       display: grid;
-      align-content: space-between;
+      grid-template-rows: auto 1fr auto;
+      gap: 8px;
+      align-content: stretch;
       box-shadow: 0 18px 30px rgba(17, 70, 216, 0.12);
       transform:
         translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y)))
         rotate(var(--card-rotate));
       transform-origin: 50% 85%;
-      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-      animation: floatCard 4.4s ease-in-out infinite;
+      transition:
+        transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 300ms ease,
+        border-color 300ms ease,
+        opacity 300ms ease;
+      will-change: transform;
+      animation: floatCard 5s ease-in-out infinite;
     }
 
-    .thesisCard:nth-of-type(1) {
-      --card-x: -108px;
-      --card-y: 20px;
-      --card-rotate: -13deg;
+    .thesisCard.is-left {
+      --card-x: -92px;
+      --card-y: 18px;
+      --card-rotate: -11deg;
       z-index: 1;
       animation-delay: -0.8s;
+      opacity: 0.95;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.26)),
+        #ffe8c9;
     }
 
-    .thesisCard:nth-of-type(2) {
+    .thesisCard.is-center {
       --card-x: 0px;
-      --card-y: 36px;
+      --card-y: 28px;
       --card-rotate: 0deg;
-      z-index: 2;
+      z-index: 3;
       animation-delay: -0.2s;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.22)),
+        #f6f0ff;
     }
 
-    .thesisCard:nth-of-type(3) {
-      --card-x: 108px;
-      --card-y: 20px;
-      --card-rotate: 13deg;
+    .thesisCard.is-right {
+      --card-x: 92px;
+      --card-y: 18px;
+      --card-rotate: 11deg;
       z-index: 1;
       animation-delay: -1.4s;
+      opacity: 0.95;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.24)),
+        #e8f7ff;
+    }
+
+    .thesisCard.is-center,
+    .thesisCard.is-active {
+      transform:
+        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y) - 14px))
+        rotate(var(--card-rotate));
+      box-shadow: 0 24px 40px rgba(17, 70, 216, 0.18);
+      border-color: var(--blue-dark);
+      z-index: 5;
     }
 
     .thesisCard:hover,
-    .thesisCard:focus-visible,
-    .thesisCard.is-active {
+    .thesisCard:focus-visible {
       transform:
-        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y) - 16px))
+        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y) - 10px))
         rotate(var(--card-rotate));
       box-shadow: 0 24px 40px rgba(17, 70, 216, 0.18);
       border-color: var(--blue-dark);
@@ -1059,13 +1255,16 @@
     }
 
     .cardSuit {
-      font-family: "Bungee", sans-serif;
-      font-size: 1.12rem;
-      line-height: 1;
+      font-family: "Montserrat", "Archivo", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      text-transform: uppercase;
     }
 
     .cardRank {
-      font-size: 0.78rem;
+      font-size: 0.7rem;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -1082,11 +1281,16 @@
     }
 
     .cardVisual {
-      margin: 14px 0;
-      min-height: 178px;
-      padding: 10px;
+      aspect-ratio: 1 / 1.02;
+      min-height: 0;
+      padding: 12px 10px;
       display: grid;
       place-items: center;
+      box-shadow: inset 0 0 0 1px rgba(17, 70, 216, 0.05);
+      background:
+        radial-gradient(circle at 50% 28%, rgba(17, 70, 216, 0.12), transparent 36%),
+        rgba(255, 255, 255, 0.54);
+      border-color: rgba(17, 70, 216, 0.12);
     }
 
     .galleryImage,
@@ -1095,12 +1299,13 @@
     }
 
     .cardVisual img {
-      width: 100%;
-      height: 100%;
+      width: 92%;
+      height: 92%;
       object-fit: contain;
       object-position: center;
       filter: none;
       mix-blend-mode: normal;
+      transform: translateZ(0);
     }
 
     .cardName,
@@ -1108,10 +1313,27 @@
       font-size: clamp(1.26rem, 2.4vw, 1.7rem);
     }
 
+    .cardName {
+      margin: 0;
+      font-family: "Montserrat", "Archivo", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.16;
+    }
+
     .cardFlavor {
-      margin: 8px 0 0;
-      font-size: 0.76rem;
-      line-height: 1.42;
+      margin: 2px 0 0;
+      font-family: "Montserrat", "Archivo", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.34;
+      opacity: 0.86;
+    }
+
+    .cardFooter {
+      display: grid;
+      gap: 2px;
+      align-content: end;
     }
 
     .deckDetail,
@@ -1127,21 +1349,48 @@
 
     .galleryStage {
       position: relative;
+      height: 100%;
+      width: 100%;
+      display: grid;
+      place-items: center;
     }
 
     .galleryPortrait {
       position: relative;
-      min-height: 330px;
+      min-height: 100%;
+      width: min(100%, 100%);
       border: 2px solid rgba(17, 70, 216, 0.18);
       border-radius: 24px;
       background:
-        linear-gradient(160deg, rgba(17, 70, 216, 0.08), transparent 56%),
-        rgba(255, 255, 255, 0.46);
+        linear-gradient(180deg, rgba(17, 70, 216, 0.06), transparent 44%),
+        rgba(255, 255, 255, 0.3);
       display: grid;
       place-items: center;
-      padding: 18px 72px;
-      touch-action: pan-y;
+      padding: 14px 56px;
       overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(17, 70, 216, 0.04);
+    }
+
+    .galleryPortrait::before,
+    .galleryPortrait::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .galleryPortrait::before {
+      background:
+        radial-gradient(circle at 50% 50%, rgba(17, 70, 216, 0.16), transparent 34%),
+        radial-gradient(circle at 50% 50%, rgba(255, 242, 189, 0.58), transparent 54%);
+      filter: blur(6px);
+      opacity: 0.9;
+    }
+
+    .galleryPortrait::after {
+      inset: 18px;
+      border: 1px solid rgba(17, 70, 216, 0.1);
+      border-radius: 20px;
     }
 
     .galleryFigure {
@@ -1150,13 +1399,31 @@
       height: 248px;
       display: grid;
       place-items: center;
-      touch-action: pan-y pinch-zoom;
-      cursor: ew-resize;
     }
 
-    .galleryFigure.is-dragging,
-    .cardArena.is-dragging {
-      cursor: grabbing;
+    .galleryFigure::before,
+    .galleryFigure::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .galleryFigure::before {
+      width: 224px;
+      height: 224px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(17, 70, 216, 0.28) 0%, rgba(17, 70, 216, 0.12) 38%, rgba(17, 70, 216, 0) 74%);
+      filter: blur(14px);
+      animation: mascotGlow 3.8s ease-in-out infinite alternate;
+    }
+
+    .galleryFigure::after {
+      width: 240px;
+      height: 240px;
+      border: 1px dashed rgba(17, 70, 216, 0.18);
+      border-radius: 50%;
+      animation: slowSpin 16s linear infinite;
     }
 
     .galleryImage {
@@ -1170,6 +1437,9 @@
       pointer-events: none;
       filter: none;
       mix-blend-mode: normal;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 18px 34px rgba(17, 70, 216, 0.18));
     }
 
     .galleryPortrait.is-changing .galleryImage {
@@ -1190,6 +1460,8 @@
       line-height: 1;
       z-index: 3;
       background: rgba(248, 236, 217, 0.92);
+      box-shadow: 0 0 0 0 rgba(17, 70, 216, 0.12);
+      animation: pointGlow 2.6s ease-in-out infinite;
     }
 
     .galleryCursor.prev {
@@ -1225,72 +1497,42 @@
 
     .videoStage {
       position: relative;
-      min-height: 290px;
+      aspect-ratio: 16 / 9;
       border: 2px solid rgba(17, 70, 216, 0.18);
       border-radius: 20px;
       overflow: hidden;
+      display: grid;
+      place-items: center;
       background:
         linear-gradient(180deg, rgba(17, 70, 216, 0.12), transparent 44%),
         rgba(255, 255, 255, 0.32);
     }
 
     .loopVideo {
+      position: relative;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      background: rgba(255, 255, 255, 0.34);
-    }
-
-    .fallbackVisual {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      padding: 18px;
-    }
-
-    .fallbackVisual img {
-      width: 90%;
-    }
-
-    .fallbackVisual.is-hidden,
-    .loopVideo[hidden] {
-      display: none;
+      object-fit: contain;
+      object-position: center center;
+      background:
+        linear-gradient(180deg, rgba(17, 70, 216, 0.08), rgba(255, 255, 255, 0.14)),
+        rgba(255, 255, 255, 0.5);
     }
 
     .videoBadge {
       display: none;
     }
 
-    .playPulse {
-      position: absolute;
-      inset: 50% auto auto 50%;
-      width: 92px;
-      height: 92px;
-      margin: -46px 0 0 -46px;
-      border: 2px solid rgba(248, 236, 217, 0.9);
-      border-radius: 50%;
-      background: rgba(17, 70, 216, 0.86);
-      display: grid;
-      place-items: center;
-      box-shadow: 0 10px 24px rgba(17, 70, 216, 0.22);
-      animation: pulseRing 2s ease-out infinite;
-      z-index: 2;
-    }
-
-    .playPulse::before {
-      content: "";
-      width: 0;
-      height: 0;
-      margin-left: 4px;
-      border-top: 13px solid transparent;
-      border-bottom: 13px solid transparent;
-      border-left: 21px solid var(--paper);
-    }
-
     .videoMeta {
       display: grid;
       gap: 10px;
+    }
+
+    .videoModule {
+      height: 100%;
+      display: grid;
+      align-content: start;
+      gap: 12px;
     }
 
     .videoMeta ul {
@@ -1301,109 +1543,41 @@
       line-height: 1.45;
     }
 
-<<<<<<< HEAD
     .cvPanel {
-=======
-    .twoCol {
->>>>>>> parent of 904f6de (update.)
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1.12fr) auto;
       gap: 18px;
+      align-items: center;
+      background:
+        linear-gradient(135deg, rgba(17, 70, 216, 0.08), rgba(255, 255, 255, 0)),
+        rgba(255, 253, 247, 0.72);
     }
 
-    .skillCol {
-      display: grid;
-      gap: 14px;
-      align-content: start;
-    }
-
-    .bulletList {
-      margin: 0;
-      padding-left: 18px;
+    .cvCopy {
       display: grid;
       gap: 8px;
-      line-height: 1.48;
     }
 
-    .toolGrid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .toolTile {
+    .cvButton {
       border: 2px solid var(--blue);
-      border-radius: 18px;
-      padding: 12px;
-      text-align: center;
-      font-family: "Bungee", sans-serif;
-      font-size: 1rem;
-      text-transform: uppercase;
-      background: rgba(17, 70, 216, 0.06);
-    }
-
-    .contactBand {
+      border-radius: 999px;
+      padding: 14px 20px;
       background: var(--blue);
       color: var(--paper);
-      padding: 24px 22px 30px;
-      border-radius: 0 0 26px 26px;
-    }
-
-    .contactTitle {
-      margin: 0 0 18px;
-      font-family: "Bungee", sans-serif;
-      font-size: clamp(2.1rem, 6vw, 4rem);
-      line-height: 0.94;
-      text-transform: uppercase;
-    }
-
-    .contactGrid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .contactBlock {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(248, 236, 217, 0.55);
-    }
-
-    .contactBlock h3,
-    .contactBlock p {
-      margin: 0;
-    }
-
-    .contactBlock h3 {
-      font-size: 0.82rem;
+      text-decoration: none;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(248, 236, 217, 0.84);
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+      white-space: nowrap;
     }
 
-    .contactBlock p,
-    .contactBlock a {
-      margin-top: 10px;
-      color: var(--paper);
-      text-decoration: none;
-      font-size: 1rem;
-      line-height: 1.45;
-      font-weight: 700;
-      display: inline-block;
-    }
-
-    .contactBlock a:hover,
-    .contactBlock a:focus-visible {
-      text-decoration: underline;
+    .cvButton:hover,
+    .cvButton:focus-visible {
+      transform: translateY(-2px);
+      background: transparent;
+      color: var(--blue);
       outline: none;
-    }
-
-    .footerNote {
-      margin: 18px 0 0;
-      max-width: 56ch;
-      font-size: 0.86rem;
-      line-height: 1.5;
-      color: rgba(248, 236, 217, 0.78);
     }
 
     .reveal {
@@ -1462,6 +1636,26 @@
       }
     }
 
+    @keyframes mascotGlow {
+      from {
+        transform: scale(0.96);
+        opacity: 0.62;
+      }
+      to {
+        transform: scale(1.08);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slowSpin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     @keyframes pulseRing {
       0% {
         box-shadow: 0 0 0 0 rgba(17, 70, 216, 0.24);
@@ -1477,11 +1671,13 @@
     @media (max-width: 980px) {
       .hero,
       .workGrid,
-      .portfolioFeature,
       .experienceGrid,
-      .twoCol,
-      .contactGrid {
+      .cvPanel {
         grid-template-columns: 1fr;
+      }
+
+      .storyRail {
+        grid-auto-columns: minmax(300px, 320px);
       }
 
       .workPicker,
@@ -1498,28 +1694,28 @@
         grid-template-columns: 1fr;
       }
 
-<<<<<<< HEAD
       .workPanel {
         order: -1;
       }
 
-      .portfolioViewer {
+      .portfolioSlide {
+        grid-template-columns: 1fr;
+      }
+
+      .portfolioCanvas {
         order: -1;
       }
 
-=======
->>>>>>> parent of 904f6de (update.)
-=======
       .thesisCard {
-        width: min(38vw, 184px);
+        width: min(31vw, 178px);
       }
 
-      .thesisCard:nth-of-type(1) {
-        --card-x: -94px;
+      .thesisCard.is-left {
+        --card-x: -86px;
       }
 
-      .thesisCard:nth-of-type(3) {
-        --card-x: 94px;
+      .thesisCard.is-right {
+        --card-x: 86px;
       }
     }
 
@@ -1577,11 +1773,25 @@
 
       .workPicker,
       .factGrid,
-      .toolGrid,
       .timelineLine,
-      .experienceGrid,
-      .contactGrid {
+      .experienceGrid {
         grid-template-columns: 1fr;
+      }
+
+      .storyRail {
+        grid-auto-columns: 86vw;
+      }
+
+      .storyVisual--research {
+        min-height: 150px;
+      }
+
+      .storyFrame {
+        width: min(100%, 178px);
+      }
+
+      .storyVisual--research .storyChibi {
+        max-height: 170px;
       }
 
       .portraitOrbit {
@@ -1672,63 +1882,57 @@
         font-size: 0.94rem;
       }
 
-      .portfolioCopy {
-        padding: 18px;
+      .portfolioSlide {
+        padding: 14px;
       }
 
-      .portfolioControls {
-        grid-template-columns: 1fr;
+      .portfolioCanvas {
+        min-height: 388px;
       }
 
-      .portfolioNav {
-        width: 100%;
+      .portfolioMeta {
+        padding: 8px 12px 12px;
       }
 
-      .portfolioDots {
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        padding-bottom: 2px;
-        scrollbar-width: none;
-      }
-
-      .portfolioDots::-webkit-scrollbar {
-        display: none;
+      .portfolioArrow {
+        width: 40px;
+        height: 40px;
       }
 
       .cardArena {
-        min-height: 352px;
+        min-height: 100%;
         padding-top: 22px;
         touch-action: pan-y;
       }
 
       .thesisCard {
-        width: min(46vw, 162px);
+        width: min(46vw, 164px);
       }
 
-      .thesisCard:nth-of-type(1) {
-        --card-x: -74px;
+      .thesisCard.is-left {
+        --card-x: -60px;
         --card-y: 8px;
-        --card-rotate: -12deg;
+        --card-rotate: -9deg;
       }
 
-      .thesisCard:nth-of-type(2) {
+      .thesisCard.is-center {
         --card-x: 0px;
         --card-y: 18px;
       }
 
-      .thesisCard:nth-of-type(3) {
-        --card-x: 74px;
+      .thesisCard.is-right {
+        --card-x: 60px;
         --card-y: 8px;
-        --card-rotate: 12deg;
+        --card-rotate: 9deg;
       }
 
       .cardVisual {
-        min-height: 130px;
+        min-height: 0;
       }
 
       .galleryPortrait {
         min-height: 300px;
-        padding: 18px 42px;
+        padding: 0 38px;
       }
 
       .galleryFigure {
@@ -1776,10 +1980,10 @@
       <div class="brand">Jackie Foo / Portfolio</div>
       <nav class="nav" aria-label="Section navigation">
         <a href="#profile">Profile</a>
-        <a href="#work">Work</a>
-        <a href="#showcase">Showcase</a>
-        <a href="#skills">Skills</a>
-        <a href="#contact">Contact</a>
+        <a href="#research">Research</a>
+        <a href="#industry">Industry</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#cv">CV</a>
       </nav>
     </header>
 
@@ -1831,122 +2035,125 @@
       </div>
     </section>
 
-    <section id="work" class="section">
-      <h2 class="sectionTitle reveal">Work / Experience</h2>
-      <p class="sectionLead reveal">
-        Current research tracks on top, selected experience underneath.
-      </p>
-
-      <div class="workGrid">
-        <div class="workPicker reveal">
-          <button class="workCard is-active" type="button" data-work="0" aria-label="Show PolyFeed Thesis">
-            <p class="workDate">Jun 2025 - Present</p>
-            <p class="workName">PolyFeed Thesis</p>
-            <p class="workText">Feedback analytics, co-design, and implementation strategy.</p>
-          </button>
-          <button class="workCard" type="button" data-work="1" aria-label="Show More Than Words">
-            <p class="workDate">Mar 2025 - Present</p>
-            <p class="workName">More Than Words</p>
-            <p class="workText">Assistive communication research and local AI experimentation.</p>
-          </button>
-          <button class="workCard" type="button" data-work="2" aria-label="Show Action Lab Malaysia">
-            <p class="workDate">Nov 2024 - Present</p>
-            <p class="workName">Action Lab Malaysia</p>
-            <p class="workText">HCI literature review, synthesis, and collaborator prep.</p>
-          </button>
-          <button class="workCard" type="button" data-work="3" aria-label="Show Web Development">
-            <p class="workDate">2024 - Present</p>
-            <p class="workName">Web Development</p>
-            <p class="workText">Interactive systems, dashboards, and research-facing frontend work.</p>
-          </button>
+    <section id="research" class="section">
+      <div class="sectionStack">
+        <div class="sectionHeader">
+          <h2 class="sectionTitle reveal">Research</h2>
+          <p class="sectionLead reveal">
+            Current research tracks and project directions.
+          </p>
         </div>
 
-<<<<<<< HEAD
-        <div class="workGrid">
-          <div class="workPicker reveal">
-            <button class="workCard is-active" type="button" data-work="0" aria-label="Show PolyFeed Thesis">
-              <p class="workDate">Jun 2025 - Present</p>
-              <p class="workName">PolyFeed Thesis</p>
-              <p class="workText">Feedback analytics, co-design, and implementation strategy.</p>
-            </button>
-            <button class="workCard" type="button" data-work="1" aria-label="Show More Than Words">
-              <p class="workDate">Mar 2025 - Present</p>
-              <p class="workName">More Than Words</p>
-              <p class="workText">Assistive communication research and local AI experimentation.</p>
-            </button>
-            <button class="workCard" type="button" data-work="2" aria-label="Show Action Lab Malaysia">
-              <p class="workDate">Nov 2024 - Present</p>
-              <p class="workName">Action Lab Malaysia</p>
-              <p class="workText">HCI literature review, synthesis, and collaborator prep.</p>
-            </button>
-            <button class="workCard" type="button" data-work="3" aria-label="Show Web Development">
-              <p class="workDate">2024 - Present</p>
-              <p class="workName">Web Development</p>
-              <p class="workText">Interactive systems, dashboards, and research-facing frontend work.</p>
-            </button>
-            <button class="workCard" type="button" data-work="4" aria-label="Show DIS Reviewer">
-              <p class="workDate">2025 - 2026</p>
-              <p class="workName">DIS Reviewer</p>
-              <p class="workText">HCI reviewing, contribution framing, and research standards.</p>
-            </button>
-          </div>
-
-          <aside class="detailCard reveal workPanel" aria-live="polite">
-            <div id="workDetail">
-              <p class="detailTitle">PolyFeed Thesis</p>
-              <p class="detailMeta">Monash University / Jun 2025 - Present</p>
-              <p class="bodyText">
-                Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with attention to feedback analytics uptake, co-design, and implementation strategy.
-              </p>
-              <div class="tagRow">
-                <span class="tag">Feedback analytics</span>
-                <span class="tag">Co-design</span>
-                <span class="tag">Implementation</span>
+        <div class="storyRail reveal" aria-label="Research projects">
+          <article class="storyCard storyCard--research">
+            <div class="storyVisual storyVisual--research">
+              <div class="storyFrame">
+                <img class="storyChibi" src="chibi_transparent_backgrounds/01_tech_research_education.png" alt="Chibi illustration for PolyFeed thesis" />
               </div>
-=======
-=======
-=======
->>>>>>> parent of 904f6de (update.)
-        <aside class="detailCard reveal workPanel" aria-live="polite">
-          <div id="workDetail">
-            <p class="detailTitle">PolyFeed Thesis</p>
-            <p class="detailMeta">Monash University / Jun 2025 - Present</p>
-            <p class="bodyText">
-              Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with attention to feedback analytics uptake, co-design, and implementation strategy.
+            </div>
+            <div class="storyMeta">
+              <span>Jun 2025 - Present</span>
+              <span>Monash University</span>
+            </div>
+            <h3 class="storyTitle">PolyFeed Thesis</h3>
+            <p class="storyText">
+              Feedback analytics, co-design, and implementation strategy across real teaching contexts, with attention to what makes the tool useful, difficult, or meaningful in practice.
             </p>
             <div class="tagRow">
               <span class="tag">Feedback analytics</span>
               <span class="tag">Co-design</span>
               <span class="tag">Implementation</span>
-<<<<<<< HEAD
-=======
->>>>>>> parent of 904f6de (update.)
             </div>
-          </div>
-        </aside>
+          </article>
+
+          <article class="storyCard storyCard--research">
+            <div class="storyVisual storyVisual--research">
+              <div class="storyFrame">
+                <img class="storyChibi" src="chibi_transparent_backgrounds/03_ai_neurodivergent_support.png" alt="Chibi illustration for More Than Words" />
+              </div>
+            </div>
+            <div class="storyMeta">
+              <span>Mar 2025 - Present</span>
+              <span>Monash Assistive Tech Team</span>
+            </div>
+            <h3 class="storyTitle">More Than Words</h3>
+            <p class="storyText">
+              Assistive communication research exploring emoji recommendation, local AI experimentation, and how different users interpret communication cues in context.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Assistive tech</span>
+              <span class="tag">Local AI</span>
+              <span class="tag">Communication</span>
+            </div>
+          </article>
+
+          <article class="storyCard storyCard--research">
+            <div class="storyVisual storyVisual--research">
+              <div class="storyFrame">
+                <img class="storyChibi" src="chibi_transparent_backgrounds/02_lab_office_desk.png" alt="Chibi illustration for Action Lab Malaysia" />
+              </div>
+            </div>
+            <div class="storyMeta">
+              <span>Nov 2024 - Present</span>
+              <span>Monash Malaysia</span>
+            </div>
+            <h3 class="storyTitle">Action Lab Malaysia</h3>
+            <p class="storyText">
+              HCI research collaboration focused on literature synthesis, research preparation, and strengthening positioning across CHI, DIS, and CSCW-adjacent work.
+            </p>
+            <div class="tagRow">
+              <span class="tag">HCI research</span>
+              <span class="tag">Literature review</span>
+              <span class="tag">Preparation</span>
+            </div>
+          </article>
+
+          <article class="storyCard storyCard--research">
+            <div class="storyVisual storyVisual--research">
+              <div class="storyFrame">
+                <img class="storyChibi" src="chibi_transparent_backgrounds/06_tech_coding_debugging.png" alt="Chibi illustration for web development" />
+              </div>
+            </div>
+            <div class="storyMeta">
+              <span>2024 - Present</span>
+              <span>Software engineering track</span>
+            </div>
+            <h3 class="storyTitle">Web Development</h3>
+            <p class="storyText">
+              Interactive systems, dashboards, and research-facing frontend work that connect structured content, interface design, and implementation-minded prototypes.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Frontend</span>
+              <span class="tag">Dashboards</span>
+              <span class="tag">Prototype</span>
+            </div>
+          </article>
+        </div>
       </div>
-      <div class="experienceSectionWrap">
-        <div class="experienceHeaderRow">
-          <div>
-            <p class="moduleEyebrow reveal">Selected Experience</p>
-          </div>
+    </section>
+
+    <section id="industry" class="section">
+      <div class="sectionStack">
+        <div class="sectionHeader">
+          <h2 class="sectionTitle reveal">Industry</h2>
           <p class="sectionLead reveal">
-            Selected roles from practice, reporting, and transformation work.
+            Selected roles and academic service.
           </p>
         </div>
 
-        <div class="experienceGrid">
-          <article class="experienceLog reveal">
-            <div class="expMeta">
+        <div class="storyRail reveal" aria-label="Industry experience">
+          <article class="storyCard">
+            <div class="storyVisual">
+              <img class="storyChibi" src="chibi_transparent_backgrounds/05_corporate_cross_country_implementation.png" alt="Chibi illustration for strategy and transformation" />
+            </div>
+            <div class="storyMeta">
               <span>May 2023 - Aug 2024</span>
               <span>Malaysia / On-site</span>
             </div>
-            <h3 class="expRole">Strategy &amp; Transformation</h3>
-            <p class="detailMeta">Maybank / Group Risk / Contract</p>
-            <ul class="expBullets">
-              <li>Worked across a capital risk migration touching 14 applications and 200+ stakeholders.</li>
-              <li>Built a dashboard that reduced monthly status preparation from around five days to about one hour.</li>
-            </ul>
+            <h3 class="storyTitle">Strategy &amp; Transformation</h3>
+            <p class="storyText">
+              Worked across a capital risk migration touching 14 applications and 200+ stakeholders, while building a dashboard that reduced monthly status preparation from around five days to about one hour.
+            </p>
             <div class="tagRow">
               <span class="tag">Stakeholders</span>
               <span class="tag">Dashboards</span>
@@ -1954,395 +2161,245 @@
             </div>
           </article>
 
-          <article class="experienceLog reveal">
-            <div class="expMeta">
+          <article class="storyCard">
+            <div class="storyVisual">
+              <img class="storyChibi" src="chibi_transparent_backgrounds/04_corporate_marketing_yellow_tie.png" alt="Chibi illustration for retail branding and marcom" />
+            </div>
+            <div class="storyMeta">
               <span>Nov 2022 - Apr 2023</span>
               <span>Malaysia / On-site</span>
             </div>
-            <h3 class="expRole">Retail Branding &amp; Marcom</h3>
-            <p class="detailMeta">Maybank / Consumer Financial Services / Contract</p>
-            <ul class="expBullets">
-              <li>Supported premium card launch coordination, campaign rollout, and reporting across multiple workstreams.</li>
-              <li>Produced six ROI reports in the first eight weeks, linking campaign performance back to spend decisions.</li>
-            </ul>
+            <h3 class="storyTitle">Retail Branding &amp; Marcom</h3>
+            <p class="storyText">
+              Supported premium card launch coordination, campaign rollout, and reporting across multiple workstreams, including six ROI reports in the first eight weeks.
+            </p>
             <div class="tagRow">
               <span class="tag">Reporting</span>
-              <span class="tag">Campaign Ops</span>
+              <span class="tag">Campaign ops</span>
               <span class="tag">Communication</span>
             </div>
           </article>
 
+          <article class="storyCard">
+            <div class="storyVisual">
+              <img class="storyChibi" src="chibi_transparent_backgrounds/07_data_analytics_presentation.png" alt="Chibi illustration for DIS reviewer" />
+            </div>
+            <div class="storyMeta">
+              <span>2025 - 2026</span>
+              <span>Academic service</span>
+            </div>
+            <h3 class="storyTitle">DIS Reviewer</h3>
+            <p class="storyText">
+              Reviewed HCI submissions and strengthened my sense of contribution framing, methodological clarity, and what makes research arguments feel credible and publishable.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Reviewing</span>
+              <span class="tag">HCI</span>
+              <span class="tag">Research standards</span>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-<<<<<<< HEAD
     <section id="portfolio" class="section">
-      <div class="sectionStack">
-        <div class="sectionHeader">
-          <h2 class="sectionTitle reveal">Portfolio</h2>
-          <p class="sectionLead reveal">
-            One featured piece at a time, with swipe-first viewing for phone and a larger media stage for desktop.
-          </p>
-        </div>
-
-        <div class="portfolioFeature">
-          <article class="portfolioCopy detailCard reveal">
-            <p class="portfolioLabel" id="portfolioLabel">01 / Thesis Deck</p>
-            <h3 class="moduleTitle" id="portfolioTitle">Thesis Card System</h3>
-            <p class="portfolioSummary" id="portfolioSummary">
-              A card-based showcase for thesis materials, combining persona and instruction cards into a more visual and game-like research artefact.
-=======
-=======
->>>>>>> parent of 904f6de (update.)
-    <section id="showcase" class="section">
-      <h2 class="sectionTitle reveal">Showcase</h2>
+      <h2 class="sectionTitle reveal">Portfolio</h2>
       <p class="sectionLead reveal">
-        Cards, mascot development, and looped demos.
+        Thesis cards, mascot development, and looped demos.
       </p>
 
-      <div class="showcaseBoard">
-        <article class="module reveal">
-          <p class="moduleEyebrow">Thesis Deck / Swipe or tap</p>
-          <h3 class="moduleTitle">Card Showcase</h3>
-          <div class="cardArena" aria-label="Animated thesis card preview">
-            <button class="thesisCard is-active" type="button" data-card="0">
-              <div class="cardTop">
-                <span class="cardSuit">Persona</span>
-                <span class="cardRank">01</span>
-              </div>
-              <div class="cardVisual">
-                <img src="pic/tutor-persona-2.png" alt="Student Sense-Makers card preview" />
-              </div>
-              <div>
-                <p class="cardName">Student Sense-Makers</p>
-                <p class="cardFlavor">I want students to know what to do next.</p>
-              </div>
-            </button>
-
-            <button class="thesisCard" type="button" data-card="1">
-              <div class="cardTop">
-                <span class="cardSuit">Persona</span>
-                <span class="cardRank">02</span>
-              </div>
-              <div class="cardVisual">
-                <img src="pic/tutor-persona-1.png" alt="Scale Thinkers card preview" />
-              </div>
-              <div>
-                <p class="cardName">Scale Thinkers</p>
-                <p class="cardFlavor">I think about what works for large cohorts.</p>
-              </div>
-            </button>
-
-            <button class="thesisCard" type="button" data-card="2">
-              <div class="cardTop">
-                <span class="cardSuit">Instruction</span>
-                <span class="cardRank">03</span>
-              </div>
-              <div class="cardVisual">
-                <img src="pic/tutor-persona-5.png" alt="What's my motivation card preview" />
-              </div>
-              <div>
-                <p class="cardName">What’s My Motivation</p>
-                <p class="cardFlavor">What are you hoping feedback does here?</p>
-              </div>
-            </button>
-          </div>
-
-          <div class="deckDetail" id="deckDetail" aria-live="polite">
-            <p class="detailTitle">Student Sense-Makers</p>
-            <p class="bodyText">
-              A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.
->>>>>>> parent of 904f6de (update.)
-            </p>
-            <ul class="portfolioNotes" id="portfolioNotes">
-              <li>Persona and instruction cards designed for workshop discussion.</li>
-              <li>Visual system that helps abstract feedback ideas feel more tangible.</li>
-            </ul>
-            <div class="tagRow" id="portfolioTags">
-              <span class="tag">Research artefact</span>
-              <span class="tag">Card design</span>
-              <span class="tag">Workshop material</span>
-            </div>
-            <div class="portfolioControls">
-              <button class="portfolioNav" type="button" id="portfolioPrev" aria-label="Previous portfolio piece">Prev</button>
-              <p class="portfolioHint">Swipe the viewer left or right to move through the portfolio.</p>
-              <button class="portfolioNav" type="button" id="portfolioNext" aria-label="Next portfolio piece">Next</button>
-            </div>
-            <div class="portfolioDots" id="portfolioDots" aria-label="Portfolio selector"></div>
-          </article>
-
-<<<<<<< HEAD
-          <article class="portfolioViewer reveal">
-            <div class="portfolioViewport" id="portfolioViewport">
-              <div class="portfolioTrack" id="portfolioTrack">
-                <section class="portfolioSlide is-active" data-portfolio-slide="0" aria-label="Thesis deck">
-                  <div class="slideBoard">
-                    <p class="slideEyebrow">Thesis Deck</p>
-                    <div class="cardArena" aria-label="Animated thesis card preview">
-                      <button class="thesisCard is-active is-center" type="button" data-card="0">
-                        <div class="cardTop">
-                          <span class="cardSuit">Persona</span>
-                          <span class="cardRank">01</span>
-                        </div>
-                        <div class="cardVisual">
-                          <img src="pic/tutor-persona-2.png" alt="Student Sense-Makers card preview" />
-                        </div>
-                        <div class="cardFooter">
-                          <p class="cardName">Student Sense-Makers</p>
-                          <p class="cardFlavor">Persona card</p>
-                        </div>
-                      </button>
-
-                      <button class="thesisCard is-right" type="button" data-card="1">
-                        <div class="cardTop">
-                          <span class="cardSuit">Persona</span>
-                          <span class="cardRank">02</span>
-                        </div>
-                        <div class="cardVisual">
-                          <img src="pic/tutor-persona-1.png" alt="Scale Thinkers card preview" />
-                        </div>
-                        <div class="cardFooter">
-                          <p class="cardName">Scale Thinkers</p>
-                          <p class="cardFlavor">Persona card</p>
-                        </div>
-                      </button>
-
-                      <button class="thesisCard is-left" type="button" data-card="2">
-                        <div class="cardTop">
-                          <span class="cardSuit">Instruction</span>
-                          <span class="cardRank">03</span>
-                        </div>
-                        <div class="cardVisual">
-                          <img src="pic/tutor-persona-5.png" alt="What's my motivation card preview" />
-                        </div>
-                        <div class="cardFooter">
-                          <p class="cardName">What’s My Motivation</p>
-                          <p class="cardFlavor">Instruction card</p>
-                        </div>
-                      </button>
-                    </div>
+      <div class="portfolioCarousel reveal">
+        <div class="portfolioViewport" id="portfolioViewport">
+          <div class="portfolioTrack" id="portfolioTrack">
+            <article class="portfolioSlide is-active" data-portfolio-slide="0">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Thesis Deck</p>
+                <h3 class="moduleTitle">Thesis Card System</h3>
+                <div class="deckDetail" id="deckDetail" aria-live="polite">
+                  <p class="detailTitle">Student Sense-Makers</p>
+                  <p class="bodyText">
+                    A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.
+                  </p>
+                  <div class="tagRow">
+                    <span class="tag">Persona card</span>
+                    <span class="tag">Next steps</span>
+                    <span class="tag">Consistency</span>
                   </div>
-                </section>
-
-                <section class="portfolioSlide" data-portfolio-slide="1" aria-label="Mascot development">
-                  <div class="slideBoard">
-                    <p class="slideEyebrow">Mascot Development</p>
-                    <div class="galleryStage">
-                      <div class="galleryPortrait" id="galleryPortrait">
-                        <div class="galleryFigure">
-                          <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
-                          <img
-                            id="galleryImage"
-                            class="galleryImage"
-                            src="pic/Mascot/1.png"
-                            alt="Mascot development concept"
-                            draggable="false"
-                          />
-                          <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
-                  </div>
-                </section>
-
-                <section class="portfolioSlide" data-portfolio-slide="2" aria-label="Website demo">
-                  <div class="slideBoard">
-                    <p class="slideEyebrow">Website Loop</p>
-                    <div class="videoModule" data-video-wrapper data-video-src="Loop-website.mov">
-                      <div class="videoStage">
-                        <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-                        <div class="fallbackVisual">
-                          <img src="pic/Mascot/2.png" alt="Fallback for website loop" />
-                        </div>
-                        <div class="playPulse" aria-hidden="true"></div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section class="portfolioSlide" data-portfolio-slide="3" aria-label="Participant demo">
-                  <div class="slideBoard">
-                    <p class="slideEyebrow">Participant Website Loop</p>
-                    <div class="videoModule" data-video-wrapper data-video-src="Participant website.mov">
-                      <div class="videoStage">
-                        <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-                        <div class="fallbackVisual">
-                          <img src="pic/tutor-persona-2.png" alt="Placeholder for participant website loop" />
-                        </div>
-                        <div class="playPulse" aria-hidden="true"></div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section class="portfolioSlide" data-portfolio-slide="4" aria-label="Schema loop">
-                  <div class="slideBoard">
-                    <p class="slideEyebrow">Schema Loop</p>
-                    <div class="videoModule" data-video-wrapper data-video-src="Schema_video.mov">
-                      <div class="videoStage">
-                        <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-                        <div class="fallbackVisual">
-                          <img src="pic/tutor-persona-1.png" alt="Placeholder for schema loop" />
-                        </div>
-                        <div class="playPulse" aria-hidden="true"></div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-            </div>
-          </article>
-        </div>
-=======
-        <article class="module reveal">
-          <p class="moduleEyebrow">Mascot Development / Swipe or click</p>
-          <h3 class="moduleTitle">Mascot Select</h3>
-          <div class="galleryShell">
-            <div class="galleryStage">
-              <div class="galleryPortrait" id="galleryPortrait">
-                <div class="galleryFigure">
-                  <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
-                  <img
-                    id="galleryImage"
-                    class="galleryImage"
-                    src="pic/Mascot/1.png"
-                    alt="Mascot development concept"
-                    draggable="false"
-                  />
-                  <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
                 </div>
               </div>
-            </div>
-            <div class="galleryInfo">
-              <p class="galleryName" id="galleryName">Reader Cat</p>
-              <p class="bodyText" id="galleryText">
-                A softer research-facing mascot direction built around reading, study, and early exploration.
-              </p>
-              <p class="miniNote">Drag or swipe across the mascot to move between states.</p>
-              <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
-            </div>
-          </div>
-        </article>
+              <div class="portfolioCanvas portfolioCanvas--art">
+                <div class="cardArena" aria-label="Animated thesis card preview">
+                  <button class="thesisCard is-active is-center" type="button" data-card="0">
+                    <div class="cardTop">
+                      <span class="cardSuit">Persona</span>
+                      <span class="cardRank">01</span>
+                    </div>
+                    <div class="cardVisual">
+                      <img src="pic/tutor-persona-2.png" alt="Student Sense-Makers card preview" />
+                    </div>
+                    <div class="cardFooter">
+                      <p class="cardName">Student Sense-Makers</p>
+                      <p class="cardFlavor">Persona card</p>
+                    </div>
+                  </button>
 
-        <article class="module reveal">
-          <p class="moduleEyebrow">Website Loop</p>
-          <h3 class="moduleTitle">Website Demo</h3>
-          <div class="videoModule" data-video-wrapper data-video-src="Loop-website.mov">
-            <div class="videoStage">
-              <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-              <div class="fallbackVisual">
-                <img src="pic/Mascot/2.png" alt="Fallback for website loop" />
-              </div>
-              <div class="playPulse" aria-hidden="true"></div>
-            </div>
-            <div class="videoMeta">
-              <p class="bodyText">
-                Looping walkthrough of the current website direction.
-              </p>
-              <ul>
-                <li>Main site flow and visual direction</li>
-                <li>Autoplay, muted, and looping in the page</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+                  <button class="thesisCard is-right" type="button" data-card="1">
+                    <div class="cardTop">
+                      <span class="cardSuit">Persona</span>
+                      <span class="cardRank">02</span>
+                    </div>
+                    <div class="cardVisual">
+                      <img src="pic/tutor-persona-1.png" alt="Scale Thinkers card preview" />
+                    </div>
+                    <div class="cardFooter">
+                      <p class="cardName">Scale Thinkers</p>
+                      <p class="cardFlavor">Persona card</p>
+                    </div>
+                  </button>
 
-        <article class="module reveal">
-          <p class="moduleEyebrow">Participant Website Loop</p>
-          <h3 class="moduleTitle">Participant Demo</h3>
-          <div class="videoModule" data-video-wrapper data-video-src="Participant website.mov">
-            <div class="videoStage">
-              <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-              <div class="fallbackVisual">
-                <img src="pic/tutor-persona-2.png" alt="Placeholder for participant website loop" />
+                  <button class="thesisCard is-left" type="button" data-card="2">
+                    <div class="cardTop">
+                      <span class="cardSuit">Instruction</span>
+                      <span class="cardRank">03</span>
+                    </div>
+                    <div class="cardVisual">
+                      <img src="pic/tutor-persona-5.png" alt="What's my motivation card preview" />
+                    </div>
+                    <div class="cardFooter">
+                      <p class="cardName">What’s My Motivation</p>
+                      <p class="cardFlavor">Instruction card</p>
+                    </div>
+                  </button>
+                </div>
               </div>
-              <div class="playPulse" aria-hidden="true"></div>
-            </div>
-            <div class="videoMeta">
-              <p class="bodyText">
-                Participant-facing website flow and interaction screens.
-              </p>
-              <ul>
-                <li>Shows the participant-side interface and flow</li>
-                <li>Loops in the same way as the other demo modules</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+            </article>
 
-        <article class="module reveal">
-          <p class="moduleEyebrow">Schema Loop Video</p>
-          <h3 class="moduleTitle">Schema Loop</h3>
-          <div class="videoModule" data-video-wrapper data-video-src="Schema_video.mov">
-            <div class="videoStage">
-              <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
-              <div class="fallbackVisual">
-                <img src="pic/tutor-persona-1.png" alt="Placeholder for schema loop" />
+            <article class="portfolioSlide" data-portfolio-slide="1">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Mascot Development</p>
+                <h3 class="galleryName" id="galleryName">Reader Cat</h3>
+                <p class="bodyText" id="galleryText">
+                  A softer research-facing mascot direction built around reading, study, and early exploration.
+                </p>
+                <p class="miniNote">Use the arrows to move between mascot states.</p>
+                <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
               </div>
-              <div class="playPulse" aria-hidden="true"></div>
-            </div>
-            <div class="videoMeta">
-              <p class="bodyText">
-                Schema structure, content model, and dashboard logic walkthrough.
-              </p>
-              <ul>
-                <li>Uses the real schema video already in the project</li>
-                <li>Separate from the website demos so it can stand on its own</li>
-              </ul>
-            </div>
+              <div class="portfolioCanvas portfolioCanvas--art">
+                <div class="galleryStage">
+                  <div class="galleryPortrait" id="galleryPortrait">
+                    <div class="galleryFigure">
+                      <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
+                      <img
+                        id="galleryImage"
+                        class="galleryImage"
+                        src="pic/Mascot/1.png"
+                        alt="Mascot development concept"
+                        draggable="false"
+                      />
+                      <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="portfolioSlide" data-portfolio-slide="2">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Website Loop</p>
+                <h3 class="moduleTitle">Website Demo</h3>
+                <div class="videoMeta">
+                  <p class="bodyText">
+                    Looping walkthrough of the current website direction.
+                  </p>
+                  <ul>
+                    <li>Main site flow and visual direction</li>
+                    <li>Autoplay, muted, and looping in the page</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="portfolioCanvas">
+                <div class="videoModule">
+                  <div class="videoStage">
+                    <video class="loopVideo" muted loop autoplay playsinline preload="auto" poster="pic/Mascot/2.png">
+                      <source src="Loop-website.mp4?v=20260518" type="video/mp4" />
+                      <source src="Loop-website.mov?v=20260518" type="video/quicktime" />
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="portfolioSlide" data-portfolio-slide="3">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Participant Website Loop</p>
+                <h3 class="moduleTitle">Participant Demo</h3>
+                <div class="videoMeta">
+                  <p class="bodyText">
+                    Participant-facing website flow and interaction screens.
+                  </p>
+                  <ul>
+                    <li>Shows the participant-side interface and flow</li>
+                    <li>Loops in the same way as the other demo modules</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="portfolioCanvas">
+                <div class="videoModule">
+                  <div class="videoStage">
+                    <video class="loopVideo" muted loop autoplay playsinline preload="auto" poster="pic/tutor-persona-2.png">
+                      <source src="Participant website.mp4?v=20260518" type="video/mp4" />
+                      <source src="Participant website.mov?v=20260518" type="video/quicktime" />
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="portfolioSlide" data-portfolio-slide="4">
+              <div class="portfolioInfo">
+                <p class="moduleEyebrow">Schema Loop Video</p>
+                <h3 class="moduleTitle">Schema Loop</h3>
+                <div class="videoMeta">
+                  <p class="bodyText">
+                    Schema structure, content model, and dashboard logic walkthrough.
+                  </p>
+                  <ul>
+                    <li>Uses the real schema video already in the project</li>
+                    <li>Separate from the website demos so it can stand on its own</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="portfolioCanvas">
+                <div class="videoModule">
+                  <div class="videoStage">
+                    <video class="loopVideo" muted loop autoplay playsinline preload="auto" poster="pic/tutor-persona-1.png">
+                      <source src="Schema_video.mp4?v=20260518" type="video/mp4" />
+                      <source src="Schema_video.mov?v=20260518" type="video/quicktime" />
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
-        </article>
->>>>>>> parent of 904f6de (update.)
+        </div>
+        <div class="portfolioMeta">
+          <button class="portfolioArrow prev" type="button" id="portfolioPrev" aria-label="Previous portfolio item">&#8249;</button>
+          <div class="portfolioDots" id="portfolioDots" aria-label="Portfolio selector"></div>
+          <button class="portfolioArrow next" type="button" id="portfolioNext" aria-label="Next portfolio item">&#8250;</button>
+        </div>
       </div>
     </section>
 
-    <section id="skills" class="section">
-      <div class="twoCol">
-        <div class="skillCol reveal">
-          <h2 class="sectionTitle">Skills</h2>
-          <div class="toolGrid" aria-label="Core skills">
-            <div class="toolTile">HCI</div>
-            <div class="toolTile">Co-Design</div>
-            <div class="toolTile">Python</div>
-            <div class="toolTile">SQL</div>
-          </div>
-          <ul class="bulletList">
-            <li>Human-centred learning analytics and feedback analytics</li>
-            <li>Qualitative interviewing, workshops, thematic analysis, and stakeholder synthesis</li>
-            <li>Interactive artifact design, web prototyping, and dashboard thinking</li>
-            <li>HTML, CSS, JavaScript, database structure, and reporting automation</li>
-          </ul>
+    <section id="cv" class="section">
+      <div class="cvPanel reveal">
+        <div class="cvCopy">
+          <p class="moduleEyebrow">CV Download</p>
+          <h2 class="sectionTitle">Full CV</h2>
+          <p class="bodyText">
+            Open the full CV on a separate page for the more detailed academic and professional record.
+          </p>
         </div>
-
-        <div class="skillCol reveal">
-          <h2 class="sectionTitle">Strengths</h2>
-          <ul class="bulletList">
-            <li>Turning real stakeholder friction into usable research and design directions</li>
-            <li>Balancing research depth with practical implementation thinking</li>
-            <li>Working across design, technical, educational, and organisational contexts</li>
-            <li>Making dense systems easier to understand through clearer structures and artifacts</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="contactBand">
-      <h2 class="contactTitle reveal">Contact</h2>
-      <div class="contactGrid">
-        <div class="contactBlock reveal">
-          <h3>Email</h3>
-          <a href="mailto:you@email.com">you@email.com</a>
-        </div>
-        <div class="contactBlock reveal">
-          <h3>Portfolio</h3>
-          <a href="https://www.jackiefoo.me/" target="_blank" rel="noreferrer">jackiefoo.me</a>
-        </div>
-        <div class="contactBlock reveal">
-          <h3>LinkedIn</h3>
-          <a href="#">Add your LinkedIn URL</a>
-        </div>
+        <a class="cvButton" href="index.html" target="_blank" rel="noreferrer">Open CV Page</a>
       </div>
     </section>
   </main>
@@ -2350,29 +2407,25 @@
   <script>
     (() => {
       const workDetail = document.getElementById("workDetail");
-      const workGrid = document.querySelector(".workGrid");
       const workButtons = [...document.querySelectorAll("[data-work]")];
       const thesisCards = [...document.querySelectorAll("[data-card]")];
       const cardArena = document.querySelector(".cardArena");
+      const deckDetail = document.getElementById("deckDetail");
       const revealNodes = [...document.querySelectorAll(".reveal")];
       const portfolioViewport = document.getElementById("portfolioViewport");
       const portfolioTrack = document.getElementById("portfolioTrack");
       const portfolioSlides = [...document.querySelectorAll("[data-portfolio-slide]")];
-      const portfolioLabel = document.getElementById("portfolioLabel");
-      const portfolioTitle = document.getElementById("portfolioTitle");
-      const portfolioSummary = document.getElementById("portfolioSummary");
-      const portfolioNotes = document.getElementById("portfolioNotes");
-      const portfolioTags = document.getElementById("portfolioTags");
       const portfolioDots = document.getElementById("portfolioDots");
       const portfolioPrev = document.getElementById("portfolioPrev");
       const portfolioNext = document.getElementById("portfolioNext");
       const galleryPortrait = document.getElementById("galleryPortrait");
-      const galleryFigure = document.querySelector(".galleryFigure");
       const galleryImage = document.getElementById("galleryImage");
+      const galleryName = document.getElementById("galleryName");
+      const galleryText = document.getElementById("galleryText");
       const galleryDots = document.getElementById("galleryDots");
       const galleryPrev = document.getElementById("galleryPrev");
       const galleryNext = document.getElementById("galleryNext");
-      const videoWrappers = [...document.querySelectorAll("[data-video-wrapper]")];
+      const portfolioVideos = [...document.querySelectorAll(".portfolioSlide .loopVideo")];
 
       const workItems = [
         {
@@ -2383,7 +2436,7 @@
         },
         {
           title: "More Than Words",
-          meta: "MATT / Mar 2025 - Present",
+          meta: "Monash Assistive Tech Team / Mar 2025 - Present",
           body: "Assistive technology research exploring emoji recommendation and communication support, including local AI experimentation and context-sensitive interpretation.",
           tags: ["Assistive technology", "Emoji recommendation", "Local AI"]
         },
@@ -2398,12 +2451,6 @@
           meta: "Ongoing / software engineering track",
           body: "Web-facing builds that connect interface design, structured content, dashboards, and implementation-minded frontend work.",
           tags: ["Frontend", "Dashboards", "Implementation"]
-        },
-        {
-          title: "DIS Reviewer",
-          meta: "ACM Designing Interactive Systems / 2025 - 2026",
-          body: "Academic reviewing work that sharpened contribution framing, methodological clarity, and a stronger sense of what makes HCI research arguments feel credible and publishable.",
-          tags: ["Reviewing", "HCI", "Research standards"]
         }
       ];
 
@@ -2454,56 +2501,11 @@
       ];
 
       const portfolioItems = [
-        {
-          label: "Thesis Deck",
-          title: "Thesis Card System",
-          body: "A card-based showcase for thesis materials, combining persona and instruction cards into a more visual and game-like research artefact.",
-          notes: [
-            "Persona and instruction cards designed for workshop discussion.",
-            "Visual system that helps abstract feedback ideas feel more tangible."
-          ],
-          tags: ["Research artefact", "Card design", "Workshop material"]
-        },
-        {
-          label: "Mascot Development",
-          title: "Mascot Select",
-          body: "A mascot family explored as a more playful visual layer for the project world, with multiple states that can be cycled like a character screen.",
-          notes: [
-            "Five mascot variants shown through a single glowing selector stage.",
-            "Built to feel more alive without breaking the blue and cream poster aesthetic."
-          ],
-          tags: ["Mascot system", "Character screen", "Visual identity"]
-        },
-        {
-          label: "Website Demo",
-          title: "Main Website Loop",
-          body: "A looping walkthrough of the current website direction, focusing on the visual system, overall flow, and how the mascot and layout work together.",
-          notes: [
-            "Autoplaying loop embedded directly into the portfolio viewer.",
-            "Framed consistently with the other media pieces for a cleaner reading rhythm."
-          ],
-          tags: ["Website", "Loop video", "Visual direction"]
-        },
-        {
-          label: "Participant Demo",
-          title: "Participant Website Flow",
-          body: "A participant-facing interface demo that shows how the project can translate into a cleaner, more guided interaction flow for real users.",
-          notes: [
-            "Separate from the main site so it reads as its own interface direction.",
-            "Uses the same viewer system so it stays consistent with the rest of the portfolio."
-          ],
-          tags: ["Participant flow", "Interaction design", "Prototype"]
-        },
-        {
-          label: "Schema Loop",
-          title: "Schema Structure Walkthrough",
-          body: "A looping view of the schema and content structure behind the project, showing how materials and logic are organised under the surface.",
-          notes: [
-            "Makes the backend structure part of the portfolio rather than hiding it.",
-            "Useful for showing systems thinking alongside the visual work."
-          ],
-          tags: ["Schema", "Systems thinking", "Content model"]
-        }
+        "Thesis deck",
+        "Mascot development",
+        "Website demo",
+        "Participant demo",
+        "Schema loop"
       ];
 
       let workIndex = 0;
@@ -2533,48 +2535,38 @@
 
       function renderDeck(index) {
         const item = thesisItems[index];
-        if (!item) return;
+        if (!item || !deckDetail) return;
         deckIndex = index;
 
+        deckDetail.innerHTML = `
+          <p class="detailTitle">${item.title}</p>
+          <p class="bodyText">${item.body}</p>
+          <div class="tagRow">
+            ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+        `;
+
         thesisCards.forEach((card, cardIndex) => {
+          const relativeIndex = (cardIndex - index + thesisCards.length) % thesisCards.length;
+          const positionClass = relativeIndex === 0 ? "is-center" : relativeIndex === 1 ? "is-right" : "is-left";
+
           card.classList.toggle("is-active", cardIndex === index);
-<<<<<<< HEAD
-        });
-      }
-
-      function renderPortfolio(index) {
-        const item = portfolioItems[index];
-        if (!item || !portfolioTrack || !portfolioLabel || !portfolioTitle || !portfolioSummary || !portfolioNotes || !portfolioTags || !portfolioDots) return;
-
-        portfolioIndex = index;
-        portfolioLabel.textContent = `${String(index + 1).padStart(2, "0")} / ${item.label}`;
-        portfolioTitle.textContent = item.title;
-        portfolioSummary.textContent = item.body;
-        portfolioNotes.innerHTML = item.notes.map((note) => `<li>${note}</li>`).join("");
-        portfolioTags.innerHTML = item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
-        portfolioTrack.style.transform = `translateX(-${index * 100}%)`;
-
-        portfolioSlides.forEach((slide, slideIndex) => {
-          slide.classList.toggle("is-active", slideIndex === index);
-        });
-
-        [...portfolioDots.querySelectorAll("button")].forEach((dot, dotIndex) => {
-          dot.classList.toggle("is-active", dotIndex === index);
-          dot.setAttribute("aria-pressed", String(dotIndex === index));
-=======
->>>>>>> parent of 904f6de (update.)
+          card.classList.remove("is-left", "is-center", "is-right");
+          card.classList.add(positionClass);
         });
       }
 
       function renderMascot(index) {
         const item = mascotItems[index];
-        if (!item || !galleryImage || !galleryDots || !galleryPortrait) return;
+        if (!item || !galleryImage || !galleryName || !galleryText || !galleryDots || !galleryPortrait) return;
 
         galleryPortrait.classList.add("is-changing");
 
         setTimeout(() => {
           galleryImage.src = item.image;
           galleryImage.alt = item.name;
+          galleryName.textContent = item.name;
+          galleryText.textContent = item.text;
           galleryPortrait.classList.remove("is-changing");
         }, 120);
 
@@ -2594,9 +2586,48 @@
         renderDeck(deckIndex);
       }
 
+      function renderPortfolio(index) {
+        if (!portfolioTrack || !portfolioDots) return;
+
+        portfolioIndex = index;
+        portfolioTrack.style.transform = `translateX(-${index * 100}%)`;
+
+        portfolioSlides.forEach((slide, slideIndex) => {
+          slide.classList.toggle("is-active", slideIndex === index);
+        });
+
+        [...portfolioDots.querySelectorAll("button")].forEach((dot, dotIndex) => {
+          dot.classList.toggle("is-active", dotIndex === index);
+          dot.setAttribute("aria-pressed", String(dotIndex === index));
+        });
+
+        syncPortfolioVideos(index);
+      }
+
       function movePortfolio(direction) {
         portfolioIndex = (portfolioIndex + direction + portfolioItems.length) % portfolioItems.length;
         renderPortfolio(portfolioIndex);
+      }
+
+      function syncPortfolioVideos(activeIndex) {
+        portfolioSlides.forEach((slide, slideIndex) => {
+          const video = slide.querySelector(".loopVideo");
+          if (!video) return;
+
+          video.muted = true;
+          video.defaultMuted = true;
+          video.loop = true;
+          video.playsInline = true;
+
+          if (slideIndex === activeIndex) {
+            const playAttempt = video.play();
+            if (playAttempt && typeof playAttempt.catch === "function") {
+              playAttempt.catch(() => {});
+            }
+          } else {
+            video.pause();
+          }
+        });
       }
 
       function bindSwipe(target, onPrev, onNext, ignoreSelector) {
@@ -2624,7 +2655,7 @@
           const deltaY = event.clientY - startY;
           reset();
 
-          if (Math.abs(deltaX) < 34 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+          if (Math.abs(deltaX) < 24 || Math.abs(deltaX) < Math.abs(deltaY)) return;
           if (deltaX > 0) {
             onPrev();
           } else {
@@ -2657,8 +2688,7 @@
         if (!portfolioDots) return;
         const dot = document.createElement("button");
         dot.type = "button";
-        dot.textContent = item.label;
-        dot.setAttribute("aria-label", `Show ${item.title}`);
+        dot.setAttribute("aria-label", `Show ${item}`);
         dot.setAttribute("aria-pressed", String(index === 0));
         dot.classList.toggle("is-active", index === 0);
         dot.addEventListener("click", () => renderPortfolio(index));
@@ -2698,51 +2728,26 @@
         galleryImage.addEventListener("dragstart", (event) => event.preventDefault());
       }
 
-      bindSwipe(galleryFigure, () => moveMascot(-1), () => moveMascot(1), ".galleryCursor");
       bindSwipe(cardArena, () => {
-        deckSwipeLockUntil = Date.now() + 220;
+        deckSwipeLockUntil = Date.now() + 180;
         moveDeck(-1);
       }, () => {
-        deckSwipeLockUntil = Date.now() + 220;
+        deckSwipeLockUntil = Date.now() + 180;
         moveDeck(1);
       });
-
-      bindSwipe(workGrid, () => {
-        renderWork((workIndex - 1 + workItems.length) % workItems.length);
-      }, () => {
-        renderWork((workIndex + 1) % workItems.length);
-      }, ".workCard, .tag");
 
       bindSwipe(portfolioViewport, () => {
         movePortfolio(-1);
       }, () => {
         movePortfolio(1);
-      }, ".galleryCursor, .galleryDots button, .thesisCard");
+      }, ".thesisCard, .galleryCursor, .galleryDots button");
 
-      videoWrappers.forEach((wrapper) => {
-        const video = wrapper.querySelector(".loopVideo");
-        const fallback = wrapper.querySelector(".fallbackVisual");
-        const pulse = wrapper.querySelector(".playPulse");
-        const src = wrapper.dataset.videoSrc;
-
-        if (!video || !fallback || !src) return;
-
-        video.src = src;
-
-        video.addEventListener("loadeddata", () => {
-          video.hidden = false;
-          fallback.classList.add("is-hidden");
-          if (pulse) pulse.style.display = "none";
-          video.play().catch(() => {});
-        }, { once: true });
-
-        video.addEventListener("error", () => {
-          video.hidden = true;
-          fallback.classList.remove("is-hidden");
-          if (pulse) pulse.style.display = "";
-        }, { once: true });
-
-        video.load();
+      portfolioVideos.forEach((video) => {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.preload = "auto";
       });
 
       renderWork(workIndex);
