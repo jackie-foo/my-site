@@ -3,665 +3,1121 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jackie Foo | Canvas Projects</title>
-  <meta name="description" content="Open canvas intro with scroll-down projects." />
-  <meta name="theme-color" content="#fffdf6" />
+  <title>Jackie Foo | CV Poster</title>
+  <meta
+    name="description"
+    content="Single-page CV poster for Jackie Foo with bold editorial typography, selected work, skills, and contact details."
+  />
+  <meta name="theme-color" content="#0d47d9" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Bungee:wght@400&display=swap"
+    rel="stylesheet"
+  />
 
   <style>
     :root {
-      --bg: #fffdf6;
-      --paper: #fffdf6;
-      --ink: #161616;
-      --muted: #4f4e4b;
-      --line: #ece4d2;
+      --paper: #f8ecd9;
+      --paper-2: #f3e1c5;
+      --blue: #1146d8;
+      --blue-dark: #0a329f;
+      --blue-soft: rgba(17, 70, 216, 0.14);
+      --ink: #15317f;
+      --line: rgba(17, 70, 216, 0.34);
+      --white: #fffdf7;
+      --shadow: 0 16px 40px rgba(17, 70, 216, 0.12);
+      --max: 1220px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html,
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      min-height: 100%;
-      background: var(--bg);
+      min-height: 100vh;
+      font-family: "Archivo", sans-serif;
       color: var(--ink);
-      font-family: "Instrument Sans", sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.72), transparent 18%),
+        radial-gradient(circle at 85% 14%, rgba(255, 255, 255, 0.28), transparent 22%),
+        linear-gradient(180deg, var(--paper) 0%, #f7ead2 44%, var(--paper-2) 100%);
       overflow-x: hidden;
     }
 
-    body.preload {
-      overflow: hidden;
+    a,
+    button {
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .intro404 {
-      position: fixed;
-      inset: 0;
-      z-index: 90;
-      display: grid;
-      place-items: center;
-      background: var(--bg);
-      transition: opacity 460ms ease, visibility 460ms ease;
-    }
-
-    .intro404.hide {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .introCard {
-      text-align: center;
-      display: grid;
-      gap: 8px;
-      justify-items: center;
-    }
-
-    .introCode {
-      margin: 0;
-      font-family: "Gaegu", cursive;
-      font-size: clamp(4rem, 16vw, 12rem);
-      line-height: 0.84;
-      letter-spacing: 0.03em;
-      animation: wobble 720ms ease-in-out infinite alternate;
-    }
-
-    .introMsg {
-      margin: 0;
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #5a5751;
-    }
-
-    .introSub {
-      margin: 0;
-      font-family: "Gaegu", cursive;
-      font-size: 1.3rem;
-      color: #4b4943;
-    }
-
-    @keyframes wobble {
-      from { transform: translateY(-4px) rotate(-1deg); }
-      to { transform: translateY(4px) rotate(1deg); }
+    img {
+      max-width: 100%;
+      display: block;
     }
 
     .page {
+      width: min(calc(100% - 24px), var(--max));
+      margin: 14px auto;
+      border: 2px solid var(--blue);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)),
+        var(--paper);
+      box-shadow: var(--shadow);
       position: relative;
-      z-index: 2;
+      overflow: clip;
     }
 
-    .topbar {
-      position: relative;
+    .page::before,
+    .page::after {
+      content: "";
+      position: absolute;
+      inset: auto;
+      border-radius: 50%;
+      border: 2px solid rgba(17, 70, 216, 0.12);
+      pointer-events: none;
+    }
+
+    .page::before {
+      width: 320px;
+      height: 320px;
+      top: -160px;
+      right: -110px;
+    }
+
+    .page::after {
+      width: 260px;
+      height: 260px;
+      bottom: 180px;
+      left: -140px;
+    }
+
+    .masthead {
+      position: sticky;
+      top: 0;
       z-index: 12;
-      height: 46px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      padding: 0 16px;
-      border-bottom: 1px solid var(--line);
-      background: var(--paper);
-      font-size: 0.83rem;
-      font-weight: 600;
-    }
-
-    .topLeft,
-    .topRight {
-      display: inline-flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .topRight {
-      justify-self: end;
+      gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 2px solid var(--blue);
+      background: rgba(248, 236, 217, 0.92);
+      backdrop-filter: blur(10px);
     }
 
     .brand {
-      font-family: "Gaegu", cursive;
-      font-size: 2rem;
-      font-weight: 700;
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(1rem, 2.2vw, 1.24rem);
+      line-height: 1;
       letter-spacing: 0.02em;
+      text-transform: uppercase;
     }
 
-    .link {
-      color: var(--ink);
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav a,
+    .ghostBtn,
+    .chip {
+      border: 2px solid var(--blue);
+      background: transparent;
+      color: var(--blue);
       text-decoration: none;
-      border-bottom: 1px solid transparent;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+      cursor: pointer;
     }
 
-    .link:hover {
-      border-color: var(--ink);
+    .nav a:hover,
+    .ghostBtn:hover,
+    .chip:hover,
+    .nav a:focus-visible,
+    .ghostBtn:focus-visible,
+    .chip:focus-visible {
+      background: var(--blue);
+      color: var(--paper);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .section {
+      position: relative;
+      padding: 28px 22px;
+      border-bottom: 2px solid var(--blue);
     }
 
     .hero {
-      min-height: calc(100vh - 46px);
-      padding: clamp(16px, 3vw, 34px) clamp(16px, 3vw, 36px);
-      position: relative;
       display: grid;
-      align-items: center;
-      background: var(--bg);
+      grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1.22fr);
+      gap: 22px;
+      align-items: start;
     }
 
-    .heroCenter {
-      width: min(100%, 980px);
+    .heroLeft {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .portraitCard {
+      border: 2px solid var(--blue);
+      background: rgba(255, 253, 247, 0.74);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      min-height: 340px;
+    }
+
+    .portraitCard::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 2px solid var(--line);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .portraitWrap {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      max-width: 320px;
       margin: 0 auto;
       display: grid;
-      justify-items: center;
-      gap: clamp(6px, 1.4vw, 14px);
-      padding: clamp(34px, 5vw, 56px) 0 clamp(96px, 14vh, 130px);
+      place-items: center;
+    }
+
+    .portraitRing {
+      position: absolute;
+      inset: 6%;
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+    }
+
+    .portraitImg {
+      position: relative;
+      z-index: 1;
+      width: min(84%, 280px);
+      filter: saturate(0) contrast(1.08) brightness(1.12);
+      mix-blend-mode: multiply;
+      transition: transform 220ms ease, opacity 180ms ease;
+    }
+
+    .portraitCard:hover .portraitImg {
+      transform: rotate(-3deg) scale(1.03);
+    }
+
+    .portraitControls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      min-width: 0;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .chip.is-active,
+    .chip[aria-pressed="true"] {
+      background: var(--blue);
+      color: var(--paper);
+    }
+
+    .miniNote,
+    .helper {
+      margin: 0;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--blue-dark);
+    }
+
+    .heroRight {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .nameBlock {
+      display: grid;
+      gap: 10px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--blue);
+      border-radius: 50%;
+      background: rgba(17, 70, 216, 0.1);
     }
 
     .heroTitle {
       margin: 0;
-      text-align: center;
-      font-family: "Gaegu", cursive;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      line-height: 0.94;
-      font-size: clamp(2.3rem, 6.6vw, 5.3rem);
-      z-index: 3;
-      pointer-events: none;
-      max-width: 9ch;
-      opacity: 0;
-      transition: opacity 420ms ease 90ms;
-    }
-
-    .heroVisual {
-      position: relative;
-      width: min(74vw, 620px);
-      max-height: none;
-      z-index: 2;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 540ms ease 180ms;
-    }
-
-    .heroVisual img {
-      width: 100%;
-      max-height: min(54vh, 540px);
-      object-fit: contain;
-      display: block;
-      filter: drop-shadow(0 9px 12px rgba(0, 0, 0, 0.1));
-    }
-
-    .heroMeta {
-      position: absolute;
-      left: clamp(16px, 3vw, 36px);
-      bottom: clamp(16px, 3vw, 34px);
-      z-index: 3;
-      max-width: 34ch;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 420ms ease 280ms;
-    }
-
-    body.loaded .heroTitle,
-    body.loaded .heroVisual,
-    body.loaded .heroMeta {
-      opacity: 1;
-    }
-
-    .heroMeta h2 {
-      margin: 0;
-      font-size: clamp(1.65rem, 3vw, 2.6rem);
-      line-height: 0.96;
-      letter-spacing: -0.04em;
-      pointer-events: auto;
-    }
-
-    .heroMeta p {
-      margin: 8px 0 0;
-      font-size: 0.92rem;
-      line-height: 1.48;
-      color: #2f2f2f;
-      pointer-events: auto;
-    }
-
-    .heroMeta a {
-      margin-top: 10px;
-      display: inline-block;
-      color: #111;
-      text-decoration: none;
-      border-bottom: 1px solid #111;
-      font-size: 0.84rem;
-      font-weight: 600;
-      pointer-events: auto;
-    }
-
-    .scrollCue {
-      position: absolute;
-      right: clamp(14px, 3vw, 32px);
-      bottom: clamp(16px, 3vw, 34px);
-      z-index: 3;
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 0.74rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(3.25rem, 10vw, 7.5rem);
+      line-height: 0.84;
       text-transform: uppercase;
-      pointer-events: none;
+      color: var(--blue);
+      letter-spacing: 0.01em;
     }
 
-    .scrollCue i {
-      width: 12px;
-      height: 12px;
-      border-right: 2px solid var(--muted);
-      border-bottom: 2px solid var(--muted);
-      transform: rotate(45deg);
-      display: inline-block;
-      animation: cue 1.2s ease-in-out infinite;
+    .introRow {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(240px, 0.88fr);
+      gap: 18px;
+      align-items: start;
     }
 
-    @keyframes cue {
-      0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.72; }
-      50% { transform: rotate(45deg) translate(3px, 3px); opacity: 1; }
+    .introCard,
+    .factCard,
+    .timelineDetail,
+    .projectCard,
+    .skillCol,
+    .contactBlock {
+      border: 2px solid var(--blue);
+      background: rgba(255, 253, 247, 0.68);
+      padding: 16px;
     }
 
-    .projects {
-      padding: clamp(34px, 5vw, 58px) clamp(16px, 3vw, 36px) 110px;
+    .introText {
+      margin: 0;
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      line-height: 1.42;
+      max-width: 34ch;
+    }
+
+    .introText strong {
+      font-weight: 800;
+    }
+
+    .factCard {
       display: grid;
       gap: 12px;
-      background: var(--bg);
+      align-content: start;
     }
 
-    .projects h3 {
-      margin: 0;
-      font-family: "Gaegu", cursive;
-      font-size: clamp(2.1rem, 5vw, 4rem);
-      line-height: 1;
-      letter-spacing: 0.03em;
+    .factGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .factLabel {
+      margin: 0 0 4px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .projects p {
+    .factValue {
       margin: 0;
-      color: #4a4640;
-      font-size: 1rem;
-      line-height: 1.56;
-      max-width: 62ch;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      font-weight: 700;
     }
 
-    .projectFlow {
-      margin-top: 18px;
+    .sectionTitle {
+      margin: 0 0 18px;
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 0.95;
+      color: var(--blue);
+      text-transform: uppercase;
+    }
+
+    .sectionLead {
+      margin: -6px 0 20px;
+      max-width: 56ch;
+      font-size: 0.96rem;
+      line-height: 1.6;
+    }
+
+    .timelineGrid {
       display: grid;
-      gap: 22px;
-      max-width: 1080px;
-      margin-inline: auto;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+      gap: 18px;
+      align-items: start;
     }
 
-    .flowItem {
+    .timelineRail {
+      display: grid;
+      gap: 16px;
+    }
+
+    .timelineLine {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(260px, 0.95fr) minmax(280px, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
-      align-items: center;
-      padding: 14px;
-      border-radius: 24px;
-      background: linear-gradient(130deg, #fffef9, #fffdf5);
-      border: 1px solid #e9dfc9;
-      box-shadow: 0 10px 20px rgba(56, 44, 30, 0.06);
-      overflow: hidden;
+      padding: 16px 0 0;
     }
 
-    .flowItem::before {
+    .timelineLine::before {
       content: "";
       position: absolute;
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      top: -190px;
-      right: -110px;
-      background: radial-gradient(circle at center, rgba(255, 241, 182, 0.45), rgba(255, 241, 182, 0));
-      pointer-events: none;
-      z-index: 0;
+      left: 0;
+      right: 0;
+      top: 29px;
+      height: 2px;
+      background: var(--blue);
     }
 
-    .flowItem:nth-child(even) {
-      grid-template-columns: minmax(280px, 1fr) minmax(260px, 0.95fr);
-    }
-
-    .flowItem:nth-child(even) .flowArt {
-      order: 2;
-    }
-
-    .flowItem:nth-child(even) .flowBody {
-      order: 1;
-    }
-
-    .flowArt,
-    .flowBody {
+    .timelineStop {
       position: relative;
-      z-index: 1;
-    }
-
-    .flowArt {
-      border-radius: 18px;
-      min-height: 236px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      background:
-        linear-gradient(160deg, rgba(226, 255, 136, 0.9) 0 58%, transparent 58% 100%),
-        #f4f1e7;
-    }
-
-    .flowArt img {
-      width: min(72%, 260px);
-      height: auto;
-      object-fit: contain;
-      display: block;
-      filter: saturate(1.02) contrast(1.03);
-    }
-
-    .flowBody {
       display: grid;
       gap: 8px;
       align-content: start;
-      padding: 2px;
+      text-align: center;
     }
 
-    .flowNum {
-      font-family: "Gaegu", cursive;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #57524b;
+    .timelineBtn {
+      width: 22px;
+      height: 22px;
+      margin: 0 auto;
+      border-radius: 50%;
+      border: 2px solid var(--blue);
+      background: var(--paper);
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .timelineBtn:hover,
+    .timelineBtn:focus-visible {
+      transform: scale(1.12);
+      background: var(--blue-soft);
+      outline: none;
+    }
+
+    .timelineStop.is-active .timelineBtn {
+      background: var(--blue);
+    }
+
+    .timelineLabel {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
     }
 
-    .flowTitle {
+    .timelineText {
       margin: 0;
-      font-family: "Gaegu", cursive;
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
-      line-height: 1.03;
+      font-size: 0.88rem;
+      line-height: 1.4;
     }
 
-    .flowDesc {
+    .timelineDetail {
+      min-height: 100%;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .timelineRole {
       margin: 0;
-      font-size: 0.94rem;
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      line-height: 0.92;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .timelineMeta,
+    .timelineBody {
+      margin: 0;
       line-height: 1.55;
-      color: #37342f;
-      max-width: 60ch;
     }
 
-    .flowLink {
-      width: fit-content;
-      color: #242220;
-      text-decoration: none;
-      border-bottom: 1px solid #6f695f;
-      font-size: 0.79rem;
+    .tagRow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      border: 2px solid var(--blue);
+      padding: 7px 10px;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
+      background: rgba(17, 70, 216, 0.06);
+    }
+
+    .projectsBar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .projectsGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .projectCard {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .projectCard:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(17, 70, 216, 0.1);
+    }
+
+    .projectArt {
+      min-height: 220px;
+      border: 2px solid var(--line);
+      background:
+        linear-gradient(140deg, rgba(17, 70, 216, 0.08), transparent 58%),
+        rgba(255, 255, 255, 0.54);
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .projectArt img {
+      width: min(88%, 270px);
+      filter: saturate(0) contrast(1.08) brightness(1.08);
+      mix-blend-mode: multiply;
+    }
+
+    .projectKicker {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .projectTitle {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(1.2rem, 2vw, 1.7rem);
+      line-height: 0.94;
+      color: var(--blue);
+      text-transform: uppercase;
+    }
+
+    .projectDesc,
+    .projectMeta {
+      margin: 0;
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+
+    .projectLink {
+      width: fit-content;
+      text-decoration: none;
+      color: var(--blue);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 2px solid currentColor;
       padding-bottom: 2px;
     }
 
-    .collab {
-      margin-top: 2px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      flex-wrap: wrap;
-      color: #5f5a53;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+    .projectCard[hidden] {
+      display: none;
+    }
+
+    .twoCol {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .skillCol {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .bulletList {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+      line-height: 1.45;
+    }
+
+    .toolGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .toolTile {
+      border: 2px solid var(--blue);
+      padding: 12px;
+      text-align: center;
+      font-family: "Bungee", sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      background: rgba(17, 70, 216, 0.06);
+    }
+
+    .contactBand {
+      background: var(--blue);
+      color: var(--paper);
+      padding: 24px 22px 30px;
+    }
+
+    .contactTitle {
+      margin: 0 0 18px;
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(2.1rem, 6vw, 4rem);
+      line-height: 0.94;
       text-transform: uppercase;
     }
 
-    .collab img {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid #e6dfd3;
+    .contactGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .contactBlock {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(248, 236, 217, 0.55);
+    }
+
+    .contactBlock h3,
+    .contactBlock p {
+      margin: 0;
+    }
+
+    .contactBlock h3 {
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(248, 236, 217, 0.84);
+    }
+
+    .contactBlock p,
+    .contactBlock a {
+      margin-top: 10px;
+      color: var(--paper);
+      text-decoration: none;
+      font-size: 1rem;
+      line-height: 1.45;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .contactBlock a:hover,
+    .contactBlock a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    .footerNote {
+      margin: 18px 0 0;
+      max-width: 52ch;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      color: rgba(248, 236, 217, 0.78);
     }
 
     .reveal {
       opacity: 0;
-      transform: translateY(24px);
+      transform: translateY(22px);
       transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 420ms ease;
-      transition-delay: var(--delay, 0ms);
     }
 
-    .reveal.show {
+    .reveal.is-visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    @media (max-width: 860px) {
-      .topRight {
-        gap: 7px;
-      }
-
-      .topRight .link:nth-child(2),
-      .topRight .link:nth-child(3) {
-        display: none;
-      }
-
-      .heroTitle {
-        font-size: clamp(2rem, 11vw, 3.8rem);
-        max-width: 10ch;
-      }
-
-      .heroCenter {
-        gap: 2px;
-        padding: 26px 0 20px;
-      }
-
-      .heroVisual {
-        width: min(88vw, 430px);
-      }
-
-      .heroVisual img {
-        max-height: 42vh;
-      }
-
-      .heroMeta,
-      .scrollCue {
-        position: static;
-      }
-
-      .heroMeta {
-        max-width: 34ch;
-        margin: 0 auto;
-        text-align: center;
-        display: grid;
-        gap: 10px;
-        justify-items: center;
-        pointer-events: auto;
-      }
-
-      .heroMeta p,
-      .heroMeta a {
-        margin-top: 0;
-      }
-
-      .scrollCue {
-        justify-self: center;
-        margin-top: 18px;
-      }
-
-      .projectFlow {
-        gap: 16px;
-      }
-
-      .flowItem,
-      .flowItem:nth-child(even) {
+    @media (max-width: 980px) {
+      .hero,
+      .introRow,
+      .timelineGrid,
+      .twoCol,
+      .contactGrid {
         grid-template-columns: 1fr;
       }
 
-      .flowItem:nth-child(even) .flowArt,
-      .flowItem:nth-child(even) .flowBody {
-        order: initial;
+      .projectsGrid {
+        grid-template-columns: 1fr;
       }
 
-      .flowArt {
-        min-height: 180px;
+      .factGrid,
+      .timelineLine {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        width: min(calc(100% - 12px), var(--max));
+        margin: 6px auto;
+      }
+
+      .masthead,
+      .section,
+      .contactBand {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .portraitCard {
+        min-height: auto;
+      }
+
+      .heroTitle {
+        font-size: clamp(2.65rem, 19vw, 4.5rem);
+      }
+
+      .factGrid,
+      .toolGrid,
+      .timelineLine {
+        grid-template-columns: 1fr;
+      }
+
+      .timelineLine::before {
+        left: 10px;
+        right: auto;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        height: auto;
+      }
+
+      .timelineStop {
+        text-align: left;
+        grid-template-columns: 22px 1fr;
+        column-gap: 12px;
+        align-items: start;
+      }
+
+      .timelineBtn {
+        margin: 0;
+      }
+
+      .timelineLabel,
+      .timelineText {
+        grid-column: 2;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .scrollCue i {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
         animation: none !important;
         transition: none !important;
       }
     }
   </style>
 </head>
-<body class="preload">
-  <div id="intro404" class="intro404" aria-hidden="true">
-    <div class="introCard">
-      <h1 class="introCode">404</h1>
-      <p class="introMsg">not found... maybe?</p>
-      <p class="introSub">just kidding, loading your page</p>
-    </div>
-  </div>
-
+<body>
   <main class="page">
-    <header class="topbar">
-      <div class="topLeft">
-        <a class="link" href="/index.html">Home</a>
-        <a class="link" href="#projects">Projects</a>
-      </div>
-      <div class="brand">jackie foo</div>
-      <div class="topRight">
-        <a class="link" href="#">LinkedIn</a>
-        <a class="link" href="#">GitHub</a>
-        <a class="link" href="mailto:you@email.com">Email</a>
-      </div>
+    <header class="masthead">
+      <div class="brand">Jackie Foo / CV Poster</div>
+      <nav class="nav" aria-label="Section navigation">
+        <a href="#profile">Profile</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#work">Work</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </header>
 
-    <section class="hero" aria-label="Main canvas hero">
-      <div class="heroCenter">
-        <h1 class="heroTitle">Playful systems for clearer ideas</h1>
+    <section id="profile" class="section hero">
+      <div class="heroLeft reveal">
+        <div class="portraitCard">
+          <div class="portraitWrap">
+            <div class="portraitRing" aria-hidden="true"></div>
+            <img
+              id="portraitImage"
+              class="portraitImg"
+              src="/pic/chibi5.png"
+              alt="Illustrated portrait of Jackie Foo"
+            />
+          </div>
+          <div class="portraitControls" aria-label="Portrait styles">
+            <button class="chip is-active" type="button" data-portrait="/pic/chibi5.png" aria-pressed="true">Main</button>
+            <button class="chip" type="button" data-portrait="/pic/chibi1.png" aria-pressed="false">Sketch</button>
+            <button class="chip" type="button" data-portrait="/pic/chibi2.png" aria-pressed="false">Studio</button>
+            <button class="chip" type="button" data-portrait="/pic/chibi3.png" aria-pressed="false">Play</button>
+          </div>
+        </div>
+        <p class="miniNote">
+          Playful visual system, but cleaner and more hireable: one page, one scroll, stronger first impression.
+        </p>
+      </div>
 
-        <div class="heroVisual">
-          <img id="mainVisual" src="/pic/chibi5.png" alt="Main visual" />
+      <div class="heroRight">
+        <div class="nameBlock reveal">
+          <div class="eyebrow">Hello, I’m Jackie</div>
+          <h1 class="heroTitle">Jackie<br />Foo</h1>
+        </div>
+
+        <div class="introRow">
+          <div class="introCard reveal">
+            <p class="introText">
+              I design <strong>playful systems for clearer ideas</strong> across interaction,
+              workshop flows, and story-led interfaces. This page turns the old
+              project board into a single CV format while keeping the same personal,
+              illustrated energy.
+            </p>
+          </div>
+
+          <div class="factCard reveal">
+            <div class="factGrid">
+              <div>
+                <p class="factLabel">Focus</p>
+                <p class="factValue">Interaction design + visual storytelling</p>
+              </div>
+              <div>
+                <p class="factLabel">Works Best In</p>
+                <p class="factValue">Collaborative design teams</p>
+              </div>
+              <div>
+                <p class="factLabel">Building</p>
+                <p class="factValue">Projects, flows, and systems</p>
+              </div>
+            </div>
+            <p class="helper">
+              This layout is intentionally more editorial than corporate, so it still feels like your work.
+            </p>
+          </div>
         </div>
       </div>
-
-      <div class="heroMeta">
-        <h2>Jackie Foo</h2>
-        <p>
-          A lighter board for interaction experiments, design systems, and project stories.
-        </p>
-        <a href="/index.html">Back to Home</a>
-      </div>
-
-      <div class="scrollCue"><i></i> Scroll for projects</div>
     </section>
 
-    <section id="projects" class="projects" aria-label="Projects">
-      <h3 class="reveal">Projects</h3>
-      <p class="reveal" style="--delay: 60ms;">
-        Open project flow. Scroll through the story and jump into any case study.
+    <section id="timeline" class="section">
+      <h2 class="sectionTitle reveal">Timeline</h2>
+      <p class="sectionLead reveal">
+        A quick interactive read of the work already living on your site. Click the markers to swap the detail panel.
       </p>
 
-      <div class="projectFlow">
-        <article class="flowItem reveal">
-          <div class="flowArt"><img src="/pic/chibi3.png" alt="Journey Mapping Tool" /></div>
-          <div class="flowBody">
-            <div class="flowNum">Project 02</div>
-            <h4 class="flowTitle">Journey Mapping Tool</h4>
-            <p class="flowDesc">Prompt-led mapping for student and tutor constraints in one flow, with strategic reflection cues and action prompts.</p>
-            <a class="flowLink" href="/project-view.html?project=2">Open Project</a>
-            <div class="collab">
-              <img src="/pic/chibi3.png" alt="Shen" />
-              <img src="/pic/chibi1.png" alt="Samantha" />
-              <span>Shen + Samantha</span>
-            </div>
+      <div class="timelineGrid">
+        <div class="timelineRail reveal">
+          <div class="timelineLine" id="timelineStops">
+            <article class="timelineStop is-active">
+              <button class="timelineBtn" type="button" data-timeline="0" aria-label="Show Project 01"></button>
+              <p class="timelineLabel">Project 01</p>
+              <p class="timelineText">Feedback workshop</p>
+            </article>
+            <article class="timelineStop">
+              <button class="timelineBtn" type="button" data-timeline="1" aria-label="Show Project 02"></button>
+              <p class="timelineLabel">Project 02</p>
+              <p class="timelineText">Journey mapping</p>
+            </article>
+            <article class="timelineStop">
+              <button class="timelineBtn" type="button" data-timeline="2" aria-label="Show Project 03"></button>
+              <p class="timelineLabel">Project 03</p>
+              <p class="timelineText">Live dashboard</p>
+            </article>
+            <article class="timelineStop">
+              <button class="timelineBtn" type="button" data-timeline="3" aria-label="Show Project 04"></button>
+              <p class="timelineLabel">Project 04</p>
+              <p class="timelineText">Tutor workflow</p>
+            </article>
           </div>
+        </div>
+
+        <aside class="timelineDetail reveal" id="timelineDetail" aria-live="polite">
+          <p class="timelineRole">Feedback Workshop</p>
+          <p class="timelineMeta">Project 01 / facilitation systems / team collaboration</p>
+          <p class="timelineBody">
+            Workshop stages built to surface feedback friction, synthesize what participants were feeling, and move toward clearer next actions.
+          </p>
+          <div class="tagRow">
+            <span class="tag">Workshop design</span>
+            <span class="tag">Feedback systems</span>
+            <span class="tag">Action mapping</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="work" class="section">
+      <h2 class="sectionTitle reveal">Selected Work</h2>
+      <p class="sectionLead reveal">
+        Still the same projects, just organized like a stronger one-page portfolio CV instead of a loose project list.
+      </p>
+
+      <div class="projectsBar reveal" aria-label="Project filters">
+        <button class="ghostBtn" type="button" data-filter="all">All</button>
+        <button class="ghostBtn" type="button" data-filter="systems">Systems</button>
+        <button class="ghostBtn" type="button" data-filter="facilitation">Facilitation</button>
+        <button class="ghostBtn" type="button" data-filter="research">Research</button>
+      </div>
+
+      <div class="projectsGrid">
+        <article class="projectCard reveal" data-category="facilitation research">
+          <div class="projectArt">
+            <img src="/pic/chibi1.png" alt="Illustration for Feedback Workshop" />
+          </div>
+          <div>
+            <p class="projectKicker">Project 01</p>
+            <h3 class="projectTitle">Feedback Workshop</h3>
+          </div>
+          <p class="projectDesc">
+            Workshop stages used to surface feedback friction and translate it into practical implementation actions across the semester.
+          </p>
+          <p class="projectMeta">Focus: facilitation, framing problems, turning discussion into usable outputs.</p>
+          <a class="projectLink" href="/project-view.html?project=1">Open project</a>
         </article>
 
-        <article class="flowItem reveal" style="--delay: 80ms;">
-          <div class="flowArt"><img src="/pic/chibi1.png" alt="Feedback Workshop" /></div>
-          <div class="flowBody">
-            <div class="flowNum">Project 01</div>
-            <h4 class="flowTitle">Feedback Workshop</h4>
-            <p class="flowDesc">Workshop stages to surface feedback friction and implementation actions across the semester.</p>
-            <a class="flowLink" href="/project-view.html?project=1">Open Project</a>
-            <div class="collab">
-              <img src="/pic/chibi1.png" alt="Thanish" />
-              <img src="/pic/chibi2.png" alt="Nevin" />
-              <span>Thanish + Nevin</span>
-            </div>
+        <article class="projectCard reveal" data-category="systems research">
+          <div class="projectArt">
+            <img src="/pic/chibi3.png" alt="Illustration for Journey Mapping Tool" />
           </div>
+          <div>
+            <p class="projectKicker">Project 02</p>
+            <h3 class="projectTitle">Journey Mapping Tool</h3>
+          </div>
+          <p class="projectDesc">
+            Prompt-led mapping for student and tutor constraints in one flow, with strategic reflection cues and action prompts.
+          </p>
+          <p class="projectMeta">Focus: systems thinking, experience mapping, making complex processes easier to read.</p>
+          <a class="projectLink" href="/project-view.html?project=2">Open project</a>
         </article>
 
-        <article class="flowItem reveal" style="--delay: 140ms;">
-          <div class="flowArt"><img src="/pic/chibi2.png" alt="Live Dashboard" /></div>
-          <div class="flowBody">
-            <div class="flowNum">Project 03</div>
-            <h4 class="flowTitle">Live Dashboard</h4>
-            <p class="flowDesc">Stage monitoring board for facilitation timing, participation trends, and intervention decisions.</p>
-            <a class="flowLink" href="/project-view.html?project=3">Open Project</a>
-            <div class="collab">
-              <img src="/pic/chibi2.png" alt="Thanish" />
-              <img src="/pic/chibi3.png" alt="Shen" />
-              <span>Thanish + Shen</span>
-            </div>
+        <article class="projectCard reveal" data-category="systems facilitation">
+          <div class="projectArt">
+            <img src="/pic/chibi2.png" alt="Illustration for Live Dashboard" />
           </div>
+          <div>
+            <p class="projectKicker">Project 03</p>
+            <h3 class="projectTitle">Live Dashboard</h3>
+          </div>
+          <p class="projectDesc">
+            A stage-monitoring board for facilitation timing, participation trends, and intervention decisions during live sessions.
+          </p>
+          <p class="projectMeta">Focus: dashboard thinking, timing, visual hierarchy, real-time decision support.</p>
+          <a class="projectLink" href="/project-view.html?project=3">Open project</a>
         </article>
 
-        <article class="flowItem reveal" style="--delay: 200ms;">
-          <div class="flowArt"><img src="/pic/chibi1.png" alt="Tutor Workflow" /></div>
-          <div class="flowBody">
-            <div class="flowNum">Project 04</div>
-            <h4 class="flowTitle">Tutor Workflow</h4>
-            <p class="flowDesc">Flow-based constraint mapping for marking operations and communication bottlenecks in assessment pipelines.</p>
-            <a class="flowLink" href="/project-view.html?project=4">Open Project</a>
-            <div class="collab">
-              <img src="/pic/chibi2.png" alt="Nevin" />
-              <img src="/pic/chibi1.png" alt="Samantha" />
-              <span>Nevin + Samantha</span>
-            </div>
+        <article class="projectCard reveal" data-category="systems">
+          <div class="projectArt">
+            <img src="/pic/chibi5.png" alt="Illustration for Tutor Workflow" />
           </div>
+          <div>
+            <p class="projectKicker">Project 04</p>
+            <h3 class="projectTitle">Tutor Workflow</h3>
+          </div>
+          <p class="projectDesc">
+            Flow-based constraint mapping for marking operations and communication bottlenecks in assessment pipelines.
+          </p>
+          <p class="projectMeta">Focus: operational clarity, workflow design, and simplifying cross-team communication.</p>
+          <a class="projectLink" href="/project-view.html?project=4">Open project</a>
         </article>
       </div>
+    </section>
+
+    <section id="skills" class="section">
+      <div class="twoCol">
+        <div class="skillCol reveal">
+          <h2 class="sectionTitle">Skills</h2>
+          <div class="toolGrid" aria-label="Core skills">
+            <div class="toolTile">UI</div>
+            <div class="toolTile">UX</div>
+            <div class="toolTile">Flow</div>
+            <div class="toolTile">Story</div>
+          </div>
+          <ul class="bulletList">
+            <li>Interaction design with a playful visual voice</li>
+            <li>Journey mapping and system-level thinking</li>
+            <li>Workshop structuring and facilitation support</li>
+            <li>Prototype-ready HTML and CSS presentation</li>
+          </ul>
+        </div>
+
+        <div class="skillCol reveal">
+          <h2 class="sectionTitle">Strengths</h2>
+          <ul class="bulletList">
+            <li>Turning messy research or discussion into a visual structure people can follow</li>
+            <li>Balancing personality with clarity so the design still feels memorable and useful</li>
+            <li>Working across team-based project setups without losing the visual point of view</li>
+            <li>Making interfaces feel warm, expressive, and easy to navigate</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contactBand">
+      <h2 class="contactTitle reveal">Contact</h2>
+      <div class="contactGrid">
+        <div class="contactBlock reveal">
+          <h3>Email</h3>
+          <a href="mailto:you@email.com">you@email.com</a>
+        </div>
+        <div class="contactBlock reveal">
+          <h3>LinkedIn</h3>
+          <a href="#">Add your LinkedIn link</a>
+        </div>
+        <div class="contactBlock reveal">
+          <h3>GitHub</h3>
+          <a href="#">Add your GitHub link</a>
+        </div>
+      </div>
+      <p class="footerNote reveal">
+        If you want, the next pass can swap these placeholder contact links for your real details and tighten the wording into a more formal job-application version.
+      </p>
     </section>
   </main>
 
   <script>
     (() => {
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const bodyEl = document.body;
-      const intro404 = document.getElementById("intro404");
+      const portraitImage = document.getElementById("portraitImage");
+      const portraitButtons = [...document.querySelectorAll("[data-portrait]")];
+      const timelineDetail = document.getElementById("timelineDetail");
+      const timelineStops = [...document.querySelectorAll(".timelineStop")];
+      const timelineButtons = [...document.querySelectorAll("[data-timeline]")];
+      const filterButtons = [...document.querySelectorAll("[data-filter]")];
+      const projectCards = [...document.querySelectorAll(".projectCard")];
+      const revealNodes = [...document.querySelectorAll(".reveal")];
 
-      const mainVisual = document.getElementById("mainVisual");
-      mainVisual.addEventListener("error", () => {
-        mainVisual.src = "/pic/chibi3.png";
+      const timelineItems = [
+        {
+          title: "Feedback Workshop",
+          meta: "Project 01 / facilitation systems / team collaboration",
+          body: "Workshop stages built to surface feedback friction, synthesize what participants were feeling, and move toward clearer next actions.",
+          tags: ["Workshop design", "Feedback systems", "Action mapping"]
+        },
+        {
+          title: "Journey Mapping Tool",
+          meta: "Project 02 / systems thinking / student and tutor flows",
+          body: "A prompt-led structure for mapping constraints, reflecting on blind spots, and moving from observations into usable strategy.",
+          tags: ["Journey mapping", "Systems design", "Reflection cues"]
+        },
+        {
+          title: "Live Dashboard",
+          meta: "Project 03 / facilitation timing / live decision support",
+          body: "A monitoring board designed to make session pacing, participation patterns, and interventions easier to read during facilitation.",
+          tags: ["Dashboard design", "Live monitoring", "Visual hierarchy"]
+        },
+        {
+          title: "Tutor Workflow",
+          meta: "Project 04 / workflow clarity / operational communication",
+          body: "Flow-based constraint mapping that focuses on marking operations and communication bottlenecks across an assessment pipeline.",
+          tags: ["Workflow mapping", "Operations", "Communication systems"]
+        }
+      ];
+
+      portraitButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextSrc = button.dataset.portrait;
+          if (!nextSrc || portraitImage.getAttribute("src") === nextSrc) return;
+
+          portraitImage.style.opacity = "0.25";
+
+          setTimeout(() => {
+            portraitImage.src = nextSrc;
+            portraitImage.style.opacity = "1";
+          }, 120);
+
+          portraitButtons.forEach((item) => {
+            const active = item === button;
+            item.classList.toggle("is-active", active);
+            item.setAttribute("aria-pressed", String(active));
+          });
+        });
       });
 
-      function finishIntro() {
-        if (intro404) {
-          intro404.classList.add("hide");
-          setTimeout(() => intro404.remove(), 520);
-        }
-        bodyEl.classList.remove("preload");
-        bodyEl.classList.add("loaded");
+      function renderTimeline(index) {
+        const item = timelineItems[index];
+        if (!item || !timelineDetail) return;
+
+        timelineDetail.innerHTML = `
+          <p class="timelineRole">${item.title}</p>
+          <p class="timelineMeta">${item.meta}</p>
+          <p class="timelineBody">${item.body}</p>
+          <div class="tagRow">
+            ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+        `;
+
+        timelineStops.forEach((stop, stopIndex) => {
+          stop.classList.toggle("is-active", stopIndex === index);
+        });
       }
 
-      setTimeout(finishIntro, reduceMotion ? 620 : 1200);
+      timelineButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          renderTimeline(Number(button.dataset.timeline));
+        });
+      });
 
-      const revealNodes = [...document.querySelectorAll(".reveal")];
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const filter = button.dataset.filter || "all";
+
+          filterButtons.forEach((item) => {
+            const active = item === button;
+            item.style.background = active ? "var(--blue)" : "transparent";
+            item.style.color = active ? "var(--paper)" : "var(--blue)";
+          });
+
+          projectCards.forEach((card) => {
+            if (filter === "all") {
+              card.hidden = false;
+              return;
+            }
+
+            const categories = card.dataset.category || "";
+            card.hidden = !categories.includes(filter);
+          });
+        });
+      });
+
       if ("IntersectionObserver" in window) {
-        const revealObserver = new IntersectionObserver((entries, obs) => {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
-            entry.target.classList.add("show");
-            obs.unobserve(entry.target);
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
           });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.18 });
 
         revealNodes.forEach((node) => revealObserver.observe(node));
       } else {
-        revealNodes.forEach((node) => node.classList.add("show"));
+        revealNodes.forEach((node) => node.classList.add("is-visible"));
       }
     })();
   </script>
