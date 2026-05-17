@@ -6,7 +6,7 @@
   <title>Jackie Foo | CV Poster</title>
   <meta
     name="description"
-    content="Single-page CV poster for Jackie Foo with bold editorial typography, selected work, thesis card showcase, and contact details."
+    content="Single-page CV poster for Jackie Foo with a research timeline, thesis showcase, mascot gallery, and looping media placeholders."
   />
   <meta name="theme-color" content="#0d47d9" />
 
@@ -26,7 +26,6 @@
       --blue-soft: rgba(17, 70, 216, 0.14);
       --ink: #15317f;
       --line: rgba(17, 70, 216, 0.34);
-      --white: #fffdf7;
       --shadow: 0 18px 44px rgba(17, 70, 216, 0.12);
       --max: 1220px;
     }
@@ -56,7 +55,8 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    img {
+    img,
+    video {
       max-width: 100%;
       display: block;
     }
@@ -78,7 +78,6 @@
     .page::after {
       content: "";
       position: absolute;
-      inset: auto;
       border-radius: 50%;
       border: 2px solid rgba(17, 70, 216, 0.12);
       pointer-events: none;
@@ -94,14 +93,14 @@
     .page::after {
       width: 260px;
       height: 260px;
-      bottom: 220px;
+      bottom: 320px;
       left: -140px;
     }
 
     .masthead {
       position: sticky;
       top: 0;
-      z-index: 12;
+      z-index: 20;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -129,8 +128,8 @@
     }
 
     .nav a,
-    .ghostBtn,
-    .chip {
+    .chip,
+    .galleryCursor {
       border: 2px solid var(--blue);
       border-radius: 999px;
       background: transparent;
@@ -147,11 +146,11 @@
     }
 
     .nav a:hover,
-    .ghostBtn:hover,
     .chip:hover,
+    .galleryCursor:hover,
     .nav a:focus-visible,
-    .ghostBtn:focus-visible,
-    .chip:focus-visible {
+    .chip:focus-visible,
+    .galleryCursor:focus-visible {
       background: var(--blue);
       color: var(--paper);
       transform: translateY(-2px);
@@ -171,6 +170,19 @@
       align-items: start;
     }
 
+    .portraitCard,
+    .panel,
+    .detailCard,
+    .experienceCard,
+    .module,
+    .skillCol,
+    .contactBlock {
+      border: 2px solid var(--blue);
+      border-radius: 24px;
+      background: rgba(255, 253, 247, 0.7);
+      padding: 16px;
+    }
+
     .heroLeft {
       display: grid;
       gap: 16px;
@@ -178,9 +190,6 @@
     }
 
     .portraitCard {
-      border: 2px solid var(--blue);
-      border-radius: 24px;
-      background: rgba(255, 253, 247, 0.74);
       padding: 18px;
       position: relative;
       overflow: hidden;
@@ -235,7 +244,6 @@
 
     .chip {
       min-width: 0;
-      padding: 8px 10px;
       background: rgba(255, 255, 255, 0.4);
     }
 
@@ -284,14 +292,31 @@
       background: rgba(17, 70, 216, 0.1);
     }
 
-    .heroTitle {
+    .heroTitle,
+    .sectionTitle,
+    .detailTitle,
+    .moduleTitle {
       margin: 0;
       font-family: "Bungee", sans-serif;
-      font-size: clamp(3.25rem, 10vw, 7.5rem);
-      line-height: 0.84;
-      text-transform: uppercase;
       color: var(--blue);
+      text-transform: uppercase;
+      line-height: 0.92;
+    }
+
+    .heroTitle {
+      font-size: clamp(3.25rem, 10vw, 7.5rem);
       letter-spacing: 0.01em;
+    }
+
+    .sectionTitle {
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 0.95;
+      margin-bottom: 18px;
+    }
+
+    .detailTitle,
+    .moduleTitle {
+      font-size: clamp(1.45rem, 3vw, 2.2rem);
     }
 
     .introRow {
@@ -299,18 +324,6 @@
       grid-template-columns: minmax(0, 1.12fr) minmax(240px, 0.88fr);
       gap: 18px;
       align-items: start;
-    }
-
-    .introCard,
-    .factCard,
-    .timelineDetail,
-    .projectCard,
-    .skillCol,
-    .contactBlock {
-      border: 2px solid var(--blue);
-      border-radius: 24px;
-      background: rgba(255, 253, 247, 0.68);
-      padding: 16px;
     }
 
     .introText {
@@ -336,7 +349,9 @@
       gap: 12px;
     }
 
-    .factLabel {
+    .factLabel,
+    .kicker,
+    .moduleEyebrow {
       margin: 0 0 4px;
       font-size: 0.72rem;
       font-weight: 800;
@@ -344,32 +359,28 @@
       text-transform: uppercase;
     }
 
-    .factValue {
+    .factValue,
+    .detailMeta,
+    .bodyText {
       margin: 0;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      font-weight: 700;
+      line-height: 1.55;
     }
 
-    .sectionTitle {
-      margin: 0 0 18px;
-      font-family: "Bungee", sans-serif;
-      font-size: clamp(2rem, 6vw, 4rem);
-      line-height: 0.95;
-      color: var(--blue);
-      text-transform: uppercase;
+    .factValue {
+      font-size: 0.95rem;
+      font-weight: 700;
     }
 
     .sectionLead {
       margin: -6px 0 20px;
-      max-width: 56ch;
+      max-width: 62ch;
       font-size: 0.96rem;
       line-height: 1.6;
     }
 
     .timelineGrid {
       display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+      grid-template-columns: minmax(0, 1.08fr) minmax(310px, 0.92fr);
       gap: 18px;
       align-items: start;
     }
@@ -384,7 +395,7 @@
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
-      padding: 16px 0 0;
+      padding: 18px 0 0;
     }
 
     .timelineLine::before {
@@ -392,7 +403,7 @@
       position: absolute;
       left: 0;
       right: 0;
-      top: 29px;
+      top: 30px;
       height: 2px;
       background: var(--blue);
       border-radius: 999px;
@@ -407,8 +418,8 @@
     }
 
     .timelineBtn {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       margin: 0 auto;
       border-radius: 50%;
       border: 2px solid var(--blue);
@@ -428,7 +439,8 @@
       background: var(--blue);
     }
 
-    .timelineLabel {
+    .timelineLabel,
+    .timelineDate {
       margin: 0;
       font-size: 0.72rem;
       font-weight: 800;
@@ -442,28 +454,17 @@
       line-height: 1.4;
     }
 
-    .timelineDetail {
-      min-height: 100%;
+    .timelineSide {
+      display: grid;
+      gap: 18px;
+    }
+
+    .detailCard,
+    .experienceCard {
       display: grid;
       gap: 12px;
       align-content: start;
-    }
-
-    .timelineRole,
-    .deckTitle {
-      margin: 0;
-      font-family: "Bungee", sans-serif;
-      font-size: clamp(1.5rem, 3vw, 2.2rem);
-      line-height: 0.92;
-      text-transform: uppercase;
-      color: var(--blue);
-    }
-
-    .timelineMeta,
-    .timelineBody,
-    .deckBody {
-      margin: 0;
-      line-height: 1.55;
+      min-height: 100%;
     }
 
     .tagRow {
@@ -483,130 +484,74 @@
       background: rgba(17, 70, 216, 0.06);
     }
 
-    .projectsBar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
+    .experienceList {
+      display: grid;
+      gap: 12px;
     }
 
-    .projectsGrid {
+    .experienceItem {
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 18px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .experienceItem h4,
+    .experienceItem p {
+      margin: 0;
+    }
+
+    .experienceItem h4 {
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .experienceItem p {
+      margin-top: 6px;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .showcaseBoard {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
     }
 
-    .projectCard {
+    .module {
       display: grid;
       gap: 14px;
-      align-content: start;
-      transition: transform 180ms ease, box-shadow 180ms ease;
-    }
-
-    .projectCard:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(17, 70, 216, 0.1);
-    }
-
-    .projectArt {
-      min-height: 220px;
-      border: 2px solid var(--line);
-      border-radius: 18px;
-      background:
-        linear-gradient(140deg, rgba(17, 70, 216, 0.08), transparent 58%),
-        rgba(255, 255, 255, 0.54);
-      display: grid;
-      place-items: center;
-      padding: 20px;
-    }
-
-    .projectArt img {
-      width: min(88%, 270px);
-      filter: saturate(0) contrast(1.08) brightness(1.08);
-      mix-blend-mode: multiply;
-    }
-
-    .projectKicker,
-    .panelEyebrow {
-      margin: 0;
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .projectTitle,
-    .cardName {
-      margin: 0;
-      font-family: "Bungee", sans-serif;
-      font-size: clamp(1.2rem, 2vw, 1.7rem);
-      line-height: 0.94;
-      color: var(--blue);
-      text-transform: uppercase;
-    }
-
-    .projectDesc,
-    .projectMeta {
-      margin: 0;
-      line-height: 1.55;
-      font-size: 0.92rem;
-    }
-
-    .projectLink {
-      width: fit-content;
-      text-decoration: none;
-      color: var(--blue);
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      border-bottom: 2px solid currentColor;
-      padding-bottom: 2px;
-    }
-
-    .projectCard[hidden] {
-      display: none;
-    }
-
-    .showcaseGrid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-      gap: 18px;
-      align-items: start;
-    }
-
-    .deckPanel,
-    .videoPanel {
-      border: 2px solid var(--blue);
-      border-radius: 28px;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.04)),
-        rgba(255, 253, 247, 0.7);
-      padding: 18px;
       position: relative;
       overflow: hidden;
     }
 
-    .deckPanel::before,
-    .videoPanel::before {
+    .module::before {
       content: "";
       position: absolute;
       inset: 12px;
       border: 1px solid rgba(17, 70, 216, 0.18);
-      border-radius: 20px;
+      border-radius: 18px;
       pointer-events: none;
     }
 
     .cardArena {
-      min-height: 430px;
+      min-height: 420px;
       position: relative;
       display: grid;
       place-items: center;
-      padding: 20px;
+      padding: 22px;
     }
 
     .thesisCard {
+      --card-x: 0px;
+      --card-y: 0px;
+      --card-rotate: 0deg;
+      --card-scale: 1;
       position: absolute;
-      width: min(32vw, 200px);
+      left: 50%;
+      top: 50%;
+      width: min(31vw, 186px);
       aspect-ratio: 2.5 / 3.5;
       border: 2px solid var(--blue);
       border-radius: 26px;
@@ -617,40 +562,52 @@
       display: grid;
       align-content: space-between;
       box-shadow: 0 18px 30px rgba(17, 70, 216, 0.12);
+      transform:
+        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y)))
+        rotate(var(--card-rotate))
+        scale(var(--card-scale));
       transform-origin: 50% 85%;
       transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
       cursor: pointer;
       animation: floatCard 4.4s ease-in-out infinite;
     }
 
-    .thesisCard:hover,
-    .thesisCard:focus-visible,
-    .thesisCard.is-active {
-      transform: translateY(-14px) rotate(0deg) scale(1.04) !important;
-      box-shadow: 0 24px 40px rgba(17, 70, 216, 0.18);
-      border-color: var(--blue-dark);
-      outline: none;
-      z-index: 5;
-    }
-
     .thesisCard:nth-of-type(1) {
-      left: 9%;
-      top: 18%;
-      transform: rotate(-12deg);
+      --card-x: -150px;
+      --card-y: 10px;
+      --card-rotate: -14deg;
+      z-index: 1;
       animation-delay: -0.8s;
     }
 
     .thesisCard:nth-of-type(2) {
+      --card-x: 0px;
+      --card-y: -6px;
+      --card-rotate: 0deg;
       z-index: 2;
-      transform: rotate(0deg);
       animation-delay: -0.2s;
     }
 
     .thesisCard:nth-of-type(3) {
-      right: 9%;
-      top: 18%;
-      transform: rotate(12deg);
+      --card-x: 150px;
+      --card-y: 10px;
+      --card-rotate: 14deg;
+      z-index: 1;
       animation-delay: -1.4s;
+    }
+
+    .thesisCard:hover,
+    .thesisCard:focus-visible,
+    .thesisCard.is-active {
+      --card-scale: 1.04;
+      transform:
+        translate(calc(-50% + var(--card-x)), calc(-50% + var(--card-y) - 14px))
+        rotate(var(--card-rotate))
+        scale(var(--card-scale));
+      box-shadow: 0 24px 40px rgba(17, 70, 216, 0.18);
+      border-color: var(--blue-dark);
+      outline: none;
+      z-index: 5;
     }
 
     .cardTop {
@@ -673,23 +630,40 @@
       text-transform: uppercase;
     }
 
-    .cardVisual {
-      margin: 14px 0;
+    .cardVisual,
+    .videoFallback,
+    .schemaFallback {
       border: 2px solid rgba(17, 70, 216, 0.18);
       border-radius: 18px;
       background:
         radial-gradient(circle at 30% 20%, rgba(17, 70, 216, 0.12), transparent 34%),
         rgba(255, 255, 255, 0.46);
-      display: grid;
-      place-items: center;
-      min-height: 170px;
       overflow: hidden;
     }
 
-    .cardVisual img {
-      width: 86%;
+    .cardVisual {
+      margin: 14px 0;
+      display: grid;
+      place-items: center;
+      min-height: 170px;
+    }
+
+    .cardVisual img,
+    .galleryImage,
+    .videoFallback img,
+    .schemaFallback img {
+      width: 100%;
       filter: saturate(0) contrast(1.04) brightness(1.06);
       mix-blend-mode: multiply;
+    }
+
+    .cardName {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      font-size: 1.36rem;
+      line-height: 0.92;
+      color: var(--blue);
+      text-transform: uppercase;
     }
 
     .cardFlavor {
@@ -698,56 +672,170 @@
       line-height: 1.45;
     }
 
-    .deckDetail {
+    .deckDetail,
+    .moduleBody {
       display: grid;
       gap: 12px;
-      margin-top: 14px;
-      border-top: 2px solid rgba(17, 70, 216, 0.18);
-      padding-top: 14px;
     }
 
-    .videoShell {
+    .galleryShell {
+      display: grid;
+      gap: 14px;
+    }
+
+    .galleryStage {
       position: relative;
       min-height: 420px;
+      display: grid;
+      place-items: center;
+      padding: 12px 66px;
+    }
+
+    .galleryCursor {
+      position: absolute;
+      top: 50%;
+      width: 52px;
+      height: 52px;
+      margin-top: -26px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      font-size: 1.3rem;
+      line-height: 1;
+      z-index: 3;
+    }
+
+    .galleryCursor.prev {
+      left: 8px;
+    }
+
+    .galleryCursor.next {
+      right: 8px;
+    }
+
+    .galleryPortrait {
+      width: 100%;
+      min-height: 360px;
       border: 2px solid rgba(17, 70, 216, 0.18);
       border-radius: 24px;
+      background:
+        linear-gradient(160deg, rgba(17, 70, 216, 0.1), transparent 56%),
+        rgba(255, 255, 255, 0.46);
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      touch-action: pan-y;
+      overflow: hidden;
+    }
+
+    .galleryImage {
+      width: min(82%, 290px);
+      transition: opacity 180ms ease, transform 220ms ease;
+    }
+
+    .galleryPortrait.is-changing .galleryImage {
+      opacity: 0.18;
+      transform: translateX(10px) scale(0.98);
+    }
+
+    .galleryInfo {
+      display: grid;
+      gap: 8px;
+    }
+
+    .galleryName {
+      margin: 0;
+      font-family: "Bungee", sans-serif;
+      font-size: clamp(1.36rem, 3vw, 2rem);
+      line-height: 0.92;
+      color: var(--blue);
+      text-transform: uppercase;
+    }
+
+    .galleryDots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .galleryDots button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--blue);
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .galleryDots button.is-active {
+      background: var(--blue);
+    }
+
+    .videoModule {
+      display: grid;
+      gap: 14px;
+    }
+
+    .videoStage {
+      position: relative;
+      min-height: 304px;
+      border: 2px solid rgba(17, 70, 216, 0.18);
+      border-radius: 20px;
       overflow: hidden;
       background:
-        linear-gradient(180deg, rgba(17, 70, 216, 0.16), transparent 50%),
+        linear-gradient(180deg, rgba(17, 70, 216, 0.12), transparent 44%),
         rgba(255, 255, 255, 0.32);
-      display: grid;
-      align-content: space-between;
     }
 
-    .videoPoster {
-      min-height: 320px;
-      background:
-        linear-gradient(150deg, rgba(17, 70, 216, 0.12), transparent 48%),
-        url("/pic/tutor-persona-3.png") center / cover no-repeat;
-      position: relative;
+    .loopVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.3);
     }
 
-    .videoPoster::after {
-      content: "Loop Video Placeholder";
+    .videoFallback,
+    .schemaFallback {
       position: absolute;
-      left: 18px;
-      bottom: 18px;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .videoFallback img,
+    .schemaFallback img {
+      width: 92%;
+    }
+
+    .videoFallback.is-hidden,
+    .schemaFallback.is-hidden,
+    .loopVideo[hidden] {
+      display: none;
+    }
+
+    .videoBadge,
+    .loopBadge {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
       border: 2px solid var(--blue);
       border-radius: 999px;
       padding: 8px 12px;
-      background: rgba(248, 236, 217, 0.92);
+      background: rgba(248, 236, 217, 0.94);
       font-size: 0.74rem;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      z-index: 2;
     }
 
     .playPulse {
       position: absolute;
       inset: 50% auto auto 50%;
-      width: 94px;
-      height: 94px;
-      margin: -47px 0 0 -47px;
+      width: 92px;
+      height: 92px;
+      margin: -46px 0 0 -46px;
       border: 2px solid rgba(248, 236, 217, 0.9);
       border-radius: 50%;
       background: rgba(17, 70, 216, 0.86);
@@ -755,6 +843,7 @@
       place-items: center;
       box-shadow: 0 10px 24px rgba(17, 70, 216, 0.22);
       animation: pulseRing 2s ease-out infinite;
+      z-index: 2;
     }
 
     .playPulse::before {
@@ -769,23 +858,14 @@
 
     .videoMeta {
       display: grid;
-      gap: 12px;
-      padding: 16px;
-    }
-
-    .videoDock {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
     }
 
-    .dockTile {
-      border: 2px solid rgba(17, 70, 216, 0.18);
-      border-radius: 16px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.36);
-      font-size: 0.76rem;
-      font-weight: 700;
+    .videoMeta ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
       line-height: 1.45;
     }
 
@@ -884,7 +964,7 @@
 
     .footerNote {
       margin: 18px 0 0;
-      max-width: 52ch;
+      max-width: 54ch;
       font-size: 0.86rem;
       line-height: 1.5;
       color: rgba(248, 236, 217, 0.78);
@@ -926,13 +1006,9 @@
       .hero,
       .introRow,
       .timelineGrid,
-      .showcaseGrid,
+      .showcaseBoard,
       .twoCol,
       .contactGrid {
-        grid-template-columns: 1fr;
-      }
-
-      .projectsGrid {
         grid-template-columns: 1fr;
       }
 
@@ -941,12 +1017,8 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .cardArena {
-        min-height: 500px;
-      }
-
       .thesisCard {
-        width: min(44vw, 220px);
+        width: min(43vw, 214px);
       }
     }
 
@@ -974,7 +1046,7 @@
       .factGrid,
       .toolGrid,
       .timelineLine,
-      .videoDock {
+      .contactGrid {
         grid-template-columns: 1fr;
       }
 
@@ -999,36 +1071,60 @@
       }
 
       .timelineLabel,
+      .timelineDate,
       .timelineText {
         grid-column: 2;
       }
 
+      .galleryStage {
+        min-height: 360px;
+        padding: 0;
+      }
+
+      .galleryCursor {
+        width: 46px;
+        height: 46px;
+        margin-top: -23px;
+        top: auto;
+        bottom: 12px;
+      }
+
+      .galleryCursor.prev {
+        left: 12px;
+      }
+
+      .galleryCursor.next {
+        right: 12px;
+      }
+
+      .galleryPortrait {
+        min-height: 300px;
+      }
+
       .cardArena {
-        min-height: 640px;
+        min-height: 620px;
       }
 
       .thesisCard {
         width: min(70vw, 230px);
       }
 
-      .thesisCard:nth-of-type(1),
-      .thesisCard:nth-of-type(2),
-      .thesisCard:nth-of-type(3) {
-        left: 50%;
-        right: auto;
-        top: auto;
-      }
-
       .thesisCard:nth-of-type(1) {
-        transform: translateX(-50%) translateY(-88px) rotate(-10deg);
+        --card-x: -6px;
+        --card-y: -126px;
+        --card-rotate: -10deg;
       }
 
       .thesisCard:nth-of-type(2) {
-        transform: translateX(-50%) translateY(22px) rotate(0deg);
+        --card-x: 0px;
+        --card-y: 18px;
+        --card-rotate: 0deg;
       }
 
       .thesisCard:nth-of-type(3) {
-        transform: translateX(-50%) translateY(136px) rotate(10deg);
+        --card-x: 6px;
+        --card-y: 162px;
+        --card-rotate: 10deg;
       }
     }
 
@@ -1053,7 +1149,6 @@
       <nav class="nav" aria-label="Section navigation">
         <a href="#profile">Profile</a>
         <a href="#timeline">Timeline</a>
-        <a href="#work">Work</a>
         <a href="#showcase">Showcase</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
@@ -1080,7 +1175,7 @@
           </div>
         </div>
         <p class="miniNote">
-          Same poster energy, but now softened and a little more game-like instead of purely boxy.
+          Mascot interaction is now fuller: six states in the showcase, cursor-like selectors, and swipe support kept for mobile.
         </p>
       </div>
 
@@ -1091,32 +1186,32 @@
         </div>
 
         <div class="introRow">
-          <div class="introCard reveal">
+          <div class="panel reveal">
             <p class="introText">
               I design <strong>playful systems for clearer ideas</strong> across interaction,
-              workshop flows, and story-led interfaces. This page keeps the same
-              blue-and-cream editorial vibe, but adds a more collectible,
-              game-inspired way to show your projects and thesis artifacts.
+              research, workshop flows, and story-led interfaces. This version
+              pushes the page closer to a game-like portfolio board while staying
+              in the same blue-and-cream poster language.
             </p>
           </div>
 
-          <div class="factCard reveal">
+          <div class="panel factCard reveal">
             <div class="factGrid">
               <div>
                 <p class="factLabel">Focus</p>
-                <p class="factValue">Interaction design + visual storytelling</p>
+                <p class="factValue">Interaction design + research artifacts</p>
               </div>
               <div>
-                <p class="factLabel">Works Best In</p>
-                <p class="factValue">Collaborative design teams</p>
+                <p class="factLabel">Track</p>
+                <p class="factValue">Design + software development</p>
               </div>
               <div>
-                <p class="factLabel">Building</p>
-                <p class="factValue">Projects, flows, systems, and artifacts</p>
+                <p class="factLabel">Mode</p>
+                <p class="factValue">Playful, structured, and systems-led</p>
               </div>
             </div>
             <p class="helper">
-              This version adds smoother corners, softer framing, and showcase areas for cards and media.
+              Both loop sections are ready for `.mp4` files and will autoplay muted once the files exist.
             </p>
           </div>
         </div>
@@ -1124,137 +1219,87 @@
     </section>
 
     <section id="timeline" class="section">
-      <h2 class="sectionTitle reveal">Timeline</h2>
+      <h2 class="sectionTitle reveal">Research / Project Timeline</h2>
       <p class="sectionLead reveal">
-        A quick interactive read of the work already living on your site. Click the markers to swap the detail panel.
+        This timeline is your project map rather than a project-card section. Click each stop to change the focus panel, and use the right column for professional experience.
       </p>
 
       <div class="timelineGrid">
         <div class="timelineRail reveal">
           <div class="timelineLine">
             <article class="timelineStop is-active">
-              <button class="timelineBtn" type="button" data-timeline="0" aria-label="Show Project 01"></button>
-              <p class="timelineLabel">Project 01</p>
-              <p class="timelineText">Feedback workshop</p>
+              <button class="timelineBtn" type="button" data-timeline="0" aria-label="Show Master Thesis"></button>
+              <p class="timelineDate">2025 - Present</p>
+              <p class="timelineLabel">Master Thesis</p>
+              <p class="timelineText">Cards, systems, interaction</p>
             </article>
             <article class="timelineStop">
-              <button class="timelineBtn" type="button" data-timeline="1" aria-label="Show Project 02"></button>
-              <p class="timelineLabel">Project 02</p>
-              <p class="timelineText">Journey mapping</p>
+              <button class="timelineBtn" type="button" data-timeline="1" aria-label="Show More Than Words"></button>
+              <p class="timelineDate">2025</p>
+              <p class="timelineLabel">More Than Words</p>
+              <p class="timelineText">Communication and framing</p>
             </article>
             <article class="timelineStop">
-              <button class="timelineBtn" type="button" data-timeline="2" aria-label="Show Project 03"></button>
-              <p class="timelineLabel">Project 03</p>
-              <p class="timelineText">Live dashboard</p>
+              <button class="timelineBtn" type="button" data-timeline="2" aria-label="Show Action Lab Research"></button>
+              <p class="timelineDate">2024 - 2025</p>
+              <p class="timelineLabel">Action Lab Research</p>
+              <p class="timelineText">Experiment and reflection</p>
             </article>
             <article class="timelineStop">
-              <button class="timelineBtn" type="button" data-timeline="3" aria-label="Show Project 04"></button>
-              <p class="timelineLabel">Project 04</p>
-              <p class="timelineText">Tutor workflow</p>
+              <button class="timelineBtn" type="button" data-timeline="3" aria-label="Show Casual Web Development"></button>
+              <p class="timelineDate">Ongoing</p>
+              <p class="timelineLabel">Casual Web Development</p>
+              <p class="timelineText">Software engineering track</p>
             </article>
           </div>
         </div>
 
-        <aside class="timelineDetail reveal" id="timelineDetail" aria-live="polite">
-          <p class="timelineRole">Feedback Workshop</p>
-          <p class="timelineMeta">Project 01 / facilitation systems / team collaboration</p>
-          <p class="timelineBody">
-            Workshop stages built to surface feedback friction, synthesize what participants were feeling, and move toward clearer next actions.
-          </p>
-          <div class="tagRow">
-            <span class="tag">Workshop design</span>
-            <span class="tag">Feedback systems</span>
-            <span class="tag">Action mapping</span>
-          </div>
-        </aside>
-      </div>
-    </section>
+        <div class="timelineSide">
+          <aside class="detailCard reveal" id="timelineDetail" aria-live="polite">
+            <p class="detailTitle">Master Thesis</p>
+            <p class="detailMeta">2025 - Present / card systems / thesis interaction design</p>
+            <p class="bodyText">
+              Building a thesis direction that turns complex ideas into more playable, discussable, and visually memorable interaction artifacts.
+            </p>
+            <div class="tagRow">
+              <span class="tag">Card design</span>
+              <span class="tag">System thinking</span>
+              <span class="tag">Interactive artifact</span>
+            </div>
+          </aside>
 
-    <section id="work" class="section">
-      <h2 class="sectionTitle reveal">Selected Work</h2>
-      <p class="sectionLead reveal">
-        Still the same projects, just organized like a stronger one-page portfolio CV instead of a loose project list.
-      </p>
-
-      <div class="projectsBar reveal" aria-label="Project filters">
-        <button class="ghostBtn" type="button" data-filter="all">All</button>
-        <button class="ghostBtn" type="button" data-filter="systems">Systems</button>
-        <button class="ghostBtn" type="button" data-filter="facilitation">Facilitation</button>
-        <button class="ghostBtn" type="button" data-filter="research">Research</button>
-      </div>
-
-      <div class="projectsGrid">
-        <article class="projectCard reveal" data-category="facilitation research">
-          <div class="projectArt">
-            <img src="/pic/chibi1.png" alt="Illustration for Feedback Workshop" />
-          </div>
-          <div>
-            <p class="projectKicker">Project 01</p>
-            <h3 class="projectTitle">Feedback Workshop</h3>
-          </div>
-          <p class="projectDesc">
-            Workshop stages used to surface feedback friction and translate it into practical implementation actions across the semester.
-          </p>
-          <p class="projectMeta">Focus: facilitation, framing problems, turning discussion into usable outputs.</p>
-          <a class="projectLink" href="/project-view.html?project=1">Open project</a>
-        </article>
-
-        <article class="projectCard reveal" data-category="systems research">
-          <div class="projectArt">
-            <img src="/pic/chibi3.png" alt="Illustration for Journey Mapping Tool" />
-          </div>
-          <div>
-            <p class="projectKicker">Project 02</p>
-            <h3 class="projectTitle">Journey Mapping Tool</h3>
-          </div>
-          <p class="projectDesc">
-            Prompt-led mapping for student and tutor constraints in one flow, with strategic reflection cues and action prompts.
-          </p>
-          <p class="projectMeta">Focus: systems thinking, experience mapping, making complex processes easier to read.</p>
-          <a class="projectLink" href="/project-view.html?project=2">Open project</a>
-        </article>
-
-        <article class="projectCard reveal" data-category="systems facilitation">
-          <div class="projectArt">
-            <img src="/pic/chibi2.png" alt="Illustration for Live Dashboard" />
-          </div>
-          <div>
-            <p class="projectKicker">Project 03</p>
-            <h3 class="projectTitle">Live Dashboard</h3>
-          </div>
-          <p class="projectDesc">
-            A stage-monitoring board for facilitation timing, participation trends, and intervention decisions during live sessions.
-          </p>
-          <p class="projectMeta">Focus: dashboard thinking, timing, visual hierarchy, real-time decision support.</p>
-          <a class="projectLink" href="/project-view.html?project=3">Open project</a>
-        </article>
-
-        <article class="projectCard reveal" data-category="systems">
-          <div class="projectArt">
-            <img src="/pic/chibi5.png" alt="Illustration for Tutor Workflow" />
-          </div>
-          <div>
-            <p class="projectKicker">Project 04</p>
-            <h3 class="projectTitle">Tutor Workflow</h3>
-          </div>
-          <p class="projectDesc">
-            Flow-based constraint mapping for marking operations and communication bottlenecks in assessment pipelines.
-          </p>
-          <p class="projectMeta">Focus: operational clarity, workflow design, and simplifying cross-team communication.</p>
-          <a class="projectLink" href="/project-view.html?project=4">Open project</a>
-        </article>
+          <aside class="experienceCard reveal">
+            <p class="moduleEyebrow">Professional Experience / Fill-in Column</p>
+            <h3 class="detailTitle">Experience</h3>
+            <div class="experienceList">
+              <div class="experienceItem">
+                <h4>Role / Studio / Company</h4>
+                <p>Add your title, place, and a one-line summary here.</p>
+              </div>
+              <div class="experienceItem">
+                <h4>Role / Studio / Company</h4>
+                <p>Use this for another internship, freelance, research, or team role.</p>
+              </div>
+              <div class="experienceItem">
+                <h4>Role / Studio / Company</h4>
+                <p>This side column is meant to stay easy to update once you lock in your final wording.</p>
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
 
     <section id="showcase" class="section">
-      <h2 class="sectionTitle reveal">Thesis Deck</h2>
+      <h2 class="sectionTitle reveal">Showcase</h2>
       <p class="sectionLead reveal">
-        A more game-like showcase zone for your thesis cards and a looping website demo. The cards below are placeholder slots sized like poker cards so your real deck can drop in later.
+        The main screen works like a game board now: a more stable thesis card fan, a six-state mascot selector, a MATT loop slot, and a separate schema loop slot.
       </p>
 
-      <div class="showcaseGrid">
-        <div class="deckPanel reveal">
-          <p class="panelEyebrow">Card Showcase / Click a card</p>
+      <div class="showcaseBoard">
+        <article class="module reveal">
+          <p class="moduleEyebrow">Thesis Deck / Click a card</p>
+          <h3 class="moduleTitle">Card Showcase</h3>
           <div class="cardArena" aria-label="Animated thesis card preview">
             <button class="thesisCard is-active" type="button" data-card="0">
               <div class="cardTop">
@@ -1266,7 +1311,7 @@
               </div>
               <div>
                 <p class="cardName">Signal Card</p>
-                <p class="cardFlavor">Use this as the front-cover look for one of your thesis deck cards.</p>
+                <p class="cardFlavor">A front-cover style card for the deck.</p>
               </div>
             </button>
 
@@ -1280,7 +1325,7 @@
               </div>
               <div>
                 <p class="cardName">System Card</p>
-                <p class="cardFlavor">A nice slot for a more diagram-based or structural card in the set.</p>
+                <p class="cardFlavor">For structure, rules, and frameworks.</p>
               </div>
             </button>
 
@@ -1294,43 +1339,107 @@
               </div>
               <div>
                 <p class="cardName">Action Card</p>
-                <p class="cardFlavor">A place for cards that ask players to reflect, choose, or respond.</p>
+                <p class="cardFlavor">For reflection, response, and play.</p>
               </div>
             </button>
           </div>
 
           <div class="deckDetail" id="deckDetail" aria-live="polite">
-            <p class="deckTitle">Signal Card</p>
-            <p class="deckBody">
-              This panel can explain what the card set does, how the deck works, or why the visual language matters in your thesis project.
+            <p class="detailTitle">Signal Card</p>
+            <p class="bodyText">
+              The card fan now keeps each card anchored in place while still lifting the active card, which should fix the glitchy jump from the earlier version.
             </p>
             <div class="tagRow">
               <span class="tag">Poker size</span>
-              <span class="tag">Animated preview</span>
+              <span class="tag">Stable fan layout</span>
               <span class="tag">Thesis artifact</span>
             </div>
           </div>
-        </div>
+        </article>
 
-        <div class="videoPanel reveal">
-          <p class="panelEyebrow">Website Loop / Drop in your video</p>
-          <div class="videoShell">
-            <div class="videoPoster">
-              <div class="playPulse" aria-hidden="true"></div>
-            </div>
-            <div class="videoMeta">
-              <p class="deckTitle">Website Demo Loop</p>
-              <p class="deckBody">
-                This stage is ready for a muted looping video of your website or thesis interaction. Once you have the file, we can swap this placeholder for a real autoplay loop.
-              </p>
-              <div class="videoDock">
-                <div class="dockTile">Format: `.mp4` or `.webm`</div>
-                <div class="dockTile">Behavior: autoplay / muted / loop</div>
-                <div class="dockTile">Best use: website walkthrough or card interaction demo</div>
+        <article class="module reveal">
+          <p class="moduleEyebrow">Mascot Development / Swipe or click</p>
+          <h3 class="moduleTitle">Character Select</h3>
+          <div class="galleryShell">
+            <div class="galleryStage">
+              <button class="galleryCursor prev" type="button" id="galleryPrev" aria-label="Previous mascot">&#8249;</button>
+              <div class="galleryPortrait" id="galleryPortrait">
+                <img
+                  id="galleryImage"
+                  class="galleryImage"
+                  src="/pic/tutor-persona-1.png"
+                  alt="Mascot development concept"
+                />
               </div>
+              <button class="galleryCursor next" type="button" id="galleryNext" aria-label="Next mascot">&#8250;</button>
+            </div>
+            <div class="galleryInfo">
+              <p class="galleryName" id="galleryName">Mascot 01</p>
+              <p class="bodyText" id="galleryText">
+                A more open and welcoming mascot pose that reads clearly as a front-facing character option.
+              </p>
+              <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
             </div>
           </div>
-        </div>
+        </article>
+
+        <article class="module reveal">
+          <p class="moduleEyebrow">MATT Website Loop</p>
+          <h3 class="moduleTitle">MATT Loop</h3>
+          <div
+            class="videoModule"
+            data-video-wrapper
+            data-video-src="/media/matt-loop.mp4"
+            data-video-label="Drop matt-loop.mp4 here"
+          >
+            <div class="videoStage">
+              <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
+              <div class="videoFallback">
+                <img src="/pic/tutor-persona-2.png" alt="Placeholder for MATT website loop" />
+              </div>
+              <div class="playPulse" aria-hidden="true"></div>
+              <span class="videoBadge">Drop matt-loop.mp4 here</span>
+            </div>
+            <div class="videoMeta">
+              <p class="bodyText">
+                `MP4` is completely fine here. Once `media/matt-loop.mp4` exists, this module will autoplay muted and loop automatically.
+              </p>
+              <ul>
+                <li>Recommended: `muted`, `loop`, `playsinline`, `autoplay`</li>
+                <li>Use this for the MATT website walk-through or screen-recorded interaction</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="module reveal">
+          <p class="moduleEyebrow">Schema Loop Video</p>
+          <h3 class="moduleTitle">Schema Loop</h3>
+          <div
+            class="videoModule"
+            data-video-wrapper
+            data-video-src="/media/schema-loop.mp4"
+            data-video-label="Drop schema-loop.mp4 here"
+          >
+            <div class="videoStage">
+              <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
+              <div class="schemaFallback">
+                <img src="/pic/tutor-persona-3.png" alt="Placeholder for schema loop video" />
+              </div>
+              <div class="playPulse" aria-hidden="true"></div>
+              <span class="loopBadge">Drop schema-loop.mp4 here</span>
+            </div>
+            <div class="videoMeta">
+              <p class="bodyText">
+                This is your second loop slot, kept separate from MATT so the schema animation can stand on its own.
+              </p>
+              <ul>
+                <li>Place `schema-loop.mp4` inside a `media` folder at the project root</li>
+                <li>The page will swap from placeholder image to real loop automatically</li>
+              </ul>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -1346,8 +1455,8 @@
           </div>
           <ul class="bulletList">
             <li>Interaction design with a playful visual voice</li>
-            <li>Journey mapping and system-level thinking</li>
-            <li>Workshop structuring and facilitation support</li>
+            <li>Research translation into cards, systems, and visual structures</li>
+            <li>Workshop framing, mapping, and facilitation support</li>
             <li>Prototype-ready HTML and CSS presentation</li>
           </ul>
         </div>
@@ -1355,9 +1464,9 @@
         <div class="skillCol reveal">
           <h2 class="sectionTitle">Strengths</h2>
           <ul class="bulletList">
-            <li>Turning messy research or discussion into a visual structure people can follow</li>
+            <li>Turning messy ideas into a visual structure people can follow</li>
             <li>Balancing personality with clarity so the design still feels memorable and useful</li>
-            <li>Working across team-based project setups without losing the visual point of view</li>
+            <li>Working across design and software-facing project setups</li>
             <li>Making interfaces feel warm, expressive, and easy to navigate</li>
           </ul>
         </div>
@@ -1381,7 +1490,7 @@
         </div>
       </div>
       <p class="footerNote reveal">
-        If you want, the next pass can swap these placeholder contact links for your real details and replace the video shell with your actual looping file.
+        Once you add real mascot images and the two `.mp4` files, this should feel much closer to a finished interactive CV board.
       </p>
     </section>
   </main>
@@ -1393,44 +1502,50 @@
       const timelineDetail = document.getElementById("timelineDetail");
       const timelineStops = [...document.querySelectorAll(".timelineStop")];
       const timelineButtons = [...document.querySelectorAll("[data-timeline]")];
-      const filterButtons = [...document.querySelectorAll("[data-filter]")];
-      const projectCards = [...document.querySelectorAll(".projectCard")];
       const thesisCards = [...document.querySelectorAll("[data-card]")];
       const deckDetail = document.getElementById("deckDetail");
       const revealNodes = [...document.querySelectorAll(".reveal")];
+      const galleryPortrait = document.getElementById("galleryPortrait");
+      const galleryImage = document.getElementById("galleryImage");
+      const galleryName = document.getElementById("galleryName");
+      const galleryText = document.getElementById("galleryText");
+      const galleryDots = document.getElementById("galleryDots");
+      const galleryPrev = document.getElementById("galleryPrev");
+      const galleryNext = document.getElementById("galleryNext");
+      const videoWrappers = [...document.querySelectorAll("[data-video-wrapper]")];
 
       const timelineItems = [
         {
-          title: "Feedback Workshop",
-          meta: "Project 01 / facilitation systems / team collaboration",
-          body: "Workshop stages built to surface feedback friction, synthesize what participants were feeling, and move toward clearer next actions.",
-          tags: ["Workshop design", "Feedback systems", "Action mapping"]
+          title: "Master Thesis",
+          meta: "2025 - Present / card systems / thesis interaction design",
+          body: "Building a thesis direction that turns complex ideas into more playable, discussable, and visually memorable interaction artifacts.",
+          tags: ["Card design", "System thinking", "Interactive artifact"]
         },
         {
-          title: "Journey Mapping Tool",
-          meta: "Project 02 / systems thinking / student and tutor flows",
-          body: "A prompt-led structure for mapping constraints, reflecting on blind spots, and moving from observations into usable strategy.",
-          tags: ["Journey mapping", "Systems design", "Reflection cues"]
+          title: "More Than Words",
+          meta: "2025 / communication framing / meaning beyond text",
+          body: "A project lens focused on how visual and interactive forms can hold meaning, tone, and interpretation beyond literal wording alone.",
+          tags: ["Communication", "Visual framing", "Meaning making"]
         },
         {
-          title: "Live Dashboard",
-          meta: "Project 03 / facilitation timing / live decision support",
-          body: "A monitoring board designed to make session pacing, participation patterns, and interventions easier to read during facilitation.",
-          tags: ["Dashboard design", "Live monitoring", "Visual hierarchy"]
+          title: "Action Lab Research",
+          meta: "2024 - 2025 / experimentation / reflection and iteration",
+          body: "Research-led making that brings together testing, reflection, and iterative decisions across systems, interfaces, and workshop structures.",
+          tags: ["Research", "Experimentation", "Iteration"]
         },
         {
-          title: "Tutor Workflow",
-          meta: "Project 04 / workflow clarity / operational communication",
-          body: "Flow-based constraint mapping that focuses on marking operations and communication bottlenecks across an assessment pipeline.",
-          tags: ["Workflow mapping", "Operations", "Communication systems"]
+          title: "Casual Web Development",
+          meta: "Ongoing / software engineering track / frontend builds",
+          body: "An active development track where design thinking meets implementation through personal sites, interface systems, and interactive frontend work.",
+          tags: ["Frontend", "Implementation", "Software track"]
         }
       ];
 
       const thesisItems = [
         {
           title: "Signal Card",
-          body: "Use this as a hero-style placeholder for one of your thesis cards. The stack animation makes the deck feel collectible and more game-like without changing your color palette.",
-          tags: ["Poker size", "Cover card", "Visual hook"]
+          body: "The active card now lifts while staying anchored in the same fanned position, which should stop the earlier glitch where the whole stack felt like it was snapping around.",
+          tags: ["Poker size", "Stable fan layout", "Visual hook"]
         },
         {
           title: "System Card",
@@ -1443,6 +1558,42 @@
           tags: ["Prompt card", "Interaction", "Decision point"]
         }
       ];
+
+      const mascotItems = [
+        {
+          name: "Mascot 01",
+          image: "/pic/tutor-persona-1.png",
+          text: "A more open and welcoming mascot pose that reads clearly as a front-facing character option."
+        },
+        {
+          name: "Mascot 02",
+          image: "/pic/tutor-persona-2.png",
+          text: "A system-facing concept that feels more task-oriented and useful for a guided interface role."
+        },
+        {
+          name: "Mascot 03",
+          image: "/pic/tutor-persona-3.png",
+          text: "A softer, more reflective state that works well for explanation, pause, or slower narrative moments."
+        },
+        {
+          name: "Mascot 04",
+          image: "/pic/tutor-persona-4.png",
+          text: "A more diagram-driven mascot direction that can support framework-heavy or instructional content."
+        },
+        {
+          name: "Mascot 05",
+          image: "/pic/tutor-persona-5.png",
+          text: "A more expressive and lively version that suits a playful character-select mood."
+        },
+        {
+          name: "Mascot 06",
+          image: "/pic/tutor-persona-6.png",
+          text: "A quieter and more grounded design direction that still feels consistent with the larger mascot family."
+        }
+      ];
+
+      let mascotIndex = 0;
+      let touchStartX = null;
 
       portraitButtons.forEach((button) => {
         button.addEventListener("click", () => {
@@ -1469,9 +1620,9 @@
         if (!item || !timelineDetail) return;
 
         timelineDetail.innerHTML = `
-          <p class="timelineRole">${item.title}</p>
-          <p class="timelineMeta">${item.meta}</p>
-          <p class="timelineBody">${item.body}</p>
+          <p class="detailTitle">${item.title}</p>
+          <p class="detailMeta">${item.meta}</p>
+          <p class="bodyText">${item.body}</p>
           <div class="tagRow">
             ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
           </div>
@@ -1487,8 +1638,8 @@
         if (!item || !deckDetail) return;
 
         deckDetail.innerHTML = `
-          <p class="deckTitle">${item.title}</p>
-          <p class="deckBody">${item.body}</p>
+          <p class="detailTitle">${item.title}</p>
+          <p class="bodyText">${item.body}</p>
           <div class="tagRow">
             ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
           </div>
@@ -1499,31 +1650,48 @@
         });
       }
 
+      function renderMascot(index) {
+        const item = mascotItems[index];
+        if (!item || !galleryImage || !galleryName || !galleryText || !galleryDots || !galleryPortrait) return;
+
+        galleryPortrait.classList.add("is-changing");
+
+        setTimeout(() => {
+          galleryImage.src = item.image;
+          galleryImage.alt = item.name;
+          galleryName.textContent = item.name;
+          galleryText.textContent = item.text;
+          galleryPortrait.classList.remove("is-changing");
+        }, 120);
+
+        [...galleryDots.querySelectorAll("button")].forEach((dot, dotIndex) => {
+          dot.classList.toggle("is-active", dotIndex === index);
+          dot.setAttribute("aria-pressed", String(dotIndex === index));
+        });
+      }
+
+      function moveMascot(direction) {
+        mascotIndex = (mascotIndex + direction + mascotItems.length) % mascotItems.length;
+        renderMascot(mascotIndex);
+      }
+
+      mascotItems.forEach((item, index) => {
+        if (!galleryDots) return;
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Show ${item.name}`);
+        dot.setAttribute("aria-pressed", String(index === 0));
+        dot.classList.toggle("is-active", index === 0);
+        dot.addEventListener("click", () => {
+          mascotIndex = index;
+          renderMascot(mascotIndex);
+        });
+        galleryDots.appendChild(dot);
+      });
+
       timelineButtons.forEach((button) => {
         button.addEventListener("click", () => {
           renderTimeline(Number(button.dataset.timeline));
-        });
-      });
-
-      filterButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const filter = button.dataset.filter || "all";
-
-          filterButtons.forEach((item) => {
-            const active = item === button;
-            item.style.background = active ? "var(--blue)" : "transparent";
-            item.style.color = active ? "var(--paper)" : "var(--blue)";
-          });
-
-          projectCards.forEach((card) => {
-            if (filter === "all") {
-              card.hidden = false;
-              return;
-            }
-
-            const categories = card.dataset.category || "";
-            card.hidden = !categories.includes(filter);
-          });
         });
       });
 
@@ -1532,6 +1700,57 @@
           renderDeck(Number(card.dataset.card));
         });
       });
+
+      if (galleryPrev) {
+        galleryPrev.addEventListener("click", () => moveMascot(-1));
+      }
+
+      if (galleryNext) {
+        galleryNext.addEventListener("click", () => moveMascot(1));
+      }
+
+      if (galleryPortrait) {
+        galleryPortrait.addEventListener("touchstart", (event) => {
+          touchStartX = event.changedTouches[0].clientX;
+        }, { passive: true });
+
+        galleryPortrait.addEventListener("touchend", (event) => {
+          if (touchStartX === null) return;
+          const touchEndX = event.changedTouches[0].clientX;
+          const delta = touchEndX - touchStartX;
+          touchStartX = null;
+
+          if (Math.abs(delta) < 36) return;
+          moveMascot(delta > 0 ? -1 : 1);
+        }, { passive: true });
+      }
+
+      videoWrappers.forEach((wrapper) => {
+        const video = wrapper.querySelector(".loopVideo");
+        const fallback = wrapper.querySelector(".videoFallback, .schemaFallback");
+        const pulse = wrapper.querySelector(".playPulse");
+        const src = wrapper.dataset.videoSrc;
+
+        if (!video || !fallback || !src) return;
+
+        video.src = src;
+
+        video.addEventListener("loadeddata", () => {
+          video.hidden = false;
+          fallback.classList.add("is-hidden");
+          if (pulse) pulse.style.display = "none";
+        }, { once: true });
+
+        video.addEventListener("error", () => {
+          video.hidden = true;
+          fallback.classList.remove("is-hidden");
+          if (pulse) pulse.style.display = "";
+        }, { once: true });
+
+        video.load();
+      });
+
+      renderMascot(mascotIndex);
 
       if ("IntersectionObserver" in window) {
         const revealObserver = new IntersectionObserver((entries, observer) => {
