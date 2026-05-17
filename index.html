@@ -2191,7 +2191,7 @@
           <h2 class="sectionTitle reveal">My industry experience</h2>
         </div>
 
-        <div class="storyRail reveal" aria-label="Industry experience">
+        <div class="storyRail reveal" id="industryRail" aria-label="Industry experience">
           <article class="storyCard storyCard--industry">
             <div class="storyVisual">
               <img class="storyChibi" src="chibi_transparent_backgrounds/05_corporate_cross_country_implementation.png" alt="Chibi illustration for strategy and transformation" />
@@ -2233,6 +2233,11 @@
               Reviewed HCI submissions and got a much better feel for what makes research framing, methods, and writing come across clearly.
             </p>
           </article>
+        </div>
+
+        <div class="storyNav reveal" aria-label="Industry navigation">
+          <button class="storyNavButton" id="industryPrev" type="button">Left</button>
+          <button class="storyNavButton" id="industryNext" type="button">Right</button>
         </div>
       </div>
     </section>
@@ -2450,6 +2455,9 @@
       const researchRail = document.getElementById("researchRail");
       const researchPrev = document.getElementById("researchPrev");
       const researchNext = document.getElementById("researchNext");
+      const industryRail = document.getElementById("industryRail");
+      const industryPrev = document.getElementById("industryPrev");
+      const industryNext = document.getElementById("industryNext");
       const galleryPortrait = document.getElementById("galleryPortrait");
       const galleryImage = document.getElementById("galleryImage");
       const galleryName = document.getElementById("galleryName");
@@ -2755,6 +2763,16 @@
 
         researchPrev.addEventListener("click", () => moveResearch(-1));
         researchNext.addEventListener("click", () => moveResearch(1));
+      }
+
+      if (industryRail && industryPrev && industryNext) {
+        const moveIndustry = (direction) => {
+          const amount = Math.max(280, Math.round(industryRail.clientWidth * 0.82));
+          industryRail.scrollBy({ left: direction * amount, behavior: "smooth" });
+        };
+
+        industryPrev.addEventListener("click", () => moveIndustry(-1));
+        industryNext.addEventListener("click", () => moveIndustry(1));
       }
 
       renderWork(workIndex);
