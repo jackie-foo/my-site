@@ -270,7 +270,7 @@
       object-fit: cover;
       border-radius: 50%;
       border: 2px solid var(--blue);
-      filter: none;
+      filter: grayscale(1) contrast(1.03);
       mix-blend-mode: normal;
       background: #fff;
     }
@@ -380,40 +380,26 @@
     }
 
     .metaRail {
-      position: relative;
       display: grid;
-      gap: 16px;
-      max-width: 38rem;
-      padding-left: 22px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 54rem;
+      padding-left: 0;
     }
 
     .metaRail::before {
-      content: "";
-      position: absolute;
-      left: 6px;
-      top: 6px;
-      bottom: 6px;
-      width: 2px;
-      border-radius: 999px;
-      background: rgba(17, 70, 216, 0.26);
+      display: none;
     }
 
     .metaLine {
-      position: relative;
+      border-top: 2px solid rgba(17, 70, 216, 0.24);
+      padding-top: 12px;
       display: grid;
       gap: 5px;
     }
 
     .metaLine::before {
-      content: "";
-      position: absolute;
-      left: -21px;
-      top: 4px;
-      width: 12px;
-      height: 12px;
-      border: 2px solid var(--blue);
-      border-radius: 50%;
-      background: var(--paper);
+      display: none;
     }
 
     .factCard {
@@ -490,6 +476,7 @@
       grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
       gap: 18px;
       align-items: start;
+      margin-bottom: 22px;
     }
 
     .workPicker {
@@ -867,14 +854,14 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      width: min(28vw, 176px);
-      aspect-ratio: 2.5 / 3.5;
+      width: min(29vw, 188px);
+      aspect-ratio: 2.48 / 3.6;
       border: 2px solid var(--blue);
       border-radius: 26px;
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.34)),
         var(--paper);
-      padding: 12px;
+      padding: 12px 12px 14px;
       display: grid;
       align-content: space-between;
       box-shadow: 0 18px 30px rgba(17, 70, 216, 0.12);
@@ -954,7 +941,8 @@
 
     .cardVisual {
       margin: 14px 0;
-      min-height: 154px;
+      min-height: 178px;
+      padding: 10px;
       display: grid;
       place-items: center;
     }
@@ -967,8 +955,8 @@
     .cardVisual img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: center top;
+      object-fit: contain;
+      object-position: center;
       filter: none;
       mix-blend-mode: normal;
     }
@@ -1016,8 +1004,8 @@
 
     .galleryFigure {
       position: relative;
-      width: min(100%, 300px);
-      min-height: 240px;
+      width: min(100%, 310px);
+      height: 248px;
       display: grid;
       place-items: center;
       touch-action: pan-y pinch-zoom;
@@ -1030,7 +1018,10 @@
     }
 
     .galleryImage {
-      width: min(82%, 238px);
+      width: min(80%, 232px);
+      height: 216px;
+      object-fit: contain;
+      object-position: center;
       transition: opacity 180ms ease, transform 220ms ease;
       user-select: none;
       -webkit-user-drag: none;
@@ -1126,18 +1117,7 @@
     }
 
     .videoBadge {
-      position: absolute;
-      left: 16px;
-      bottom: 16px;
-      border: 2px solid var(--blue);
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: rgba(248, 236, 217, 0.94);
-      font-size: 0.74rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      z-index: 2;
+      display: none;
     }
 
     .playPulse {
@@ -1368,6 +1348,10 @@
         min-height: 360px;
       }
 
+      .metaRail {
+        grid-template-columns: 1fr;
+      }
+
       .thesisCard {
         width: min(38vw, 184px);
       }
@@ -1455,7 +1439,13 @@
       }
 
       .metaRail {
-        padding-left: 18px;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .metaLine {
+        padding-top: 0;
+        border-top: 0;
       }
 
       .timelineLine::before {
@@ -1560,8 +1550,13 @@
         padding: 18px 42px;
       }
 
+      .galleryFigure {
+        height: 220px;
+      }
+
       .galleryImage {
         width: min(84%, 205px);
+        height: 190px;
       }
 
       .galleryCursor {
@@ -1601,7 +1596,6 @@
       <nav class="nav" aria-label="Section navigation">
         <a href="#profile">Profile</a>
         <a href="#work">Work</a>
-        <a href="#experience">Experience</a>
         <a href="#showcase">Showcase</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
@@ -1657,9 +1651,9 @@
     </section>
 
     <section id="work" class="section">
-      <h2 class="sectionTitle reveal">Current Work</h2>
+      <h2 class="sectionTitle reveal">Work / Experience</h2>
       <p class="sectionLead reveal">
-        Pick a track to swap the main panel.
+        Current research tracks on top, selected experience underneath.
       </p>
 
       <div class="workGrid">
@@ -1701,14 +1695,10 @@
           </div>
         </aside>
       </div>
-    </section>
-
-    <section id="experience" class="section">
       <div class="experienceSectionWrap">
         <div class="experienceHeaderRow">
           <div>
-            <p class="moduleEyebrow reveal">Professional Experience</p>
-            <h2 class="sectionTitle reveal">Experience</h2>
+            <p class="moduleEyebrow reveal">Selected Experience</p>
           </div>
           <p class="sectionLead reveal">
             Selected roles and academic service.
@@ -1790,11 +1780,11 @@
                 <span class="cardRank">01</span>
               </div>
               <div class="cardVisual">
-                <img src="pic/cards/persona-scale-thinkers.png" alt="Scale Thinkers card preview" />
+                <img src="pic/tutor-persona-2.png" alt="Student Sense-Makers card preview" />
               </div>
               <div>
-                <p class="cardName">Scale Thinkers</p>
-                <p class="cardFlavor">I think about what works for large cohorts.</p>
+                <p class="cardName">Student Sense-Makers</p>
+                <p class="cardFlavor">I want students to know what to do next.</p>
               </div>
             </button>
 
@@ -1804,11 +1794,11 @@
                 <span class="cardRank">02</span>
               </div>
               <div class="cardVisual">
-                <img src="pic/cards/persona-student-sense-makers.png" alt="Student Sense-Makers card preview" />
+                <img src="pic/tutor-persona-1.png" alt="Scale Thinkers card preview" />
               </div>
               <div>
-                <p class="cardName">Student Sense-Makers</p>
-                <p class="cardFlavor">I want students to know what to do next.</p>
+                <p class="cardName">Scale Thinkers</p>
+                <p class="cardFlavor">I think about what works for large cohorts.</p>
               </div>
             </button>
 
@@ -1818,7 +1808,7 @@
                 <span class="cardRank">03</span>
               </div>
               <div class="cardVisual">
-                <img src="pic/cards/instruction-what-is-my-motivation.png" alt="What's my motivation instruction card preview" />
+                <img src="pic/tutor-persona-5.png" alt="What's my motivation card preview" />
               </div>
               <div>
                 <p class="cardName">What’s My Motivation</p>
@@ -1828,14 +1818,14 @@
           </div>
 
           <div class="deckDetail" id="deckDetail" aria-live="polite">
-            <p class="detailTitle">Scale Thinkers</p>
+            <p class="detailTitle">Student Sense-Makers</p>
             <p class="bodyText">
-              A persona card for tutors or educators thinking at cohort level, with prompts about scale, repetition, and patterns across many submissions.
+              A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.
             </p>
             <div class="tagRow">
               <span class="tag">Persona card</span>
-              <span class="tag">Cohort thinking</span>
-              <span class="tag">Feedback design</span>
+              <span class="tag">Next steps</span>
+              <span class="tag">Consistency</span>
             </div>
           </div>
         </article>
@@ -1880,15 +1870,37 @@
                 <img src="pic/Mascot/2.png" alt="Fallback for website loop" />
               </div>
               <div class="playPulse" aria-hidden="true"></div>
-              <span class="videoBadge">Loop-website.mov</span>
             </div>
             <div class="videoMeta">
               <p class="bodyText">
-                Your current website loop lives here and should autoplay muted when the browser can read the `.mov`.
+                Looping walkthrough of the current website direction.
               </p>
               <ul>
-                <li>Uses the real `Loop-website.mov` file in the project root</li>
-                <li>If you later export an `mp4`, it will be even safer across browsers</li>
+                <li>Main site flow and visual direction</li>
+                <li>Autoplay, muted, and looping in the page</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="module reveal">
+          <p class="moduleEyebrow">Participant Website Loop</p>
+          <h3 class="moduleTitle">Participant Demo</h3>
+          <div class="videoModule" data-video-wrapper data-video-src="Participant website.mov">
+            <div class="videoStage">
+              <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
+              <div class="fallbackVisual">
+                <img src="pic/tutor-persona-2.png" alt="Placeholder for participant website loop" />
+              </div>
+              <div class="playPulse" aria-hidden="true"></div>
+            </div>
+            <div class="videoMeta">
+              <p class="bodyText">
+                Participant-facing website flow and interaction screens.
+              </p>
+              <ul>
+                <li>Shows the participant-side interface and flow</li>
+                <li>Loops in the same way as the other demo modules</li>
               </ul>
             </div>
           </div>
@@ -1897,22 +1909,21 @@
         <article class="module reveal">
           <p class="moduleEyebrow">Schema Loop Video</p>
           <h3 class="moduleTitle">Schema Loop</h3>
-          <div class="videoModule" data-video-wrapper data-video-src="media/schema-loop.mp4">
+          <div class="videoModule" data-video-wrapper data-video-src="Schema_video.mov">
             <div class="videoStage">
               <video class="loopVideo" muted loop autoplay playsinline preload="metadata" hidden></video>
               <div class="fallbackVisual">
-                <img src="pic/cards/persona-student-sense-makers.png" alt="Placeholder for schema loop" />
+                <img src="pic/tutor-persona-1.png" alt="Placeholder for schema loop" />
               </div>
               <div class="playPulse" aria-hidden="true"></div>
-              <span class="videoBadge">Drop schema-loop.mp4 here</span>
             </div>
             <div class="videoMeta">
               <p class="bodyText">
-                A separate loop slot for your schema or dashboard logic, so it is not competing with the MATT website panel.
+                Schema structure, content model, and dashboard logic walkthrough.
               </p>
               <ul>
-                <li>Put the file at `media/schema-loop.mp4`</li>
-                <li>Useful for schema structure, content model, or dashboard logic walkthroughs</li>
+                <li>Uses the real schema video already in the project</li>
+                <li>Separate from the website demos so it can stand on its own</li>
               </ul>
             </div>
           </div>
@@ -2016,14 +2027,14 @@
 
       const thesisItems = [
         {
-          title: "Scale Thinkers",
-          body: "A persona card for tutors or educators thinking at cohort level, with prompts about scale, repetition, and patterns across many submissions.",
-          tags: ["Persona card", "Cohort thinking", "Feedback design"]
-        },
-        {
           title: "Student Sense-Makers",
           body: "A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.",
           tags: ["Persona card", "Next steps", "Consistency"]
+        },
+        {
+          title: "Scale Thinkers",
+          body: "A persona card for tutors or educators thinking at cohort level, with prompts about scale, repetition, and patterns across many submissions.",
+          tags: ["Persona card", "Cohort thinking", "Feedback design"]
         },
         {
           title: "What’s My Motivation",
