@@ -588,6 +588,37 @@
       display: none;
     }
 
+    .storyNav {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      gap: 10px;
+      justify-content: start;
+      align-items: center;
+      margin-top: -4px;
+    }
+
+    .storyNavButton {
+      border: 2px solid var(--blue);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.44);
+      color: var(--blue);
+      padding: 10px 16px;
+      font: inherit;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .storyNavButton:hover,
+    .storyNavButton:focus-visible {
+      background: var(--blue);
+      color: var(--paper);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
     .storyCard {
       scroll-snap-align: start;
       display: grid;
@@ -1503,6 +1534,7 @@
       overflow: hidden;
       display: grid;
       place-items: center;
+      padding: 16px;
       background:
         linear-gradient(180deg, rgba(17, 70, 216, 0.12), transparent 44%),
         rgba(255, 255, 255, 0.32);
@@ -1510,10 +1542,15 @@
 
     .loopVideo {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      align-self: center;
+      justify-self: center;
       object-fit: contain;
       object-position: center center;
+      border-radius: 14px;
       background:
         linear-gradient(180deg, rgba(17, 70, 216, 0.08), rgba(255, 255, 255, 0.14)),
         rgba(255, 255, 255, 0.5);
@@ -1531,7 +1568,7 @@
     .videoModule {
       height: 100%;
       display: grid;
-      align-content: start;
+      align-content: center;
       gap: 12px;
     }
 
@@ -2010,12 +2047,10 @@
         </div>
 
         <p class="heroIntro reveal">
-          Student researcher interested in how technology can better support learning,
-          communication, and feedback in real-world settings. I have worked on
-          feedback analytics and co-design research, assistive technology projects
-          involving local AI experimentation, and implementation work with different
-          stakeholders. I am interested in human-centred research that turns real
-          user needs into practical and sustainable tools.
+          I’m Jackie, a student researcher who enjoys building human-centred
+          technology for learning, communication, and feedback. My work brings
+          together research, design, prototyping, and implementation, especially
+          when ideas need to become something people can actually use.
         </p>
 
         <div class="metaRail reveal" aria-label="Profile details">
@@ -2038,13 +2073,10 @@
     <section id="research" class="section">
       <div class="sectionStack">
         <div class="sectionHeader">
-          <h2 class="sectionTitle reveal">Research</h2>
-          <p class="sectionLead reveal">
-            Current research tracks and project directions.
-          </p>
+          <h2 class="sectionTitle reveal">Projects I’m currently working on</h2>
         </div>
 
-        <div class="storyRail reveal" aria-label="Research projects">
+        <div class="storyRail reveal" id="researchRail" aria-label="Research projects">
           <article class="storyCard storyCard--research">
             <div class="storyVisual storyVisual--research">
               <div class="storyFrame">
@@ -2055,15 +2087,10 @@
               <span>Jun 2025 - Present</span>
               <span>Monash University</span>
             </div>
-            <h3 class="storyTitle">PolyFeed Thesis</h3>
+            <h3 class="storyTitle">PolyFeed Feedback Analytics</h3>
             <p class="storyText">
-              Feedback analytics, co-design, and implementation strategy across real teaching contexts, with attention to what makes the tool useful, difficult, or meaningful in practice.
+              Exploring how students, tutors, and educators use feedback analytics in real teaching settings. I also designed workshop cards and built a live dashboard system to help turn feedback concerns into practical strategies.
             </p>
-            <div class="tagRow">
-              <span class="tag">Feedback analytics</span>
-              <span class="tag">Co-design</span>
-              <span class="tag">Implementation</span>
-            </div>
           </article>
 
           <article class="storyCard storyCard--research">
@@ -2078,13 +2105,8 @@
             </div>
             <h3 class="storyTitle">More Than Words</h3>
             <p class="storyText">
-              Assistive communication research exploring emoji recommendation, local AI experimentation, and how different users interpret communication cues in context.
+              Exploring an emoji recommender for communication support, especially for neurodivergent users and people with diverse communication needs. I tested lightweight local AI ideas with privacy, access, and device limits in mind.
             </p>
-            <div class="tagRow">
-              <span class="tag">Assistive tech</span>
-              <span class="tag">Local AI</span>
-              <span class="tag">Communication</span>
-            </div>
           </article>
 
           <article class="storyCard storyCard--research">
@@ -2099,13 +2121,8 @@
             </div>
             <h3 class="storyTitle">Action Lab Malaysia</h3>
             <p class="storyText">
-              HCI research collaboration focused on literature synthesis, research preparation, and strengthening positioning across CHI, DIS, and CSCW-adjacent work.
+              HCI design-methods research on how user research, design problems, and participatory methods can be communicated more clearly to design teams and external stakeholders.
             </p>
-            <div class="tagRow">
-              <span class="tag">HCI research</span>
-              <span class="tag">Literature review</span>
-              <span class="tag">Preparation</span>
-            </div>
           </article>
 
           <article class="storyCard storyCard--research">
@@ -2120,14 +2137,14 @@
             </div>
             <h3 class="storyTitle">Web Development</h3>
             <p class="storyText">
-              Interactive systems, dashboards, and research-facing frontend work that connect structured content, interface design, and implementation-minded prototypes.
+              Building small web systems for research and workshop use, including live dashboards, card-based interfaces, and participant-facing pages.
             </p>
-            <div class="tagRow">
-              <span class="tag">Frontend</span>
-              <span class="tag">Dashboards</span>
-              <span class="tag">Prototype</span>
-            </div>
           </article>
+        </div>
+
+        <div class="storyNav reveal" aria-label="Research navigation">
+          <button class="storyNavButton" id="researchPrev" type="button">Left</button>
+          <button class="storyNavButton" id="researchNext" type="button">Right</button>
         </div>
       </div>
     </section>
@@ -2135,10 +2152,7 @@
     <section id="industry" class="section">
       <div class="sectionStack">
         <div class="sectionHeader">
-          <h2 class="sectionTitle reveal">Industry</h2>
-          <p class="sectionLead reveal">
-            Selected roles and academic service.
-          </p>
+          <h2 class="sectionTitle reveal">My industry experience</h2>
         </div>
 
         <div class="storyRail reveal" aria-label="Industry experience">
@@ -2150,15 +2164,10 @@
               <span>May 2023 - Aug 2024</span>
               <span>Malaysia / On-site</span>
             </div>
-            <h3 class="storyTitle">Strategy &amp; Transformation</h3>
+            <h3 class="storyTitle">Maybank Strategy &amp; Transformation</h3>
             <p class="storyText">
-              Worked across a capital risk migration touching 14 applications and 200+ stakeholders, while building a dashboard that reduced monthly status preparation from around five days to about one hour.
+              Worked on a large Maybank risk migration across 14 applications and 200+ stakeholders, and built a dashboard that cut monthly status prep from about five days to around one hour.
             </p>
-            <div class="tagRow">
-              <span class="tag">Stakeholders</span>
-              <span class="tag">Dashboards</span>
-              <span class="tag">Transformation</span>
-            </div>
           </article>
 
           <article class="storyCard">
@@ -2169,15 +2178,10 @@
               <span>Nov 2022 - Apr 2023</span>
               <span>Malaysia / On-site</span>
             </div>
-            <h3 class="storyTitle">Retail Branding &amp; Marcom</h3>
+            <h3 class="storyTitle">Maybank Retail Branding &amp; Marcom</h3>
             <p class="storyText">
-              Supported premium card launch coordination, campaign rollout, and reporting across multiple workstreams, including six ROI reports in the first eight weeks.
+              Helped with campaign rollout, reporting, and coordination across Maybank marketing work, including six ROI reports in the first eight weeks.
             </p>
-            <div class="tagRow">
-              <span class="tag">Reporting</span>
-              <span class="tag">Campaign ops</span>
-              <span class="tag">Communication</span>
-            </div>
           </article>
 
           <article class="storyCard">
@@ -2188,25 +2192,17 @@
               <span>2025 - 2026</span>
               <span>Academic service</span>
             </div>
-            <h3 class="storyTitle">DIS Reviewer</h3>
+            <h3 class="storyTitle">ACM Designing Interactive Systems Reviewer</h3>
             <p class="storyText">
-              Reviewed HCI submissions and strengthened my sense of contribution framing, methodological clarity, and what makes research arguments feel credible and publishable.
+              Reviewed HCI submissions and got a much better feel for what makes research framing, methods, and writing come across clearly.
             </p>
-            <div class="tagRow">
-              <span class="tag">Reviewing</span>
-              <span class="tag">HCI</span>
-              <span class="tag">Research standards</span>
-            </div>
           </article>
         </div>
       </div>
     </section>
 
     <section id="portfolio" class="section">
-      <h2 class="sectionTitle reveal">Portfolio</h2>
-      <p class="sectionLead reveal">
-        Thesis cards, mascot development, and looped demos.
-      </p>
+      <h2 class="sectionTitle reveal">Project artefacts I designed and built.</h2>
 
       <div class="portfolioCarousel reveal">
         <div class="portfolioViewport" id="portfolioViewport">
@@ -2214,18 +2210,15 @@
             <article class="portfolioSlide is-active" data-portfolio-slide="0">
               <div class="portfolioInfo">
                 <p class="moduleEyebrow">Thesis Deck</p>
-                <h3 class="moduleTitle">Thesis Card System</h3>
-                <div class="deckDetail" id="deckDetail" aria-live="polite">
-                  <p class="detailTitle">Student Sense-Makers</p>
-                  <p class="bodyText">
-                    A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.
-                  </p>
-                  <div class="tagRow">
-                    <span class="tag">Persona card</span>
-                    <span class="tag">Next steps</span>
-                    <span class="tag">Consistency</span>
-                  </div>
-                </div>
+                <h3 class="moduleTitle">PolyFeed Card System</h3>
+                <p class="bodyText">
+                  I designed three types of cards from scratch to support PolyFeed
+                  workshops and strategy discussions. The cards combine content
+                  structure, visual design, and game-like interaction so students
+                  and tutors could understand, compare, and refine implementation
+                  ideas more easily.
+                </p>
+                <p class="miniNote">Designed with Adobe Illustrator.</p>
               </div>
               <div class="portfolioCanvas portfolioCanvas--art">
                 <div class="cardArena" aria-label="Animated thesis card preview">
@@ -2277,11 +2270,12 @@
             <article class="portfolioSlide" data-portfolio-slide="1">
               <div class="portfolioInfo">
                 <p class="moduleEyebrow">Mascot Development</p>
-                <h3 class="galleryName" id="galleryName">Reader Cat</h3>
+                <h3 class="galleryName" id="galleryName">Mascot Variations</h3>
                 <p class="bodyText" id="galleryText">
-                  A softer research-facing mascot direction built around reading, study, and early exploration.
+                  I designed this mascot from scratch to make the research materials feel warmer and easier to approach. The character has a few variations for different project moments, so the website feels more personal without becoming too formal.
                 </p>
-                <p class="miniNote">Use the arrows to move between mascot states.</p>
+                <p class="miniNote">Designed from scratch in Procreate.</p>
+                <p class="miniNote">Use the arrows to browse different mascot variations.</p>
                 <div class="galleryDots" id="galleryDots" aria-label="Mascot selector"></div>
               </div>
               <div class="portfolioCanvas portfolioCanvas--art">
@@ -2305,15 +2299,15 @@
 
             <article class="portfolioSlide" data-portfolio-slide="2">
               <div class="portfolioInfo">
-                <p class="moduleEyebrow">Website Loop</p>
-                <h3 class="moduleTitle">Website Demo</h3>
+                <h3 class="moduleTitle">Workshop Website</h3>
                 <div class="videoMeta">
                   <p class="bodyText">
-                    Looping walkthrough of the current website direction.
+                    This is the custom website I designed for the PolyFeed workshops. It was created after PowerPoint felt too static and Miro felt too flexible for the activity.
                   </p>
                   <ul>
-                    <li>Main site flow and visual direction</li>
-                    <li>Autoplay, muted, and looping in the page</li>
+                    <li>Built mainly with HTML, CSS, JavaScript, Supabase, and Vercel</li>
+                    <li>Around 12 pages, including student pages, tutor pages, and a shared master dashboard</li>
+                    <li>Used to support live workshop discussion and strategy updates</li>
                   </ul>
                 </div>
               </div>
@@ -2331,15 +2325,15 @@
 
             <article class="portfolioSlide" data-portfolio-slide="3">
               <div class="portfolioInfo">
-                <p class="moduleEyebrow">Participant Website Loop</p>
-                <h3 class="moduleTitle">Participant Demo</h3>
+                <h3 class="moduleTitle">Participant Workshop Pages</h3>
                 <div class="videoMeta">
                   <p class="bodyText">
-                    Participant-facing website flow and interaction screens.
+                    These pages were designed for students and tutors to enter workshop responses. Their inputs could then appear on the shared dashboard during the session.
                   </p>
                   <ul>
-                    <li>Shows the participant-side interface and flow</li>
-                    <li>Loops in the same way as the other demo modules</li>
+                    <li>Separate pages for student and tutor activities</li>
+                    <li>Inputs designed to connect with the live dashboard</li>
+                    <li>Created for workshop use, not just as a visual mock-up</li>
                   </ul>
                 </div>
               </div>
@@ -2357,15 +2351,15 @@
 
             <article class="portfolioSlide" data-portfolio-slide="4">
               <div class="portfolioInfo">
-                <p class="moduleEyebrow">Schema Loop Video</p>
-                <h3 class="moduleTitle">Schema Loop</h3>
+                <h3 class="moduleTitle">Live Update Structure</h3>
                 <div class="videoMeta">
                   <p class="bodyText">
-                    Schema structure, content model, and dashboard logic walkthrough.
+                    This is the Supabase schema I created for the workshop system, so card content and participant inputs could be stored, updated, and shown on the shared dashboard.
                   </p>
                   <ul>
-                    <li>Uses the real schema video already in the project</li>
-                    <li>Separate from the website demos so it can stand on its own</li>
+                    <li>Shows how card content and participant inputs were organised</li>
+                    <li>Feeds updates back into the shared dashboard</li>
+                    <li>Built as part of the workshop system</li>
                   </ul>
                 </div>
               </div>
@@ -2396,7 +2390,7 @@
           <p class="moduleEyebrow">CV Download</p>
           <h2 class="sectionTitle">Full CV</h2>
           <p class="bodyText">
-            Open the full CV on a separate page for the more detailed academic and professional record.
+            View my full CV for a more detailed record of my research, publications, projects, and industry experience.
           </p>
         </div>
         <a class="cvButton" href="index.html" target="_blank" rel="noreferrer">Open CV Page</a>
@@ -2410,7 +2404,6 @@
       const workButtons = [...document.querySelectorAll("[data-work]")];
       const thesisCards = [...document.querySelectorAll("[data-card]")];
       const cardArena = document.querySelector(".cardArena");
-      const deckDetail = document.getElementById("deckDetail");
       const revealNodes = [...document.querySelectorAll(".reveal")];
       const portfolioViewport = document.getElementById("portfolioViewport");
       const portfolioTrack = document.getElementById("portfolioTrack");
@@ -2418,6 +2411,9 @@
       const portfolioDots = document.getElementById("portfolioDots");
       const portfolioPrev = document.getElementById("portfolioPrev");
       const portfolioNext = document.getElementById("portfolioNext");
+      const researchRail = document.getElementById("researchRail");
+      const researchPrev = document.getElementById("researchPrev");
+      const researchNext = document.getElementById("researchNext");
       const galleryPortrait = document.getElementById("galleryPortrait");
       const galleryImage = document.getElementById("galleryImage");
       const galleryName = document.getElementById("galleryName");
@@ -2429,83 +2425,60 @@
 
       const workItems = [
         {
-          title: "PolyFeed Thesis",
+          title: "PolyFeed Feedback Analytics",
           meta: "Monash University / Jun 2025 - Present",
-          body: "Master’s thesis examining how PolyFeed is understood and used across real teaching contexts, with attention to feedback analytics uptake, co-design, and implementation strategy.",
+          body: "Exploring how students, tutors, and educators use feedback analytics in real teaching settings, alongside workshop cards and a live dashboard system for turning concerns into practical strategies.",
           tags: ["Feedback analytics", "Co-design", "Implementation"]
         },
         {
           title: "More Than Words",
           meta: "Monash Assistive Tech Team / Mar 2025 - Present",
-          body: "Assistive technology research exploring emoji recommendation and communication support, including local AI experimentation and context-sensitive interpretation.",
+          body: "Exploring an emoji recommender for communication support, especially for neurodivergent users and people with diverse communication needs.",
           tags: ["Assistive technology", "Emoji recommendation", "Local AI"]
         },
         {
           title: "Action Lab Malaysia",
           meta: "Monash University Malaysia / Nov 2024 - Present",
-          body: "HCI research collaboration focused on literature synthesis, research preparation, and strengthening positioning across CHI, DIS, and CSCW-adjacent work.",
+          body: "HCI design-methods research on how user research, design problems, and participatory methods can be communicated more clearly to design teams and external stakeholders.",
           tags: ["HCI research", "Literature review", "Research preparation"]
         },
         {
-          title: "Casual Web Development",
+          title: "Web Development",
           meta: "Ongoing / software engineering track",
-          body: "Web-facing builds that connect interface design, structured content, dashboards, and implementation-minded frontend work.",
+          body: "Building small web systems for research and workshop use, including live dashboards, card-based interfaces, and participant-facing pages.",
           tags: ["Frontend", "Dashboards", "Implementation"]
-        }
-      ];
-
-      const thesisItems = [
-        {
-          title: "Student Sense-Makers",
-          body: "A persona card focused on consistency, shared structures, and helping students know what to do next instead of getting lost in mixed signals.",
-          tags: ["Persona card", "Next steps", "Consistency"]
-        },
-        {
-          title: "Scale Thinkers",
-          body: "A persona card for tutors or educators thinking at cohort level, with prompts about scale, repetition, and patterns across many submissions.",
-          tags: ["Persona card", "Cohort thinking", "Feedback design"]
-        },
-        {
-          title: "What’s My Motivation",
-          body: "An instruction card for surfacing what feedback is actually meant to do, then turning those intentions into more specific and workable ideas.",
-          tags: ["Instruction card", "Tutor intentions", "Design prompts"]
         }
       ];
 
       const mascotItems = [
         {
-          name: "Reader Cat",
-          image: "pic/Mascot/1.png",
-          text: "A softer research-facing mascot direction built around reading, study, and early exploration."
+          name: "Mascot variation 1",
+          image: "pic/Mascot/1.png"
         },
         {
-          name: "Studio Cat",
-          image: "pic/Mascot/2.png",
-          text: "A making-focused state that feels closer to visual development, prototyping, and creative exploration."
+          name: "Mascot variation 2",
+          image: "pic/Mascot/2.png"
         },
         {
-          name: "Builder Cat",
-          image: "pic/Mascot/3.png",
-          text: "A planning and systems version that fits process mapping, implementation logic, and structured build work."
+          name: "Mascot variation 3",
+          image: "pic/Mascot/3.png"
         },
         {
-          name: "Play Cat",
-          image: "pic/Mascot/4.png",
-          text: "A brighter and more expressive state that pushes the playful side of the mascot family."
+          name: "Mascot variation 4",
+          image: "pic/Mascot/4.png"
         },
         {
-          name: "Courier Cat",
-          image: "pic/Mascot/5.png",
-          text: "A delivery and rollout state that feels useful for communication, movement, and getting work out into the world."
+          name: "Mascot variation 5",
+          image: "pic/Mascot/5.png"
         }
       ];
 
       const portfolioItems = [
         "Thesis deck",
         "Mascot development",
-        "Website demo",
-        "Participant demo",
-        "Schema loop"
+        "Workshop website",
+        "Participant workshop pages",
+        "Live update structure"
       ];
 
       let workIndex = 0;
@@ -2534,17 +2507,7 @@
       }
 
       function renderDeck(index) {
-        const item = thesisItems[index];
-        if (!item || !deckDetail) return;
         deckIndex = index;
-
-        deckDetail.innerHTML = `
-          <p class="detailTitle">${item.title}</p>
-          <p class="bodyText">${item.body}</p>
-          <div class="tagRow">
-            ${item.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
-          </div>
-        `;
 
         thesisCards.forEach((card, cardIndex) => {
           const relativeIndex = (cardIndex - index + thesisCards.length) % thesisCards.length;
@@ -2558,15 +2521,13 @@
 
       function renderMascot(index) {
         const item = mascotItems[index];
-        if (!item || !galleryImage || !galleryName || !galleryText || !galleryDots || !galleryPortrait) return;
+        if (!item || !galleryImage || !galleryDots || !galleryPortrait) return;
 
         galleryPortrait.classList.add("is-changing");
 
         setTimeout(() => {
           galleryImage.src = item.image;
           galleryImage.alt = item.name;
-          galleryName.textContent = item.name;
-          galleryText.textContent = item.text;
           galleryPortrait.classList.remove("is-changing");
         }, 120);
 
@@ -2582,7 +2543,7 @@
       }
 
       function moveDeck(direction) {
-        deckIndex = (deckIndex + direction + thesisItems.length) % thesisItems.length;
+        deckIndex = (deckIndex + direction + thesisCards.length) % thesisCards.length;
         renderDeck(deckIndex);
       }
 
@@ -2749,6 +2710,16 @@
         video.playsInline = true;
         video.preload = "auto";
       });
+
+      if (researchRail && researchPrev && researchNext) {
+        const moveResearch = (direction) => {
+          const amount = Math.max(280, Math.round(researchRail.clientWidth * 0.82));
+          researchRail.scrollBy({ left: direction * amount, behavior: "smooth" });
+        };
+
+        researchPrev.addEventListener("click", () => moveResearch(-1));
+        researchNext.addEventListener("click", () => moveResearch(1));
+      }
 
       renderWork(workIndex);
       renderDeck(0);
